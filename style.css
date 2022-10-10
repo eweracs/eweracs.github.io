@@ -24,6 +24,22 @@ body, p {
     color: #ffffff;
 }
 
+body {
+    position: absolute;
+    top: 50%;
+    left: 20%;
+    -moz-transform:translateY(-50%) translateX(-12.5%);
+    -webkit-transform:translateY(-50%) translateX(-12.5%);
+    transform: translateY(-50%) translateX(-12.5%);
+    max-height: 100%;
+    max-width: 600px;
+    background-image: url("sources/img/bg_main.png");
+    background-size: cover;
+    background-repeat: repeat;
+    background-attachment: fixed;
+    background-position: center;
+}
+
 strong {
     font-variation-settings: "wght" 700;
     font-weight: normal;
@@ -46,22 +62,6 @@ a {
     text-decoration: none;
 }
 
-/* add a background image from sources/img and blur it*/
-body {
-    position: absolute;
-    top: 50%;
-    left: 20%;
-    -moz-transform:translateY(-50%) translateX(-12.5%);
-    -webkit-transform:translateY(-50%) translateX(-12.5%);
-    transform: translateY(-50%) translateX(-12.5%);
-    max-width: 600px;
-    background-image: url("sources/img/bg_main.png");
-    background-size: cover;
-    background-repeat: repeat;
-    background-attachment: fixed;
-    background-position: center;
-}
-
 br {
     display: block;
     content: "";
@@ -70,6 +70,7 @@ br {
 }
 
 .topnav {
+    padding-top: 10%;
     overflow: hidden;
     font-variant: small-caps;
     letter-spacing: 0.06em;
@@ -102,6 +103,7 @@ br {
 .fa {
     padding-right: 12px;
     color: #ffffff;
+    padding-bottom: 20%;
 }
 
 .fa:hover {
