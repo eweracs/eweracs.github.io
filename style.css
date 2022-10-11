@@ -40,6 +40,25 @@ body {
     background-position: center;
 }
 
+h1 {
+    font-family: "Fizz Italic";
+    font-weight: normal;
+    font-variation-settings: "wght" 300;
+    font-size: 42px;
+    line-height: 1;
+    color: #ffffff;
+}
+
+h2 {
+    font-family: "Fizz"
+    font-variation-settings: "wght" 300;
+    font-weight: normal;
+    font-variant: small-caps;
+    font-size: 22px;
+    letter-spacing: 0.05em
+    color: #ffffff;
+}
+
 strong {
     font-variation-settings: "wght" 700;
     font-weight: normal;
@@ -91,7 +110,7 @@ br {
 
 .topnav a:hover {
     color: #d90b5d;
-    font-variation-settings: "wght" 700;
+    font-variation-settings: "wght" 600;
 }
 
 .topnav a.active {
@@ -110,4 +129,8 @@ br {
     color: #d90b5d;
     color: #ffffff;
     opacity: 0.7;
+}
+
+img {
+    max-width: 100%
 }
