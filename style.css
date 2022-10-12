@@ -72,18 +72,20 @@ br {
 }
 
 .container {
-    position: relative;
+    position: absolute;
     top: 100px;
-    height: 100%;
+    bottom: 0px;
+    left: 10%;
+    right: 10%;
+
 }
 
 .content {
     position: absolute;
-    height: 100%;
-    margin-top: 0px;
-    left: 10%;
-    margin-right: 10%;
+    top: 50%;
     max-width: 600px;
+    ms-transform: translateY(-50%);
+    transform: translateY(-50%);
 }
 
 .content p {
@@ -96,7 +98,8 @@ br {
 }
 
 .topnav {
-    position: absolute;
+    display: block;
+    position: fixed;
     padding-top: 40px;
     left: 10%;
     overflow: hidden;
