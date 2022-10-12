@@ -14,25 +14,8 @@ body {
     background-color: #fefefe;
 }
 
-/* Set the font to Fizz Regular, size 16px, and color #000000 */
-body, p {
-    font-family: "Fizz";
-    font-weight: normal;
-    font-variation-settings: "wght" 300;
-    font-size: 22px;
-    line-height: 1.4;
-    color: #ffffff;
-}
 
 body {
-    position: absolute;
-    top: 50%;
-    left: 20%;
-    -moz-transform:translateY(-50%) translateX(-12.5%);
-    -webkit-transform:translateY(-50%) translateX(-12.5%);
-    transform: translateY(-50%) translateX(-12.5%);
-    max-height: 100%;
-    max-width: 600px;
     background-image: url("sources/img/bg_main.png");
     background-size: cover;
     background-repeat: repeat;
@@ -50,12 +33,12 @@ h1 {
 }
 
 h2 {
-    font-family: "Fizz"
-    font-variation-settings: "wght" 300;
+    font-family: "Fizz";
     font-weight: normal;
+    font-variation-settings: "wght" 300;
     font-variant: small-caps;
     font-size: 22px;
-    letter-spacing: 0.05em
+    letter-spacing: 0.05em;
     color: #ffffff;
 }
 
@@ -70,15 +53,15 @@ i {
     font-style: normal;
 }
 
+a {
+    color: #d90b5d;
+    text-decoration: none;
+}
+
 a:hover {
     font-family: "Fizz Italic";
     font-style: italic;
     font-variation-settings: "wght" 700;
-}
-
-a {
-    color: #d90b5d;
-    text-decoration: none;
 }
 
 br {
@@ -88,8 +71,34 @@ br {
     line-height: 1.6;
 }
 
+.container {
+    position: relative;
+    top: 100px;
+    height: 100%;
+}
+
+.content {
+    position: absolute;
+    height: 100%;
+    margin-top: 0px;
+    left: 10%;
+    margin-right: 10%;
+    max-width: 600px;
+}
+
+.content p {
+    font-family: "Fizz";
+    font-weight: normal;
+    font-variation-settings: "wght" 300;
+    font-size: 22px;
+    line-height: 1.4;
+    color: #ffffff;
+}
+
 .topnav {
-    padding-top: 10%;
+    position: absolute;
+    padding-top: 40px;
+    left: 10%;
     overflow: hidden;
     font-variant: small-caps;
     letter-spacing: 0.06em;
@@ -110,7 +119,6 @@ br {
 
 .topnav a:hover {
     color: #d90b5d;
-    font-variation-settings: "wght" 600;
 }
 
 .topnav a.active {
@@ -118,11 +126,10 @@ br {
     font-variation-settings: "wght" 600;
 }
 
-/* Style all font awesome icons */
 .fa {
     padding-right: 12px;
     color: #ffffff;
-    padding-bottom: 20%;
+    padding-bottom: 10%;
 }
 
 .fa:hover {
