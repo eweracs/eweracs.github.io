@@ -73,19 +73,17 @@ br {
 
 .container {
     position: absolute;
-    top: 100px;
-    bottom: 0px;
+    overflow: auto;
     left: 10%;
-    right: 10%;
-
+    margin-right: 10%;
+    top: 100px;
+    bottom: 0;
 }
 
 .content {
-    position: absolute;
-    top: 50%;
+    position: relative;
     max-width: 600px;
-    ms-transform: translateY(-50%);
-    transform: translateY(-50%);
+    top: 100px;
 }
 
 .content p {
@@ -98,8 +96,7 @@ br {
 }
 
 .topnav {
-    display: block;
-    position: fixed;
+    position: absolute;
     padding-top: 40px;
     left: 10%;
     overflow: hidden;
@@ -132,7 +129,6 @@ br {
 .fa {
     padding-right: 12px;
     color: #ffffff;
-    padding-bottom: 10%;
 }
 
 .fa:hover {
