@@ -47,7 +47,7 @@ body {
 
 #container {
     position: relative;
-    max-width: 600px;
+    width: 600px;
     display: table-cell;
     vertical-align: middle;
     padding-top: 100px;
@@ -156,4 +156,62 @@ br {
 
 img {
     max-width: 100%
+}
+
+.clientimg {
+    display: block;
+    width: 100%;
+    height: auto;
+}
+
+.overlay {
+    position: relative;
+    top: -120px;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 100%;
+    width: 100%;
+    opacity: 0;
+    transition: .3s ease;
+    background-color: #d90b5d;
+}
+
+.overlaytext {
+    font-family: "Fizz Italic";
+    font-variation-settings: "wght" 300;
+    color: white;
+    font-size: 20px;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    -webkit-transform: translate(-50%, -50%);
+    -ms-transform: translate(-50%, -50%);
+    transform: translate(-50%, -50%);
+    text-align: center;
+}
+
+* { box-sizing: border-box;}
+
+/* First the Grid */
+.gallery-grid {
+  display: -ms-grid;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(120px, 120px));
+  grid-gap: 0;
+  justify-items: center;
+  margin: 0;
+  padding: 0;
+}
+
+/* The Images */
+.gallery-img {
+  max-width: 120px;
+  height: auto;
+  object-fit: cover;
+  transition: opacity 0.25s ease-in-out;
+}
+
+.gallery-img:hover .overlay {
+  opacity: 1;
 }
