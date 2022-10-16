@@ -165,20 +165,21 @@ img {
 }
 
 .overlay {
-    position: relative;
-    top: -120px;
+    position: absolute;
+    top: 0px;
     bottom: 0;
     left: 0;
     right: 0;
     height: 100%;
     width: 100%;
     opacity: 0;
-    transition: .3s ease;
+    transition: 0.3s ease-in-out;
     background-color: #d90b5d;
 }
 
 .overlaytext {
     font-family: "Fizz Italic";
+    font-variant: normal;
     font-variation-settings: "wght" 300;
     color: white;
     font-size: 20px;
@@ -195,23 +196,25 @@ img {
 
 /* First the Grid */
 .gallery-grid {
-  display: -ms-grid;
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(120px, 120px));
-  grid-gap: 0;
-  justify-items: center;
-  margin: 0;
-  padding: 0;
+    display: -ms-grid;
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(120px, 120px));
+    grid-gap: 0;
+    justify-items: center;
+    margin: 0;
+    padding: 0;
 }
 
 /* The Images */
 .gallery-img {
-  max-width: 120px;
-  height: auto;
-  object-fit: cover;
-  transition: opacity 0.25s ease-in-out;
+    filter: none;
+    -webkit-filter: grayscale(0);
+    max-width: 120px;
+    height: 120px;
+    object-fit: cover;
+    transition: opacity 0.25s ease-in-out;
 }
 
 .gallery-img:hover .overlay {
-  opacity: 1;
+    opacity: 1;
 }
