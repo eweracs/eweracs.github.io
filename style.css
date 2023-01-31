@@ -121,6 +121,7 @@ br {
     font-variant: small-caps;
     letter-spacing: 0.06em;
 }
+
 .topnav a {
     font-family: "Fizz";
     font-style: normal;
@@ -140,6 +141,38 @@ br {
 }
 
 .topnav a.active {
+    color: #ffffff;
+    font-variation-settings: "wght" 600;
+}
+
+.langnav {
+    z-index: 100;
+    position: absolute;
+    top: 100px;
+    width: 600px;
+    font-variant: small-caps;
+    letter-spacing: 0.06em;
+}
+
+.langnav a {
+    font-family: "Fizz";
+    font-style: normal;
+    transition: all 0.2s ease-in-out;
+    float: left;
+    display: block;
+    color: #d0d0d0;
+    text-align: center;
+    padding-left: 0px;
+    padding-right: 10px;
+    text-decoration: none;
+    font-size: 18px;
+}
+
+.langnav a:hover {
+    color: #d90b5d;
+}
+
+.langnav a.active {
     color: #ffffff;
     font-variation-settings: "wght" 600;
 }
