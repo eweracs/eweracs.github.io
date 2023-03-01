@@ -102,6 +102,7 @@ a {
 }
 
 a:hover {
+    font-synthesis: none;
     font-family: "Fizz Italic";
     font-style: italic;
     font-variation-settings: "wght" 700;
@@ -240,9 +241,10 @@ img {
 
 /* The Images */
 .gallery-img {
+    position: relative;
     filter: none;
     -webkit-filter: grayscale(0);
-    max-width: 120px;
+    width: 120px;
     height: 120px;
     object-fit: cover;
     transition: opacity 0.25s ease-in-out;
