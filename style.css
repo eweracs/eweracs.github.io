@@ -10,11 +10,10 @@
     src: url("sources/fonts/FizzItalic-Variable-TRIAL.woff2") format("woff2");
 }
 
-*, *:before, *:after {
-    -moz-box-sizing: border-box;
-    -webkit-box-sizing: border-box;
-    box-sizing: border-box;
+:root {
+    --accent: #d90b5d;
 }
+
 html, body {
     height: 100%;
     margin-left: 5%;
@@ -29,32 +28,19 @@ body {
     background-attachment: fixed;
     background-position: center;
     background-color: #fefefe;
-    display: table;
-    padding-top: 150px;
-    margin-top: -100px;
+    margin-top: 0;
+    margin-bottom: 0;
 }
 
-#space {
-    position: relative;
-    z-index: 0;
-    height: 100px;
-    width: 100%;
-    border-bottom: 2px dashed red;
-    color: red;
-    text-align: center;
-    padding-top: 70px;
-}
-
-#container {
-    position: relative;
-    width: 600px;
-    display: table-cell;
-    vertical-align: middle;
-    padding-top: 100px;
+.spacer {
+    height: 50%;
 }
 
 #content {
-
+    position: relative;
+    max-width: 600px;
+    padding-top: 100px;
+    padding-bottom: 100px;
 }
 
 p {
@@ -63,7 +49,7 @@ p {
     font-variation-settings: "wght" 300;
     font-size: 22px;
     line-height: 1.4;
-    color: #ffffff;
+    color: white;
 }
 
 h1 {
@@ -72,7 +58,7 @@ h1 {
     font-variation-settings: "wght" 300;
     font-size: 42px;
     line-height: 1;
-    color: #ffffff;
+    color: white;
 }
 
 h2 {
@@ -82,7 +68,7 @@ h2 {
     font-variant: small-caps;
     font-size: 22px;
     letter-spacing: 0.05em;
-    color: #ffffff;
+    color: white;
 }
 
 strong {
@@ -97,14 +83,16 @@ i {
 }
 
 a {
-    color: #d90b5d;
-    text-decoration: none;
+    transition: all 0.1s ease-in-out;
+    color: white;
+    text-decoration: underline;
+    text-underline-offset: 0.2em;
+    text-decoration-thickness: 0.1em;
+    text-decoration-color: var(--accent);
 }
 
 a:hover {
     font-synthesis: none;
-    font-family: "Fizz Italic";
-    font-style: italic;
     font-variation-settings: "wght" 700;
 }
 
@@ -115,76 +103,56 @@ br {
     line-height: 1.6;
 }
 
+#nav {
+    width: 100%;
+    overflow-x: hidden;
+    transition: 0.5s;
+    padding-top: 60px;
+}
+
 .topnav {
-    z-index: 100;
-    position: absolute;
-    top: 50px;
+    position: relative;
+    font-size: 22px;
     font-variant: small-caps;
     letter-spacing: 0.06em;
+    margin-bottom: 25px;
 }
 
 .topnav a {
+    display: inline-block;
     font-family: "Fizz";
     font-style: normal;
     transition: all 0.2s ease-in-out;
-    float: left;
-    display: block;
     color: #d0d0d0;
-    text-align: center;
     padding-left: 0px;
     padding-right: 30px;
     text-decoration: none;
-    font-size: 22px;
 }
 
 .topnav a:hover {
-    color: #d90b5d;
+    color: var(--accent);
 }
 
 .topnav a.active {
-    color: #ffffff;
+    color: white;
     font-variation-settings: "wght" 600;
 }
 
-.langnav {
-    z-index: 100;
-    position: absolute;
-    top: 100px;
-    width: 600px;
-    font-variant: small-caps;
-    letter-spacing: 0.06em;
-}
-
-.langnav a {
-    font-family: "Fizz";
-    font-style: normal;
-    transition: all 0.2s ease-in-out;
-    float: left;
-    display: block;
-    color: #d0d0d0;
-    text-align: center;
-    padding-left: 0px;
-    padding-right: 10px;
-    text-decoration: none;
+.languages {
     font-size: 18px;
 }
 
-.langnav a:hover {
-    color: #d90b5d;
-}
-
-.langnav a.active {
-    color: #ffffff;
-    font-variation-settings: "wght" 600;
+.languages a {
+    padding-right: 10px;
 }
 
 .fa {
     padding-right: 12px;
-    color: #ffffff;
+    color: white;
 }
 
 .fa:hover {
-    color: #d90b5d;
+    color: var(--accent);
     opacity: 0.7;
 }
 
@@ -208,7 +176,7 @@ img {
     width: 100%;
     opacity: 0;
     transition: 0.3s ease-in-out;
-    background-color: #d90b5d;
+    background-color: var(--accent);
 }
 
 .overlaytext {
@@ -225,8 +193,6 @@ img {
     transform: translate(-50%, -50%);
     text-align: center;
 }
-
-* { box-sizing: border-box;}
 
 /* First the Grid */
 .gallery-grid {

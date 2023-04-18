@@ -8,24 +8,29 @@
     <link rel="shortcut icon" type="image/png" href="sources/img/favicon.svg">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
   </head>
-  <div class="topnav">
-    <a href="index.html">hello</a>
-    <a href="projects.html">projects</a>
-    <a class="active" href="about.html">about</a>
-  </div>
-  <div class="langnav">
-    <a class="active" href="about.html">en</a>
-    <a href="de/about.html">de</a>
-    <a href="fr/about.html">fr</a>
-  </div>
-  <div id="space">
-  </div>
-  <div id="container">
+  <body>
+    <div id="nav">
+      <div class="topnav">
+        <a href="index.html">hello</a>
+        <a href="projects.html">projects</a>
+        <a class="active" href="#about">about</a>
+      </div>
+      <div class="topnav languages">
+        <a class="active" href="about.html">en</a>
+        <a href="de/about.html">de</a>
+        <a href="fr/about.html">fr</a>
+      </div>
+    </div>
+    <div id="spacer"></div>
     <div id="content">
       <p>
         Hi, I&rsquo;m Sebastian Carewe. I am a font engineer and type designer currently based in Lille, France.<br>
-        Initially from Berlin, Germany, I studied interface design and focused on type design under Luc(as) de Groot. I went on to work on a multitude of projects, from in-house families and remasters to exclusive typefaces. After studying Italian language and literature for a year, I moved to Porto, Portugal, to work as a font engineer at <a href="https://schriftlabor.at"><i>Schriftlabor</i></a> for one year. Owing to my passion for languages, I am currently studying linguistics in Lille.<br> I publish scripts and plugins for Glyphs and various other code on my <a href="https://github.com/eweracs"><i>Github</i></a>. I pride myself in a most comprehensive type design skill set ranging all the way from drawing to the nitty-gritty final production work. Equally balancing drawing, tool creation and production has enabled me to inform each of these fields to develop a highly efficient workflow which compromises neither quality nor adaptability.<br> Aside from type, I have a broad background in music, with a keen interest in music theory, acoustics and the piano (jazz and classical). In winter, I spend my time speed-skating and on my bike in summer. I can solve a Rubik&rsquo;s cube in nine seconds, but can&rsquo;t tell you the point.
+        Initially from Berlin, Germany, I studied interface design and focused on type design under Luc(as) de Groot.
+        I went on to work on a multitude of projects, from in-house families and remasters to exclusive typefaces. After studying Italian language and literature for a year, I moved to Porto, Portugal, to work as a font engineer at <a href="https://schriftlabor.at">Schriftlabor</a> for one year. Owing to my passion for languages, I am currently studying linguistics in Lille.<br>
+        I publish scripts and plugins for Glyphs and various other code on my <a href="https://github.com/eweracs">Github</a>. I pride myself in a most comprehensive type design skill set ranging all the way from drawing to the nitty-gritty final production work. Equally balancing drawing, tool creation and production has enabled me to inform each of these fields to develop a highly efficient workflow which compromises neither quality nor adaptability.<br>
+        Aside from type, I have a broad background in music, with a keen interest in music theory, acoustics and the piano (jazz and classical). In winter, I spend my time speed-skating and on my bike in summer. I can solve a Rubik&rsquo;s cube in nine seconds, but can&rsquo;t tell you the point.
       </p>
     </div>
-  </div>
+    <script src="JS/main.js" onload="setSpacerHeight()"></script>
+  </body>
 </html>

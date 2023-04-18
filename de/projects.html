@@ -8,19 +8,20 @@
     <link rel="shortcut icon" type="image/png" href="../sources/img/favicon.svg">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
   </head>
-  <div class="topnav">
-    <a href="index.html">hallo</a>
-    <a class="active" href="projects.html">projekte</a>
-    <a href="about.html">info</a>
-  </div>
-  <div class="langnav">
-    <a href="../projects.html">en</a>
-    <a class="active" href="../de/projects.html">de</a>
-    <a href="../fr/projects.html">fr</a>
-  </div>
-  <div id="space">
-  </div>
-  <div id="container">
+  <body>
+    <div id="nav">
+      <div class="topnav">
+        <a href="index.html">hallo</a>
+        <a class="active" href="#projects">projekte</a>
+        <a href="about.html">info</a>
+      </div>
+      <div class="topnav languages">
+        <a href="../projects.html">en</a>
+        <a class="active" href="#projects">de</a>
+        <a href="../fr/projects.html">fr</a>
+      </div>
+    </div>
+    <div id="spacer"></div>
     <div id="content">
       <p>
 <!--        <a style="color:#ffffff" href="fizz.html"><i>Fizz &rarr;</i></a><br>-->
@@ -110,5 +111,6 @@
         </div>
       </div>
     </div>
-  </div>
+  <script src="../JS/main.js" onload="setSpacerHeight()"></script>
+  </body>
 </html>

@@ -8,19 +8,20 @@
     <link rel="shortcut icon" type="image/png" href="sources/img/favicon.svg">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
   </head>
-  <div class="topnav">
-    <a class="active" href="#hello">hello</a>
-    <a href="projects.html">projects</a>
-    <a href="about.html">about</a>
-  </div>
-  <div class="langnav">
-    <a class="active" href="index.html">en</a>
-    <a href="de/index.html">de</a>
-    <a href="fr/index.html">fr</a>
-  </div>
-  <div id="space">
-  </div>
-  <div id="container">
+  <body>
+    <div id="nav">
+      <div class="topnav">
+        <a class="active" href="#hello">hello</a>
+        <a href="projects.html">projects</a>
+        <a href="about.html">about</a>
+      </div>
+      <div class="topnav languages">
+        <a class="active" href="index.html">en</a>
+        <a href="de/index.html">de</a>
+        <a href="fr/index.html">fr</a>
+      </div>
+    </div>
+    <div id="spacer"></div>
     <div id="content">
       <p>
         Sebastian Carewe &#8226; <i>Font engineering, type design &#8226; Lille, France</i><br> My expertise in type covers everything from drawing (Latin/Cyrillic), mastering and static and variable font production to tool development (Python) and quality assurance.<br> Looking for me? We can work in English, German or French: <i>sebastian.carewe (at) gmail.com</i>
@@ -29,5 +30,6 @@
       <a href="https://www.github.com/eweracs"><i class="fa fa-github" aria-hidden="true"></i></a>
       <a href="https://instagram.com/s_carewe"><i class="fa fa-instagram" aria-hidden="true"></i></a>
     </div>
-  </div>
+    <script src="JS/main.js" onload="setSpacerHeight()"></script>
+  </body>
 </html>
