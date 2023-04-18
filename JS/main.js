@@ -2,7 +2,6 @@ function setSpacerHeight() {
     window.onresize = function() {
         setSpacerHeight();
     }
-    console.log("scrolling");
     var spacer = document.getElementById("spacer");
     var content = document.getElementById("content");
     var navBar = document.getElementById("nav");
