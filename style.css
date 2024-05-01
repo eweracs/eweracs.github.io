@@ -216,7 +216,6 @@ img {
 .gallery-img {
     position: relative;
     filter: none;
-    -webkit-filter: grayscale(0);
     width: 120px;
     height: 120px;
     object-fit: cover;
