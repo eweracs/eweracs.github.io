@@ -2,7 +2,7 @@
 /* Add the font Fizz Regular (from sources/fonts) to the page */
 @font-face {
     font-family: "Fizz";
-    src: url("sources/fonts/FizzVF-Regular.woff2.woff2") format("woff2");
+    src: url("sources/fonts/FizzVF-Regular.woff2") format("woff2");
 }
 
 @font-face {
