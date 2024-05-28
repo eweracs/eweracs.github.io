@@ -46,7 +46,7 @@ body {
 p, ul {
     font-family: "Fizz";
     font-weight: normal;
-    font-variation-settings: "wght" 300;
+    font-variation-settings: "wght" 400;
     font-size: 22px;
     line-height: 1.4;
     color: white;
@@ -55,7 +55,7 @@ p, ul {
 h1 {
     font-family: "Fizz Italic";
     font-weight: normal;
-    font-variation-settings: "wght" 300;
+    font-variation-settings: "wght" 400;
     font-size: 42px;
     line-height: 1;
     color: white;
@@ -64,7 +64,7 @@ h1 {
 h2 {
     font-family: "Fizz";
     font-weight: normal;
-    font-variation-settings: "wght" 300;
+    font-variation-settings: "wght" 400;
     font-variant: small-caps;
     font-size: 22px;
     letter-spacing: 0.05em;
@@ -142,7 +142,7 @@ ul {
 
 .topnav a.active {
     color: white;
-    font-variation-settings: "wght" 600;
+    font-variation-settings: "wght" 700;
 }
 
 .languages {
@@ -189,7 +189,7 @@ img {
 .overlaytext {
     font-family: "Fizz Italic";
     font-variant: normal;
-    font-variation-settings: "wght" 300;
+    font-variation-settings: "wght" 400;
     color: white;
     font-size: 20px;
     position: absolute;
