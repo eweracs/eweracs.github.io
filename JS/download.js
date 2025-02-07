@@ -1,7 +1,17 @@
 // Function to get file name and handle download
 async function setupFileDownload() {
-    // Extract file ID from URL
-    const fileId = window.location.pathname.split('/').pop();
+    // Get the file ID from URL query parameter
+    const urlParams = new URLSearchParams(window.location.search);
+    const fileId = urlParams.get('id');
+
+    // If no file ID is provided, show an error
+    if (!fileId) {
+        document.getElementById('file-name').textContent = 'File Download';
+        const downloadButton = document.getElementById('download-button');
+        downloadButton.style.display = 'none';
+        document.getElementById('error-message').textContent = 'No file ID provided.';
+        return;
+    }
 
     // Direct Google Drive download link
     const driveDownloadLink = `https://drive.google.com/uc?export=download&id=${fileId}`;
