@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Download File</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no"/>
+    <link rel="stylesheet" href="style.css" type="text/css"/>
+    <link rel="shortcut icon" type="image/png" href="sources/img/favicon.svg">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+  </head>
+  <body>
+    <div id="nav">
+      <div class="topnav">
+        <a href="index.html">hello</a>
+        <a href="projects.html">projects</a>
+        <a href="about.html">about</a>
+      </div>
+      <div class="topnav languages">
+        <a class="active" href="download.html">en</a>
+        <a href="de/download.html">de</a>
+        <a href="fr/download.html">fr</a>
+      </div>
+    </div>
+    <div id="spacer"></div>
+    <div id="content">
+      <div id="download-container">
+        <div id="file-name">Loading file...</div>
+        <a id="download-button" href="#" download style="display: none;">Download File</a>
+        <div id="error-message"></div>
+      </div>
+    </div>
+
+    <script src="JS/main.js" onload="setSpacerHeight()"></script>
+    <script src="JS/download.js"></script>
+  </body>
+</html>

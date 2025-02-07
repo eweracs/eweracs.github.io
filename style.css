@@ -225,3 +225,33 @@ img {
 .gallery-img:hover .overlay {
     opacity: 1;
 }
+
+#download-container {
+    background-color: white;
+    font-family: "Fizz";
+    font-size: 22px;
+    color: black;
+    max-width: 600px;
+    margin: 0 auto;
+    text-align: left;
+    padding: 40px;
+}
+#download-button {
+    display: inline-block;
+    background-color: #4CAF50;
+    color: white;
+    padding: 10px 20px;
+    text-decoration: none;
+    border-radius: 5px;
+    margin-top: 20px;
+    font-size: 22px;
+}
+#file-name {
+    font-weight: bold;
+    margin-bottom: 15px;
+    font-size: 30px;
+}
+#error-message {
+    color: var(--accent);
+    margin-top: 15px;
+}
