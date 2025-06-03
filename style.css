@@ -103,6 +103,10 @@ br {
     line-height: 1.6;
 }
 
+p {
+    margin-bottom: 1em;
+}
+
 ul {
     font-family: "Fizz";
     list-style-type: disc;
