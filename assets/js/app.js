@@ -50,7 +50,7 @@ class App {
 
     async loadTranslations() {
         try {
-            const response = await fetch('assets/data/translations.json');
+            const response = await fetch('/assets/data/translations.json');
             this.translations = await response.json();
         } catch (error) {
             console.error('Failed to load translations:', error);
@@ -59,7 +59,7 @@ class App {
 
     async loadPages() {
         try {
-            const response = await fetch('assets/data/pages.json');
+            const response = await fetch('/assets/data/pages.json');
             this.pages = await response.json();
         } catch (error) {
             console.error('Failed to load pages:', error);
@@ -68,7 +68,7 @@ class App {
 
     async loadClients() {
         try {
-            const response = await fetch('assets/data/clients.json');
+            const response = await fetch('/assets/data/clients.json');
             this.clients = await response.json();
         } catch (error) {
             console.error('Failed to load clients:', error);
