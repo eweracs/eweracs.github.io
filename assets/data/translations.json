@@ -82,7 +82,7 @@
       "download": {
         "title": "Dateien herunterladen",
         "loadingText": "Laden...",
-        "downloadButtonText": "Herunterladen"
+        "downloadButtonText": "Dateien Herunterladen"
       }
     }
   },
@@ -125,7 +125,7 @@
       "download": {
         "title": "Télécharger fichiers",
         "loadingText": "Charger...",
-        "downloadButtonText": "Télécharger"
+        "downloadButtonText": "Télécharger fichiers"
       }
     }
   }
