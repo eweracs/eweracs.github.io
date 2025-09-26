@@ -39,7 +39,7 @@ body {
     background-repeat: repeat;
     background-attachment: fixed;
     background-position: center;
-    background-color: #fefefe;
+    background-color: #111;
     margin-top: 0;
     margin-bottom: 0;
     line-height: 1.5;
@@ -235,6 +235,7 @@ main {
 #content {
     position: relative;
     max-width: 600px;
+    margin: 0 auto;
     padding-top: 100px;
     padding-bottom: 100px;
 }
@@ -257,17 +258,17 @@ main {
 /* Gallery and Projects */
 .gallery-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fill, 120px);
-    gap: 1rem;
-    margin-top: 2rem;
+    grid-template-columns: repeat(auto-fill, 135px);
+    gap: 20px;
+    justify-content: center;
 }
 
 .gallery-img {
     position: relative;
     aspect-ratio: 1;
     overflow: hidden;
-    width: 120px;
-    height: 120px;
+    width: 135px;
+    height: 135px;
     object-fit: cover;
     transition: transform 0.2s ease;
 }
@@ -296,7 +297,7 @@ main {
     bottom: 0;
     width: 100%;
     height: 100%;
-    background: rgba(217, 11, 93, 0.9);
+    background: black;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -422,8 +423,4 @@ br {
         font-size: 20px;
     }
 
-    .gallery-grid {
-        grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
-        gap: 0.8rem;
-    }
 }

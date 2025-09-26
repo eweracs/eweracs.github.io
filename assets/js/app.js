@@ -204,32 +204,24 @@ class App {
     }
 
     initProjectsPage() {
-        console.log('Initializing projects page...');
-
         // Load services list
         const servicesList = document.getElementById('services-list');
         const services = this.translations[this.currentLang]?.pages?.projects?.services || [];
-
-        console.log('Services found:', services.length);
 
         if (servicesList && services.length) {
             servicesList.innerHTML = services
                 .map(service => `<li>${service}</li>`)
                 .join('');
-            console.log('Services loaded successfully');
         } else {
             console.log('Services list element not found or no services data');
         }
 
         // Load clients gallery
         const clientsGallery = document.getElementById('clients-gallery');
-        console.log('Clients gallery element found:', !!clientsGallery);
-        console.log('Clients data:', this.clients.length, 'items');
 
         if (clientsGallery && this.clients.length) {
             const galleryHTML = this.clients
                 .map(client => {
-                    console.log('Loading client:', client.name, 'Logo path:', client.logo);
                     return `
                         <div class="gallery-img">
                             <img src="${client.logo}" alt="${client.name}" class="clientimg" onerror="console.error('Failed to load image:', '${client.logo}')">
@@ -244,7 +236,6 @@ class App {
                 .join('');
 
             clientsGallery.innerHTML = galleryHTML;
-            console.log('Clients gallery loaded successfully');
         } else {
             console.log('Clients gallery element not found or no clients data');
         }
