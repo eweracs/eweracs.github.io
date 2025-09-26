@@ -93,6 +93,7 @@ h2 {
 strong {
     font-variation-settings: 'wght' 700;
     font-weight: normal;
+    transition: all 0.1s ease-in-out;
 }
 
 i {
@@ -119,6 +120,7 @@ a {
 a:hover {
     font-synthesis: none;
     font-variation-settings: 'wght' 700;
+    transition: all 0.1s ease-in-out;
 }
 
 /* Loading Spinner */
@@ -330,11 +332,10 @@ main {
 
 #download-button {
     display: inline-block;
-    background-color: #4CAF50;
+    background-color: var(--accent);
     color: white;
     padding: 10px 20px;
     text-decoration: none;
-    border-radius: 5px;
     margin-top: 20px;
     font-size: 22px;
 }
