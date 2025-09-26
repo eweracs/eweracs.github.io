@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg id="a" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" viewBox="0 0 400 400">
+  <!-- Generator: Adobe Illustrator 29.1.0, SVG Export Plug-In . SVG Version: 2.1.0 Build 142)  -->
+  <defs>
+    <style>
+      .st0 {
+        fill: #fff;
+      }
+
+      .st1 {
+        display: none;
+      }
+    </style>
+  </defs>
+  <rect width="400" height="400"/>
+  <g id="HrHQeI" class="st1">
+    <image id="HrHQeI1" data-name="HrHQeI" width="225" height="225" transform="scale(1.8)" xlink:href="fontwerk-1.png"/>
+  </g>
+  <rect class="st0" x="101" y="126" width="31" height="74"/>
+  <rect class="st0" x="222" y="126" width="31" height="74"/>
+  <rect class="st0" x="191" y="200" width="31" height="74"/>
+  <polygon class="st0" points="130 274 100 274 131 200 161 200 130 274"/>
+  <polygon class="st0" points="252 274 222 274 253 200 283 200 252 274"/>
+  <polygon class="st0" points="313 200 283 200 314 126 344 126 313 200"/>
+  <polygon class="st0" points="191 200 161 200 192 126 222 126 191 200"/>
+  <rect class="st0" x="70" y="200" width="31" height="74"/>
+</svg>

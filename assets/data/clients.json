@@ -1,0 +1,82 @@
+[
+  {
+    "name": "GitHub",
+    "url": "https://www.github.com",
+    "logo": "assets/img/clients/github.svg"
+  },
+  {
+    "name": "Optimo",
+    "url": "https://www.optimo.ch",
+    "logo": "assets/img/clients/optimo.svg"
+  },
+  {
+    "name": "Lettermin",
+    "url": "https://www.lettermin.com",
+    "logo": "assets/img/clients/lettermin.svg"
+  },
+  {
+    "name": "Atlas Fonts",
+    "url": "http://www.atlasfonts.com",
+    "logo": "assets/img/clients/atlasfonts.svg"
+  },
+  {
+    "name": "MNKY Type",
+    "url": "http://www.monkeytype.xyz",
+    "logo": "assets/img/clients/mnky.svg"
+  },
+  {
+    "name": "Alexander Branczyk",
+    "url": "http://www.czyk.de",
+    "logo": "assets/img/clients/czyk.svg"
+  },
+  {
+    "name": "Character Type",
+    "url": "https://www.charactertype.com",
+    "logo": "assets/img/clients/charactertype.svg"
+  },
+  {
+    "name": "TypeMates",
+    "url": "https://www.typemates.com",
+    "logo": "assets/img/clients/typemates.svg"
+  },
+  {
+    "name": "Signal Foundry",
+    "url": "https://www.signalfoundry.com",
+    "logo": "assets/img/clients/signalfoundry.svg"
+  },
+  {
+    "name": "PS Type Lab",
+    "url": "https://www.pstl.com",
+    "logo": "assets/img/clients/pstl.svg"
+  },
+  {
+    "name": "Mostardesign Type",
+    "url": "https://www.motyfo.com/",
+    "logo": "assets/img/clients/motyfo.svg"
+  },
+  {
+    "name": "Nova Type",
+    "url": "https://www.novatypefoundry.com",
+    "logo": "assets/img/clients/novatype.svg"
+  },
+  {
+    "name": "Serpentype",
+    "url": "https://www.serpentype.com",
+    "logo": "assets/img/clients/serpentype.svg"
+  },
+  {
+    "name": "Kanon Foundry",
+    "url": "https://www.kanonfoundry.com",
+    "logo": "assets/img/clients/kanonfoundry.svg"
+  },
+  {
+    "name": "Moniteurs",
+    "url": "http://www.moniteurs.de",
+    "logo": "assets/img/clients/moniteurs.svg"
+  },
+  {
+    "name": "Berlin Philharmonic",
+    "url": "https://www.berliner-philharmoniker.de",
+    "logo": "assets/img/clients/bph.svg"
+  }
+]
