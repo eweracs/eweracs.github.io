@@ -6,24 +6,24 @@
     <title>Sebastian Carewe – Font engineering, type design</title>
     <meta name="description"
           content="Sebastian Carewe specialises in font engineering and type design, offering expertise in drawing, mastering, and font production.">
-    <link rel="stylesheet" href="assets/css/style.css">
-    <link rel="shortcut icon" href="assets/img/favicon.svg" type="image/svg+xml">
+    <link rel="stylesheet" href="/assets/css/style.css">
+    <link rel="shortcut icon" href="/assets/img/favicon.svg" type="image/svg+xml">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
 <body>
-    <div id="loading">
+    <div id="loading" class="loading">
         <div class="spinner"></div>
     </div>
 
     <header>
-        <nav id="nav">
+        <nav id="nav" aria-label="Main navigation">
             <div class="nav-content">
-                <div class="topnav">
+                <div class="topnav main-nav">
                     <a href="#" class="nav-link active" data-page="home" data-i18n="nav.home">hello</a>
                     <a href="#" class="nav-link" data-page="projects" data-i18n="nav.projects">projects</a>
                     <a href="#" class="nav-link" data-page="about" data-i18n="nav.about">about</a>
                 </div>
-                <div class="topnav languages">
+                <div class="topnav languages" aria-label="Language selection">
                     <button class="lang-btn active" data-lang="en">en</button>
                     <button class="lang-btn" data-lang="de">de</button>
                     <button class="lang-btn" data-lang="fr">fr</button>
@@ -34,12 +34,24 @@
 
     <div id="spacer"></div>
 
-    <main>
-        <div id="app">
-            <!-- Content will be loaded here by JavaScript -->
-        </div>
+    <main id="app">
+        <!-- Dynamic content will be loaded here -->
     </main>
 
-    <script src="app.js"></script>
+    <footer>
+        <div class="social-links">
+            <a href="https://www.linkedin.com/in/sebastian-carewe-84aa0a220" rel="noopener" aria-label="LinkedIn">
+                <i class="fab fa-linkedin" aria-hidden="true"></i>
+            </a>
+            <a href="https://www.github.com/eweracs" rel="noopener" aria-label="GitHub">
+                <i class="fab fa-github" aria-hidden="true"></i>
+            </a>
+            <a href="https://instagram.com/s_carewe" rel="noopener" aria-label="Instagram">
+                <i class="fab fa-instagram" aria-hidden="true"></i>
+            </a>
+        </div>
+    </footer>
+
+    <script type="module" src="/assets/js/app.js"></script>
 </body>
 </html>
