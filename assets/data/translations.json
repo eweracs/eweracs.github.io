@@ -11,7 +11,7 @@
         "title": "Font engineering and type design",
         "subtitle": "Font engineering, type design • Paris, France",
         "description": "My expertise in type covers everything from drawing (Latin/Cyrillic), mastering and static and variable font production to tool development (Python) and quality assurance, complemented by my background in linguistics.",
-        "contact": "Looking for me? I’m always happy to chat about new projects: sebastian.carewe (at) gmail.com"
+        "contact": "Looking for me? I'm always happy to chat about new projects: sebastian.carewe<span class=\"email-protected\"></span>"
       },
       "about": {
         "title": "About",
@@ -22,14 +22,13 @@
         "servicesIntro": "I offer a wide range of services around type design and font engineering, including:",
         "services": [
           "Consulting",
-          "Character set expansion (Latin, Cyrillic)",
-          "Weight/width expansion",
+          "Character set extension (Latin, Cyrillic)",
+          "Style expansion",
           "Italics",
-          "Spacing",
-          "Kerning",
+          "Spacing/Kerning",
           "Quality assurance",
           "OpenType feature engineering",
-          "Static, variable font production",
+          "Static and variable font production",
           "Mastering",
           "Character set research",
           "Tool creation around Glyphs"
@@ -54,7 +53,7 @@
         "title": "Font-Engineering, Schriftgestaltung",
         "subtitle": "Font-Engineering, Schriftgestaltung • Paris, Frankreich",
         "description": "Meine Expertise in Sachen Schrift reicht vom Zeichnen (Lateinisch/Kyrillisch) über Mastering und Produktion statischer Schriften und Variable-Fonts bis hin zur Toolentwicklung (Python) und Qualitätssicherung, begleitet von meiner Leidenschaft für Linguistik.",
-        "contact": "Auf der Suche nach mir? Ich bin immer offen für Projektideen: sebastian.carewe (at) gmail.com"
+        "contact": "Auf der Suche nach mir? Ich bin immer offen für Projektideen: sebastian.carewe<span class=\"email-protected\"></span>"
       },
       "about": {
         "title": "Info",
@@ -66,13 +65,12 @@
         "services": [
           "Beratung",
           "Zeichensatzerweiterung (Lateinisch, Kyrillisch)",
-          "Stärken-/Breitenerweiterung",
-          "Kursive",
-          "Spationierung",
-          "Kerning",
+          "Stilerweiterung",
+          "Kursivgestaltung",
+          "Spationierung/Kerning",
           "Qualitätssicherung",
           "OpenType-Feature-Engineering",
-          "Statische, variable Schriftproduktion",
+          "Statische und variable Schriftproduktion",
           "Mastering",
           "Zeichensatzforschung",
           "Toolentwicklung für Glyphs"
@@ -97,7 +95,7 @@
         "title": "Ingénierie et dessin typographique",
         "subtitle": "Ingénierie, création de polices • Paris, France",
         "description": "Mes compétences en matière de typographie englobent le dessin (latin/cyrillique), la maîtrise et la production de polices statiques et variables, le développement de logiciels (Python) et l’assurance qualité, le tout complété par ma formation en linguistique.",
-        "contact": "Vous me cherchez ? Je suis toujours ravi de discuter de nouveaux projets : sebastian.carewe (at) gmail.com"
+        "contact": "Vous me cherchez ? Je suis toujours ravi de discuter de nouveaux projets : sebastian.carewe<span class=\"email-protected\"></span>"
       },
       "about": {
         "title": "À propos",
@@ -109,10 +107,9 @@
         "services": [
           "Conseil",
           "Extension de jeux de caractères (Latin, Cyrillique)",
-          "Extension de graisse/chasse",
+          "Extensions de styles",
           "Italiques",
-          "Espacement",
-          "Crénage",
+          "Espacement/crénage",
           "Assurance qualité",
           "Ingénierie de fonctionnalités OpenType",
           "Production de polices statiques et variables",
