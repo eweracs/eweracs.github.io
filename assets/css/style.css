@@ -34,12 +34,12 @@ html, body {
 }
 
 body {
-    background-image: url('../img/bg_main.png');
+    /*background-image: url('../img/bg_main.png');*/
     background-size: cover;
     background-repeat: repeat;
     background-attachment: fixed;
     background-position: center;
-    background-color: #111;
+    background-color: black;
     margin-top: 0;
     margin-bottom: 0;
     line-height: 1.5;
@@ -88,12 +88,6 @@ h2 {
     font-size: 22px;
     letter-spacing: 0.05em;
     color: white;
-}
-
-strong {
-    font-variation-settings: 'wght' 700;
-    font-weight: normal;
-    transition: all 0.1s ease-in-out;
 }
 
 i {
@@ -321,10 +315,10 @@ main {
 
 /* Download Section */
 #download-container {
-    background-color: white;
+    background-color: black;
     font-family: 'Fizz';
     font-size: 22px;
-    color: black;
+    color: white;
     max-width: 600px;
     margin: 0 auto;
     text-align: left;
@@ -332,13 +326,17 @@ main {
 }
 
 #download-button {
-    display: inline-block;
     background-color: var(--accent);
     color: white;
     padding: 10px 20px;
     text-decoration: none;
     margin-top: 20px;
     font-size: 22px;
+    transition: all 0.3s ease-in-out;
+}
+
+#download-button:hover {
+    font-variation-settings: 'wght' 700;
 }
 
 #file-name {
@@ -398,6 +396,11 @@ br {
     text-align: center;
     padding: 2rem;
     color: #666;
+}
+
+/* Email obfuscation */
+.email-protected::after {
+    content: "@gmail.com";
 }
 
 /* Responsive Design */

@@ -1,15 +1,18 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!-- Generator: Adobe Illustrator 28.1.0, SVG Export Plug-In . SVG Version: 6.00 Build 0)  -->
-<svg version="1.1" id="a" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
-	 viewBox="0 0 400 400" style="enable-background:new 0 0 400 400;" xml:space="preserve">
-<style type="text/css">
-	.st0{fill:#222730;}
-	.st1{fill:#0081FD;}
-	.st2{fill:#FD0000;}
-</style>
-<rect class="st0" width="400" height="400"/>
-<path class="st1" d="M247.2,135.5c60.6,45.5,70.6,129.3,21.3,186.7c-48.3,56.4-127.1,54.4-171.5,19.4c18.6-25.7,37.1-51.5,55.7-77.2
-	c5.7-7.7,11.5-15.4,17.2-23.1C195.7,206,221.4,170.7,247.2,135.5z"/>
-<path class="st2" d="M247.2,135.5c-25.7,35.2-51.5,70.5-77.2,105.7c-5.7,7.8-11.5,15.4-17.2,23.1C91.3,219,83.2,131.8,133.2,76
-	c42.5-47.4,114.7-56.2,166.7-20.1c0.9,0.7,1.8,1.4,3.1,2.3C284.3,84.1,265.7,109.8,247.2,135.5z"/>
+<?xml version="1.0" encoding="UTF-8"?>
+<svg id="a" xmlns="http://www.w3.org/2000/svg" version="1.1" viewBox="0 0 400 400">
+  <!-- Generator: Adobe Illustrator 29.1.0, SVG Export Plug-In . SVG Version: 2.1.0 Build 142)  -->
+  <defs>
+    <style>
+      .st0 {
+        fill: #0081fd;
+      }
+
+      .st1 {
+        fill: #fd0000;
+      }
+    </style>
+  </defs>
+  <rect width="400" height="400"/>
+  <path class="st0" d="M247.2,135.5c60.6,45.5,70.6,129.3,21.3,186.7-48.3,56.4-127.1,54.4-171.5,19.4,18.6-25.7,37.1-51.5,55.7-77.2,5.7-7.7,11.5-15.4,17.2-23.1,25.8-35.3,51.5-70.6,77.3-105.8Z"/>
+  <path class="st1" d="M247.2,135.5c-25.7,35.2-51.5,70.5-77.2,105.7-5.7,7.8-11.5,15.4-17.2,23.1-61.5-45.3-69.6-132.5-19.6-188.3,42.5-47.4,114.7-56.2,166.7-20.1.9.7,1.8,1.4,3.1,2.3-18.7,25.9-37.3,51.6-55.8,77.3Z"/>
 </svg>
