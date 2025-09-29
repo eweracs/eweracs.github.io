@@ -231,7 +231,7 @@ main {
     max-width: 600px;
     margin: 0 auto;
     padding-top: 100px;
-    padding-bottom: 100px;
+    padding-bottom: 20px;
 }
 
 #content p {
@@ -379,7 +379,6 @@ main {
 
 /* Footer */
 footer {
-    margin-top: 4rem;
     padding: 2rem;
     text-align: center;
 }
@@ -415,6 +414,22 @@ br {
 
     #spacer {
         height: 120px;
+    }
+
+    #content {
+        padding-top: 10px;
+        padding-bottom: 10px
+    }
+
+    footer {
+        position: fixed;
+        bottom: 20px;
+        left: 50%;
+        transform: translateX(-50%);
+        backdrop-filter: blur(2px);
+        border-radius: 50px;
+        padding: 10px 15px;
+        background-color: rgba(0, 0, 0, 0.1);
     }
 
     main {

@@ -39,7 +39,11 @@ class App {
         const header = document.querySelector('header');
         const currentScrollTop = window.pageYOffset || document.documentElement.scrollTop;
 
-        if (currentScrollTop > 100) {
+        // Use different threshold based on screen width
+        const isMobile = window.matchMedia('(max-width: 768px)').matches;
+        const threshold = isMobile ? 20 : 100;
+
+        if (currentScrollTop > threshold) {
             header.classList.add('faded');
         } else {
             header.classList.remove('faded');
