@@ -275,6 +275,11 @@ main {
     opacity: 1;
 }
 
+.gallery-img:hover .clientimg {
+    opacity: 0;
+    transition: opacity 0.5s ease;
+}
+
 .clientimg {
     display: block;
     width: 100%;
