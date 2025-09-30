@@ -355,7 +355,7 @@ main {
 }
 
 #download-button:hover {
-    color: var(--text-colour);
+    color: white;
     background-color: var(--accent-colour);
 }
 

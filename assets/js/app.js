@@ -2,7 +2,7 @@ class App {
     constructor() {
         this.currentLang = localStorage.getItem('lang') || 'en';
         this.currentPage = 'home';
-        this.currentTheme = localStorage.getItem('theme') || 'light';
+        this.currentTheme = localStorage.getItem('theme') || 'dark';
         this.translations = {};
         this.pages = {};
         this.clients = [];
