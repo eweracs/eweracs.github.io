@@ -6,8 +6,8 @@
     <title>Sebastian Carewe – Font engineering, type design</title>
     <meta name="description"
           content="Sebastian Carewe specialises in font engineering and type design, offering expertise in drawing, mastering, and font production.">
-    <link rel="stylesheet" href="/assets/css/style.css">
-    <link rel="shortcut icon" href="/assets/img/favicon.svg" type="image/svg+xml">
+    <link rel="stylesheet" href="assets/css/style.css">
+    <link rel="shortcut icon" href="assets/img/favicon.svg" type="image/svg+xml">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
 <body>
@@ -24,9 +24,11 @@
                     <a href="#" class="nav-link" data-page="about" data-i18n="nav.about">about</a>
                 </div>
                 <div class="topnav languages" aria-label="Language selection">
-                    <button class="lang-btn active" data-lang="en">en</button>
-                    <button class="lang-btn" data-lang="de">de</button>
-                    <button class="lang-btn" data-lang="fr">fr</button>
+                    <button class="nav-link theme-toggle" id="theme-toggle" aria-label="Theme toggle">
+                        <img src="/assets/img/darkmode.svg" alt="Colour switcher" width="16" height="16">
+                    <button class="nav-link lang-btn active" data-lang="en">en</button>
+                    <button class="nav-link lang-btn" data-lang="de">de</button>
+                    <button class="nav-link lang-btn" data-lang="fr">fr</button>
                 </div>
             </div>
         </nav>
@@ -52,6 +54,6 @@
         </div>
     </footer>
 
-    <script type="module" src="/assets/js/app.js"></script>
+    <script type="module" src="assets/js/app.js"></script>
 </body>
 </html>
