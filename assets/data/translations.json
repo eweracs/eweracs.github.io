@@ -35,9 +35,9 @@
         "clientsIntro": "Selected clients:"
       },
       "download": {
-        "title": "Download File",
+        "title": "Download Files",
         "loadingText": "Loading file...",
-        "downloadButtonText": "Download Files"
+        "downloadButtonText": "Download files"
       }
     }
   },
