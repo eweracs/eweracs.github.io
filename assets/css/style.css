@@ -15,7 +15,7 @@
     --nav-colour: #999;
     --button-hover: #f5f5f5;
     --accent-colour: #d90b5d;
-    --footer-background: rgba(1, 1, 1, 0.1);
+    --footer-background: rgba(255, 255, 255, 0.3);
 }
 
 /* Dark theme */
@@ -25,7 +25,7 @@
     --nav-colour: #d0d0d0;
     --button-hover: #3d3d3d;
     --accent-colour: #d90b5d;
-    --footer-background: rgba(0, 0, 0, 0.1);
+    --footer-background: rgba(0, 0, 0, 0.2);
 }
 
 /* Reset and Base Styles */
