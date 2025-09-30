@@ -9,7 +9,21 @@
 }
 
 :root {
-    --accent: #d90b5d;
+    /* Light theme (default) */
+    --bg-colour: white;
+    --text-colour: black;
+    --nav-colour: #999;
+    --button-hover: #f5f5f5;
+    --accent-colour: #d90b5d;
+}
+
+/* Dark theme */
+[data-theme="dark"] {
+    --bg-colour: #1a1a1a;
+    --text-colour: white;
+    --nav-colour: #d0d0d0;
+    --button-hover: #3d3d3d;
+    --accent-colour: #d90b5d;
 }
 
 /* Reset and Base Styles */
@@ -31,6 +45,7 @@ html, body {
     margin-left: 5%;
     margin-right: 5%;
     padding: 0;
+    transition: all 0.1s ease-in-out;
 }
 
 body {
@@ -39,7 +54,7 @@ body {
     background-repeat: repeat;
     background-attachment: fixed;
     background-position: center;
-    background-color: black;
+    background-color: var(--bg-colour);
     margin-top: 0;
     margin-bottom: 0;
     line-height: 1.5;
@@ -67,7 +82,7 @@ p, ul {
     font-variation-settings: 'wght' 500;
     font-size: 22px;
     line-height: 1.4;
-    color: white;
+    color: var(--text-colour);
     margin-bottom: 1em;
 }
 
@@ -77,7 +92,7 @@ h1 {
     font-variation-settings: 'wght' 500;
     font-size: 42px;
     line-height: 1;
-    color: white;
+    color: var(--text-colour);
 }
 
 h2 {
@@ -87,11 +102,10 @@ h2 {
     font-variant: small-caps;
     font-size: 22px;
     letter-spacing: 0.05em;
-    color: white;
+    color: var(--text-colour);
 }
 
 i {
-    transition: all 0.2s ease-in-out;
     font-family: 'Fizz Italic';
     font-style: normal;
 }
@@ -104,11 +118,11 @@ ul {
 /* Links */
 a {
     transition: all 0.1s ease-in-out;
-    color: white;
+    color: var(--text-colour);
     text-decoration: underline;
     text-underline-offset: 0.2em;
     text-decoration-thickness: 0.1em;
-    text-decoration-color: var(--accent);
+    text-decoration-color: var(--accent-colour);
 }
 
 p a:hover {
@@ -124,7 +138,7 @@ p a:hover {
     left: 0;
     width: 100%;
     height: 100%;
-    background: black;
+    background: var(--bg-colour);
     display: flex;
     justify-content: center;
     align-items: center;
@@ -181,8 +195,8 @@ header.faded {
     gap: 2rem;
 }
 
-.nav-link, .lang-btn {
-    color: #d0d0d0;
+.nav-link {
+    color: var(--nav-colour);
     font-size: 22px;
     font-variant: small-caps;
     text-decoration: none;
@@ -191,23 +205,20 @@ header.faded {
     background: none;
     border: none;
     cursor: pointer;
+    font-variation-settings: 'wght' 500;
 }
 
-.nav-link:hover, .lang-btn:hover, .topnav a:hover {
-    color: var(--accent);
+.nav-link:hover, .topnav a:hover {
+    color: var(--accent-colour);
 }
 
-.nav-link.active, .lang-btn.active {
-    color: white;
+.nav-link.active {
+    color: var(--text-colour);
     font-variation-settings: 'wght' 700;
 }
 
-.languages {
-    font-size: 18px;
-}
-
-.languages a {
-    padding-right: 10px;
+[data-theme="dark"] #theme-toggle {
+    filter: invert(1);
 }
 
 /* Spacers */
@@ -285,7 +296,7 @@ main {
     width: 100%;
     height: 100%;
     object-fit: contain;
-    background: black;
+    background: var(--bg-colour);
 }
 
 .overlay {
@@ -296,7 +307,7 @@ main {
     bottom: 0;
     width: 100%;
     height: 100%;
-    background: black;
+    background: var(--bg-colour);
     display: flex;
     align-items: center;
     justify-content: center;
@@ -308,7 +319,7 @@ main {
     font-family: 'Fizz Italic';
     font-variant: normal;
     font-variation-settings: 'wght' 500;
-    color: white;
+    color: var(--text-colour);
     font-size: 20px;
     text-align: center;
     padding: 0.5rem;
@@ -320,7 +331,7 @@ main {
 
 /* Download Section */
 #download-container {
-    background-color: white;
+    background-color: var(--text-colour);
     font-family: 'Fizz';
     font-size: 22px;
     color: white;
@@ -332,8 +343,8 @@ main {
 
 #download-button {
     font-variation-settings: 'wght' 500;
-    border: 2px solid var(--accent);
-    color: black;
+    border: 2px solid var(--accent-colour);
+    color: var(--bg-colour);
     padding: 10px 20px;
     text-decoration: none;
     margin-top: 20px;
@@ -342,12 +353,12 @@ main {
 }
 
 #download-button:hover {
-    color: white;
-    background-color: var(--accent);
+    color: var(--text-colour);
+    background-color: var(--accent-colour);
 }
 
 #file-name {
-    color: black;
+    color: var(--bg-colour);
     font-weight: bold;
     margin-bottom: 15px;
     font-size: 30px;
@@ -355,18 +366,18 @@ main {
 
 #error-message {
     font-variation-settings: 'wght' 500;
-    color: var(--accent);
+    color: var(--accent-colour);
     margin-top: 15px;
 }
 
 /* Icons and Social */
 .fa {
     padding-right: 12px;
-    color: white;
+    color: var(--text-colour);
 }
 
 .fa:hover {
-    color: var(--accent);
+    color: var(--accent-colour);
     opacity: 0.7;
 }
 
@@ -377,13 +388,13 @@ main {
 }
 
 .social-links a {
-    color: white;
+    color: var(--text-colour);
     font-size: 20px;
     transition: color 0.2s ease;
 }
 
 .social-links a:hover {
-    color: var(--accent);
+    color: var(--accent-colour);
 }
 
 /* Footer */
@@ -445,7 +456,7 @@ br {
         padding: 0 1rem;
     }
 
-    .nav-link, .lang-btn {
+    .nav-link {
         padding: 0.4rem 0.8rem;
         font-size: 20px;
     }

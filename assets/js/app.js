@@ -2,6 +2,7 @@ class App {
     constructor() {
         this.currentLang = localStorage.getItem('lang') || 'en';
         this.currentPage = 'home';
+        this.currentTheme = localStorage.getItem('theme') || 'light';
         this.translations = {};
         this.pages = {};
         this.clients = [];
@@ -14,11 +15,42 @@ class App {
         await this.loadTranslations();
         await this.loadPages();
         await this.loadClients();
+        this.initTheme();
         this.setupEventListeners();
         this.setupScrollBehavior();
         this.updateLanguage();
         this.navigateTo(this.getPageFromURL());
         this.hideLoading();
+    }
+
+    initTheme() {
+        // Set theme based on stored preference or system preference
+        const storedTheme = localStorage.getItem('theme');
+        const systemPrefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+
+        if (storedTheme) {
+            this.currentTheme = storedTheme;
+        } else if (systemPrefersDark) {
+            this.currentTheme = 'dark';
+        }
+
+        this.applyTheme();
+    }
+
+    applyTheme() {
+        if (this.currentTheme === 'dark') {
+            document.documentElement.setAttribute('data-theme', 'dark');
+        } else {
+            document.documentElement.removeAttribute('data-theme');
+        }
+
+        localStorage.setItem('theme', this.currentTheme);
+    }
+
+    // Toggle theme
+    toggleTheme() {
+        this.currentTheme = this.currentTheme === 'light' ? 'dark' : 'light';
+        this.applyTheme();
     }
 
     setupScrollBehavior() {
@@ -80,14 +112,15 @@ class App {
     }
 
     setupEventListeners() {
-        // Navigation links
-        document.querySelectorAll('.nav-link').forEach(link => {
+        // Navigation links - ONLY target elements with data-page attribute
+        document.querySelectorAll('.nav-link[data-page]').forEach(link => {
             link.addEventListener('click', (e) => {
                 e.preventDefault();
                 const page = e.target.dataset.page;
                 this.navigateTo(page);
             });
         });
+
 
         // Language buttons
         document.querySelectorAll('.lang-btn').forEach(btn => {
@@ -97,10 +130,32 @@ class App {
             });
         });
 
+        // Theme toggle button
+        const themeToggle = document.getElementById('theme-toggle');
+        if (themeToggle) {
+            themeToggle.addEventListener('click', (e) => {
+                e.preventDefault();
+                e.stopPropagation(); // Prevent event bubbling
+                this.toggleTheme();
+            });
+        }
+
+
         // Browser back/forward
         window.addEventListener('popstate', (e) => {
             this.navigateTo(e.state?.page || 'home', false);
         });
+
+        // Listen for system theme changes
+        window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', (e) => {
+            // Only auto-switch if user hasn't manually set a preference
+            if (!localStorage.getItem('theme')) {
+                this.currentTheme = e.matches ? 'dark' : 'light';
+                this.applyTheme();
+            }
+        });
+
+
     }
 
     navigateTo(page, pushState = true) {
@@ -120,8 +175,8 @@ class App {
             history.pushState({page}, '', url);
         }
 
-        // Update navigation - don't highlight download page in nav
-        document.querySelectorAll('.nav-link').forEach(link => {
+        // Update navigation - only target navigation links with data-page attribute
+        document.querySelectorAll('.nav-link[data-page]').forEach(link => {
             const shouldBeActive = link.dataset.page === page && page !== 'download';
             link.classList.toggle('active', shouldBeActive);
         });
