@@ -10,14 +10,19 @@
     "logo": "assets/img/clients/optimo.svg"
   },
   {
-    "name": "Lettermin",
-    "url": "https://www.lettermin.com",
-    "logo": "assets/img/clients/lettermin.svg"
+    "name": "Character Type",
+    "url": "https://www.charactertype.com",
+    "logo": "assets/img/clients/charactertype.svg"
   },
   {
     "name": "Atlas Fonts",
     "url": "http://www.atlasfonts.com",
     "logo": "assets/img/clients/atlasfonts.svg"
+  },
+  {
+    "name": "TypeMates",
+    "url": "https://www.typemates.com",
+    "logo": "assets/img/clients/typemates.svg"
   },
   {
     "name": "MNKY Type",
@@ -30,14 +35,9 @@
     "logo": "assets/img/clients/czyk.svg"
   },
   {
-    "name": "Character Type",
-    "url": "https://www.charactertype.com",
-    "logo": "assets/img/clients/charactertype.svg"
-  },
-  {
-    "name": "TypeMates",
-    "url": "https://www.typemates.com",
-    "logo": "assets/img/clients/typemates.svg"
+    "name": "Lettermin",
+    "url": "https://www.lettermin.com",
+    "logo": "assets/img/clients/lettermin.svg"
   },
   {
     "name": "Signal Foundry",
@@ -45,9 +45,9 @@
     "logo": "assets/img/clients/signalfoundry.svg"
   },
   {
-    "name": "PS Type Lab",
-    "url": "https://www.pstl.com",
-    "logo": "assets/img/clients/pstl.svg"
+    "name": "Mark van Leeuwen",
+    "url": "https://www.markvanleeuwen.co",
+    "logo": "assets/img/clients/markvanleeuwen.svg"
   },
   {
     "name": "Mostardesign Type",
@@ -55,9 +55,9 @@
     "logo": "assets/img/clients/motyfo.svg"
   },
   {
-    "name": "Nova Type",
-    "url": "https://www.novatypefoundry.com",
-    "logo": "assets/img/clients/novatype.svg"
+    "name": "PS Type Lab",
+    "url": "https://www.pstl.com",
+    "logo": "assets/img/clients/pstl.svg"
   },
   {
     "name": "Serpentype",
@@ -68,6 +68,21 @@
     "name": "Kanon Foundry",
     "url": "https://www.kanonfoundry.com",
     "logo": "assets/img/clients/kanonfoundry.svg"
+  },
+  {
+    "name": "Margot Lévêque Studio",
+    "url": "https://www.margotleveque.com",
+    "logo": "assets/img/clients/margotleveque.svg"
+  },
+  {
+    "name": "Fontwerk",
+    "url": "https://www.fontwerk.com",
+    "logo": "assets/img/clients/fontwerk.svg"
+  },
+  {
+    "name": "Nova Type",
+    "url": "https://www.novatypefoundry.com",
+    "logo": "assets/img/clients/novatype.svg"
   },
   {
     "name": "Moniteurs",
