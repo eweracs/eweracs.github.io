@@ -41,7 +41,8 @@
       "download": {
         "title": "Download Files",
         "loadingText": "Loading file...",
-        "downloadButtonText": "Download files"
+        "downloadButtonText": "Download files",
+        "waitingText": "Please wait..."
       }
     }
   },
@@ -86,7 +87,8 @@
       "download": {
         "title": "Dateien herunterladen",
         "loadingText": "Laden...",
-        "downloadButtonText": "Dateien Herunterladen"
+        "downloadButtonText": "Dateien Herunterladen",
+        "waitingText": "Bitte warten..."
       }
     }
   },
@@ -131,7 +133,8 @@
       "download": {
         "title": "Télécharger fichiers",
         "loadingText": "Charger...",
-        "downloadButtonText": "Télécharger fichiers"
+        "downloadButtonText": "Télécharger fichiers",
+        "waitingText": "Un instant..."
       }
     }
   }

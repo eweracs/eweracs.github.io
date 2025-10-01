@@ -261,6 +261,31 @@ class App {
         if (downloadButton) {
             downloadButton.href = driveDownloadLink;
             downloadButton.style.display = 'inline-block';
+
+            // Add click event listener to change button text
+            downloadButton.addEventListener('click', function() {
+                const originalText = this.textContent;
+                const button = this;
+
+                // Change button text to "Please wait..."
+                button.textContent = originalText + "..."
+                button.style.pointerEvents = 'none';
+                button.style.opacity = '0.7';
+
+                // Function to restore button state
+                const restoreButton = () => {
+                    button.textContent = originalText;
+                    button.style.pointerEvents = 'auto';
+                    button.style.opacity = '1';
+                };
+
+                // Timer - restore after 15 seconds
+                setTimeout(() => {
+                    restoreButton();
+                    window.removeEventListener('focus', handleFocus);
+                    window.removeEventListener('blur', handleBlur);
+                }, 15000);
+            });
         }
     }
 
