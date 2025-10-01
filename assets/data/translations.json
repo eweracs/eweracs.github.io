@@ -3,6 +3,7 @@
   "en": {
     "nav": {
       "home": "hello",
+      "expertise": "expertise",
       "projects": "projects",
       "about": "about"
     },
@@ -17,8 +18,8 @@
         "title": "About",
         "content": "Hi, I’m Sebastian Carewe. I am a font engineer, type designer and linguist currently based in Paris.<br>Initially from Berlin, Germany, I studied interface design and focused on type design under Luc(as) de Groot. After studying Italian language and literature for a year, I moved to Porto, Portugal, to work as a font engineer at <a href=\"https://schriftlabor.at\">Schriftlabor</a> for one year. Owing to my passion for languages, I then completed a BA in linguistics in Lille and am continuing with a master’s degree at Sorbonne Nouvelle in Paris.<br>I publish scripts and plugins for Glyphs and various other code on my <a href=\"https://github.com/eweracs\">Github</a>. I pride myself in a most comprehensive type design skill set ranging all the way from drawing to the nitty-gritty final production work. Equally balancing drawing, tool creation and production has enabled me to inform each of these fields to develop a highly efficient workflow which compromises neither quality nor adaptability.<br>Aside from type, I have a broad background in music, with a keen interest in music theory, acoustics and the piano (jazz and classical). I spend my time speed-skating in winter and on my bike in summer. I can solve a Rubik’s cube in nine seconds, but can’t tell you the point."
       },
-      "projects": {
-        "title": "Projects",
+      "expertise": {
+        "title": "Expertise",
         "servicesIntro": "I offer a wide range of services around type design and font engineering, including:",
         "services": [
           "Design, consulting, extension (Latin Extended, Cyrillic Extended)",
@@ -31,7 +32,10 @@
           "Tool creation in Python around Glyphs",
           "Workflow optimisation (Git, production, tools)",
           "Character set and localisation research"
-        ],
+        ]
+      },
+      "projects": {
+        "title": "Projects",
         "clientsIntro": "Selected clients:"
       },
       "download": {
@@ -44,6 +48,7 @@
   "de": {
     "nav": {
       "home": "hallo",
+      "expertise": "expertise",
       "projects": "projekte",
       "about": "info"
     },
@@ -58,8 +63,8 @@
         "title": "Info",
         "content": "Hallo, ich bin Sebastian Carewe. Ich bin Schriftingenieur, Schriftgestalter und Linguist und wohne aktuell in Paris.<br>Ursprünglich aus Berlin, habe ich mich während meines Interfacedesign-Studiums unter Luc(as) de Groot auf Schriftgestaltung konzentriert. Nach einem Jahr Studium italienischer Literatur bin ich nach Porto, Portugal, gezogen, um ein Jahr lang als Schriftingenieur bei <a href=\"https://schriftlabor.at\">Schriftlabor</a> zu arbeiten. Aufgrund meiner Leidenschaft für Sprachen habe ich danach in Lille einen Bachelor in Linguistik gemacht, an den ich aktuell in Paris an der Sorbonne Nouvelle mit einem Master anschließe.<br>Ich veröffentliche Skripte und Erweiterungen für Glyphs und diversen anderen Code auf meinem <a href=\"https://github.com/eweracs\">GitHub</a>. Meine umfassenden Fähigkeiten im Schriftbereich reichen vom Zeichnen bis hin zu den Feinheiten der Endproduktion. Die Balance aus Zeichnung, Programmierung und Produktion hat es mir ermöglicht, diese Bereiche gegenseitig zu bereichern, um einen hocheffizienten Arbeitsprozess zu entwickeln, der weder bei Qualität noch bei Anpassungsfähigkeit Kompromisse macht.<br>Abseits von Typographie habe ich ein breit gefächertes musikalisches Interesse, mit einem besonderen Schwerpunkt auf Musiktheorie, Akustik und Klavier (Jazz und Klassik). Im Winter verbringe ich meine Zeit beim Eisschnelllauf und im Sommer auf dem Rennrad. Ich kann einen Zauberwürfel in neun Sekunden lösen, nur der Sinn ist mir noch schleierhaft."
       },
-      "projects": {
-        "title": "Projekte",
+      "expertise": {
+        "title": "Expertise",
         "servicesIntro": "Ich biete eine breite Palette von Dienstleistungen rund um Schriftgestaltung und Font-Engineering an, darunter:",
         "services": [
           "Gestaltung, Beratung, Erweiterung (erweitertes Lateinisch, erweitertes Kyrillisch)",
@@ -72,7 +77,10 @@
           "Python-Toolentwicklung für Glyphs",
           "Workflowoptimierung (Git, Produktion, Werkzeuge)",
           "Zeichensatzforschung und Lokalisierung"
-        ],
+        ]
+      },
+      "projects": {
+        "title": "Projekte",
         "clientsIntro": "Ausgewählte Kunden:"
       },
       "download": {
@@ -85,6 +93,7 @@
   "fr": {
     "nav": {
       "home": "bonjour",
+      "expertise": "expertise",
       "projects": "projets",
       "about": "à propos"
     },
@@ -99,8 +108,8 @@
         "title": "À propos",
         "content": "Salut, je suis Sebastian Carewe. Je suis ingénieur en polices de caractères, créateur de caractères et linguiste actuellement basé à Paris.<br>Originaire de Berlin, j’ai fait des études de design d’interface où je me suis concentré sur le dessin de caractères sous la direction de Luc(as) de Groot. Après un an d’études de littérature et culture italiennes, j’ai déménagé à Porto, au Portugal, pour travailler comme ingénieur typographe chez <a href=\"https://schriftlabor.at\">Schriftlabor</a> pendant un an. Passionné par les langues, j’ai ensuite fait une licence en linguistique à Lille et poursuis actuellement mon master à Paris à la Sorbonne Nouvelle.<br>Je publie des scripts et des plugins pour Glyphs et divers autres codes sur mon <a href=\"https://www.github.com/eweracs\">GitHub</a>. Mes compétences en matière de conception de caractères vont du dessin au travail de production final. L’équilibre entre le dessin, la création d’outils et la production m’a permis d’enrichir chacun de ces domaines pour développer un flux de travail très efficace qui ne compromet ni la qualité ni l’adaptabilité.<br>En dehors de la typographie, j’ai une vaste expérience de la musique, avec un intérêt marqué pour le solfège, la théorie de l’acoustique et le piano (jazz et classique). Je passe mon temps à faire du patinage de vitesse en hiver et à faire du vélo en été. Je peux résoudre un Rubik’s cube en neuf secondes, mais j’en cherche toujours le sens."
       },
-      "projects": {
-        "title": "Projets",
+      "expertise": {
+        "title": "Expertise",
         "servicesIntro": "J’offre une large gamme de services autour du design typographique et de l’ingénierie de polices, notamment :",
         "services": [
           "Dessin, conseil, extension (Latin étendu, Cyrillique étendu)",
@@ -113,7 +122,10 @@
           "Création d’outils pour Glyphs",
           "Optimisation de flux de travail (Git, production, outils)",
           "Recherches linguistiques (jeux de caractères, localisation)"
-        ],
+        ]
+      },
+      "projects": {
+        "title": "Projets",
         "clientsIntro": "Clients sélectionnés :"
       },
       "download": {

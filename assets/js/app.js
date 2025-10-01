@@ -216,7 +216,6 @@ class App {
     }
 
     initPageScripts(page) {
-        // Set spacer height (from your original main.js)
         this.setSpacerHeight();
 
         // Page-specific initialization
@@ -224,7 +223,10 @@ class App {
             this.initProjectsPage();
         } else if (page === 'download') {
             this.initDownloadPage();
+        } else if (page === 'expertise') {
+            this.initExpertisePage();
         }
+
     }
 
     initDownloadPage() {
@@ -262,10 +264,10 @@ class App {
         }
     }
 
-    initProjectsPage() {
+    initExpertisePage() {
         // Load services list
         const servicesList = document.getElementById('services-list');
-        const services = this.translations[this.currentLang]?.pages?.projects?.services || [];
+        const services = this.translations[this.currentLang]?.pages?.expertise?.services || [];
 
         if (servicesList && services.length) {
             servicesList.innerHTML = services
@@ -274,30 +276,145 @@ class App {
         } else {
             console.log('Services list element not found or no services data');
         }
+    }
 
-        // Load clients gallery
-        const clientsGallery = document.getElementById('clients-gallery');
 
-        if (clientsGallery && this.clients.length) {
-            const galleryHTML = this.clients
-                .map(client => {
-                    return `
-                        <div class="gallery-img">
-                            <img src="${client.logo}" alt="${client.name}" class="clientimg" onerror="console.error('Failed to load image:', '${client.logo}')">
-                            <a href="${client.url}" target="_blank" rel="noopener">
-                                <div class="overlay">
-                                    <div class="overlaytext">${client.name}</div>
-                                </div>
+    initProjectsPage() {
+        if (!this.clients.length) {
+            console.log('No clients data available');
+            return;
+        }
+
+        this.renderTableOfContents();
+        this.renderProjectsList();
+        this.setupScrollObserver();
+    }
+
+    renderTableOfContents() {
+        const tocList = document.getElementById('toc-list');
+        if (!tocList) return;
+
+        // Only show clients that have projects
+        //const clientsWithProjects = this.clients.filter(client => client.projects && client.projects.length > 0);
+        const sortedClients = [...this.clients].sort((a, b) => a.name.localeCompare(b.name));
+
+        const tocHTML = sortedClients
+            .map(client => `
+                <div class="toc-item" data-client="${client.name}">
+                    <span class="toc-name">${client.name}</span>
+                </div>
+            `)
+            .join('');
+
+        tocList.innerHTML = tocHTML;
+    }
+
+
+
+
+    renderProjectsList() {
+        const projectsList = document.getElementById('projects-list');
+        if (!projectsList) return;
+
+        const sortedClients = [...this.clients].sort((a, b) => a.name.localeCompare(b.name));
+
+        const projectsHTML = sortedClients
+            .map(client => {
+                return `
+                    <section class="client-section" data-client="${client.name}" id="client-${client.name.replace(/\s+/g, '-').toLowerCase()}">
+                        <div class="client-header">
+                            <a href="${client.url}" target="_blank" rel="noopener noreferrer" class="client-name-link">
+                                <img src="${client.logo}" alt="${client.name}" class="client-icon">
+                                <h2 class="client-name">${client.name}</h2>
+                                <h2 class="client-name">→</h2>
                             </a>
                         </div>
-                    `;
-                })
-                .join('');
+                        <div class="projects-grid">
+                            ${client.projects.map(project => {
+                                const projectContent = `
+                                    <div class="project-card">
+                                        <h3 class="project-title">${project.name}</h3>
+                                        <p class="project-description">${project.description}</p>
+                                        <div class="project-meta">
+                                            <span class="project-year">${project.year}</span>
+                                            <div class="project-types">
+                                                ${this.renderProjectTypes(project.type)}
+                                            </div>
+                                        </div>
+                                    </div>
+                                `;
 
-            clientsGallery.innerHTML = galleryHTML;
-        } else {
-            console.log('Clients gallery element not found or no clients data');
-        }
+                                // Only wrap in anchor tag if URL exists
+                                if (project.url) {
+                                    return `
+                                        <a href="${project.url}" target="_blank" rel="noopener noreferrer" class="project-name-link">
+                                            ${projectContent}
+                                        </a>
+                                    `;
+                                } else {
+                                    return projectContent;
+                                }
+                            }).join('')}
+                        </div>
+                    </section>
+                `;
+            })
+            .join('');
+
+        projectsList.innerHTML = projectsHTML;
+    }
+
+
+    renderProjectTypes(types) {
+        // Handle both array and string cases
+        const typeArray = Array.isArray(types) ? types : [types];
+
+        return typeArray
+            .map(type => `<span class="project-type-chip">${type}</span>`)
+            .join('');
+    }
+
+
+    setupScrollObserver() {
+        const tocItems = document.querySelectorAll('.toc-item');
+        const clientSections = document.querySelectorAll('.client-section');
+
+        if (!tocItems.length || !clientSections.length) return;
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    const clientName = entry.target.dataset.client;
+
+                    // Remove active class from all toc items
+                    tocItems.forEach(item => item.classList.remove('active'));
+
+                    // Add active class to current toc item
+                    const activeTocItem = document.querySelector(`.toc-item[data-client="${clientName}"]`);
+                    if (activeTocItem) {
+                        activeTocItem.classList.add('active');
+                    }
+                }
+            });
+        }, {
+            rootMargin: '-10% 0px -90% 0px',
+            threshold: 0
+        });
+
+        clientSections.forEach(section => {
+            observer.observe(section);
+        });
+
+        // Add click handlers to TOC items for smooth scrolling
+        tocItems.forEach(item => {
+            item.addEventListener('click', () => {
+                const clientName = item.dataset.client;
+                const targetSection = document.querySelector(`.client-section[data-client="${clientName}"]`);
+                if (targetSection) {
+                    targetSection.scrollIntoView({ behavior: 'smooth' });
+                }
+            });
+        });
     }
 
     setSpacerHeight() {
