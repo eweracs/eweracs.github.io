@@ -668,7 +668,7 @@ br {
     }
 
     .topnav {
-        gap: 1rem;
+        gap: 0rem;
     }
 
     #spacer {
