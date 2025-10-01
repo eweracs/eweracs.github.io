@@ -83,7 +83,7 @@
       {
         "name": "Glyphs plugins",
         "description": "Development of foundry-specific tools.",
-        "year": "2024",
+        "year": "Since 2024",
         "type": ["Tool development"]
       }
     ]
@@ -240,7 +240,7 @@
     ]
   },
   {
-    "name": "Margot Lévêque Studio",
+    "name": "Margot Lévêque",
     "url": "https://www.margotleveque.com",
     "logo": "assets/img/clients/margotleveque.svg",
     "projects": [

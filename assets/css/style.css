@@ -446,7 +446,7 @@ a.client-name-link:hover {
 }
 
 .project-card {
-    background: rgba(255, 255, 255, 0.9);
+    background: var(--background-colour);
     backdrop-filter: blur(10px);
     padding: 2rem;
     box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
@@ -454,7 +454,7 @@ a.client-name-link:hover {
 }
 
 [data-theme="dark"] .project-card {
-    background: var(--background-colour);
+    background: #333;
     box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
 }
 
@@ -530,6 +530,10 @@ a .project-card:hover {
     padding-top: 1rem;
     border-top: 1px solid rgba(217, 11, 93, 0.2);
     font-size: 14px;
+}
+
+[data-theme="dark"] .project-meta {
+    border-top: 1px solid rgba(255, 255, 255, 0.2);
 }
 
 .project-year {
