@@ -563,15 +563,6 @@ a .project-card:hover {
     background: rgba(217, 11, 93, 0.2);
 }
 
-/* Responsive adjustments for meta information */
-@media (max-width: 768px) {
-    .project-meta {
-        flex-direction: column;
-        align-items: flex-start;
-        gap: 0.5rem;
-    }
-}
-
 /* Download Section */
 #download-container {
     background-color: var(--text-colour);
@@ -666,7 +657,7 @@ br {
 }
 
 /* Responsive Design */
-@media (max-width: 768px) {
+@media (max-width: 960px) {
     .nav-content {
         flex-direction: column;
     }
@@ -682,6 +673,12 @@ br {
     #content {
         padding-top: 10px;
         padding-bottom: 10px
+    }
+
+    .project-meta {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 0.5rem;
     }
 
     footer {
