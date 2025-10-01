@@ -234,7 +234,7 @@ header.faded {
 /* Main Content */
 main {
     max-width: 600px;
-    margin: 2rem auto;
+    margin: 0 auto;
 }
 
 #content {
