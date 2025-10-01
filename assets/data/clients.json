@@ -257,7 +257,14 @@
     "name": "Fontwerk",
     "url": "https://www.fontwerk.com",
     "logo": "assets/img/clients/fontwerk.svg",
-    "projects": []
+    "projects": [
+      {
+        "name": "Proofreading",
+        "description": "Proofreading of specimens, newsletters and promotional material.",
+        "year": "2025",
+        "type": ["Consulting"]
+      }
+    ]
   },
   {
     "name": "Nova Type",
