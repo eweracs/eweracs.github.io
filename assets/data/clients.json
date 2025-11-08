@@ -67,8 +67,8 @@
     "logo": "assets/img/clients/atlasfonts.svg",
     "projects": [
       {
-        "name": "Novel Sans",
-        "description": "Mastering and font development on the multiscript Novel Sans superfamily.",
+        "name": "Novel superfamily",
+        "description": "Mastering and font development on the multiscript Novel superfamily.",
         "year": "Since 2024",
         "type": ["Review","Mastering", "Arabic", "Hebrew", "Cyrillic", "Greek"],
         "url": "http://www.atlasfonts.com/typefaces/novel-sans"
@@ -232,7 +232,7 @@
     "projects": [
       {
         "name": "Züka",
-        "description": "Mastering, spacing and kerning for a highly precise revival sans-serif.",
+        "description": "Mastering, spacing and kerning for a highly precise sans-serif revival.",
         "year": "2024",
         "type": ["Mastering", "Spacing/Kerning"],
         "url": "https://www.kanonfoundry.com/kf-zuka"
@@ -299,7 +299,7 @@
     "projects": [
       {
         "name": "BPH Sans",
-        "description": "Technical consulting and variable font implementation",
+        "description": "Technical consulting and variable font implementation.",
         "year": "2020",
         "type": ["Consulting"]
       }

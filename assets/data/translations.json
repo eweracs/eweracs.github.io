@@ -87,7 +87,7 @@
       "download": {
         "title": "Dateien herunterladen",
         "loadingText": "Laden...",
-        "downloadButtonText": "Dateien Herunterladen",
+        "downloadButtonText": "Dateien herunterladen",
         "waitingText": "Bitte warten..."
       }
     }
