@@ -116,6 +116,19 @@
     ]
   },
   {
+    "name": "A2 Type",
+    "url": "https://www.a2-type.co.uk",
+    "logo": "assets/img/clients/a2type.svg",
+    "projects": [
+      {
+        "name": "Font production",
+        "description": "Mastering, production and design consulting.",
+        "year": "Since 2025",
+        "type": ["Mastering", "Production", "Consulting"]
+      }
+    ]
+  },
+  {
     "name": "Lettermin",
     "url": "https://www.lettermin.com",
     "logo": "assets/img/clients/lettermin.svg",
