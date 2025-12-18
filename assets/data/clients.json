@@ -244,11 +244,18 @@
     "logo": "assets/img/clients/kanonfoundry.svg",
     "projects": [
       {
-        "name": "Züka",
+        "name": "KF Zuka",
         "description": "Mastering, spacing and kerning for a highly precise sans-serif revival.",
         "year": "2024",
         "type": ["Mastering", "Spacing/Kerning"],
         "url": "https://www.kanonfoundry.com/kf-zuka"
+      },
+      {
+        "name": "Clippy",
+        "description": "Mastering, spacing and kerning of a fun display-ish family with backslant styles",
+        "year": "2025",
+        "type": ["Mastering", "Spacing/Kerning"],
+        "url": "https://www.kanonfoundry.com/clippy"
       }
     ]
   },
