@@ -192,7 +192,7 @@ export default function App() {
               <div className="space-y-2">
                 {/* Recommended: don’t inject <i> from JSON; render markup in React */}
                 <p className="text-white/90">
-                  Sebastian Carewe • <i>Font engineering, type design • Paris, France</i>
+                  Sebastian Carewe • <i>{tString(language, "hello.meta")}</i>
                 </p>
 
                 <p className="text-white/90">{tString(language, "hello.p1")}</p>

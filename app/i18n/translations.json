@@ -7,7 +7,7 @@
       "about": "About"
     },
     "hello": {
-      "line1": "Sebastian Carewe <i>• Font engineering, type design • Paris, France</i>",
+      "meta": "Font engineering, type design • Paris, France",
       "p1": "My expertise in type covers everything from drawing (Latin/Cyrillic), mastering and static and variable font production to tool development (Python) and quality assurance, complemented by my background in linguistics.",
       "contact": "Looking for me? I’m always happy to chat about new projects: {email}"
     },
@@ -48,7 +48,7 @@
       "about": "À propos"
     },
     "hello": {
-      "line1": "Sebastian Carewe <i>• Ingénierie typographique, design de caractères • Paris, France</i>",
+      "meta": "Ingénierie typographique, dessin de caractères • Paris, France",
       "p1": "Mes compétences en matière de typographie englobent le dessin (latin/cyrillique), la maîtrise et la production de polices statiques et variables, le développement de logiciels (Python) et l’assurance qualité, le tout complété par ma formation en linguistique.",
       "contact": "Vous me cherchez ? Je suis toujours ravi de discuter de nouveaux projets : {email}"
     },
@@ -89,7 +89,7 @@
       "about": "Info"
     },
     "hello": {
-      "line1": "Sebastian Carewe <i>• Font Engineering, Type Design • Paris, Frankreich</i>",
+      "meta": "Font Engineering, Type Design • Paris, Frankreich",
       "p1": "Meine Expertise in Sachen Schrift reicht vom Zeichnen (Lateinisch/Kyrillisch) über Mastering und Produktion statischer Schriften und Variable-Fonts bis hin zur Toolentwicklung (Python) und Qualitätssicherung, begleitet von meiner Leidenschaft für Linguistik.",
       "contact": "Auf der Suche nach mir? Ich bin immer offen für Projektideen: {email}"
     },
