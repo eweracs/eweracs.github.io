@@ -126,7 +126,7 @@ function getGridStyle(
     if (activeSection === null) {
       return {
         gridTemplateColumns: "1fr",
-        gridTemplateRows: `repeat(${sectionsLength}, 1fr)`,
+        gridTemplateRows: Array.from({ length: sectionsLength }, () => "1fr").join(" "),
       };
     }
 
