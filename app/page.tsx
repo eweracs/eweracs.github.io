@@ -423,9 +423,20 @@ export default function App() {
                     className="text-center"
                   >
                     <motion.h2
-                      animate={{ opacity: activeSection === null ? 0.9 : 0.7 }}
-                      transition={{ duration: 0.4 }}
-                      className={`text-white italic ${isMobile ? "text-base" : "text-4xl"}`}
+                      initial={{ opacity: 0 }}
+                      animate={{
+                        opacity: activeSection === null ? 0.9 : 0.7,
+                      }}
+                      transition={{ duration: 0.4, ease: "easeOut" }}
+                      className={`text-white italic transition-[font-size] duration-400 ${
+                        isMobile
+                          ? activeSection === null
+                            ? "text-xl"
+                            : "text-base"
+                          : activeSection === null
+                            ? "text-4xl"
+                            : "text-xl"
+                      }`}
                     >
                       {section.title}
                     </motion.h2>
@@ -447,9 +458,16 @@ export default function App() {
                   >
                     <div className="min-h-full flex flex-col justify-center">
                       <div className="flex-shrink-0 px-12 py-24">
-                        <div className="max-w-lg mx-auto text-white">{section.content}</div>
+                        <div className="max-w-lg mx-auto text-white">
+                          <h2 className="text-white italic mb-6 text-2xl">
+                            {section.title}
+                          </h2>
+
+                          {section.content}
+                        </div>
                       </div>
                     </div>
+
                   </motion.div>
                 )}
               </AnimatePresence>
