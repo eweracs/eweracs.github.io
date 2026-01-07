@@ -1,0 +1,125 @@
+{
+  "EN": {
+    "nav": {
+      "hello": "Hello",
+      "projects": "Projects",
+      "expertise": "Expertise",
+      "about": "About"
+    },
+    "hello": {
+      "line1": "Sebastian Carewe <i>• Font engineering, type design • Paris, France</i>",
+      "p1": "My expertise in type covers everything from drawing (Latin/Cyrillic), mastering and static and variable font production to tool development (Python) and quality assurance, complemented by my background in linguistics.",
+      "contact": "Looking for me? I’m always happy to chat about new projects: {email}"
+    },
+    "projects": {
+      "intro": "I have worked with clients of all sizes, be it indie foundries, established designers or major corporations.",
+      "viewProject": "View project"
+    },
+    "expertise": {
+      "intro": "My strength is the diversity of my interests. I combine a strong design foundation with seven years of technical experience in font technology and Python programming. This foundation is complemented by my studies in linguistics, with a special interest in languages and writing systems, major or marginalised. I offer a wide range of services around type design and font engineering, including:",
+      "designTitle": "Design & Consulting",
+      "designItems": [
+        "Type design",
+        "Design review & consulting",
+        "Script extension (Latin Extended, Cyrillic Extended)",
+        "Character set and localisation research",
+        "Algorithmic oblique/italic creation",
+        "Spacing/kerning"
+      ],
+      "technicalTitle": "Technical & Production",
+      "technicalItems": [
+        "Workflow optimisation (Git, production, tools)",
+        "Static and variable font production",
+        "OpenType feature engineering",
+        "Tool creation in Python around Glyphs",
+        "Quality assurance",
+        "File mastering"
+      ]
+    },
+    "about": {
+      "p1": "Hi, I’m Sebastian Carewe. I am a font engineer, type designer and linguist currently based in Paris.\nInitially from Berlin, Germany, I studied interface design and focused on type design under Luc(as) de Groot. After studying Italian language and literature for a year, I moved to Porto, Portugal, to work as a font engineer at {schriftlaborLink} for one year. Owing to my passion for languages, I then completed a BA in linguistics in Lille and am continuing with a master’s degree at Sorbonne Nouvelle in Paris. I publish scripts and plugins for Glyphs and various other code on my {githubLink}. I pride myself in a most comprehensive type design skill set ranging all the way from drawing to the nitty-gritty final production work. Equally balancing drawing, tool creation and production has enabled me to inform each of these fields to develop a highly efficient workflow which compromises neither quality nor adaptability.\nAside from type, I have a broad background in music, with a keen interest in music theory, acoustics and the piano (jazz and classical). I spend my time speed-skating in winter and on my bike in summer. I can solve a Rubik’s cube in nine seconds, but can’t tell you the point."
+    }
+  },
+  "FR": {
+    "nav": {
+      "hello": "Bonjour",
+      "projects": "Projets",
+      "expertise": "Expertise",
+      "about": "À propos"
+    },
+    "hello": {
+      "line1": "Sebastian Carewe <i>• Ingénierie typographique, design de caractères • Paris, France</i>",
+      "p1": "Mes compétences en matière de typographie englobent le dessin (latin/cyrillique), la maîtrise et la production de polices statiques et variables, le développement de logiciels (Python) et l’assurance qualité, le tout complété par ma formation en linguistique.",
+      "contact": "Vous me cherchez ? Je suis toujours ravi de discuter de nouveaux projets : {email}"
+    },
+    "projects": {
+      "intro": "Je travaille avec des clients de toutes tailles, qu’il s’agisse de fonderies indépendantes, de designers établis ou de grandes entreprises.",
+      "viewProject": "Voir le projet"
+    },
+    "expertise": {
+      "intro": "Ma force réside dans la diversité de mes centres d’intérêt. Je combine de fortes compétences en dessin avec sept années d’expérience technique dans le domaine des polices de caractères et de la programmation Python. Cette expertise est complétée par mes études en linguistique, avec un intérêt particulier pour les langues et les systèmes d’écriture, qu’ils soient majeurs ou marginalisés. Je propose une large gamme de services autour de la conception de polices et de l’ingénierie typographique, notamment :",
+      "designTitle": "Design & Conseil",
+      "designItems": [
+        "Dessin typographique",
+        "Révision de dessin et conseil",
+        "Extension de jeu de caractères (Latin étendu, Cyrillique étendu)",
+        "Recherches linguistiques (jeux de caractères, localisation)",
+        "Création algorithmique d’obliques/italiques",
+        "Espacement/crénage"
+      ],
+      "technicalTitle": "Technique & Production",
+      "technicalItems": [
+        "Optimisation de flux de travail (Git, production, outils)",
+        "Production de polices statiques et variables",
+        "Ingénierie de fonctionnalités OpenType",
+        "Création d’outils (Python) pour Glyphs",
+        "Assurance qualité",
+        "Maîtrise de fichiers sources"
+      ]
+    },
+    "about": {
+      "p1": "Salut, je suis Sebastian Carewe. Je suis ingénieur en polices de caractères, créateur de caractères et linguiste actuellement basé à Paris.\nOriginaire de Berlin, j’ai étudié le design d’interface où je me suis concentré sur le dessin de caractères sous la direction de Luc(as) de Groot. Après un an d’études de littérature et culture italiennes, j’ai déménagé à Porto, au Portugal, pour travailler comme ingénieur typographe chez {schriftlaborLink} pendant un an. Passionné par les langues, j’ai ensuite suivi une licence de linguistique à Lille et poursuis actuellement mon master à Paris à la Sorbonne Nouvelle.\nJe publie des scripts et des plugins pour Glyphs et divers autres codes sur mon {githubLink}. Mes compétences en matière de conception de caractères vont du dessin au travail de production final. L’équilibre entre le dessin, la création d’outils et la production m’a permis d’enrichir chacun de ces domaines pour développer un flux de travail très efficace qui ne compromet ni la qualité ni l’adaptabilité.\nEn dehors de la typographie, j’ai une vaste expérience dans la musique, avec un intérêt marqué pour le solfège, la théorie de l’acoustique et le piano (jazz et classique). Je passe mon temps à faire du patinage de vitesse en hiver et à faire du vélo en été. Je peux résoudre un Rubik’s cube en neuf secondes, mais j’en cherche toujours le sens."
+    }
+  },
+  "DE": {
+    "nav": {
+      "hello": "Hallo",
+      "projects": "Projekte",
+      "expertise": "Expertise",
+      "about": "Info"
+    },
+    "hello": {
+      "line1": "Sebastian Carewe <i>• Font Engineering, Type Design • Paris, Frankreich</i>",
+      "p1": "Meine Expertise in Sachen Schrift reicht vom Zeichnen (Lateinisch/Kyrillisch) über Mastering und Produktion statischer Schriften und Variable-Fonts bis hin zur Toolentwicklung (Python) und Qualitätssicherung, begleitet von meiner Leidenschaft für Linguistik.",
+      "contact": "Auf der Suche nach mir? Ich bin immer offen für Projektideen: {email}"
+    },
+    "projects": {
+      "intro": "Ich habe mit Kunden jeder Größe zusammengearbeitet, seien es unabhängige Schriftverlage, etablierte Gestalter oder große Unternehmen.",
+      "viewProject": "Projekt ansehen"
+    },
+    "expertise": {
+      "intro": "Meine Stärke ist die Vielfalt meiner Interessen. Ich verbinde meine gestalterische Ausbildung mit sieben Jahren technischer Erfahrung in den Bereichen Schrifttechnologie und Python-Programmierung. Ergänzt wird diese Grundlage durch mein Studium der Linguistik, mit einem besonderen Interesse für Sprachen und Schriftsystemen, ob weit verbreitet oder marginalisiert. Ich biete eine breite Palette von Dienstleistungen rund um Schriftgestaltung und Font-Engineering an, darunter:",
+      "designTitle": "Design & Beratung",
+      "designItems": [
+        "Schriftgestaltung",
+        "Gestaltungsprüfung und Beratung",
+        "Zeichensatzerweiterung (erweitertes Lateinisch, erweitertes Kyrillisch)",
+        "Zeichensatzforschung und Lokalisierung",
+        "Algorithmische Erstellung von Kursiven",
+        "Spationierung/Kerning"
+      ],
+      "technicalTitle": "Technik & Produktion",
+      "technicalItems": [
+        "Workflowoptimierung (Git, Produktion, Werkzeuge)",
+        "Statische und variable Schriftproduktion",
+        "OpenType-Feature-Engineering",
+        "Python-Toolentwicklung für Glyphs",
+        "Qualitätssicherung",
+        "Mastering"
+      ]
+    },
+    "about": {
+      "p1": "Hallo, ich bin Sebastian Carewe. Ich bin Schriftingenieur, Schriftgestalter und Linguist und wohne aktuell in Paris.\nUrsprünglich aus Berlin, habe ich mich während meines Interfacedesign-Studiums unter Luc(as) de Groot auf Schriftgestaltung konzentriert. Nach einem Jahr Studium italienischer Literatur bin ich nach Porto, Portugal, gezogen, um ein Jahr lang als Schriftingenieur bei {schriftlaborLink} zu arbeiten. Aufgrund meiner Leidenschaft für Sprachen habe ich danach in Lille einen Bachelor in Linguistik gemacht, an den ich aktuell in Paris an der Sorbonne Nouvelle mit einem Master anschließe.\nIch veröffentliche Skripte und Erweiterungen für Glyphs und diversen anderen Code auf meinem {githubLink}. Meine umfassenden Fähigkeiten im Schriftbereich reichen vom Zeichnen bis hin zu den Feinheiten der Endproduktion. Die Balance aus Zeichnung, Programmierung und Produktion hat es mir ermöglicht, diese Bereiche gegenseitig zu bereichern, um einen hocheffizienten Arbeitsprozess zu entwickeln, der weder bei Qualität noch bei Anpassungsfähigkeit Kompromisse macht.\nAbseits von Typographie habe ich ein breit gefächertes musikalisches Interesse, mit einem besonderen Schwerpunkt auf Musiktheorie, Akustik und Klavier (Jazz und Klassik). Im Winter verbringe ich meine Zeit beim Eisschnelllauf und im Sommer auf dem Rennrad. Ich kann einen Zauberwürfel in neun Sekunden lösen, nur der Sinn ist mir noch schleierhaft."
+    }
+  }
+}
