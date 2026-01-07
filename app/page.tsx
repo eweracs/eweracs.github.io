@@ -1,13 +1,13 @@
 "use client";
 
 import { useState, useEffect, useMemo } from "react";
-import { motion, AnimatePresence } from "motion/react";
+import { motion, AnimatePresence } from "framer-motion";
 import { X, ExternalLink } from "lucide-react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faLinkedin, faGithub, faInstagram } from "@fortawesome/free-brands-svg-icons";
 import clientsData from "../public/assets/data/clients.json";
 import Image from "next/image";
-import { t, type Lang } from "./i18n/i18n";
+import { tString, tList, type Lang } from "./i18n/i18n";
 
 const SocialFooter = () => (
   <footer className="mt-auto pt-6">
@@ -51,7 +51,7 @@ interface Section {
 }
 
 function renderAboutP1(lang: Lang) {
-  const raw = t(lang, "about.p1");
+  const raw = tString(lang, "about.p1");
 
   const tokens: Array<string | "SCHRIFTLABOR" | "GITHUB" | "\n"> = raw
     .replaceAll("{schriftlaborLink}", "\u0000SCHRIFTLABOR\u0000")
@@ -127,8 +127,8 @@ export default function App() {
     return sorted;
   };
 
-  const getGridStyle = () => {
-    if (window.innerWidth < 800) {
+    const getGridStyle = () => {
+    if (isMobile) {
       if (activeSection === null) {
         return {
           gridTemplateColumns: "1fr",
@@ -136,7 +136,9 @@ export default function App() {
         };
       }
       const activeIndex = activeSection - 1;
-      const gridRows = sections.map((_, index) => (index === activeIndex ? "8fr" : "0.5fr")).join(" ");
+      const gridRows = sections
+        .map((_, index) => (index === activeIndex ? "8fr" : "0.5fr"))
+        .join(" ");
       return {
         gridTemplateColumns: "1fr",
         gridTemplateRows: gridRows,
@@ -182,7 +184,7 @@ export default function App() {
     () => [
       {
         id: 1,
-        title: t(language, "nav.hello"),
+        title: tString(language, "nav.hello"),
         color: "bg-emerald-800",
         content: (
           <div className="flex flex-col h-full">
@@ -193,10 +195,10 @@ export default function App() {
                   Sebastian Carewe • <i>Font engineering, type design • Paris, France</i>
                 </p>
 
-                <p className="text-white/90">{t(language, "hello.p1")}</p>
+                <p className="text-white/90">{tString(language, "hello.p1")}</p>
 
                 <p className="text-white/90">
-                  {t(language, "hello.contact", { email: "sebastian.carewe" })}
+                  {tString(language, "hello.contact", { email: "sebastian.carewe" })}
                   <span className="email-protected" />
                 </p>
               </div>
@@ -207,13 +209,13 @@ export default function App() {
       },
       {
         id: 2,
-        title: t(language, "nav.projects"),
+        title: tString(language, "nav.projects"),
         color: "bg-slate-900",
         content: (
           <div className="flex flex-col h-full">
             <div className="flex-1 overflow-y-auto">
               <div className="space-y-12">
-                <p className="text-white/90">{t(language, "projects.intro")}</p>
+                <p className="text-white/90">{tString(language, "projects.intro")}</p>
 
                 {getSortedClients().map((client, index) => (
                   <div key={index} className="space-y-6">
@@ -255,7 +257,7 @@ export default function App() {
                               rel="noopener noreferrer"
                               className="text-white/50 hover:text-white/80 transition-colors text-sm flex items-center gap-1"
                             >
-                              {t(language, "projects.viewProject")} <ExternalLink className="w-3 h-3" />
+                              {tString(language, "projects.viewProject")} <ExternalLink className="w-3 h-3" />
                             </a>
                           )}
                         </div>
@@ -271,23 +273,23 @@ export default function App() {
       },
       {
         id: 3,
-        title: t(language, "nav.expertise"),
+        title: tString(language, "nav.expertise"),
         color: "bg-amber-700",
         content: (
           <div className="flex flex-col h-full">
             <div className="flex-1 overflow-y-auto">
               <div className="space-y-2">
-                <p className="text-white/90 text-base">{t(language, "expertise.intro")}</p>
+                <p className="text-white/90 text-base">{tString(language, "expertise.intro")}</p>
 
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-10 pt-4">
                   <div className="space-y-4">
-                    <h3 className="text-white/90 text-xl mb-3">{t(language, "expertise.designTitle")}</h3>
-                    {renderListItems(t(language, "expertise.designItems") as string[])}
+                    <h3 className="text-white/90 text-xl mb-3">{tString(language, "expertise.designTitle")}</h3>
+                    {renderListItems(tList(language, "expertise.designItems"))}
                   </div>
 
                   <div className="space-y-4">
-                    <h3 className="text-white/90 text-xl mb-3">{t(language, "expertise.technicalTitle")}</h3>
-                    {renderListItems(t(language, "expertise.technicalItems") as string[])}
+                    <h3 className="text-white/90 text-xl mb-3">{tString(language, "expertise.technicalTitle")}</h3>
+                    {renderListItems(tList(language, "expertise.technicalItems"))}
                   </div>
                 </div>
               </div>
@@ -298,7 +300,7 @@ export default function App() {
       },
       {
           id: 4,
-          title: t(language, "nav.about"),
+          title: tString(language, "nav.about"),
           color: "bg-blue-900",
           content: (
             <div className="flex flex-col h-full">
@@ -352,7 +354,6 @@ export default function App() {
                 >
                   {language}
                 </motion.button>
-              )}
             </AnimatePresence>
           </div>
 
