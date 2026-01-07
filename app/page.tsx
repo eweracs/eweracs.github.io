@@ -6,7 +6,6 @@ import { X, ExternalLink } from "lucide-react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faLinkedin, faGithub, faInstagram } from "@fortawesome/free-brands-svg-icons";
 import clientsData from "../public/assets/data/clients.json";
-import Image from "next/image";
 import { tString, tList, type Lang } from "./i18n/i18n";
 
 const SocialFooter = () => (
@@ -112,63 +111,66 @@ function renderListItems(items: string[]) {
   );
 }
 
+type GridStyle = Pick<
+  React.CSSProperties,
+  "gridTemplateColumns" | "gridTemplateRows"
+>;
+
+function getGridStyle(
+  isMobile: boolean,
+  activeSection: number | null,
+  sectionsLength: number
+): GridStyle {
+  // Mobile layout: single column, variable row heights
+  if (isMobile) {
+    if (activeSection === null) {
+      return {
+        gridTemplateColumns: "1fr",
+        gridTemplateRows: `repeat(${sectionsLength}, 1fr)`,
+      };
+    }
+
+    const activeIndex = Math.max(0, activeSection - 1);
+    const gridRows = Array.from({ length: sectionsLength }, (_, index) =>
+      index === activeIndex ? "8fr" : "0.5fr"
+    ).join(" ");
+
+    return {
+      gridTemplateColumns: "1fr",
+      gridTemplateRows: gridRows,
+    };
+  }
+
+  // Desktop layout: 2x2 grid; active tile gets 4fr in its row/col, others 1fr.
+  if (activeSection === null) {
+    return { gridTemplateColumns: "1fr 1fr", gridTemplateRows: "1fr 1fr" };
+  }
+
+  const isLeft = activeSection % 2 === 1; // 1,3 => left column; 2,4 => right column
+  const isTop = activeSection <= 2; // 1,2 => top row; 3,4 => bottom row
+
+  return {
+    gridTemplateColumns: isLeft ? "4fr 1fr" : "1fr 4fr",
+    gridTemplateRows: isTop ? "4fr 1fr" : "1fr 4fr",
+  };
+}
+
 export default function App() {
   const [activeSection, setActiveSection] = useState<number | null>(1);
   const [language, setLanguage] = useState<Lang>("EN");
   const [isLangMenuOpen, setIsLangMenuOpen] = useState(false);
+  const [isMobile, setIsMobile] = useState(false);
+  const isAnyActive = activeSection !== null;
 
   const handleSectionClick = (id: number) => {
-    setActiveSection(activeSection === id ? null : id);
+    setActiveSection((current) => (current === id ? null : id));
   };
 
-  const getSortedClients = () => {
+  const sortedClients = useMemo(() => {
     const sorted = [...clientsData];
     sorted.sort((a, b) => a.name.localeCompare(b.name));
     return sorted;
-  };
-
-    const getGridStyle = () => {
-    if (isMobile) {
-      if (activeSection === null) {
-        return {
-          gridTemplateColumns: "1fr",
-          gridTemplateRows: "1fr 1fr 1fr 1fr",
-        };
-      }
-      const activeIndex = activeSection - 1;
-      const gridRows = sections
-        .map((_, index) => (index === activeIndex ? "8fr" : "0.5fr"))
-        .join(" ");
-      return {
-        gridTemplateColumns: "1fr",
-        gridTemplateRows: gridRows,
-      };
-    }
-
-    if (activeSection === null) {
-      return {
-        gridTemplateColumns: "1fr 1fr",
-        gridTemplateRows: "1fr 1fr",
-      };
-    }
-
-    if (activeSection === 1) {
-      return { gridTemplateColumns: "4fr 1fr", gridTemplateRows: "4fr 1fr" };
-    }
-    if (activeSection === 2) {
-      return { gridTemplateColumns: "1fr 4fr", gridTemplateRows: "4fr 1fr" };
-    }
-    if (activeSection === 3) {
-      return { gridTemplateColumns: "4fr 1fr", gridTemplateRows: "1fr 4fr" };
-    }
-    if (activeSection === 4) {
-      return { gridTemplateColumns: "1fr 4fr", gridTemplateRows: "1fr 4fr" };
-    }
-
-    return { gridTemplateColumns: "1fr 1fr", gridTemplateRows: "1fr 1fr" };
-  };
-
-  const [isMobile, setIsMobile] = useState(false);
+  }, []);
 
   useEffect(() => {
     const checkIfMobile = () => setIsMobile(window.innerWidth < 800);
@@ -177,8 +179,9 @@ export default function App() {
     return () => window.removeEventListener("resize", checkIfMobile);
   }, []);
 
-  const isAnyActive = activeSection !== null;
-  const otherLanguages: Lang[] = (["FR", "EN", "DE"] as const).filter((l) => l !== language);
+  const otherLanguages: Lang[] = (["FR", "EN", "DE"] as const).filter(
+    (l) => l !== language
+  );
 
   const sections: Section[] = useMemo(
     () => [
@@ -190,7 +193,6 @@ export default function App() {
           <div className="flex flex-col h-full">
             <div className="flex-1">
               <div className="space-y-2">
-                {/* Recommended: don’t inject <i> from JSON; render markup in React */}
                 <p className="text-white/90">
                   Sebastian Carewe • <i>{tString(language, "hello.meta")}</i>
                 </p>
@@ -198,7 +200,9 @@ export default function App() {
                 <p className="text-white/90">{tString(language, "hello.p1")}</p>
 
                 <p className="text-white/90">
-                  {tString(language, "hello.contact", { email: "sebastian.carewe" })}
+                  {tString(language, "hello.contact", {
+                    email: "sebastian.carewe",
+                  })}
                   <span className="email-protected" />
                 </p>
               </div>
@@ -215,10 +219,12 @@ export default function App() {
           <div className="flex flex-col h-full">
             <div className="flex-1 overflow-y-auto">
               <div className="space-y-12">
-                <p className="text-white/90">{tString(language, "projects.intro")}</p>
+                <p className="text-white/90">
+                  {tString(language, "projects.intro")}
+                </p>
 
-                {getSortedClients().map((client, index) => (
-                  <div key={index} className="space-y-6">
+                {sortedClients.map((client) => (
+                  <div key={client.name} className="space-y-6">
                     <div className="flex items-center gap-4 pb-4 border-b border-white/10">
                       <div className="flex items-center gap-3">
                         <a
@@ -234,17 +240,27 @@ export default function App() {
                     </div>
 
                     <div className="space-y-6">
-                      {client.projects.map((project, pIndex) => (
-                        <div key={pIndex} className="pl-4 border-l-2 border-white/20">
+                      {client.projects.map((project) => (
+                        <div
+                          key={`${project.name}-${project.year}`}
+                          className="pl-4 border-l-2 border-white/20"
+                        >
                           <div className="flex justify-between items-start mb-2">
                             <h4 className="text-white/80">{project.name}</h4>
-                            <span className="text-white/50 text-sm">{project.year}</span>
+                            <span className="text-white/50 text-sm">
+                              {project.year}
+                            </span>
                           </div>
-                          <p className="text-white/60 mb-3">{project.description}</p>
+                          <p className="text-white/60 mb-3">
+                            {project.description}
+                          </p>
 
                           <div className="flex gap-2 flex-wrap mb-3">
-                            {project.type.map((type, tIndex) => (
-                              <span key={tIndex} className="px-3 py-1 bg-white/10 rounded text-sm text-white/70">
+                            {project.type.map((type) => (
+                              <span
+                                key={type}
+                                className="px-3 py-1 bg-white/10 rounded text-sm text-white/70"
+                              >
                                 {type}
                               </span>
                             ))}
@@ -257,7 +273,8 @@ export default function App() {
                               rel="noopener noreferrer"
                               className="text-white/50 hover:text-white/80 transition-colors text-sm flex items-center gap-1"
                             >
-                              {tString(language, "projects.viewProject")} <ExternalLink className="w-3 h-3" />
+                              {tString(language, "projects.viewProject")}{" "}
+                              <ExternalLink className="w-3 h-3" />
                             </a>
                           )}
                         </div>
@@ -279,17 +296,25 @@ export default function App() {
           <div className="flex flex-col h-full">
             <div className="flex-1 overflow-y-auto">
               <div className="space-y-2">
-                <p className="text-white/90 text-base">{tString(language, "expertise.intro")}</p>
+                <p className="text-white/90 text-base">
+                  {tString(language, "expertise.intro")}
+                </p>
 
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-10 pt-4">
                   <div className="space-y-4">
-                    <h3 className="text-white/90 text-xl mb-3">{tString(language, "expertise.designTitle")}</h3>
+                    <h3 className="text-white/90 text-xl mb-3">
+                      {tString(language, "expertise.designTitle")}
+                    </h3>
                     {renderListItems(tList(language, "expertise.designItems"))}
                   </div>
 
                   <div className="space-y-4">
-                    <h3 className="text-white/90 text-xl mb-3">{tString(language, "expertise.technicalTitle")}</h3>
-                    {renderListItems(tList(language, "expertise.technicalItems"))}
+                    <h3 className="text-white/90 text-xl mb-3">
+                      {tString(language, "expertise.technicalTitle")}
+                    </h3>
+                    {renderListItems(
+                      tList(language, "expertise.technicalItems")
+                    )}
                   </div>
                 </div>
               </div>
@@ -299,34 +324,38 @@ export default function App() {
         ),
       },
       {
-          id: 4,
-          title: tString(language, "nav.about"),
-          color: "bg-blue-900",
-          content: (
-            <div className="flex flex-col h-full">
-              <div className="flex-1 overflow-y-auto">
-                <div className="space-y-12">
-                  <div>
-                    <div className="text-white/90 mb-8">{renderAboutP1(language)}</div>
+        id: 4,
+        title: tString(language, "nav.about"),
+        color: "bg-blue-900",
+        content: (
+          <div className="flex flex-col h-full">
+            <div className="flex-1 overflow-y-auto">
+              <div className="space-y-12">
+                <div>
+                  <div className="text-white/90 mb-8">
+                    {renderAboutP1(language)}
                   </div>
                 </div>
               </div>
-              <SocialFooter />
             </div>
-          ),
-        },
+            <SocialFooter />
+          </div>
+        ),
+      },
     ],
-    [language]
+    [language, sortedClients]
   );
 
-  const gridStyle = getGridStyle();
+  const gridStyle = useMemo(
+    () => getGridStyle(isMobile, activeSection, sections.length),
+    [isMobile, activeSection, sections.length]
+  );
 
-  // Function to get triangle clip-path based on active section
   const getTriangleClipPath = (sectionId: number) => {
-    if (sectionId === 1) return "polygon(100% 100%, 0 100%, 100% 0)"; // bottom-right corner, right angle at corner
-    if (sectionId === 2) return "polygon(0 100%, 100% 100%, 0 0)"; // bottom-left corner, right angle at corner
-    if (sectionId === 3) return "polygon(100% 0, 0 0, 100% 100%)"; // top-right corner, right angle at corner
-    if (sectionId === 4) return "polygon(0 0, 0 100%, 100% 0)"; // top-left corner, right angle at corner
+    if (sectionId === 1) return "polygon(100% 100%, 0 100%, 100% 0)";
+    if (sectionId === 2) return "polygon(0 100%, 100% 100%, 0 0)";
+    if (sectionId === 3) return "polygon(100% 0, 0 0, 100% 100%)";
+    if (sectionId === 4) return "polygon(0 0, 0 100%, 100% 0)";
     return "polygon(100% 100%, 0 100%, 100% 0)";
   };
 
@@ -425,15 +454,15 @@ export default function App() {
                     <motion.h2
                       initial={{ opacity: 0 }}
                       animate={{
-                        opacity: activeSection === null ? 0.9 : 0.7,
+                        opacity: !isAnyActive ? 0.9 : 0.7,
                       }}
                       transition={{ duration: 0.4, ease: "easeOut" }}
                       className={`text-white italic transition-[font-size] duration-400 ${
                         isMobile
-                          ? activeSection === null
+                          ? !isAnyActive
                             ? "text-xl"
                             : "text-base"
-                          : activeSection === null
+                          : !isAnyActive
                             ? "text-4xl"
                             : "text-xl"
                       }`}
