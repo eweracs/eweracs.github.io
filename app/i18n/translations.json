@@ -89,7 +89,7 @@
       "about": "Info"
     },
     "hello": {
-      "meta": "Font Engineering, Type Design • Paris, Frankreich",
+      "meta": "Schrifttechnik, Schriftgestaltung • Paris, Frankreich",
       "p1": "Meine Expertise in Sachen Schrift reicht vom Zeichnen (Lateinisch/Kyrillisch) über Mastering und Produktion statischer Schriften und Variable-Fonts bis hin zur Toolentwicklung (Python) und Qualitätssicherung, begleitet von meiner Leidenschaft für Linguistik.",
       "contact": "Auf der Suche nach mir? Ich bin immer offen für Projektideen: {email}"
     },
@@ -110,10 +110,10 @@
       ],
       "technicalTitle": "Technik & Produktion",
       "technicalItems": [
-        "Workflowoptimierung (Git, Produktion, Werkzeuge)",
+        "Arbeitsprozessoptimierung (Git, Produktion, Werkzeuge)",
         "Statische und variable Schriftproduktion",
         "OpenType-Feature-Engineering",
-        "Python-Toolentwicklung für Glyphs",
+        "Python-Entwicklung rund um Glyphs",
         "Qualitätssicherung",
         "Mastering"
       ]
