@@ -29,7 +29,7 @@ export function DownloadClient() {
   return (
     <div className="min-h-screen bg-slate-900 flex flex-col items-center justify-center gap-6">
       <div className="bg-blue-900 shadow-lg p-8 max-w-md w-full">
-        <h1 className="text-2xl text-white font-bold mb-4">File Download</h1>
+        <h1 className="text-xl text-white font-bold mb-4">Your files are ready:</h1>
 
         {error ? (
           <div className="text-white mb-4">
@@ -47,7 +47,7 @@ export function DownloadClient() {
                 download
                 className="inline-block bg-amber-700 text-white font-bold py-2 px-4 no-underline"
               >
-                Download File
+                Download
               </a>
             )}
           </>
