@@ -29,7 +29,7 @@ export default function DownloadPage() {
     : null;
 
   return (
-    <div className="flex items-center justify-center min-h-screen bg-slate-900">
+    <div className="min-h-screen bg-slate-900 flex flex-col items-center justify-center gap-6">
       <div className="bg-blue-900 shadow-lg p-8 max-w-md w-full">
         <h1 className="text-2xl text-white font-bold mb-4">File Download</h1>
 
@@ -56,6 +56,12 @@ export default function DownloadPage() {
           </>
         )}
       </div>
+      <a
+        href="/"
+        className="bg-slate-700 hover:bg-slate-600 text-white font-bold py-2 px-6 no-underline"
+      >
+        ← Back
+      </a>
     </div>
   );
 }
