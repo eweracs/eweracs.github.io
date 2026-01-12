@@ -1,0 +1,61 @@
+'use client';
+
+import { useSearchParams } from 'next/navigation';
+import { useEffect, useState } from 'react';
+
+export default function DownloadPage() {
+  const searchParams = useSearchParams();
+  const [fileName, setFileName] = useState('Download File');
+  const [fileId, setFileId] = useState<string | null>(null);
+  const [error, setError] = useState<string | null>(null);
+
+  useEffect(() => {
+    // Get the file ID and name from URL query parameters
+    const id = searchParams.get('id');
+    const name = searchParams.get('name') || 'Download File';
+
+    // If no file ID is provided, show an error
+    if (!id) {
+      setError('No file ID provided.');
+      return;
+    }
+
+    setFileId(id);
+    setFileName(name);
+  }, [searchParams]);
+
+  const driveDownloadLink = fileId
+    ? `https://drive.google.com/uc?id=${fileId}&export=download`
+    : null;
+
+  return (
+    <div className="flex items-center justify-center min-h-screen bg-slate-900">
+      <div className="bg-blue-900 shadow-lg p-8 max-w-md w-full">
+        <h1 className="text-2xl text-white font-bold mb-4">File Download</h1>
+
+        {error ? (
+          <div className="text-white mb-4">
+            <p>{error}</p>
+          </div>
+        ) : (
+          <>
+            <p className="text-white mb-6">
+              <span className="[font-variation-settings:'wght'_700]" id="file-name">{fileName}</span>
+            </p>
+            {driveDownloadLink && (
+              <a
+                id="download-button"
+                href={driveDownloadLink}
+                download
+                className="inline-block bg-amber-700 text-white font-bold py-2 px-4
+                no-underline"
+              >
+                Download File
+              </a>
+            )}
+          </>
+        )}
+      </div>
+    </div>
+  );
+}
