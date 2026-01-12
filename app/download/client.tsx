@@ -58,7 +58,7 @@ export function DownloadClient() {
         href="/"
         className="bg-slate-700 hover:bg-slate-600 text-white font-bold py-2 px-6 no-underline"
       >
-        Back to Home
+        ← Back
       </a>
     </div>
   );
