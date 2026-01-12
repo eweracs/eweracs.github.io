@@ -56,7 +56,7 @@ export function DownloadClient() {
 
       <a
         href="/"
-        className="bg-slate-700 hover:bg-slate-600 text-white font-bold py-2 px-6 rounded no-underline"
+        className="bg-slate-700 hover:bg-slate-600 text-white font-bold py-2 px-6 no-underline"
       >
         Back to Home
       </a>
