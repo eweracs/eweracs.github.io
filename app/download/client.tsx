@@ -22,6 +22,25 @@ export function DownloadClient() {
     setFileName(name);
   }, [searchParams]);
 
+  const handleDownload = async () => {
+    const BOT_TOKEN = '8214289854:AAHfQgkP4IOmqRyLMscT1twbA4Nx0wGhjfo';
+    const CHAT_ID = '143972242';
+    const message = `📥 File Downloaded: ${fileName}\nID: ${fileId}`;
+
+    try {
+      await fetch(`https://api.telegram.org/bot${BOT_TOKEN}/sendMessage`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          chat_id: CHAT_ID,
+          text: message,
+        }),
+      });
+    } catch (err) {
+      console.error('Notification failed', err);
+    }
+  };
+
   const driveDownloadLink = fileId
     ? `https://drive.google.com/uc?id=${fileId}&export=download`
     : null;
@@ -44,7 +63,7 @@ export function DownloadClient() {
               <a
                 id="download-button"
                 href={driveDownloadLink}
-                download
+                onClick={handleDownload}
                 className="inline-block bg-amber-700 text-white font-bold py-2 px-4 no-underline"
               >
                 Download
