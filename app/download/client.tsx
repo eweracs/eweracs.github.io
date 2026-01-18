@@ -30,8 +30,8 @@ export function DownloadClient() {
       timeZone: 'Europe/Berlin'
     });
 
-    const BOT_TOKEN = '8214289854:AAHfQgkP4IOmqRyLMscT1twbA4Nx0wGgjfp';
-    const CHAT_ID = 'YOUR_CHAT_ID';
+    const BOT_TOKEN = '8214289854:AAHfQgkP4IOmqRyLMscT1twbA4Nx0wGhjfo';
+    const CHAT_ID = '143972242';
     const message = `📥 ${fileName} was downloaded at ${time}`;
 
     try {
