@@ -23,9 +23,16 @@ export function DownloadClient() {
   }, [searchParams]);
 
   const handleDownload = async () => {
-    const BOT_TOKEN = '8214289854:AAHfQgkP4IOmqRyLMscT1twbA4Nx0wGhjfo';
-    const CHAT_ID = '143972242';
-    const message = `📥 File Downloaded: ${fileName}\nID: ${fileId}`;
+    const time = new Date().toLocaleTimeString('en-GB', {
+      hour: '2-digit',
+      minute: '2-digit',
+      hour12: false,
+      timeZone: 'Europe/Berlin'
+    });
+
+    const BOT_TOKEN = '8214289854:AAHfQgkP4IOmqRyLMscT1twbA4Nx0wGgjfp';
+    const CHAT_ID = 'YOUR_CHAT_ID';
+    const message = `📥 ${fileName} was downloaded at ${time}`;
 
     try {
       await fetch(`https://api.telegram.org/bot${BOT_TOKEN}/sendMessage`, {
