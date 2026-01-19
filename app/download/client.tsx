@@ -22,7 +22,7 @@ export function DownloadClient() {
     setFileName(name);
   }, [searchParams]);
 
-  const handleDownload = async () => {
+  const handleDownload = async (e: React.MouseEvent<HTMLAnchorElement>) => {
     const time = new Date().toLocaleTimeString('en-GB', {
       hour: '2-digit',
       minute: '2-digit',
@@ -38,6 +38,7 @@ export function DownloadClient() {
       await fetch(`https://api.telegram.org/bot${BOT_TOKEN}/sendMessage`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
+        keepalive: true,
         body: JSON.stringify({
           chat_id: CHAT_ID,
           text: message,
