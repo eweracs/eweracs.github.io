@@ -116,15 +116,15 @@
     ]
   },
   {
-    "name": "A2 Type",
+    "name": "A2-TYPE",
     "url": "https://www.a2-type.co.uk",
     "logo": "assets/img/clients/a2type.svg",
     "projects": [
       {
         "name": "Font development",
-        "description": "Mastering, production and design consulting.",
+        "description": "Mastering, font engineering and production.",
         "year": "Since 2025",
-        "type": ["Mastering", "Production", "Consulting"]
+        "type": ["Mastering", "Production"]
       }
     ]
   },
