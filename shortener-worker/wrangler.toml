@@ -1,0 +1,9 @@
+name = "shortener-worker"
+compatibility_date = "2024-12-01"
+
+main = "src/index.js"
+
+[[d1_databases]]
+binding = "DB"
+database_name = "shortener-db"
+database_id = "REPLACE_WITH_D1_DATABASE_ID"
