@@ -212,6 +212,27 @@ export default function App() {
     return () => window.removeEventListener("resize", checkIfMobile);
   }, []);
 
+  useEffect(() => {
+    const stored = window.localStorage.getItem("lang") as Lang | null;
+    if (stored) {
+      setLanguage(stored);
+      return;
+    }
+
+    const browserLang = navigator.language.toLowerCase();
+    const detected: Lang = browserLang.startsWith("fr")
+      ? "FR"
+      : browserLang.startsWith("de")
+        ? "DE"
+        : "EN";
+
+    setLanguage(detected);
+  }, []);
+
+  useEffect(() => {
+    window.localStorage.setItem("lang", language);
+  }, [language]);
+
   const otherLanguages: Lang[] = (["FR", "EN", "DE"] as const).filter(
     (l) => l !== language
   );
