@@ -11,7 +11,8 @@ const SHORTENER_TOKEN = process.env.SHORTENER_TOKEN;
 const ALLOWED_ORIGINS = (process.env.ALLOWED_ORIGINS || '')
   .split(',')
   .map((origin) => origin.trim())
-  .filter(Boolean);
+  .filter(Boolean)
+  .map((origin) => origin.replace(/\/$/, '').toLowerCase());
 
 if (!DATABASE_URL) {
   throw new Error('DATABASE_URL is required');
@@ -39,7 +40,8 @@ function setCorsHeaders(req, res) {
   }
 
   const origin = req.headers.origin;
-  if (origin && ALLOWED_ORIGINS.includes(origin)) {
+  const normalizedOrigin = origin ? origin.replace(/\/$/, '').toLowerCase() : null;
+  if (normalizedOrigin && ALLOWED_ORIGINS.includes(normalizedOrigin)) {
     res.setHeader('Access-Control-Allow-Origin', origin);
     res.setHeader('Access-Control-Allow-Methods', 'GET,POST,OPTIONS');
     res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
