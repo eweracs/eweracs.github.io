@@ -444,7 +444,7 @@ export default function App() {
                   animate={{ opacity: 1 }}
                   exit={{ opacity: 0 }}
                   transition={{ duration: 0.15 }}
-                  className="w-full h-full flex items-center justify-center text-white font-semibold tracking-wide
+                  className="w-full h-full flex items-center justify-center text-white font-semibold tracking-wide uppercase
                   [font-variation-settings:'wght'_500] hover:[font-variation-settings:'wght'_600]"
                   onClick={(e) => {
                     e.stopPropagation();
@@ -480,7 +480,7 @@ export default function App() {
                         setLanguage(lang);
                         setIsLangMenuOpen(false);
                       }}
-                      className="w-12 h-12 flex items-center justify-center rounded-full bg-white/10 hover:bg-white/20 transition-colors backdrop-blur-sm text-white font-semibold tracking-wide [font-variation-settings:'wght'_500] hover:[font-variation-settings:'wght'_600]"
+                      className="w-12 h-12 flex items-center justify-center rounded-full bg-white/10 hover:bg-white/20 transition-colors backdrop-blur-sm text-white font-semibold tracking-wide uppercase [font-variation-settings:'wght'_500] hover:[font-variation-settings:'wght'_600]"
                       aria-label={`Switch language to ${lang}`}
                       role="menuitem"
                     >
