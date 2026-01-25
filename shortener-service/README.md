@@ -24,7 +24,8 @@ Response:
   "shortId": "a1B2c3",
   "driveId": "FILE_ID",
   "name": "My File",
-  "shortUrl": "https://myurl.com/download?short=a1B2c3"
+  "shortUrl": "https://myurl.com/download?a1B2c3",
+  "shortUrlLong": "https://myurl.com/download?short=a1B2c3"
 }
 ```
 

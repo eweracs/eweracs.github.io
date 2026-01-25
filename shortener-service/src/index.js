@@ -186,12 +186,15 @@ app.post('/shorten', async (req, res) => {
 
   try {
     const link = await createShortLink({ driveId, name });
-    const shortUrl = `${PUBLIC_SITE_BASE.replace(/\/$/, '')}/download?short=${link.short_id}`;
+    const base = PUBLIC_SITE_BASE.replace(/\/$/, '');
+    const shortUrl = `${base}/download?${link.short_id}`;
+    const shortUrlLong = `${base}/download?short=${link.short_id}`;
     return res.json({
       shortId: link.short_id,
       driveId: link.drive_id,
       name: link.name || undefined,
       shortUrl,
+      shortUrlLong,
     });
   } catch (err) {
     console.error('Shorten failed', err);
