@@ -8,6 +8,34 @@ import { faLinkedin, faGithub, faInstagram } from "@fortawesome/free-brands-svg-
 import clientsData from "../public/assets/data/clients.json";
 import { tString, tList, type Lang } from "./i18n/i18n";
 
+type LocalizedText = string | Record<Lang, string>;
+type LocalizedList = string[] | Record<Lang, string[]>;
+
+interface Project {
+  name: LocalizedText;
+  description: Record<Lang, string>;
+  year: string;
+  type: LocalizedList;
+  url?: string;
+}
+
+interface Client {
+  name: LocalizedText;
+  url: string;
+  logo: string;
+  projects: Project[];
+}
+
+const getLocalizedText = (value: LocalizedText, lang: Lang) => {
+  if (typeof value === "string") return value;
+  return value[lang] ?? value.EN;
+};
+
+const getLocalizedList = (value: LocalizedList, lang: Lang) => {
+  if (Array.isArray(value)) return value;
+  return value[lang] ?? value.EN;
+};
+
 const SocialFooter = () => (
   <footer className="mt-auto pt-6">
     <div className="flex justify-center gap-6">
@@ -161,16 +189,21 @@ export default function App() {
   const [isLangMenuOpen, setIsLangMenuOpen] = useState(false);
   const [isMobile, setIsMobile] = useState(false);
   const isAnyActive = activeSection !== null;
+  const clients = clientsData as Client[];
 
   const handleSectionClick = (id: number) => {
     setActiveSection((current) => (current === id ? null : id));
   };
 
   const sortedClients = useMemo(() => {
-    const sorted = [...clientsData];
-    sorted.sort((a, b) => a.name.localeCompare(b.name));
+    const sorted = [...clients];
+    sorted.sort((a, b) =>
+      getLocalizedText(a.name, language).localeCompare(
+        getLocalizedText(b.name, language)
+      )
+    );
     return sorted;
-  }, []);
+  }, [clients, language]);
 
   useEffect(() => {
     const checkIfMobile = () => setIsMobile(window.innerWidth < 800);
@@ -223,8 +256,11 @@ export default function App() {
                   {tString(language, "projects.intro")}
                 </p>
 
-                {sortedClients.map((client) => (
-                  <div key={client.name} className="space-y-6">
+                {sortedClients.map((client) => {
+                  const clientName = getLocalizedText(client.name, language);
+
+                  return (
+                  <div key={client.url} className="space-y-6">
                     <div className="flex items-center gap-4 pb-4 border-b border-white/10">
                       <div className="flex items-center gap-3">
                         <a
@@ -233,30 +269,44 @@ export default function App() {
                           rel="noopener noreferrer"
                           className="text-white/90 hover:text-white transition-colors flex items-center gap-2"
                         >
-                          <h3>{client.name}</h3>
+                          <h3>{clientName}</h3>
                           <ExternalLink className="w-4 h-4" />
                         </a>
                       </div>
                     </div>
 
                     <div className="space-y-6">
-                      {client.projects.map((project) => (
+                      {client.projects.map((project) => {
+                        const projectName = getLocalizedText(
+                          project.name,
+                          language
+                        );
+                        const projectDescription = getLocalizedText(
+                          project.description,
+                          language
+                        );
+                        const projectTypes = getLocalizedList(
+                          project.type,
+                          language
+                        );
+
+                        return (
                         <div
-                          key={`${project.name}-${project.year}`}
+                          key={`${getLocalizedText(project.name, "EN")}-${project.year}`}
                           className="pl-4 border-l-2 border-white/20"
                         >
                           <div className="flex justify-between items-start mb-2">
-                            <h4 className="text-white/80">{project.name}</h4>
+                            <h4 className="text-white/80">{projectName}</h4>
                             <span className="text-white/50 text-sm">
                               {project.year}
                             </span>
                           </div>
                           <p className="text-white/60 mb-3">
-                            {project.description}
+                            {projectDescription}
                           </p>
 
                           <div className="flex gap-2 flex-wrap mb-3">
-                            {project.type.map((type) => (
+                            {projectTypes.map((type) => (
                               <span
                                 key={type}
                                 className="px-3 py-1 bg-white/10 rounded text-sm text-white/70"
@@ -278,10 +328,12 @@ export default function App() {
                             </a>
                           )}
                         </div>
-                      ))}
+                        );
+                      })}
                     </div>
                   </div>
-                ))}
+                  );
+                })}
               </div>
             </div>
             <SocialFooter />
@@ -486,7 +538,7 @@ export default function App() {
                     onClick={(e) => e.stopPropagation()}
                   >
                     <div className="min-h-full flex flex-col justify-center">
-                      <div className="flex-shrink-0 px-12 py-24">
+                      <div className="shrink-0 px-12 py-24">
                         <div className="max-w-lg mx-auto text-white">
                           <h2 className="text-white italic mb-6 text-2xl">
                             {section.title}

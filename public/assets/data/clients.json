@@ -6,9 +6,29 @@
     "projects": [
       {
         "name": "Mona Sans, Hubot Sans",
-        "description": "Revision and complete remaster of GitHub’s corporate fonts.",
+        "description": {
+          "EN": "Revision and complete remaster of GitHub’s corporate fonts.",
+          "FR": "Révision et remasterisation complète des polices corporate de GitHub.",
+          "DE": "Überarbeitung und vollständiges Remastering der Corporate-Schriften von GitHub."
+        },
         "year": "2024",
-        "type": ["Mastering", "Spacing/Kerning", "Consulting"],
+        "type": {
+          "EN": [
+            "Mastering",
+            "Spacing/Kerning",
+            "Consulting"
+          ],
+          "FR": [
+            "Finalisation",
+            "Espacement/Crénage",
+            "Conseil"
+          ],
+          "DE": [
+            "Finalisierung",
+            "Spationierung/Kerning",
+            "Beratung"
+          ]
+        },
         "url": "https://github.com/mona-sans"
       }
     ]
@@ -20,16 +40,47 @@
     "projects": [
       {
         "name": "Artex",
-        "description": "Variable font production and quality assurance.",
+        "description": {
+          "EN": "Variable font production and quality assurance.",
+          "FR": "Production de fontes variables et assurance qualité.",
+          "DE": "Variable-Font-Produktion und Qualitätssicherung."
+        },
         "year": "2022",
-        "type": ["Mastering", "Font engineering"],
+        "type": {
+          "EN": [
+            "Mastering",
+            "Font engineering"
+          ],
+          "FR": [
+            "Finalisation",
+            "Ingénierie de polices"
+          ],
+          "DE": [
+            "Finalisierung",
+            "Font-Engineering"
+          ]
+        },
         "url": "https://optimo.ch/typefaces/artex"
       },
       {
         "name": "Abstrakt",
-        "description": "Spacing and kerning for François Rappo’s Abstrakt.",
+        "description": {
+          "EN": "Spacing and kerning for François Rappo’s Abstrakt.",
+          "FR": "Espacement et crénage pour Abstrakt de François Rappo.",
+          "DE": "Spationierung und Kerning für François Rappos Abstrakt."
+        },
         "year": "2023",
-        "type": ["Spacing/Kerning"],
+        "type": {
+          "EN": [
+            "Spacing/Kerning"
+          ],
+          "FR": [
+            "Espacement/Crénage"
+          ],
+          "DE": [
+            "Spationierung/Kerning"
+          ]
+        },
         "url": "https://optimo.ch/typefaces/abstrakt"
       }
     ]
@@ -41,23 +92,69 @@
     "projects": [
       {
         "name": "Lambotype",
-        "description": "Variable font engineering for a particularly challenging design space.",
+        "description": {
+          "EN": "Variable font engineering for a particularly challenging design space.",
+          "FR": "Ingénierie de fontes variables pour un espace de design particulièrement exigeant.",
+          "DE": "Variable-Font-Engineering für einen besonders anspruchsvollen Entwurfsraum."
+        },
         "year": "2023",
-        "type": ["Font Engineering"],
+        "type": {
+          "EN": [
+            "Font Engineering"
+          ],
+          "FR": [
+            "Ingénierie de polices"
+          ],
+          "DE": [
+            "Font-Engineering"
+          ]
+        },
         "url": "https://charactertype.com/typefaces/lamborghini/"
       },
       {
         "name": "SZ Sans Digital",
-        "description": "Mastering and font engineering for the font of one of Germany’s biggest newspapers.",
+        "description": {
+          "EN": "Mastering and font engineering for the font of one of Germany’s biggest newspapers.",
+          "FR": "Finalisation et ingénierie de polices pour la fonte de l'un des plus grands journaux d'Allemagne.",
+          "DE": "Finalisierung und Font-Engineering für die Schrift einer der größten deutschen Zeitungen."
+        },
         "year": "2023",
-        "type": ["Mastering"],
+        "type": {
+          "EN": [
+            "Mastering"
+          ],
+          "FR": [
+            "Finalisation"
+          ],
+          "DE": [
+            "Finalisierung"
+          ]
+        },
         "url": "https://charactertype.com/typefaces/sueddeutsche-zeitung/"
       },
       {
-        "name": "Library font development",
-        "description": "Mastering and font development on diverse library and custom fonts",
+        "name": {
+          "EN": "Library font development",
+          "FR": "Développement de polices de bibliothèque",
+          "DE": "Bibliotheks-Schriftentwicklung"
+        },
+        "description": {
+          "EN": "Mastering and font development on diverse library and custom fonts",
+          "FR": "Finalisation et développement de fontes pour des bibliothèques et fontes sur mesure.",
+          "DE": "Finalisierung und Schriftentwicklung für verschiedene Bibliotheksschriften und Custom Fonts."
+        },
         "year": "Since 2023",
-        "type": ["Mastering"]
+        "type": {
+          "EN": [
+            "Mastering"
+          ],
+          "FR": [
+            "Finalisation"
+          ],
+          "DE": [
+            "Finalisierung"
+          ]
+        }
       }
     ]
   },
@@ -67,10 +164,43 @@
     "logo": "assets/img/clients/atlasfonts.svg",
     "projects": [
       {
-        "name": "Novel superfamily",
-        "description": "Mastering and font development on the multiscript Novel superfamily.",
+        "name": {
+          "EN": "Novel superfamily",
+          "FR": "Superfamille Novel",
+          "DE": "Novel-Superfamilie"
+        },
+        "description": {
+          "EN": "Mastering and font development on the multiscript Novel superfamily.",
+          "FR": "Finalisation et développement de fontes pour la superfamille multi-écritures Novel.",
+          "DE": "Finalisierung und Schriftentwicklung für die Multi-Script-Superfamilie Novel."
+        },
         "year": "Since 2024",
-        "type": ["Review","Mastering", "Arabic", "Hebrew", "Cyrillic", "Greek"],
+        "type": {
+          "EN": [
+            "Review",
+            "Mastering",
+            "Arabic",
+            "Hebrew",
+            "Cyrillic",
+            "Greek"
+          ],
+          "FR": [
+            "Révision",
+            "Finalisation",
+            "Arabe",
+            "Hébreu",
+            "Cyrillique",
+            "Grec"
+          ],
+          "DE": [
+            "Prüfung",
+            "Finalisierung",
+            "Arabisch",
+            "Hebräisch",
+            "Kyrillisch",
+            "Griechisch"
+          ]
+        },
         "url": "http://www.atlasfonts.com/typefaces/novel-sans"
       }
     ]
@@ -82,9 +212,23 @@
     "projects": [
       {
         "name": "Glyphs plugins",
-        "description": "Development of foundry-specific tools.",
+        "description": {
+          "EN": "Development of foundry-specific tools.",
+          "FR": "Développement d'outils spécifiques à la fonderie.",
+          "DE": "Entwicklung fonderiespezifischer Werkzeuge."
+        },
         "year": "Since 2024",
-        "type": ["Tool development"]
+        "type": {
+          "EN": [
+            "Tool development"
+          ],
+          "FR": [
+            "Développement d'outils"
+          ],
+          "DE": [
+            "Werkzeugentwicklung"
+          ]
+        }
       }
     ]
   },
@@ -94,10 +238,37 @@
     "logo": "assets/img/clients/mnky.svg",
     "projects": [
       {
-        "name": "Font design and development",
-        "description": "Design, mastering and management of the entire MNKY library.",
+        "name": {
+          "EN": "Font design and development",
+          "FR": "Design et développement de polices",
+          "DE": "Schriftdesign und -entwicklung"
+        },
+        "description": {
+          "EN": "Design, mastering and management of the entire MNKY library.",
+          "FR": "Design, finalisation et gestion de l'ensemble de la bibliothèque MNKY.",
+          "DE": "Design, Finalisierung und Betreuung der gesamten MNKY-Bibliothek."
+        },
         "year": "Since 2022",
-        "type": ["Design", "Mastering", "Spacing/Kerning", "Tool development"],
+        "type": {
+          "EN": [
+            "Design",
+            "Mastering",
+            "Spacing/Kerning",
+            "Tool development"
+          ],
+          "FR": [
+            "Design",
+            "Finalisation",
+            "Espacement/Crénage",
+            "Développement d'outils"
+          ],
+          "DE": [
+            "Design",
+            "Finalisierung",
+            "Spationierung/Kerning",
+            "Werkzeugentwicklung"
+          ]
+        },
         "url": "https://www.mnkytype.com"
       }
     ]
@@ -108,10 +279,31 @@
     "logo": "assets/img/clients/czyk.svg",
     "projects": [
       {
-        "name": "Font development",
-        "description": "Design collaboration on various font projects.",
+        "name": {
+          "EN": "Font development",
+          "FR": "Développement de polices",
+          "DE": "Schriftentwicklung"
+        },
+        "description": {
+          "EN": "Design collaboration on various font projects.",
+          "FR": "Collaboration au design sur divers projets de polices.",
+          "DE": "Design-Kollaboration bei verschiedenen Schriftprojekten."
+        },
         "year": "Since 2018",
-        "type": ["Design", "Mastering"]
+        "type": {
+          "EN": [
+            "Design",
+            "Mastering"
+          ],
+          "FR": [
+            "Design",
+            "Finalisation"
+          ],
+          "DE": [
+            "Design",
+            "Finalisierung"
+          ]
+        }
       }
     ]
   },
@@ -121,10 +313,31 @@
     "logo": "assets/img/clients/a2type.svg",
     "projects": [
       {
-        "name": "Font development",
-        "description": "Mastering, font engineering and production.",
+        "name": {
+          "EN": "Font development",
+          "FR": "Développement de polices",
+          "DE": "Schriftentwicklung"
+        },
+        "description": {
+          "EN": "Mastering, font engineering and production.",
+          "FR": "Finalisation, ingénierie de polices et production.",
+          "DE": "Finalisierung, Font-Engineering und Produktion."
+        },
         "year": "Since 2025",
-        "type": ["Mastering", "Production"]
+        "type": {
+          "EN": [
+            "Mastering",
+            "Production"
+          ],
+          "FR": [
+            "Finalisation",
+            "Production"
+          ],
+          "DE": [
+            "Finalisierung",
+            "Produktion"
+          ]
+        }
       }
     ]
   },
@@ -135,9 +348,32 @@
     "projects": [
       {
         "name": "Mae",
-        "description": "Design assistance and italic creation.",
+        "description": {
+          "EN": "Design assistance and italic creation.",
+          "FR": "Assistance au design et création des italiques.",
+          "DE": "Designunterstützung und Erstellung der Kursiven."
+        },
         "year": "2022–2025",
-        "type": ["Design", "Italics", "Mastering", "Production"],
+        "type": {
+          "EN": [
+            "Design",
+            "Italics",
+            "Mastering",
+            "Production"
+          ],
+          "FR": [
+            "Design",
+            "Italiques",
+            "Finalisation",
+            "Production"
+          ],
+          "DE": [
+            "Design",
+            "Kursiven",
+            "Finalisierung",
+            "Produktion"
+          ]
+        },
         "url": "https://www.lettermin.com?font=mae"
       }
     ]
@@ -149,37 +385,129 @@
     "projects": [
       {
         "name": "Ballinger",
-        "description": "Mastering and Greek obliques.",
+        "description": {
+          "EN": "Mastering and Greek obliques.",
+          "FR": "Finalisation et obliques grecques.",
+          "DE": "Finalisierung und griechische Schrägschnitte."
+        },
         "year": "2024",
-        "type": ["Mastering", "Obliques", "Greek", "Cyrillic"],
+        "type": {
+          "EN": [
+            "Mastering",
+            "Obliques",
+            "Greek",
+            "Cyrillic"
+          ],
+          "FR": [
+            "Finalisation",
+            "Obliques",
+            "Grec",
+            "Cyrillique"
+          ],
+          "DE": [
+            "Finalisierung",
+            "Schrägschnitte",
+            "Griechisch",
+            "Kyrillisch"
+          ]
+        },
         "url": "https://signalfoundry.com/typefaces/ballinger"
       },
       {
         "name": "Field Gothic",
-        "description": "Mastering and oblique creation across 32 masters.",
+        "description": {
+          "EN": "Mastering and oblique creation across 32 masters.",
+          "FR": "Finalisation et création d'obliques sur 32 masters.",
+          "DE": "Finalisierung und Erstellung von Schrägschnitten über 32 Master."
+        },
         "year": "2024",
-        "type": ["Mastering", "Obliques"],
+        "type": {
+          "EN": [
+            "Mastering",
+            "Obliques"
+          ],
+          "FR": [
+            "Finalisation",
+            "Obliques"
+          ],
+          "DE": [
+            "Finalisierung",
+            "Schrägschnitte"
+          ]
+        },
         "url": "https://signalfoundry.com/typefaces/field-gothic"
       },
       {
         "name": "Exact",
-        "description": "Mastering and creation of small capitals.",
+        "description": {
+          "EN": "Mastering and creation of small capitals.",
+          "FR": "Finalisation et création de petites capitales.",
+          "DE": "Finalisierung und Erstellung von Kapitälchen."
+        },
         "year": "2024",
-        "type": ["Mastering", "Design"],
+        "type": {
+          "EN": [
+            "Mastering",
+            "Design"
+          ],
+          "FR": [
+            "Finalisation",
+            "Design"
+          ],
+          "DE": [
+            "Finalisierung",
+            "Design"
+          ]
+        },
         "url": "https://signalfoundry.com/typefaces/exact"
       },
       {
         "name": "Reckham",
-        "description": "Mastering and character set extension, across 24 masters.",
+        "description": {
+          "EN": "Mastering and character set extension, across 24 masters.",
+          "FR": "Finalisation et extension du jeu de caractères, sur 24 masters.",
+          "DE": "Finalisierung und Zeichensatzerweiterung über 24 Master."
+        },
         "year": "2025",
-        "type": ["Mastering", "Design"],
+        "type": {
+          "EN": [
+            "Mastering",
+            "Design"
+          ],
+          "FR": [
+            "Finalisation",
+            "Design"
+          ],
+          "DE": [
+            "Finalisierung",
+            "Design"
+          ]
+        },
         "url": "https://signalfoundry.com/typefaces/reckham"
       },
       {
-        "name": "Library font mastering",
-        "description": "Mastering on numerous library and custom fonts.",
+        "name": {
+          "EN": "Library font mastering",
+          "FR": "Finalisation de polices de bibliothèque",
+          "DE": "Bibliotheks-Schriftfinalisierung"
+        },
+        "description": {
+          "EN": "Mastering on numerous library and custom fonts.",
+          "FR": "Finalisation de nombreuses fontes de bibliothèque et sur mesure.",
+          "DE": "Finalisierung zahlreicher Bibliotheks- und Custom-Schriften."
+        },
         "year": "Since 2024",
-        "type": ["Mastering"]
+        "type": {
+          "EN": [
+            "Mastering"
+          ],
+          "FR": [
+            "Finalisation"
+          ],
+          "DE": [
+            "Finalisierung"
+          ]
+        }
       }
     ]
   },
@@ -190,9 +518,26 @@
     "projects": [
       {
         "name": "Cortese Sans",
-        "description": "Mastering, spacing and kerning for a really vast character set with many alternates.",
+        "description": {
+          "EN": "Mastering, spacing and kerning for a really vast character set with many alternates.",
+          "FR": "Finalisation, espacement et crénage pour un très vaste jeu de caractères avec de nombreuses alternatives.",
+          "DE": "Finalisierung, Spationierung und Kerning für einen sehr großen Zeichensatz mit vielen Alternativen."
+        },
         "year": "2024",
-        "type": ["Mastering", "Spacing/Kerning"],
+        "type": {
+          "EN": [
+            "Mastering",
+            "Spacing/Kerning"
+          ],
+          "FR": [
+            "Finalisation",
+            "Espacement/Crénage"
+          ],
+          "DE": [
+            "Finalisierung",
+            "Spationierung/Kerning"
+          ]
+        },
         "url": "https://www.markvanleeuwen.co/cortese-sans"
       }
     ]
@@ -204,16 +549,66 @@
     "projects": [
       {
         "name": "Sofia Pro",
-        "description": "Remaster and design review of a large multiscript family.",
+        "description": {
+          "EN": "Remaster and design review of a large multiscript family.",
+          "FR": "Remasterisation et revue de design d'une grande famille multi-écritures.",
+          "DE": "Remastering und Design-Review einer großen Multi-Script-Familie."
+        },
         "year": "Since 2024",
-        "type": ["Mastering", "Review", "Greek", "Cyrillic", "Devanagari", "Vietnamese"],
+        "type": {
+          "EN": [
+            "Mastering",
+            "Review",
+            "Greek",
+            "Cyrillic",
+            "Devanagari",
+            "Vietnamese"
+          ],
+          "FR": [
+            "Finalisation",
+            "Révision",
+            "Grec",
+            "Cyrillique",
+            "Dévanagari",
+            "Vietnamien"
+          ],
+          "DE": [
+            "Finalisierung",
+            "Prüfung",
+            "Griechisch",
+            "Kyrillisch",
+            "Devanagari",
+            "Vietnamesisch"
+          ]
+        },
         "url": "https://www.motyfo.com/fonts-library/sofia-pro"
       },
       {
-        "name": "Library font development",
-        "description": "Mastering and development on many library fonts, old and new.",
+        "name": {
+          "EN": "Library font development",
+          "FR": "Développement de polices de bibliothèque",
+          "DE": "Bibliotheks-Schriftentwicklung"
+        },
+        "description": {
+          "EN": "Mastering and development on many library fonts, old and new.",
+          "FR": "Finalisation et développement de nombreuses polices de bibliothèque, anciennes et nouvelles.",
+          "DE": "Finalisierung und Entwicklung vieler Bibliotheksschriften, alt und neu."
+        },
         "year": "Since 2024",
-        "type": ["Spacing/Kerning", "Mastering"]
+        "type": {
+          "EN": [
+            "Spacing/Kerning",
+            "Mastering"
+          ],
+          "FR": [
+            "Espacement/Crénage",
+            "Finalisation"
+          ],
+          "DE": [
+            "Spationierung/Kerning",
+            "Finalisierung"
+          ]
+        }
       }
     ]
   },
@@ -223,10 +618,34 @@
     "logo": "assets/img/clients/pstl.svg",
     "projects": [
       {
-        "name": "Panel Superfamily",
-        "description": "Extensive design, spacing, kerning and mastering for the TDC-winning sans and serif, mono and proportional superfamily.",
+        "name": {
+          "EN": "Panel Superfamily",
+          "FR": "Superfamille Panel",
+          "DE": "Panel-Superfamilie"
+        },
+        "description": {
+          "EN": "Extensive design, spacing, kerning and mastering for the TDC-winning sans and serif, mono and proportional superfamily.",
+          "FR": "Design, espacement, crénage et finalisation approfondis pour la superfamille sans et serif, mono et proportionnelle, primée par le TDC.",
+          "DE": "Umfangreiches Design, Spationierung, Kerning und Finalisierung für die TDC-prämierte Sans- und Serif-, Mono- und Proportional-Superfamilie."
+        },
         "year": "2023",
-        "type": ["Design", "Spacing/Kerning", "Mastering"],
+        "type": {
+          "EN": [
+            "Design",
+            "Spacing/Kerning",
+            "Mastering"
+          ],
+          "FR": [
+            "Design",
+            "Espacement/Crénage",
+            "Finalisation"
+          ],
+          "DE": [
+            "Design",
+            "Spationierung/Kerning",
+            "Finalisierung"
+          ]
+        },
         "url": "https://pstypelab.com/panel"
       }
     ]
@@ -238,9 +657,26 @@
     "projects": [
       {
         "name": "Piz Grotesk",
-        "description": "Mastering, spacing and kerning for a lively, but Swiss, sans-serif.",
+        "description": {
+          "EN": "Mastering, spacing and kerning for a lively, but Swiss, sans-serif.",
+          "FR": "Finalisation, espacement et crénage pour une sans-serif vive, mais suisse.",
+          "DE": "Finalisierung, Spationierung und Kerning für eine lebhafte, aber schweizerische Sans-Serif."
+        },
         "year": "2024",
-        "type": ["Mastering", "Spacing/Kerning"],
+        "type": {
+          "EN": [
+            "Mastering",
+            "Spacing/Kerning"
+          ],
+          "FR": [
+            "Finalisation",
+            "Espacement/Crénage"
+          ],
+          "DE": [
+            "Finalisierung",
+            "Spationierung/Kerning"
+          ]
+        },
         "url": "https://www.serpentype.com/piz"
       }
     ]
@@ -252,16 +688,50 @@
     "projects": [
       {
         "name": "KF Zuka",
-        "description": "Mastering, spacing and kerning for a highly precise sans-serif revival.",
+        "description": {
+          "EN": "Mastering, spacing and kerning for a highly precise sans-serif revival.",
+          "FR": "Finalisation, espacement et crénage pour une revival sans-serif très précise.",
+          "DE": "Finalisierung, Spationierung und Kerning für eine sehr präzise Sans-Serif-Revival."
+        },
         "year": "2024",
-        "type": ["Mastering", "Spacing/Kerning"],
+        "type": {
+          "EN": [
+            "Mastering",
+            "Spacing/Kerning"
+          ],
+          "FR": [
+            "Finalisation",
+            "Espacement/Crénage"
+          ],
+          "DE": [
+            "Finalisierung",
+            "Spationierung/Kerning"
+          ]
+        },
         "url": "https://www.kanonfoundry.com/kf-zuka"
       },
       {
         "name": "Clippy",
-        "description": "Mastering, spacing and kerning of a fun display-ish family with backslant styles.",
+        "description": {
+          "EN": "Mastering, spacing and kerning of a fun display-ish family with backslant styles.",
+          "FR": "Finalisation, espacement et crénage d'une famille d'affichage ludique avec des styles en contre-italique.",
+          "DE": "Finalisierung, Spationierung und Kerning einer verspielten Display-Familie mit Backslant-Stilen."
+        },
         "year": "2025",
-        "type": ["Mastering", "Spacing/Kerning"],
+        "type": {
+          "EN": [
+            "Mastering",
+            "Spacing/Kerning"
+          ],
+          "FR": [
+            "Finalisation",
+            "Espacement/Crénage"
+          ],
+          "DE": [
+            "Finalisierung",
+            "Spationierung/Kerning"
+          ]
+        },
         "url": "https://www.kanonfoundry.com/clippy"
       }
     ]
@@ -273,9 +743,29 @@
     "projects": [
       {
         "name": "Kalice",
-        "description": "Design review, remaster, spacing and kerning of a highly decorative serif family.",
+        "description": {
+          "EN": "Design review, remaster, spacing and kerning of a highly decorative serif family.",
+          "FR": "Revue de design, remasterisation, espacement et crénage d'une famille serif très décorative.",
+          "DE": "Design-Review, Remastering, Spationierung und Kerning einer stark dekorativen Serif-Familie."
+        },
         "year": "2025",
-        "type": ["Review", "Mastering", "Spacing/Kerning"],
+        "type": {
+          "EN": [
+            "Review",
+            "Mastering",
+            "Spacing/Kerning"
+          ],
+          "FR": [
+            "Révision",
+            "Finalisation",
+            "Espacement/Crénage"
+          ],
+          "DE": [
+            "Prüfung",
+            "Finalisierung",
+            "Spationierung/Kerning"
+          ]
+        },
         "url": "https://margotleveque.com/collections/kalice"
       }
     ]
@@ -286,10 +776,28 @@
     "logo": "assets/img/clients/fontwerk.svg",
     "projects": [
       {
-        "name": "Proofreading",
-        "description": "Proofreading of specimens, newsletters and promotional material.",
+        "name": {
+          "EN": "Proofreading",
+          "FR": "Relecture",
+          "DE": "Korrekturlesen"
+        },
+        "description": {
+          "EN": "Proofreading of specimens, newsletters and promotional material.",
+          "FR": "Relecture d'épreuves, de newsletters et de matériel promotionnel.",
+          "DE": "Korrekturlesen von Mustern, Newslettern und Werbematerial."
+        },
         "year": "2025",
-        "type": ["Consulting"]
+        "type": {
+          "EN": [
+            "Consulting"
+          ],
+          "FR": [
+            "Conseil"
+          ],
+          "DE": [
+            "Beratung"
+          ]
+        }
       }
     ]
   },
@@ -299,10 +807,31 @@
     "logo": "assets/img/clients/novatype.svg",
     "projects": [
       {
-        "name": "Library font development",
-        "description": "Mastering, spacing and kerning of numerous library fonts.",
+        "name": {
+          "EN": "Library font development",
+          "FR": "Développement de polices de bibliothèque",
+          "DE": "Bibliotheks-Schriftentwicklung"
+        },
+        "description": {
+          "EN": "Mastering, spacing and kerning of numerous library fonts.",
+          "FR": "Finalisation, espacement et crénage de nombreuses polices de bibliothèque.",
+          "DE": "Finalisierung, Spationierung und Kerning zahlreicher Bibliotheksschriften."
+        },
         "year": "since 2023",
-        "type": ["Mastering", "Spacing/Kerning"]
+        "type": {
+          "EN": [
+            "Mastering",
+            "Spacing/Kerning"
+          ],
+          "FR": [
+            "Finalisation",
+            "Espacement/Crénage"
+          ],
+          "DE": [
+            "Finalisierung",
+            "Spationierung/Kerning"
+          ]
+        }
       }
     ]
   },
@@ -312,23 +841,65 @@
     "logo": "assets/img/clients/moniteurs.svg",
     "projects": [
       {
-        "name": "Custom font development",
-        "description": "Style expansion and development work on the custom in-house font family.",
+        "name": {
+          "EN": "Custom font development",
+          "FR": "Développement de police sur mesure",
+          "DE": "Custom-Schriftentwicklung"
+        },
+        "description": {
+          "EN": "Style expansion and development work on the custom in-house font family.",
+          "FR": "Extension des styles et développement de la famille de polices interne sur mesure.",
+          "DE": "Stilerweiterung und Entwicklungsarbeit an der hausinternen Custom-Schriftfamilie."
+        },
         "year": "2020",
-        "type": ["Design","Mastering", "Spacing/Kerning"]
+        "type": {
+          "EN": [
+            "Design",
+            "Mastering",
+            "Spacing/Kerning"
+          ],
+          "FR": [
+            "Design",
+            "Finalisation",
+            "Espacement/Crénage"
+          ],
+          "DE": [
+            "Design",
+            "Finalisierung",
+            "Spationierung/Kerning"
+          ]
+        }
       }
     ]
   },
   {
-    "name": "Berlin Philharmonic",
+    "name": {
+      "EN": "Berlin Philharmonic",
+      "FR": "Philharmonie de Berlin",
+      "DE": "Berliner Philharmoniker"
+    },
     "url": "https://www.berliner-philharmoniker.de",
     "logo": "assets/img/clients/bph.svg",
     "projects": [
       {
         "name": "BPH Sans",
-        "description": "Technical consulting and variable font implementation.",
+        "description": {
+          "EN": "Technical consulting and variable font implementation.",
+          "FR": "Conseil technique et implémentation de fonte variable.",
+          "DE": "Technische Beratung und Implementierung der Variablen Schrift."
+        },
         "year": "2020",
-        "type": ["Consulting"]
+        "type": {
+          "EN": [
+            "Consulting"
+          ],
+          "FR": [
+            "Conseil"
+          ],
+          "DE": [
+            "Beratung"
+          ]
+        }
       }
     ]
   },
@@ -338,10 +909,34 @@
     "logo": "assets/img/clients/sunwookkim.svg",
     "projects": [
       {
-        "name": "Custom font design",
-        "description": "Design, development and complete direction of a custom font for Korean star pianist Sunwook Kim.",
+        "name": {
+          "EN": "Custom font design",
+          "FR": "Design de police sur mesure",
+          "DE": "Custom-Schriftdesign"
+        },
+        "description": {
+          "EN": "Design, development and complete direction of a custom font for Korean star pianist Sunwook Kim.",
+          "FR": "Design, développement et direction complète d'une police sur mesure pour le pianiste vedette coréen Sunwook Kim.",
+          "DE": "Design, Entwicklung und vollständige Leitung einer Custom-Schrift für den koreanischen Starpianisten Sunwook Kim."
+        },
         "year": "2021",
-        "type": ["Design", "Direction", "Mastering"],
+        "type": {
+          "EN": [
+            "Design",
+            "Direction",
+            "Mastering"
+          ],
+          "FR": [
+            "Design",
+            "Direction",
+            "Finalisation"
+          ],
+          "DE": [
+            "Design",
+            "Leitung",
+            "Finalisierung"
+          ]
+        },
         "url": "https://www.sunwookkim.com"
       }
     ]
