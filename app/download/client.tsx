@@ -3,18 +3,69 @@
 import { useSearchParams } from 'next/navigation';
 import { useEffect, useState } from 'react';
 
+type ShortLookupResponse = {
+  driveId?: string;
+  name?: string;
+};
+
 export function DownloadClient() {
   const searchParams = useSearchParams();
   const [fileName, setFileName] = useState('Download File');
   const [fileId, setFileId] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
+  const [isResolving, setIsResolving] = useState(false);
+
+  const apiBase = process.env.NEXT_PUBLIC_SHORTENER_API_BASE?.replace(/\/$/, '');
+
+  const resolveShortId = async (shortId: string) => {
+    if (!apiBase) {
+      setError('Short links are not configured.');
+      return;
+    }
+
+    setIsResolving(true);
+    setError(null);
+
+    try {
+      const response = await fetch(`${apiBase}/resolve/${encodeURIComponent(shortId)}`);
+
+      if (!response.ok) {
+        throw new Error(`Resolve failed with status ${response.status}`);
+      }
+
+      const data = (await response.json()) as ShortLookupResponse;
+      const resolvedId = data.driveId?.trim();
+
+      if (!resolvedId) {
+        setError('Short link not found.');
+        return;
+      }
+
+      setFileId(resolvedId);
+      setFileName(data.name?.trim() || 'Download File');
+    } catch (err) {
+      console.error('Short link resolve failed', err);
+      setError('Short link lookup failed.');
+    } finally {
+      setIsResolving(false);
+    }
+  };
 
   useEffect(() => {
-    const id = searchParams.get('id');
-    const name = searchParams.get('name') || 'Download File';
+    const params = new URLSearchParams(searchParams.toString());
+    const id = params.get('id');
+    const name = params.get('name') || 'Download File';
+    const short = params.get('short');
+    const bareKey = !id && !short && !params.get('name')
+      ? params.keys().next().value
+      : null;
 
     if (!id) {
-      setError('No file ID provided.');
+      if (short || bareKey) {
+        void resolveShortId((short || bareKey) as string);
+      } else {
+        setError('No file ID provided.');
+      }
       return;
     }
 
@@ -67,6 +118,9 @@ export function DownloadClient() {
             <p className="text-white mb-6">
               <span className="[font-variation-settings:'wght'_700]" id="file-name">{fileName}</span>
             </p>
+            {isResolving && !driveDownloadLink && (
+              <p className="text-white mb-4">Resolving short link...</p>
+            )}
             {driveDownloadLink && (
               <a
                 id="download-button"
@@ -74,7 +128,7 @@ export function DownloadClient() {
                 onClick={handleDownload}
                 className="inline-block bg-amber-700 text-white font-bold py-2 px-4 no-underline"
               >
-                Download
+                {isResolving ? 'Resolving…' : 'Download'}
               </a>
             )}
           </>
