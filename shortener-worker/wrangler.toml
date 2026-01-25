@@ -6,4 +6,4 @@ main = "src/index.js"
 [[d1_databases]]
 binding = "DB"
 database_name = "shortener-db"
-database_id = "REPLACE_WITH_D1_DATABASE_ID"
+database_id = "5b07ee93-1aaa-4199-a48f-5c166e380456"
