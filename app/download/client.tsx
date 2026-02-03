@@ -14,6 +14,7 @@ export function DownloadClient() {
   const [fileId, setFileId] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [isResolving, setIsResolving] = useState(false);
+  const [hasStartedDownload, setHasStartedDownload] = useState(false);
 
   const apiBase = process.env.NEXT_PUBLIC_SHORTENER_API_BASE?.replace(/\/$/, '');
 
@@ -74,6 +75,7 @@ export function DownloadClient() {
   }, [searchParams]);
 
   const handleDownload = async (e: React.MouseEvent<HTMLAnchorElement>) => {
+    setHasStartedDownload(true);
     const time = new Date().toLocaleTimeString('en-GB', {
       hour: '2-digit',
       minute: '2-digit',
@@ -106,7 +108,7 @@ export function DownloadClient() {
 
   return (
     <div className="min-h-screen bg-slate-900 flex flex-col items-center justify-center gap-6">
-      <div className="bg-blue-900 shadow-lg p-8 max-w-md w-full">
+      <div className="bg-blue-900 shadow-lg p-8 max-w-md w-full relative overflow-hidden">
         <h1 className="text-xl text-white font-bold mb-4">Your files are ready:</h1>
 
         {error ? (
@@ -132,6 +134,12 @@ export function DownloadClient() {
               </a>
             )}
           </>
+        )}
+        {hasStartedDownload && (
+          <div className="absolute inset-0 bg-emerald-800 text-white flex flex-col items-center justify-center text-center px-6 download-overlay">
+            <p className="text-xl font-bold mb-2">Download started</p>
+            <p>This may take a moment.</p>
+          </div>
         )}
       </div>
 
