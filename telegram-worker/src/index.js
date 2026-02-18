@@ -45,32 +45,13 @@ function getCorsHeaders(origin, allowedOrigins) {
   return {};
 }
 
-async function verifyTurnstile(token, secret, remoteip) {
-  const form = new FormData();
-  form.append('secret', secret);
-  form.append('response', token);
-  if (remoteip) {
-    form.append('remoteip', remoteip);
-  }
-
-  const response = await fetch('https://challenges.cloudflare.com/turnstile/v0/siteverify', {
-    method: 'POST',
-    body: form,
-  });
-
-  if (!response.ok) {
-    return { success: false };
-  }
-
-  return response.json();
-}
-
 export default {
   async fetch(request, env) {
     const url = new URL(request.url);
     const { pathname } = url;
     const allowedOrigins = getAllowedOrigins(env);
-    const corsHeaders = getCorsHeaders(request.headers.get('Origin'), allowedOrigins);
+    const origin = request.headers.get('Origin');
+    const corsHeaders = getCorsHeaders(origin, allowedOrigins);
 
     if (request.method === 'OPTIONS') {
       return new Response(null, { status: 204, headers: corsHeaders });
@@ -82,10 +63,16 @@ export default {
 
     const botToken = env.TELEGRAM_BOT_TOKEN;
     const chatId = env.TELEGRAM_CHAT_ID;
-    const turnstileSecret = env.TURNSTILE_SECRET_KEY;
 
-    if (!botToken || !chatId || !turnstileSecret) {
+    if (!botToken || !chatId) {
       return jsonResponse({ error: 'missing server configuration' }, { status: 500, headers: corsHeaders });
+    }
+
+    if (allowedOrigins.length) {
+      const normalizedOrigin = normalizeOrigin(origin);
+      if (!normalizedOrigin || !allowedOrigins.includes(normalizedOrigin)) {
+        return jsonResponse({ error: 'origin not allowed' }, { status: 403, headers: corsHeaders });
+      }
     }
 
     let payload;
@@ -93,21 +80,6 @@ export default {
       payload = await request.json();
     } catch (err) {
       return jsonResponse({ error: 'invalid JSON' }, { status: 400, headers: corsHeaders });
-    }
-
-    const token = payload?.turnstileToken;
-    if (!token) {
-      return jsonResponse({ error: 'missing turnstile token' }, { status: 400, headers: corsHeaders });
-    }
-
-    const verification = await verifyTurnstile(
-      token,
-      turnstileSecret,
-      request.headers.get('CF-Connecting-IP')
-    );
-
-    if (!verification?.success) {
-      return jsonResponse({ error: 'verification failed' }, { status: 403, headers: corsHeaders });
     }
 
     const fileName = String(payload?.fileName || 'Download File').trim() || 'Download File';

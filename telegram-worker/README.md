@@ -7,7 +7,7 @@ message without exposing the bot token or chat ID in the client bundle.
 
 - `POST /notify` body:
   - `fileName` (string, optional)
-  - `turnstileToken` (string, required)
+  - no auth fields (CORS + origin allowlist only)
 
 ## Deploy
 
@@ -20,7 +20,6 @@ wrangler deploy telegram-worker/src/index.js --config telegram-worker/wrangler.t
 ```bash
 wrangler secret put TELEGRAM_BOT_TOKEN --config telegram-worker/wrangler.toml
 wrangler secret put TELEGRAM_CHAT_ID --config telegram-worker/wrangler.toml
-wrangler secret put TURNSTILE_SECRET_KEY --config telegram-worker/wrangler.toml
 wrangler secret put ALLOWED_ORIGINS --config telegram-worker/wrangler.toml
 ```
 
@@ -29,6 +28,5 @@ Recommended values:
 
 ## Client config
 
-Set these in your GitHub Actions / local env:
+Set this in your GitHub Actions / local env:
 - `NEXT_PUBLIC_TELEGRAM_WORKER_URL` = your worker URL
-- `NEXT_PUBLIC_TURNSTILE_SITE_KEY` = your Turnstile site key
