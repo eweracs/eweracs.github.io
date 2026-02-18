@@ -77,6 +77,8 @@ jobs:
         run: ${{ steps.detect-package-manager.outputs.runner }} next build
         env:
           NEXT_PUBLIC_SHORTENER_API_BASE: ${{ secrets.NEXT_PUBLIC_SHORTENER_API_BASE }}
+          NEXT_PUBLIC_TELEGRAM_WORKER_URL: ${{ secrets.NEXT_PUBLIC_TELEGRAM_WORKER_URL }}
+          NEXT_PUBLIC_TURNSTILE_SITE_KEY: ${{ secrets.NEXT_PUBLIC_TURNSTILE_SITE_KEY }}
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:

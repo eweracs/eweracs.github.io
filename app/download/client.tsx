@@ -1,5 +1,6 @@
 'use client';
 
+import Script from 'next/script';
 import { useSearchParams } from 'next/navigation';
 import { useEffect, useState } from 'react';
 
@@ -15,8 +16,35 @@ export function DownloadClient() {
   const [error, setError] = useState<string | null>(null);
   const [isResolving, setIsResolving] = useState(false);
   const [hasStartedDownload, setHasStartedDownload] = useState(false);
+  const [turnstileToken, setTurnstileToken] = useState<string | null>(null);
+  const [turnstileError, setTurnstileError] = useState<string | null>(null);
 
   const apiBase = process.env.NEXT_PUBLIC_SHORTENER_API_BASE?.replace(/\/$/, '');
+  const telegramWorkerBase = process.env.NEXT_PUBLIC_TELEGRAM_WORKER_URL?.replace(/\/$/, '');
+  const turnstileSiteKey = process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY;
+
+  useEffect(() => {
+    (window as typeof window & {
+      onTurnstileSuccess?: (token: string) => void;
+      onTurnstileError?: () => void;
+      onTurnstileExpired?: () => void;
+    }).onTurnstileSuccess = (token: string) => {
+      setTurnstileToken(token);
+      setTurnstileError(null);
+    };
+
+    (window as typeof window & {
+      onTurnstileError?: () => void;
+    }).onTurnstileError = () => {
+      setTurnstileError('Verification failed. Please try again.');
+    };
+
+    (window as typeof window & {
+      onTurnstileExpired?: () => void;
+    }).onTurnstileExpired = () => {
+      setTurnstileToken(null);
+    };
+  }, []);
 
   const resolveShortId = async (shortId: string) => {
     if (!apiBase) {
@@ -76,25 +104,30 @@ export function DownloadClient() {
 
   const handleDownload = async (e: React.MouseEvent<HTMLAnchorElement>) => {
     setHasStartedDownload(true);
-    const time = new Date().toLocaleTimeString('en-GB', {
-      hour: '2-digit',
-      minute: '2-digit',
-      hour12: false,
-      timeZone: 'Europe/Berlin'
-    });
-
-    const BOT_TOKEN = '8214289854:AAHfQgkP4IOmqRyLMscT1twbA4Nx0wGhjfo';
-    const CHAT_ID = '143972242';
-    const message = `📥 ${fileName} was downloaded at ${time}`;
 
     try {
-      await fetch(`https://api.telegram.org/bot${BOT_TOKEN}/sendMessage`, {
+      if (!telegramWorkerBase) {
+        setError('Download notifications are not configured.');
+        return;
+      }
+
+      if (!turnstileSiteKey) {
+        setError('Verification is not configured.');
+        return;
+      }
+
+      if (!turnstileToken) {
+        setTurnstileError('Please complete the verification.');
+        return;
+      }
+
+      await fetch(`${telegramWorkerBase}/notify`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         keepalive: true,
         body: JSON.stringify({
-          chat_id: CHAT_ID,
-          text: message,
+          fileName,
+          turnstileToken,
         }),
       });
     } catch (err) {
@@ -122,6 +155,27 @@ export function DownloadClient() {
             </p>
             {isResolving && !driveDownloadLink && (
               <p className="text-white mb-4">Resolving short link...</p>
+            )}
+            {turnstileSiteKey && (
+              <>
+                <div className="mb-4">
+                  <div
+                    className="cf-turnstile"
+                    data-sitekey={turnstileSiteKey}
+                    data-callback="onTurnstileSuccess"
+                    data-error-callback="onTurnstileError"
+                    data-expired-callback="onTurnstileExpired"
+                    data-theme="dark"
+                  />
+                </div>
+                <Script
+                  src="https://challenges.cloudflare.com/turnstile/v0/api.js"
+                  strategy="afterInteractive"
+                />
+              </>
+            )}
+            {turnstileError && (
+              <p className="text-white mb-4">{turnstileError}</p>
             )}
             {driveDownloadLink && (
               <a
