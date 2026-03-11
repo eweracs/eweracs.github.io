@@ -1039,7 +1039,7 @@ export default function ItalifyClient() {
 
         <section className="mt-10">
           <div className="grid gap-8 lg:grid-cols-[minmax(0,1fr)_minmax(0,1fr)] items-start lg:items-stretch">
-            <div className="bg-slate-900 p-5 w-full">
+            <div className="bg-slate-900 p-5 w-full order-2 lg:order-1">
               <svg
                 viewBox="0 0 526 510"
                 role="img"
@@ -1050,7 +1050,7 @@ export default function ItalifyClient() {
                 <g ref={sweepNodesRef} className="nodes" fill="none" strokeWidth="2"></g>
               </svg>
             </div>
-            <div className="text-white/85 leading-relaxed lg:flex lg:items-center lg:h-full">
+            <div className="text-white/85 leading-relaxed lg:flex lg:items-center lg:h-full order-1 lg:order-2">
               <div className="flex flex-col gap-3">
                 <h2 className="text-white/90 text-xl">Extra nodes</h2>
                 <p>
@@ -1146,7 +1146,7 @@ export default function ItalifyClient() {
 
         <section className="mt-10">
           <div className="grid gap-8 lg:grid-cols-[minmax(0,1fr)_minmax(0,1fr)] items-start lg:items-stretch">
-            <div className="bg-slate-900 p-5 w-full">
+            <div className="bg-slate-900 p-5 w-full order-2 lg:order-1">
               <svg
                 viewBox="0 0 473 528"
                 role="img"
@@ -1157,7 +1157,7 @@ export default function ItalifyClient() {
                 <g ref={inflectNodesRef} className="nodes" fill="none" strokeWidth="2"></g>
               </svg>
             </div>
-            <div className="text-white/85 leading-relaxed lg:flex lg:items-center lg:h-full">
+            <div className="text-white/85 leading-relaxed lg:flex lg:items-center lg:h-full order-1 lg:order-2">
               <div className="flex flex-col gap-3">
                 <h2 className="text-white/90 text-xl">Inflections</h2>
                 <p>
@@ -1265,7 +1265,7 @@ export default function ItalifyClient() {
 
         <section className="mt-10">
           <div className="grid gap-8 lg:grid-cols-[minmax(0,1fr)_minmax(0,1fr)] items-start lg:items-stretch">
-            <div className="bg-slate-900 p-5 w-full">
+            <div className="bg-slate-900 p-5 w-full order-2 lg:order-1">
               <svg
                 viewBox="0 0 553 537"
                 role="img"
@@ -1276,7 +1276,7 @@ export default function ItalifyClient() {
                 <g ref={retalNodesRef} className="nodes" fill="none" strokeWidth="2"></g>
               </svg>
             </div>
-            <div className="text-white/85 leading-relaxed lg:flex lg:items-center lg:h-full">
+            <div className="text-white/85 leading-relaxed lg:flex lg:items-center lg:h-full order-1 lg:order-2">
               <div className="flex flex-col gap-3">
                 <h2 className="text-white/90 text-xl">Retalics</h2>
                 <p>
