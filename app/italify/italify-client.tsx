@@ -822,7 +822,7 @@ export default function ItalifyClient() {
   }, [flubberReady, palette]);
 
   return (
-    <main className="min-h-screen bg-slate-900 text-white px-[6vw] py-12">
+    <main className="min-h-screen bg-slate-900 text-white px-[6vw] py-12 overflow-x-hidden">
       <Script
         src="https://unpkg.com/flubber@0.4.2"
         strategy="afterInteractive"
@@ -940,8 +940,8 @@ export default function ItalifyClient() {
             </label>
           </div>
         </div>
-        <div className="grid gap-6">
-          <section className="bg-slate-900 p-5 max-[900px]:overflow-x-auto max-[900px]:-mx-[calc(6vw+1.25rem)]" data-pair="a">
+        <div className="grid gap-6 max-[900px]:-mx-[6vw]">
+          <section className="bg-slate-900 p-5 max-[900px]:overflow-x-auto" data-pair="a">
             <svg
               viewBox="0 0 2784 712"
               role="img"
