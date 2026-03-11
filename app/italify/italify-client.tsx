@@ -22,6 +22,14 @@ type Palette = {
   paper: string;
 };
 
+type NodeCache = {
+  handleGroup: SVGGElement;
+  nodeGroup: SVGGElement;
+  handles: SVGLineElement[];
+  crosses: SVGLineElement[];
+  circles: SVGCircleElement[];
+};
+
 const sweepA =
   "M199.014,510c60,0,119-19,170-52c72-47,128-120,149-203c36-143-48-255-191-255c-50,0-100,13-144,37c-54,28-100,71-133,123c-20,29-34,61-42,95c-25,102,10,188,84,229c30,17,66,26,107,26Z";
 const sweepB =
@@ -230,62 +238,40 @@ const parsePath = (d: string): Segment[] => {
 const isCurve = (seg: Segment): seg is SegmentCurve => seg.type === "C";
 
 const drawNodes = (d: string, group: SVGGElement, clear = false, palette: Palette) => {
-  if (clear) {
-    while (group.firstChild) {
-      group.removeChild(group.firstChild);
-    }
+  const svgNS = "http://www.w3.org/2000/svg";
+  const cacheKey = "__nodesCache";
+  const cached = (group as unknown as { [key: string]: NodeCache | undefined })[cacheKey];
+  let cache = cached;
+
+  if (clear && cache) {
+    group.replaceChildren();
+    (group as unknown as { [key: string]: NodeCache | undefined })[cacheKey] = undefined;
+    cache = undefined;
   }
+
+  if (!cache) {
+    const handleGroup = document.createElementNS(svgNS, "g");
+    const nodeGroup = document.createElementNS(svgNS, "g");
+    group.appendChild(handleGroup);
+    group.appendChild(nodeGroup);
+    cache = {
+      handleGroup,
+      nodeGroup,
+      handles: [],
+      crosses: [],
+      circles: [],
+    };
+    (group as unknown as { [key: string]: NodeCache | undefined })[cacheKey] = cache;
+  }
+
   const segments = parsePath(d);
+  const circles: Array<{ x: number; y: number; r: number; fill: string; stroke: string }> = [];
+  const handles: Array<{ x1: number; y1: number; x2: number; y2: number }> = [];
+  const crosses: Array<{ x: number; y: number; size: number; stroke: string }> = [];
   let currentX = 0;
   let currentY = 0;
   let startX = 0;
   let startY = 0;
-
-  const svgNS = "http://www.w3.org/2000/svg";
-  const handleGroup = document.createElementNS(svgNS, "g");
-  const nodeGroup = document.createElementNS(svgNS, "g");
-  group.appendChild(handleGroup);
-  group.appendChild(nodeGroup);
-
-  const addCircle = (x: number, y: number, r: number, fill: string, stroke: string) => {
-    const circle = document.createElementNS(svgNS, "circle");
-    circle.setAttribute("cx", `${x}`);
-    circle.setAttribute("cy", `${y}`);
-    circle.setAttribute("r", `${r}`);
-    circle.setAttribute("fill", fill);
-    circle.setAttribute("stroke", stroke);
-    circle.setAttribute("stroke-width", "1.4");
-    nodeGroup.appendChild(circle);
-  };
-  const addCross = (x: number, y: number, size: number, stroke: string) => {
-    const lineA = document.createElementNS(svgNS, "line");
-    const lineB = document.createElementNS(svgNS, "line");
-    lineA.setAttribute("x1", `${x - size}`);
-    lineA.setAttribute("y1", `${y - size}`);
-    lineA.setAttribute("x2", `${x + size}`);
-    lineA.setAttribute("y2", `${y + size}`);
-    lineB.setAttribute("x1", `${x - size}`);
-    lineB.setAttribute("y1", `${y + size}`);
-    lineB.setAttribute("x2", `${x + size}`);
-    lineB.setAttribute("y2", `${y - size}`);
-    lineA.setAttribute("stroke", stroke);
-    lineB.setAttribute("stroke", stroke);
-    lineA.setAttribute("stroke-width", "1.6");
-    lineB.setAttribute("stroke-width", "1.6");
-    nodeGroup.appendChild(lineA);
-    nodeGroup.appendChild(lineB);
-  };
-  const addHandle = (x1: number, y1: number, x2: number, y2: number) => {
-    const line = document.createElementNS(svgNS, "line");
-    line.setAttribute("x1", `${x1}`);
-    line.setAttribute("y1", `${y1}`);
-    line.setAttribute("x2", `${x2}`);
-    line.setAttribute("y2", `${y2}`);
-    line.setAttribute("stroke", palette.accent);
-    line.setAttribute("stroke-width", "1.2");
-    line.setAttribute("opacity", "0.7");
-    handleGroup.appendChild(line);
-  };
 
   segments.forEach((seg) => {
     if (seg.type === "M") {
@@ -293,21 +279,21 @@ const drawNodes = (d: string, group: SVGGElement, clear = false, palette: Palett
       currentY = seg.y;
       startX = seg.x;
       startY = seg.y;
-      addCircle(seg.x, seg.y, 8, palette.paper, palette.ink);
+      circles.push({ x: seg.x, y: seg.y, r: 8, fill: palette.paper, stroke: palette.ink });
       return;
     }
     if (isCurve(seg)) {
-      addHandle(currentX, currentY, seg.c1x, seg.c1y);
-      addHandle(seg.x, seg.y, seg.c2x, seg.c2y);
-      addCross(seg.c1x, seg.c1y, 6, "#ffffff");
-      addCross(seg.c2x, seg.c2y, 6, "#ffffff");
-      addCircle(seg.x, seg.y, 8, palette.paper, palette.ink);
+      handles.push({ x1: currentX, y1: currentY, x2: seg.c1x, y2: seg.c1y });
+      handles.push({ x1: seg.x, y1: seg.y, x2: seg.c2x, y2: seg.c2y });
+      crosses.push({ x: seg.c1x, y: seg.c1y, size: 6, stroke: "#ffffff" });
+      crosses.push({ x: seg.c2x, y: seg.c2y, size: 6, stroke: "#ffffff" });
+      circles.push({ x: seg.x, y: seg.y, r: 8, fill: palette.paper, stroke: palette.ink });
       currentX = seg.x;
       currentY = seg.y;
       return;
     }
     if (seg.type === "L") {
-      addCircle(seg.x, seg.y, 8, palette.paper, palette.ink);
+      circles.push({ x: seg.x, y: seg.y, r: 8, fill: palette.paper, stroke: palette.ink });
       currentX = seg.x;
       currentY = seg.y;
       return;
@@ -316,6 +302,76 @@ const drawNodes = (d: string, group: SVGGElement, clear = false, palette: Palett
       currentX = startX;
       currentY = startY;
     }
+  });
+
+  const ensureLines = (list: SVGLineElement[], count: number, parent: SVGGElement) => {
+    while (list.length < count) {
+      const line = document.createElementNS(svgNS, "line");
+      parent.appendChild(line);
+      list.push(line);
+    }
+    while (list.length > count) {
+      const line = list.pop();
+      if (line) {
+        parent.removeChild(line);
+      }
+    }
+  };
+
+  const ensureCircles = (list: SVGCircleElement[], count: number, parent: SVGGElement) => {
+    while (list.length < count) {
+      const circle = document.createElementNS(svgNS, "circle");
+      parent.appendChild(circle);
+      list.push(circle);
+    }
+    while (list.length > count) {
+      const circle = list.pop();
+      if (circle) {
+        parent.removeChild(circle);
+      }
+    }
+  };
+
+  ensureLines(cache.handles, handles.length, cache.handleGroup);
+  ensureLines(cache.crosses, crosses.length * 2, cache.nodeGroup);
+  ensureCircles(cache.circles, circles.length, cache.nodeGroup);
+
+  handles.forEach((h, i) => {
+    const line = cache.handles[i];
+    line.setAttribute("x1", `${h.x1}`);
+    line.setAttribute("y1", `${h.y1}`);
+    line.setAttribute("x2", `${h.x2}`);
+    line.setAttribute("y2", `${h.y2}`);
+    line.setAttribute("stroke", palette.accent);
+    line.setAttribute("stroke-width", "1.2");
+    line.setAttribute("opacity", "0.7");
+  });
+
+  crosses.forEach((c, i) => {
+    const lineA = cache.crosses[i * 2];
+    const lineB = cache.crosses[i * 2 + 1];
+    lineA.setAttribute("x1", `${c.x - c.size}`);
+    lineA.setAttribute("y1", `${c.y - c.size}`);
+    lineA.setAttribute("x2", `${c.x + c.size}`);
+    lineA.setAttribute("y2", `${c.y + c.size}`);
+    lineB.setAttribute("x1", `${c.x - c.size}`);
+    lineB.setAttribute("y1", `${c.y + c.size}`);
+    lineB.setAttribute("x2", `${c.x + c.size}`);
+    lineB.setAttribute("y2", `${c.y - c.size}`);
+    lineA.setAttribute("stroke", c.stroke);
+    lineB.setAttribute("stroke", c.stroke);
+    lineA.setAttribute("stroke-width", "1.6");
+    lineB.setAttribute("stroke-width", "1.6");
+  });
+
+  circles.forEach((c, i) => {
+    const circle = cache.circles[i];
+    circle.setAttribute("cx", `${c.x}`);
+    circle.setAttribute("cy", `${c.y}`);
+    circle.setAttribute("r", `${c.r}`);
+    circle.setAttribute("fill", c.fill);
+    circle.setAttribute("stroke", c.stroke);
+    circle.setAttribute("stroke-width", "1.4");
   });
 };
 
@@ -376,16 +432,61 @@ export default function ItalifyClient() {
   const morphAnimRef = useRef<number | null>(null);
   const currentOuterPathRef = useRef<string>(basePath);
   const syncStartRef = useRef<number | null>(null);
+  const showExtraNodesRef = useRef(true);
+  const showOverlapNodesRef = useRef(true);
+  const showInflectNodesRef = useRef(true);
+  const showRoundedNodesRef = useRef(true);
+  const showRetalNodesRef = useRef(true);
+  const showContrastNodesRef = useRef(true);
+  const removeOverlapRef = useRef(false);
+  const roundedSlantRef = useRef(false);
+  const overlapInterpolatorRef = useRef<ReturnType<
+    (typeof window extends { flubber: { interpolate: infer F } } ? F : never)
+  > | null>(null);
+  const overlapKeyRef = useRef<string>("");
   const [flubberReady, setFlubberReady] = useState(false);
   const [isSlantOn, setIsSlantOn] = useState(false);
   const [sweepValue, setSweepValue] = useState(0);
   const [removeOverlap, setRemoveOverlap] = useState(false);
   const [roundedSlant, setRoundedSlant] = useState(false);
+  const [showExtraNodes, setShowExtraNodes] = useState(true);
   const [showOverlapNodes, setShowOverlapNodes] = useState(true);
   const [showInflectNodes, setShowInflectNodes] = useState(true);
   const [showRoundedNodes, setShowRoundedNodes] = useState(true);
   const [showRetalNodes, setShowRetalNodes] = useState(true);
   const [showContrastNodes, setShowContrastNodes] = useState(true);
+
+  useEffect(() => {
+    showExtraNodesRef.current = showExtraNodes;
+  }, [showExtraNodes]);
+
+  useEffect(() => {
+    showOverlapNodesRef.current = showOverlapNodes;
+  }, [showOverlapNodes]);
+
+  useEffect(() => {
+    showInflectNodesRef.current = showInflectNodes;
+  }, [showInflectNodes]);
+
+  useEffect(() => {
+    showRoundedNodesRef.current = showRoundedNodes;
+  }, [showRoundedNodes]);
+
+  useEffect(() => {
+    showRetalNodesRef.current = showRetalNodes;
+  }, [showRetalNodes]);
+
+  useEffect(() => {
+    showContrastNodesRef.current = showContrastNodes;
+  }, [showContrastNodes]);
+
+  useEffect(() => {
+    removeOverlapRef.current = removeOverlap;
+  }, [removeOverlap]);
+
+  useEffect(() => {
+    roundedSlantRef.current = roundedSlant;
+  }, [roundedSlant]);
 
   const palette = useMemo<Palette>(
     () => ({
@@ -439,12 +540,13 @@ export default function ItalifyClient() {
         morphOuter.style.fill = "none";
         morphOuter.style.stroke = "currentColor";
         morphOuter.style.strokeWidth = "2";
-        drawNodes(outerPath, nodesGroup, true, palette);
+        nodesGroup.style.display = "";
+        drawNodes(outerPath, nodesGroup, false, palette);
       } else {
         morphOuter.style.fill = "currentColor";
         morphOuter.style.stroke = "none";
         morphOuter.style.strokeWidth = "";
-        nodesGroup.replaceChildren();
+        nodesGroup.style.display = "none";
       }
     };
 
@@ -556,11 +658,18 @@ export default function ItalifyClient() {
     const sweepInterpolator = flubber.interpolate(sweepA, sweepB, {
       maxSegmentLength: 2,
     });
-    const activeA = removeOverlap ? overlapA : overlapAltA;
-    const activeB = removeOverlap ? overlapB : overlapAltB;
-    const overlapInterpolator = flubber.interpolate(activeA, activeB, {
-      maxSegmentLength: 2,
-    });
+    const getOverlapInterpolator = () => {
+      const activeA = removeOverlapRef.current ? overlapA : overlapAltA;
+      const activeB = removeOverlapRef.current ? overlapB : overlapAltB;
+      const key = `${activeA}|${activeB}`;
+      if (overlapKeyRef.current !== key || !overlapInterpolatorRef.current) {
+        overlapKeyRef.current = key;
+        overlapInterpolatorRef.current = flubber.interpolate(activeA, activeB, {
+          maxSegmentLength: 2,
+        });
+      }
+      return { activeA, activeB, interpolator: overlapInterpolatorRef.current };
+    };
     const inflectInterpolator = flubber.interpolate(inflectA, inflectB, {
       maxSegmentLength: 2,
     });
@@ -592,27 +701,37 @@ export default function ItalifyClient() {
         const sweepBlend = interpolateSegments(sweepA, sweepB, eased);
         const d = sweepBlend.path || sweepInterpolator(eased);
         sweepPath.setAttribute("d", d);
-        sweepPath.style.fill = "none";
-        sweepPath.style.stroke = "currentColor";
-        sweepPath.style.strokeWidth = "2";
-        drawNodes(d, sweepNodes, true, palette);
+        if (showExtraNodesRef.current) {
+          sweepPath.style.fill = "none";
+          sweepPath.style.stroke = "currentColor";
+          sweepPath.style.strokeWidth = "2";
+          sweepNodes.style.display = "";
+          drawNodes(d, sweepNodes, false, palette);
+        } else {
+          sweepPath.style.fill = "currentColor";
+          sweepPath.style.stroke = "none";
+          sweepPath.style.strokeWidth = "";
+          sweepNodes.style.display = "none";
+        }
         setSweepValue(Number(eased.toFixed(3)));
       }
 
       if (overlapPath && overlapNodes) {
+        const { activeA, activeB, interpolator } = getOverlapInterpolator();
         const blend = interpolateSegments(activeA, activeB, eased);
-        const d = blend.path || overlapInterpolator(eased);
+        const d = blend.path || interpolator(eased);
         overlapPath.setAttribute("d", d);
-        if (showOverlapNodes) {
+        if (showOverlapNodesRef.current) {
           overlapPath.style.fill = "none";
           overlapPath.style.stroke = "currentColor";
           overlapPath.style.strokeWidth = "2";
-          drawNodes(d, overlapNodes, true, palette);
+          overlapNodes.style.display = "";
+          drawNodes(d, overlapNodes, false, palette);
         } else {
           overlapPath.style.fill = "currentColor";
           overlapPath.style.stroke = "none";
           overlapPath.style.strokeWidth = "";
-          overlapNodes.replaceChildren();
+          overlapNodes.style.display = "none";
         }
         const box = overlapPath.getBBox();
         const viewWidth = 621;
@@ -625,16 +744,17 @@ export default function ItalifyClient() {
         const blend = interpolateSegments(inflectA, inflectB, eased);
         const d = blend.path || inflectInterpolator(eased);
         inflectPath.setAttribute("d", d);
-        if (showInflectNodes) {
+        if (showInflectNodesRef.current) {
           inflectPath.style.fill = "none";
           inflectPath.style.stroke = "currentColor";
           inflectPath.style.strokeWidth = "2";
-          drawNodes(d, inflectNodes, true, palette);
+          inflectNodes.style.display = "";
+          drawNodes(d, inflectNodes, false, palette);
         } else {
           inflectPath.style.fill = "currentColor";
           inflectPath.style.stroke = "none";
           inflectPath.style.strokeWidth = "";
-          inflectNodes.replaceChildren();
+          inflectNodes.style.display = "none";
         }
         const box = inflectPath.getBBox();
         const viewWidth = 473;
@@ -645,20 +765,21 @@ export default function ItalifyClient() {
 
       if (roundedPath && roundedNodes) {
         const viewWidth = 492;
-        const d = roundedSlant
+        const d = roundedSlantRef.current
           ? (interpolateSegments(roundedA, roundedB, eased).path || roundedInterpolator(eased))
           : roundedStatic;
         roundedPath.setAttribute("d", d);
-        if (showRoundedNodes) {
+        if (showRoundedNodesRef.current) {
           roundedPath.style.fill = "none";
           roundedPath.style.stroke = "currentColor";
           roundedPath.style.strokeWidth = "2";
-          drawNodes(d, roundedNodes, true, palette);
+          roundedNodes.style.display = "";
+          drawNodes(d, roundedNodes, false, palette);
         } else {
           roundedPath.style.fill = "currentColor";
           roundedPath.style.stroke = "none";
           roundedPath.style.strokeWidth = "";
-          roundedNodes.replaceChildren();
+          roundedNodes.style.display = "none";
         }
         const box = roundedPath.getBBox();
         const dx = viewWidth / 2 - (box.x + box.width / 2);
@@ -670,16 +791,17 @@ export default function ItalifyClient() {
         const blend = interpolateSegments(retalA, retalB, eased);
         const d = blend.path || retalInterpolator(eased);
         retalPath.setAttribute("d", d);
-        if (showRetalNodes) {
+        if (showRetalNodesRef.current) {
           retalPath.style.fill = "none";
           retalPath.style.stroke = "currentColor";
           retalPath.style.strokeWidth = "2";
-          drawNodes(d, retalNodes, true, palette);
+          retalNodes.style.display = "";
+          drawNodes(d, retalNodes, false, palette);
         } else {
           retalPath.style.fill = "currentColor";
           retalPath.style.stroke = "none";
           retalPath.style.strokeWidth = "";
-          retalNodes.replaceChildren();
+          retalNodes.style.display = "none";
         }
         const box = retalPath.getBBox();
         const viewWidth = retalPath.ownerSVGElement?.viewBox.baseVal.width || 553;
@@ -692,16 +814,17 @@ export default function ItalifyClient() {
         const blend = interpolateSegments(contrastA, contrastB, eased);
         const d = blend.path || contrastInterpolator(eased);
         contrastPath.setAttribute("d", d);
-        if (showContrastNodes) {
+        if (showContrastNodesRef.current) {
           contrastPath.style.fill = "none";
           contrastPath.style.stroke = "currentColor";
           contrastPath.style.strokeWidth = "2";
-          drawNodes(d, contrastNodes, true, palette);
+          contrastNodes.style.display = "";
+          drawNodes(d, contrastNodes, false, palette);
         } else {
           contrastPath.style.fill = "currentColor";
           contrastPath.style.stroke = "none";
           contrastPath.style.strokeWidth = "";
-          contrastNodes.replaceChildren();
+          contrastNodes.style.display = "none";
         }
         const box = contrastPath.getBBox();
         const viewWidth = contrastPath.ownerSVGElement?.viewBox.baseVal.width || 618;
@@ -718,17 +841,7 @@ export default function ItalifyClient() {
     return () => {
       cancelAnimationFrame(raf);
     };
-  }, [
-    flubberReady,
-    palette,
-    removeOverlap,
-    roundedSlant,
-    showOverlapNodes,
-    showInflectNodes,
-    showRoundedNodes,
-    showRetalNodes,
-    showContrastNodes,
-  ]);
+  }, [flubberReady, palette]);
 
   return (
     <main className="min-h-screen bg-slate-900 text-white px-[6vw] py-12">
@@ -969,6 +1082,29 @@ export default function ItalifyClient() {
                   extreme-to-extreme curve construction doesn’t allow for the desired curve shape.
                   The result is exactly the same as if the extra nodes were omitted.
                 </p>
+                <label className="inline-flex items-center gap-2 text-white/80 text-sm">
+                  <input
+                    type="checkbox"
+                    className="peer sr-only"
+                    checked={showExtraNodes}
+                    onChange={(event) => setShowExtraNodes(event.target.checked)}
+                  />
+                  <span className="relative h-5 w-5 rounded-full border border-white/30 bg-white/5 transition peer-checked:[&>svg]:opacity-100">
+                    <svg
+                      viewBox="0 0 20 20"
+                      aria-hidden="true"
+                      className="absolute inset-0 m-auto h-3.5 w-3.5 text-amber-400 opacity-0 transition"
+                      fill="none"
+                      stroke="currentColor"
+                      strokeWidth="2"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                    >
+                      <path d="M5 10.5l3 3 7-7" />
+                    </svg>
+                  </span>
+                  Show nodes
+                </label>
               </div>
             </div>
           </div>
