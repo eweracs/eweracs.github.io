@@ -240,8 +240,7 @@ const isCurve = (seg: Segment): seg is SegmentCurve => seg.type === "C";
 const drawNodes = (d: string, group: SVGGElement, palette: Palette) => {
   const svgNS = "http://www.w3.org/2000/svg";
   const cacheKey = "__nodesCache";
-  const cached = (group as unknown as { [key: string]: NodeCache | undefined })[cacheKey];
-  let cache = cached;
+  let cache = (group as unknown as { [key: string]: NodeCache | undefined })[cacheKey];
 
   if (!cache) {
     const handleGroup = document.createElementNS(svgNS, "g");
