@@ -426,7 +426,6 @@ export default function ItalifyClient() {
   const morphAnimRef = useRef<number | null>(null);
   const currentOuterPathRef = useRef<string>(basePath);
   const syncStartRef = useRef<number | null>(null);
-  const showExtraNodesRef = useRef(true);
   const showOverlapNodesRef = useRef(true);
   const showInflectNodesRef = useRef(true);
   const showRoundedNodesRef = useRef(true);
@@ -441,16 +440,11 @@ export default function ItalifyClient() {
   const [sweepValue, setSweepValue] = useState(0);
   const [removeOverlap, setRemoveOverlap] = useState(false);
   const [roundedSlant, setRoundedSlant] = useState(false);
-  const [showExtraNodes, setShowExtraNodes] = useState(true);
   const [showOverlapNodes, setShowOverlapNodes] = useState(true);
   const [showInflectNodes, setShowInflectNodes] = useState(true);
   const [showRoundedNodes, setShowRoundedNodes] = useState(true);
   const [showRetalNodes, setShowRetalNodes] = useState(true);
   const [showContrastNodes, setShowContrastNodes] = useState(true);
-
-  useEffect(() => {
-    showExtraNodesRef.current = showExtraNodes;
-  }, [showExtraNodes]);
 
   useEffect(() => {
     showOverlapNodesRef.current = showOverlapNodes;
@@ -693,18 +687,11 @@ export default function ItalifyClient() {
         const sweepBlend = interpolateSegments(sweepA, sweepB, eased);
         const d = sweepBlend.path || sweepInterpolator(eased);
         sweepPath.setAttribute("d", d);
-        if (showExtraNodesRef.current) {
-          sweepPath.style.fill = "none";
-          sweepPath.style.stroke = "currentColor";
-          sweepPath.style.strokeWidth = "2";
-          sweepNodes.style.display = "";
-          drawNodes(d, sweepNodes, palette);
-        } else {
-          sweepPath.style.fill = "currentColor";
-          sweepPath.style.stroke = "none";
-          sweepPath.style.strokeWidth = "";
-          sweepNodes.style.display = "none";
-        }
+        sweepPath.style.fill = "none";
+        sweepPath.style.stroke = "currentColor";
+        sweepPath.style.strokeWidth = "2";
+        sweepNodes.style.display = "";
+        drawNodes(d, sweepNodes, palette);
         setSweepValue(Number(eased.toFixed(3)));
       }
 
@@ -1074,29 +1061,6 @@ export default function ItalifyClient() {
                   extreme-to-extreme curve construction doesn’t allow for the desired curve shape.
                   The result is exactly the same as if the extra nodes were omitted.
                 </p>
-                <label className="inline-flex items-center gap-2 text-white/80 text-sm">
-                  <input
-                    type="checkbox"
-                    className="peer sr-only"
-                    checked={showExtraNodes}
-                    onChange={(event) => setShowExtraNodes(event.target.checked)}
-                  />
-                  <span className="relative h-5 w-5 rounded-full border border-white/30 bg-white/5 transition peer-checked:[&>svg]:opacity-100">
-                    <svg
-                      viewBox="0 0 20 20"
-                      aria-hidden="true"
-                      className="absolute inset-0 m-auto h-3.5 w-3.5 text-amber-400 opacity-0 transition"
-                      fill="none"
-                      stroke="currentColor"
-                      strokeWidth="2"
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                    >
-                      <path d="M5 10.5l3 3 7-7" />
-                    </svg>
-                  </span>
-                  Show nodes
-                </label>
               </div>
             </div>
           </div>
