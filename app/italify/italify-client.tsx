@@ -237,17 +237,11 @@ const parsePath = (d: string): Segment[] => {
 
 const isCurve = (seg: Segment): seg is SegmentCurve => seg.type === "C";
 
-const drawNodes = (d: string, group: SVGGElement, clear = false, palette: Palette) => {
+const drawNodes = (d: string, group: SVGGElement, palette: Palette) => {
   const svgNS = "http://www.w3.org/2000/svg";
   const cacheKey = "__nodesCache";
   const cached = (group as unknown as { [key: string]: NodeCache | undefined })[cacheKey];
   let cache = cached;
-
-  if (clear && cache) {
-    group.replaceChildren();
-    (group as unknown as { [key: string]: NodeCache | undefined })[cacheKey] = undefined;
-    cache = undefined;
-  }
 
   if (!cache) {
     const handleGroup = document.createElementNS(svgNS, "g");
@@ -440,9 +434,7 @@ export default function ItalifyClient() {
   const showContrastNodesRef = useRef(true);
   const removeOverlapRef = useRef(false);
   const roundedSlantRef = useRef(false);
-  const overlapInterpolatorRef = useRef<ReturnType<
-    (typeof window extends { flubber: { interpolate: infer F } } ? F : never)
-  > | null>(null);
+  const overlapInterpolatorRef = useRef<((t: number) => string) | null>(null);
   const overlapKeyRef = useRef<string>("");
   const [flubberReady, setFlubberReady] = useState(false);
   const [isSlantOn, setIsSlantOn] = useState(false);
@@ -541,7 +533,7 @@ export default function ItalifyClient() {
         morphOuter.style.stroke = "currentColor";
         morphOuter.style.strokeWidth = "2";
         nodesGroup.style.display = "";
-        drawNodes(outerPath, nodesGroup, false, palette);
+        drawNodes(outerPath, nodesGroup, palette);
       } else {
         morphOuter.style.fill = "currentColor";
         morphOuter.style.stroke = "none";
@@ -706,7 +698,7 @@ export default function ItalifyClient() {
           sweepPath.style.stroke = "currentColor";
           sweepPath.style.strokeWidth = "2";
           sweepNodes.style.display = "";
-          drawNodes(d, sweepNodes, false, palette);
+          drawNodes(d, sweepNodes, palette);
         } else {
           sweepPath.style.fill = "currentColor";
           sweepPath.style.stroke = "none";
@@ -726,7 +718,7 @@ export default function ItalifyClient() {
           overlapPath.style.stroke = "currentColor";
           overlapPath.style.strokeWidth = "2";
           overlapNodes.style.display = "";
-          drawNodes(d, overlapNodes, false, palette);
+          drawNodes(d, overlapNodes, palette);
         } else {
           overlapPath.style.fill = "currentColor";
           overlapPath.style.stroke = "none";
@@ -749,7 +741,7 @@ export default function ItalifyClient() {
           inflectPath.style.stroke = "currentColor";
           inflectPath.style.strokeWidth = "2";
           inflectNodes.style.display = "";
-          drawNodes(d, inflectNodes, false, palette);
+          drawNodes(d, inflectNodes, palette);
         } else {
           inflectPath.style.fill = "currentColor";
           inflectPath.style.stroke = "none";
@@ -774,7 +766,7 @@ export default function ItalifyClient() {
           roundedPath.style.stroke = "currentColor";
           roundedPath.style.strokeWidth = "2";
           roundedNodes.style.display = "";
-          drawNodes(d, roundedNodes, false, palette);
+          drawNodes(d, roundedNodes, palette);
         } else {
           roundedPath.style.fill = "currentColor";
           roundedPath.style.stroke = "none";
@@ -796,7 +788,7 @@ export default function ItalifyClient() {
           retalPath.style.stroke = "currentColor";
           retalPath.style.strokeWidth = "2";
           retalNodes.style.display = "";
-          drawNodes(d, retalNodes, false, palette);
+          drawNodes(d, retalNodes, palette);
         } else {
           retalPath.style.fill = "currentColor";
           retalPath.style.stroke = "none";
@@ -819,7 +811,7 @@ export default function ItalifyClient() {
           contrastPath.style.stroke = "currentColor";
           contrastPath.style.strokeWidth = "2";
           contrastNodes.style.display = "";
-          drawNodes(d, contrastNodes, false, palette);
+          drawNodes(d, contrastNodes, palette);
         } else {
           contrastPath.style.fill = "currentColor";
           contrastPath.style.stroke = "none";
