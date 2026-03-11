@@ -26,6 +26,32 @@ const sweepA =
   "M199.014,510c60,0,119-19,170-52c72-47,128-120,149-203c36-143-48-255-191-255c-50,0-100,13-144,37c-54,28-100,71-133,123c-20,29-34,61-42,95c-25,102,10,188,84,229c30,17,66,26,107,26Z";
 const sweepB =
   "M238.624,510c48,0,95-15,137-42c57-38,103-96,120-163c42-171-58-305-229-305c-40,0-80,10-116,30c-42,22-80,57-108,99c-14,23-26,49-33,76c-30,122,12,225,100,274c36,20,80,31,129,31Z";
+const overlapA =
+  "M171.494,730c65,0,117-26,156-78l-14,68h164l144-720h-170l-54,268c-19-46-60-68-121-68c-131,0-235,99-268,264c-33,167,32,266,163,266ZM243.494,609c-69,0-76-66-60-146c16-79,49-142,118-142c61,0,75,55,57,143c-18,90-54,145-115,145Z";
+const overlapB =
+  "M188.891,730c52,0,96-20,128-60l-10,50h164l144-720h-170l-57,287c-22-59-69-87-142-87c-113,0-208,85-236,227c-38,190,36,303,179,303ZM248.891,609c-78,0-86-75-68-166c14-68,42-122,102-122c70,0,85,63,65,163c-15,78-47,125-99,125Z";
+const overlapAltA =
+  "M171.494,730c118,0,192-83,228-265c36-181-4-265-123-265c-131,0-235,99-268,264c-33,167,32,266,163,266ZM243.494,609c-69,0-76-66-60-146c16-79,49-142,118-142c61,0,75,55,57,143c-18,90-54,145-115,145ZM313.494,720h164l144-720h-170l-120,599l3,16Z";
+const overlapAltB =
+  "M188.891,730c102,0,165-71,197-228c41-206-5-302-140-302c-119,0-208,85-236,227c-38,190,36,303,179,303ZM248.891,609c-78,0-86-75-68-166c14-68,42-122,102-122c70,0,85,63,65,163c-15,78-47,125-99,125ZM306.891,720h164l144-720h-170l-120,600l3,14Z";
+const inflectA =
+  "M189.042,528c132,0,227-64,248-169c38-193-236-129-221-208c5-24,31-41,63-41c37,0,57,23,54,62l140-38c-6-86-68-134-176-134c-126,0-224,68-244,169c-37,184,234,123,217,207c-5,25-29,42-61,42c-39,0-59-26-52-66l-157,29c-2,93,67,147,189,147Z";
+const inflectB =
+  "M211,528c116,0,198-56,216-147c39-194-231-153-215-235c5-21,27-36,55-36c36,0,58,21,60,58l135-29c-11-90-80-139-197-139c-110,0-195,59-213,147c-37,187,230,147,212,234c-4,22-25,37-53,37c-39,0-61-25-58-63l-153,22c4,96,82,151,211,151Z";
+const roundedA =
+  "M165.924,559c150,0,256-67,278-176c35-171-179-150-168-205c3-11,13-19,27-19c30,0,58,34,99,34s79-36,89-86c8-40-8-70-46-87c-27-13-73-20-121-20c-145,0-244,65-266,174c-35,174,168,158,158,209c-2,11-13,18-30,18c-36,0-61-34-98-34c-39,0-76,37-86,85c-8,42,9,72,50,89c27,12,68,18,114,18Z";
+const roundedB =
+  "M189.174,559c137,0,229-58,247-152c35-173-173-175-162-232c2-9,11-16,23-16c31,0,64,34,111,34c36,0,69-31,77-74c9-43-9-77-53-96c-31-15-82-23-137-23c-131,0-216,56-235,150c-35,175,163,182,153,235c-2,10-12,16-26,16c-38,0-68-34-110-34c-35,0-67,32-75,73c-9,45,10,79,56,99c31,13,78,20,131,20Z";
+const roundedStatic =
+  "M185,559c150,0,243-67,243-176c0-171-209-150-209-205c0-11,9-19,23-19c30,0,65,34,106,34s71-36,71-86c0-40-22-70-63-87c-30-13-77-20-125-20c-145,0-231,65-231,174c0,174,200,158,200,209c0,11-10,18-27,18c-36,0-67-34-104-34c-39,0-69,37-69,85c0,42,23,72,67,89c30,12,72,18,118,18Z";
+const retalA =
+  "M333.766,537c168,0,234-53,218-131c-5-23-16-44-34-61c-52,19-100,27-153,27c-52,0-105-15-114-59l-10-51c-12-58-9-97,34-97c18,0,37,12,43,46l10,47l20-30h-157l19,96h190c87,0,145-33,126-125c-25-126-120-199-256-199c-231,0-294,151-262,309c32,160,161,228,326,228Z";
+const retalB =
+  "M285.117,537c128,0,191-52,204-103c6-23,4-57-10-81c-43,13-80,19-121,19c-86,0-132-19-120-77l11-57c9-44,24-73,57-73c24,0,43,16,34,60l-7,34l32-31h-157l-19,96h226c67,0,120-25,134-95c26-132-60-229-240-229c-183,0-277,115-301,235c-43,212,90,302,277,302Z";
+const contrastA =
+  "M232.902,642c127,0,243-69,321-188c-48,17-105,27-147,27c-125,0-161-89-120-253c27-106,68-175,104-175c34,0,35,62,4,187l10-3h-166l-10,39h379c40-170-34-276-204-276c-184,0-345,133-392,323c-47,186,49,319,221,319Z";
+const contrastB =
+  "M274.261,642c106,0,222-69,286-187c-43,17-94,26-132,26c-156,0-188-104-143-283c22-88,56-145,87-145c37,0,41,62,13,187l11-3h-167l-10,39h376c23-171-65-276-247-276c-160,0-293,110-333,269c-54,217,36,373,259,373Z";
 
 const pairs = {
   a: {
@@ -337,11 +363,29 @@ export default function ItalifyClient() {
   const nodesRef = useRef<SVGGElement>(null);
   const sweepPathRef = useRef<SVGPathElement>(null);
   const sweepNodesRef = useRef<SVGGElement>(null);
+  const overlapPathRef = useRef<SVGPathElement>(null);
+  const overlapNodesRef = useRef<SVGGElement>(null);
+  const inflectPathRef = useRef<SVGPathElement>(null);
+  const inflectNodesRef = useRef<SVGGElement>(null);
+  const roundedPathRef = useRef<SVGPathElement>(null);
+  const roundedNodesRef = useRef<SVGGElement>(null);
+  const retalPathRef = useRef<SVGPathElement>(null);
+  const retalNodesRef = useRef<SVGGElement>(null);
+  const contrastPathRef = useRef<SVGPathElement>(null);
+  const contrastNodesRef = useRef<SVGGElement>(null);
   const morphAnimRef = useRef<number | null>(null);
   const currentOuterPathRef = useRef<string>(basePath);
+  const syncStartRef = useRef<number | null>(null);
   const [flubberReady, setFlubberReady] = useState(false);
   const [isSlantOn, setIsSlantOn] = useState(false);
   const [sweepValue, setSweepValue] = useState(0);
+  const [removeOverlap, setRemoveOverlap] = useState(false);
+  const [roundedSlant, setRoundedSlant] = useState(false);
+  const [showOverlapNodes, setShowOverlapNodes] = useState(true);
+  const [showInflectNodes, setShowInflectNodes] = useState(true);
+  const [showRoundedNodes, setShowRoundedNodes] = useState(true);
+  const [showRetalNodes, setShowRetalNodes] = useState(true);
+  const [showContrastNodes, setShowContrastNodes] = useState(true);
 
   const palette = useMemo<Palette>(
     () => ({
@@ -487,35 +531,184 @@ export default function ItalifyClient() {
 
     const sweepPath = sweepPathRef.current;
     const sweepNodes = sweepNodesRef.current;
-    if (!sweepPath || !sweepNodes) {
+    const overlapPath = overlapPathRef.current;
+    const overlapNodes = overlapNodesRef.current;
+    const inflectPath = inflectPathRef.current;
+    const inflectNodes = inflectNodesRef.current;
+    const roundedPath = roundedPathRef.current;
+    const roundedNodes = roundedNodesRef.current;
+    const retalPath = retalPathRef.current;
+    const retalNodes = retalNodesRef.current;
+    const contrastPath = contrastPathRef.current;
+    const contrastNodes = contrastNodesRef.current;
+
+    if (
+      (!sweepPath || !sweepNodes) &&
+      (!overlapPath || !overlapNodes) &&
+      (!inflectPath || !inflectNodes) &&
+      (!roundedPath || !roundedNodes) &&
+      (!retalPath || !retalNodes) &&
+      (!contrastPath || !contrastNodes)
+    ) {
       return;
     }
 
-    const interpolator = flubber.interpolate(sweepA, sweepB, {
+    const sweepInterpolator = flubber.interpolate(sweepA, sweepB, {
+      maxSegmentLength: 2,
+    });
+    const activeA = removeOverlap ? overlapA : overlapAltA;
+    const activeB = removeOverlap ? overlapB : overlapAltB;
+    const overlapInterpolator = flubber.interpolate(activeA, activeB, {
+      maxSegmentLength: 2,
+    });
+    const inflectInterpolator = flubber.interpolate(inflectA, inflectB, {
+      maxSegmentLength: 2,
+    });
+    const roundedInterpolator = flubber.interpolate(roundedA, roundedB, {
+      maxSegmentLength: 2,
+    });
+    const retalInterpolator = flubber.interpolate(retalA, retalB, {
+      maxSegmentLength: 2,
+    });
+    const contrastInterpolator = flubber.interpolate(contrastA, contrastB, {
       maxSegmentLength: 2,
     });
 
     let raf = 0;
-    let start: number | null = null;
     const duration = 3200;
-
     const easeInOutCubic = (t: number) =>
       t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2;
 
     const tick = (timestamp: number) => {
-      if (start === null) {
-        start = timestamp;
+      if (syncStartRef.current === null) {
+        syncStartRef.current = timestamp;
       }
-      const elapsed = timestamp - start;
+      const elapsed = timestamp - syncStartRef.current;
       const raw = (elapsed % duration) / duration;
       const pingPong = raw < 0.5 ? raw * 2 : (1 - raw) * 2;
       const eased = easeInOutCubic(pingPong);
 
-      const sweepBlend = interpolateSegments(sweepA, sweepB, eased);
-      const d = sweepBlend.path || interpolator(eased);
-      sweepPath.setAttribute("d", d);
-      drawNodes(d, sweepNodes, true, palette);
-      setSweepValue(Number(eased.toFixed(3)));
+      if (sweepPath && sweepNodes) {
+        const sweepBlend = interpolateSegments(sweepA, sweepB, eased);
+        const d = sweepBlend.path || sweepInterpolator(eased);
+        sweepPath.setAttribute("d", d);
+        sweepPath.style.fill = "none";
+        sweepPath.style.stroke = "currentColor";
+        sweepPath.style.strokeWidth = "2";
+        drawNodes(d, sweepNodes, true, palette);
+        setSweepValue(Number(eased.toFixed(3)));
+      }
+
+      if (overlapPath && overlapNodes) {
+        const blend = interpolateSegments(activeA, activeB, eased);
+        const d = blend.path || overlapInterpolator(eased);
+        overlapPath.setAttribute("d", d);
+        if (showOverlapNodes) {
+          overlapPath.style.fill = "none";
+          overlapPath.style.stroke = "currentColor";
+          overlapPath.style.strokeWidth = "2";
+          drawNodes(d, overlapNodes, true, palette);
+        } else {
+          overlapPath.style.fill = "currentColor";
+          overlapPath.style.stroke = "none";
+          overlapPath.style.strokeWidth = "";
+          overlapNodes.replaceChildren();
+        }
+        const box = overlapPath.getBBox();
+        const viewWidth = 621;
+        const dx = viewWidth - (box.x + box.width);
+        overlapPath.setAttribute("transform", `translate(${dx}, 0)`);
+        overlapNodes.setAttribute("transform", `translate(${dx}, 0)`);
+      }
+
+      if (inflectPath && inflectNodes) {
+        const blend = interpolateSegments(inflectA, inflectB, eased);
+        const d = blend.path || inflectInterpolator(eased);
+        inflectPath.setAttribute("d", d);
+        if (showInflectNodes) {
+          inflectPath.style.fill = "none";
+          inflectPath.style.stroke = "currentColor";
+          inflectPath.style.strokeWidth = "2";
+          drawNodes(d, inflectNodes, true, palette);
+        } else {
+          inflectPath.style.fill = "currentColor";
+          inflectPath.style.stroke = "none";
+          inflectPath.style.strokeWidth = "";
+          inflectNodes.replaceChildren();
+        }
+        const box = inflectPath.getBBox();
+        const viewWidth = 473;
+        const dx = viewWidth / 2 - (box.x + box.width / 2);
+        inflectPath.setAttribute("transform", `translate(${dx}, 0)`);
+        inflectNodes.setAttribute("transform", `translate(${dx}, 0)`);
+      }
+
+      if (roundedPath && roundedNodes) {
+        const viewWidth = 492;
+        const d = roundedSlant
+          ? (interpolateSegments(roundedA, roundedB, eased).path || roundedInterpolator(eased))
+          : roundedStatic;
+        roundedPath.setAttribute("d", d);
+        if (showRoundedNodes) {
+          roundedPath.style.fill = "none";
+          roundedPath.style.stroke = "currentColor";
+          roundedPath.style.strokeWidth = "2";
+          drawNodes(d, roundedNodes, true, palette);
+        } else {
+          roundedPath.style.fill = "currentColor";
+          roundedPath.style.stroke = "none";
+          roundedPath.style.strokeWidth = "";
+          roundedNodes.replaceChildren();
+        }
+        const box = roundedPath.getBBox();
+        const dx = viewWidth / 2 - (box.x + box.width / 2);
+        roundedPath.setAttribute("transform", `translate(${dx}, 0)`);
+        roundedNodes.setAttribute("transform", `translate(${dx}, 0)`);
+      }
+
+      if (retalPath && retalNodes) {
+        const blend = interpolateSegments(retalA, retalB, eased);
+        const d = blend.path || retalInterpolator(eased);
+        retalPath.setAttribute("d", d);
+        if (showRetalNodes) {
+          retalPath.style.fill = "none";
+          retalPath.style.stroke = "currentColor";
+          retalPath.style.strokeWidth = "2";
+          drawNodes(d, retalNodes, true, palette);
+        } else {
+          retalPath.style.fill = "currentColor";
+          retalPath.style.stroke = "none";
+          retalPath.style.strokeWidth = "";
+          retalNodes.replaceChildren();
+        }
+        const box = retalPath.getBBox();
+        const viewWidth = retalPath.ownerSVGElement?.viewBox.baseVal.width || 553;
+        const dx = viewWidth / 2 - (box.x + box.width / 2);
+        retalPath.setAttribute("transform", `translate(${dx}, 0)`);
+        retalNodes.setAttribute("transform", `translate(${dx}, 0)`);
+      }
+
+      if (contrastPath && contrastNodes) {
+        const blend = interpolateSegments(contrastA, contrastB, eased);
+        const d = blend.path || contrastInterpolator(eased);
+        contrastPath.setAttribute("d", d);
+        if (showContrastNodes) {
+          contrastPath.style.fill = "none";
+          contrastPath.style.stroke = "currentColor";
+          contrastPath.style.strokeWidth = "2";
+          drawNodes(d, contrastNodes, true, palette);
+        } else {
+          contrastPath.style.fill = "currentColor";
+          contrastPath.style.stroke = "none";
+          contrastPath.style.strokeWidth = "";
+          contrastNodes.replaceChildren();
+        }
+        const box = contrastPath.getBBox();
+        const viewWidth = contrastPath.ownerSVGElement?.viewBox.baseVal.width || 618;
+        const dx = viewWidth / 2 - (box.x + box.width / 2);
+        contrastPath.setAttribute("transform", `translate(${dx}, 0)`);
+        contrastNodes.setAttribute("transform", `translate(${dx}, 0)`);
+      }
 
       raf = requestAnimationFrame(tick);
     };
@@ -525,7 +718,17 @@ export default function ItalifyClient() {
     return () => {
       cancelAnimationFrame(raf);
     };
-  }, [flubberReady, palette]);
+  }, [
+    flubberReady,
+    palette,
+    removeOverlap,
+    roundedSlant,
+    showOverlapNodes,
+    showInflectNodes,
+    showRoundedNodes,
+    showRetalNodes,
+    showContrastNodes,
+  ]);
 
   return (
     <main className="min-h-screen bg-slate-900 text-white px-[6vw] py-12">
@@ -534,12 +737,46 @@ export default function ItalifyClient() {
         strategy="afterInteractive"
         onLoad={() => setFlubberReady(true)}
       />
+      <header className="max-w-[1100px] mx-auto flex flex-wrap items-center justify-between gap-4 mb-12">
+        <a
+          href="/?section=hello"
+          className="text-white/90 hover:text-white transition-all no-underline"
+        >
+          Sebastian Carewe
+        </a>
+        <nav className="flex flex-wrap items-center gap-6 text-sm text-white/70">
+          <a
+            href="/?section=hello"
+            className="hover:text-white transition-all no-underline [font-variant-caps:all-small-caps] tracking-[0.08em]"
+          >
+            Hello
+          </a>
+          <a
+            href="/?section=projects"
+            className="hover:text-white transition-all no-underline [font-variant-caps:all-small-caps] tracking-[0.08em]"
+          >
+            Projects
+          </a>
+          <a
+            href="/?section=expertise"
+            className="hover:text-white transition-all no-underline [font-variant-caps:all-small-caps] tracking-[0.08em]"
+          >
+            Expertise
+          </a>
+          <a
+            href="/?section=about"
+            className="hover:text-white transition-all no-underline [font-variant-caps:all-small-caps] tracking-[0.08em]"
+          >
+            About
+          </a>
+        </nav>
+      </header>
       <section className="max-w-[1100px] mx-auto">
-        <h1 className="text-[clamp(2rem,4vw,2.8rem)] [font-variation-settings:'wght'_700]">
+        <h1 className="text-center text-[clamp(2rem,4vw,2.8rem)] [font-variation-settings:'wght'_700]">
           Italify
         </h1>
-        <p className="text-white/90 leading-[1.7]">
-          Italify is an algorithmic approach to optical correction of oblique curves.
+        <p className="text-white/90 leading-[1.7] text-center">
+          An algorithmic approach to optical correction of oblique curves
         </p>
 
         <div className="my-6 py-4 border-y border-white/10">
@@ -627,10 +864,22 @@ export default function ItalifyClient() {
           </section>
         </div>
 
+        <p className="mt-3 text-white/60 text-sm">
+          Font in use:{" "}
+          <a
+            href="https://mnkytype.com/wilson"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="text-white/70 hover:text-white transition-all"
+          >
+            MNKY Wilson
+          </a>
+        </p>
+
         <div className="mt-10 space-y-4 text-white/85">
           <p className="leading-relaxed">
             Italify is a novel algorithm that offers a purely geometric approach to oblique curve
-            correction. Existing correction approaches include:
+            correction. So far, the most popular approaches have been:
           </p>
           <ol className="list-decimal space-y-2 pl-5">
             <li>
@@ -639,7 +888,7 @@ export default function ItalifyClient() {
                 href="https://help.fontlab.com/fontlab/8/tutorials/briem/4-3-italic/briem-4-34-curves"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="text-white/90 hover:text-white transition-colors"
+                className="text-white/90 hover:text-white transition-all"
               >
                 Karow/Briem
               </a>
@@ -654,7 +903,7 @@ export default function ItalifyClient() {
                   href="https://fonts.google.com/specimen/Inter"
                   target="_blank"
                   rel="noopener referrer"
-                  className="text-white/90 hover:text-white transition-colors"
+                  className="text-white/90 hover:text-white transition-all"
               >
                 Inter
               </a>
@@ -665,7 +914,7 @@ export default function ItalifyClient() {
                   href="https://github.com/googlefonts/roboto-2/blob/main/scripts/lib/fontbuild/italics.py"
                   target="_blank"
                   rel="noopener referrer"
-                  className="text-white/90 hover:text-white transition-colors"
+                  className="text-white/90 hover:text-white transition-all"
               >
                 algorithm
               </a> used to generate {" "}
@@ -673,18 +922,18 @@ export default function ItalifyClient() {
                   href="https://fonts.google.com/specimen/Roboto"
                   target="_blank"
                   rel="noopener referrer"
-                  className="text-white/90 hover:text-white transition-colors"
+                  className="text-white/90 hover:text-white transition-all"
               >
                 Roboto
               </a>’s obliques. The resulting obliques have the same problems as Inter.
             </li>
             <li>
-              Various other combinations (as shown by {" "}
+              Various other combinations (as demonstrated by {" "}
               <a
                   href="https://vimeo.com/1059825184"
                   target="_blank"
                   rel="noopener referrer"
-                  className="text-white/90 hover:text-white transition-colors"
+                  className="text-white/90 hover:text-white transition-all"
               >
                 Jeremy Tribby
               </a>
@@ -699,7 +948,7 @@ export default function ItalifyClient() {
         </div>
 
         <section className="mt-10">
-          <div className="grid gap-8 lg:grid-cols-[minmax(0,1fr)_minmax(0,1fr)] items-start">
+          <div className="grid gap-8 lg:grid-cols-[minmax(0,1fr)_minmax(0,1fr)] items-start lg:items-stretch">
             <div className="bg-slate-900 p-5 w-full">
               <svg
                 viewBox="0 0 526 510"
@@ -707,15 +956,20 @@ export default function ItalifyClient() {
                 aria-label="Interpolated stroke"
                 className="w-full h-auto overflow-visible text-white"
               >
-                <path ref={sweepPathRef} className="fill-none stroke-current" strokeWidth="3" />
+                <path ref={sweepPathRef} className="fill-none stroke-current" strokeWidth="2" />
                 <g ref={sweepNodesRef} className="nodes" fill="none" strokeWidth="2"></g>
               </svg>
             </div>
-            <div className="text-white/85 leading-relaxed">
-              Thanks to Italify’s purely geometrical approach, curves with multiple intermediate
-              points are transformed without a problem. This can be useful in cases where a pure
-              extreme-to-extreme curve construction doesn’t allow for the desired curve shape.
-              The result is exactly the same as if the extra nodes were omitted.
+            <div className="text-white/85 leading-relaxed lg:flex lg:items-center lg:h-full">
+              <div className="flex flex-col gap-3">
+                <h2 className="text-white/90 text-xl">Extra nodes</h2>
+                <p>
+                  Thanks to Italify’s purely geometrical approach, curves with multiple intermediate
+                  points are transformed without a problem. This can be useful in cases where a pure
+                  extreme-to-extreme curve construction doesn’t allow for the desired curve shape.
+                  The result is exactly the same as if the extra nodes were omitted.
+                </p>
+              </div>
             </div>
           </div>
           <div className="mt-4 flex items-center gap-4 text-white/70 text-sm w-full lg:max-w-[50%]">
@@ -728,168 +982,313 @@ export default function ItalifyClient() {
             </div>
           </div>
         </section>
-          The algorithm takes as much context into account as necessary in order to
-          calculate transformations. It handles all possible node types (segment transitions), as enumerated below:
-          <ul className="list-disc pl-4 space-y-3">
-            <li>
-              Has curve before
-              <ul className="list-disc pl-4 mt-2 space-y-2 border-l border-white/15">
-                <li>
-                  Has curve after
-                  <ul className="list-disc pl-4 mt-2 space-y-2 border-l border-white/15">
-                    <li>
-                      <span className="inline-flex items-center gap-2">
-                        Smooth transition
-                        <svg
-                          viewBox="0 -20 400 220"
-                          aria-hidden="true"
-                          className="w-7 h-3 text-white/70"
-                          fill="none"
-                          stroke="currentColor"
-                          strokeWidth="20"
-                          strokeLinecap="round"
-                        >
-                          <path d="M400,200c0-110-90-200-200-200s-200,90-200,200"></path>
-                        </svg>
-                      </span>
-                    </li>
-                    <li>
-                      <span className="inline-flex items-center gap-2">
-                        Unsmooth transition
-                        <svg
-                          viewBox="0 -20 400 220"
-                          aria-hidden="true"
-                          className="w-7 h-3 text-white/70"
-                          fill="none"
-                          stroke="currentColor"
-                          strokeWidth="20"
-                          strokeLinecap="round"
-                        >
-                          <path d="M400,200c-110,0-200-90-200-200c-110,0-200,90-200,200"></path>
-                        </svg>
-                      </span>
-                    </li>
-                  </ul>
-                </li>
-                <li>
-                  Has no curve after
-                  <ul className="list-disc pl-4 mt-2 space-y-2 border-l border-white/15">
-                    <li>
-                      <span className="inline-flex items-center gap-2">
-                        Smooth transition
-                        <svg
-                          viewBox="0 -20 400 220"
-                          aria-hidden="true"
-                          className="w-7 h-3 text-white/70"
-                          fill="none"
-                          stroke="currentColor"
-                          strokeWidth="20"
-                          strokeLinecap="round"
-                        >
-                          <path d="M400,0h-200c-110,0-200,90-200,200"></path>
-                        </svg>
-                      </span>
-                    </li>
-                    <li>
-                      <span className="inline-flex items-center gap-2">
-                        Unsmooth transition
-                        <svg
-                          viewBox="0 -20 400 220"
-                          aria-hidden="true"
-                          className="w-7 h-3 text-white/70"
-                          fill="none"
-                          stroke="currentColor"
-                          strokeWidth="20"
-                          strokeLinecap="round"
-                        >
-                          <path d="M400,200l-200-200c-110,0-200,90-200,200"></path>
-                        </svg>
-                      </span>
-                    </li>
-                  </ul>
-                </li>
-              </ul>
-            </li>
-            <li>
-              Has no curve before
-              <ul className="list-disc pl-4 mt-2 space-y-2 border-l border-white/15">
-                <li>
-                  Has curve after
-                  <ul className="list-disc pl-4 mt-2 space-y-2 border-l border-white/15">
-                    <li>
-                      <span className="inline-flex items-center gap-2">
-                        Smooth transition
-                        <svg
-                          viewBox="0 -20 400 220"
-                          aria-hidden="true"
-                          className="w-7 h-3 text-white/70"
-                          fill="none"
-                          stroke="currentColor"
-                          strokeWidth="20"
-                          strokeLinecap="round"
-                        >
-                          <path d="M0,0h200c110,0,200,90,200,200"></path>
-                        </svg>
-                      </span>
-                    </li>
-                    <li>
-                      <span className="inline-flex items-center gap-2">
-                        Unsmooth transition
-                        <svg
-                          viewBox="0 -20 400 220"
-                          aria-hidden="true"
-                          className="w-7 h-3 text-white/70"
-                          fill="none"
-                          stroke="currentColor"
-                          strokeWidth="20"
-                          strokeLinecap="round"
-                        >
-                          <path d="M400,200c0-110-90-200-200-200l-200,200"></path>
-                        </svg>
-                      </span>
-                    </li>
-                  </ul>
-                </li>
-                <li>
-                  Has no curve after
-                  <ul className="list-disc pl-4 mt-2 space-y-2 border-l border-white/15">
-                    <li>
-                      <span className="inline-flex items-center gap-2">
-                        Smooth transition
-                        <svg
-                          viewBox="0 -20 400 220"
-                          aria-hidden="true"
-                          className="w-7 h-3 text-white/70"
-                          fill="none"
-                          stroke="currentColor"
-                          strokeWidth="20"
-                          strokeLinecap="round"
-                        >
-                          <path d="M400,0h-200h-200"></path>
-                        </svg>
-                      </span>
-                    </li>
-                    <li>
-                      <span className="inline-flex items-center gap-2">
-                        Unsmooth transition
-                        <svg
-                          viewBox="0 -20 400 220"
-                          aria-hidden="true"
-                          className="w-7 h-3 text-white/70"
-                          fill="none"
-                          stroke="currentColor"
-                          strokeWidth="20"
-                          strokeLinecap="round"
-                        >
-                          <path d="M400,200l-200-200l-200,200"></path>
-                        </svg>
-                      </span>
-                    </li>
-                  </ul>
-                </li>
-              </ul>
-            </li>
-          </ul>
+
+        <section className="mt-10">
+          <div className="grid gap-8 lg:grid-cols-[minmax(0,1fr)_minmax(0,1fr)] items-start lg:items-stretch">
+            <div className="text-white/85 leading-relaxed lg:flex lg:items-center lg:h-full">
+              <div className="flex flex-col gap-3">
+                <h2 className="text-white/90 text-xl">Overlap-agnostic</h2>
+                <p>
+                  The algorithm works even when overlap is removed and curve intentions would seem
+                  more difficult to guess.
+                </p>
+                <label className="inline-flex items-center gap-2 text-white/80 text-sm">
+                  <input
+                    type="checkbox"
+                    className="peer sr-only"
+                    checked={removeOverlap}
+                    onChange={(event) => setRemoveOverlap(event.target.checked)}
+                  />
+                  <span className="relative h-5 w-5 rounded-full border border-white/30 bg-white/5 transition peer-checked:[&>svg]:opacity-100">
+                    <svg
+                      viewBox="0 0 20 20"
+                      aria-hidden="true"
+                      className="absolute inset-0 m-auto h-3.5 w-3.5 text-amber-400 opacity-0 transition"
+                      fill="none"
+                      stroke="currentColor"
+                      strokeWidth="2"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                    >
+                      <path d="M5 10.5l3 3 7-7" />
+                    </svg>
+                  </span>
+                  Remove overlap
+                </label>
+                <label className="inline-flex items-center gap-2 text-white/80 text-sm">
+                  <input
+                    type="checkbox"
+                    className="peer sr-only"
+                    checked={showOverlapNodes}
+                    onChange={(event) => setShowOverlapNodes(event.target.checked)}
+                  />
+                  <span className="relative h-5 w-5 rounded-full border border-white/30 bg-white/5 transition peer-checked:[&>svg]:opacity-100">
+                    <svg
+                      viewBox="0 0 20 20"
+                      aria-hidden="true"
+                      className="absolute inset-0 m-auto h-3.5 w-3.5 text-amber-400 opacity-0 transition"
+                      fill="none"
+                      stroke="currentColor"
+                      strokeWidth="2"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                    >
+                      <path d="M5 10.5l3 3 7-7" />
+                    </svg>
+                  </span>
+                  Show nodes
+                </label>
+              </div>
+            </div>
+            <div className="bg-slate-900 p-5 w-full">
+              <svg
+                viewBox="0 0 621 730"
+                role="img"
+                aria-label="Overlap interpolation"
+                className="w-full h-auto overflow-visible text-white"
+              >
+                <path ref={overlapPathRef} className="fill-none stroke-current" strokeWidth="2" />
+                <g ref={overlapNodesRef} className="nodes" fill="none" strokeWidth="2"></g>
+              </svg>
+            </div>
+          </div>
+        </section>
+
+        <section className="mt-10">
+          <div className="grid gap-8 lg:grid-cols-[minmax(0,1fr)_minmax(0,1fr)] items-start lg:items-stretch">
+            <div className="bg-slate-900 p-5 w-full">
+              <svg
+                viewBox="0 0 473 528"
+                role="img"
+                aria-label="Inflection interpolation"
+                className="w-full h-auto overflow-visible text-white"
+              >
+                <path ref={inflectPathRef} className="fill-none stroke-current" strokeWidth="2" />
+                <g ref={inflectNodesRef} className="nodes" fill="none" strokeWidth="2"></g>
+              </svg>
+            </div>
+            <div className="text-white/85 leading-relaxed lg:flex lg:items-center lg:h-full">
+              <div className="flex flex-col gap-3">
+                <h2 className="text-white/90 text-xl">Inflections</h2>
+                <p>
+                  Italify handles inflecting curves, without the need to insert explicit inflection
+                  points. This way, your outlines stay as smooth as possible.
+                </p>
+                <label className="inline-flex items-center gap-2 text-white/80 text-sm">
+                  <input
+                    type="checkbox"
+                    className="peer sr-only"
+                    checked={showInflectNodes}
+                    onChange={(event) => setShowInflectNodes(event.target.checked)}
+                  />
+                  <span className="relative h-5 w-5 rounded-full border border-white/30 bg-white/5 transition peer-checked:[&>svg]:opacity-100">
+                    <svg
+                      viewBox="0 0 20 20"
+                      aria-hidden="true"
+                      className="absolute inset-0 m-auto h-3.5 w-3.5 text-amber-400 opacity-0 transition"
+                      fill="none"
+                      stroke="currentColor"
+                      strokeWidth="2"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                    >
+                      <path d="M5 10.5l3 3 7-7" />
+                    </svg>
+                  </span>
+                  Show nodes
+                </label>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section className="mt-10">
+          <div className="grid gap-8 lg:grid-cols-[minmax(0,1fr)_minmax(0,1fr)] items-start lg:items-stretch">
+            <div className="text-white/85 leading-relaxed lg:flex lg:items-center lg:h-full">
+              <div className="flex flex-col gap-3">
+                <h2 className="text-white/90 text-xl">Rounded fonts</h2>
+                <p>
+                  Even your squishy fonts can be manipulated with decent results. There are
+                  limitations, but far less than with other approaches.
+                </p>
+                <label className="inline-flex items-center gap-2 text-white/80 text-sm">
+                  <input
+                    type="checkbox"
+                    className="peer sr-only"
+                    checked={roundedSlant}
+                    onChange={(event) => setRoundedSlant(event.target.checked)}
+                  />
+                  <span className="relative h-5 w-5 rounded-full border border-white/30 bg-white/5 transition peer-checked:[&>svg]:opacity-100">
+                    <svg
+                      viewBox="0 0 20 20"
+                      aria-hidden="true"
+                      className="absolute inset-0 m-auto h-3.5 w-3.5 text-amber-400 opacity-0 transition"
+                      fill="none"
+                      stroke="currentColor"
+                      strokeWidth="2"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                    >
+                      <path d="M5 10.5l3 3 7-7" />
+                    </svg>
+                  </span>
+                  Italify!
+                </label>
+                <label className="inline-flex items-center gap-2 text-white/80 text-sm">
+                  <input
+                    type="checkbox"
+                    className="peer sr-only"
+                    checked={showRoundedNodes}
+                    onChange={(event) => setShowRoundedNodes(event.target.checked)}
+                  />
+                  <span className="relative h-5 w-5 rounded-full border border-white/30 bg-white/5 transition peer-checked:[&>svg]:opacity-100">
+                    <svg
+                      viewBox="0 0 20 20"
+                      aria-hidden="true"
+                      className="absolute inset-0 m-auto h-3.5 w-3.5 text-amber-400 opacity-0 transition"
+                      fill="none"
+                      stroke="currentColor"
+                      strokeWidth="2"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                    >
+                      <path d="M5 10.5l3 3 7-7" />
+                    </svg>
+                  </span>
+                  Show nodes
+                </label>
+              </div>
+            </div>
+            <div className="bg-slate-900 p-5 w-full">
+              <svg
+                viewBox="0 0 492 559"
+                role="img"
+                aria-label="Rounded interpolation"
+                className="w-full h-auto overflow-visible text-white"
+              >
+                <path ref={roundedPathRef} className="fill-none stroke-current" strokeWidth="2" />
+                <g ref={roundedNodesRef} className="nodes" fill="none" strokeWidth="2"></g>
+              </svg>
+            </div>
+          </div>
+        </section>
+
+        <section className="mt-10">
+          <div className="grid gap-8 lg:grid-cols-[minmax(0,1fr)_minmax(0,1fr)] items-start lg:items-stretch">
+            <div className="bg-slate-900 p-5 w-full">
+              <svg
+                viewBox="0 0 553 537"
+                role="img"
+                aria-label="Retalics interpolation"
+                className="w-full h-auto overflow-visible text-white"
+              >
+                <path ref={retalPathRef} className="fill-none stroke-current" strokeWidth="2" />
+                <g ref={retalNodesRef} className="nodes" fill="none" strokeWidth="2"></g>
+              </svg>
+            </div>
+            <div className="text-white/85 leading-relaxed lg:flex lg:items-center lg:h-full">
+              <div className="flex flex-col gap-3">
+                <h2 className="text-white/90 text-xl">Retalics</h2>
+                <p>
+                  Whatever name you choose for your backslanted style, Italify has got you covered.
+                </p>
+                <p className="text-white/60 text-sm">
+                  Font in use:{" "}
+                  <a
+                    href="https://lettermin.com/fonts/mae-soft"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="text-white/70 hover:text-white transition-all"
+                  >
+                    Mae Soft
+                  </a>
+                  {" "}(made with Italify)
+                </p>
+                <label className="inline-flex items-center gap-2 text-white/80 text-sm">
+                  <input
+                    type="checkbox"
+                    className="peer sr-only"
+                    checked={showRetalNodes}
+                    onChange={(event) => setShowRetalNodes(event.target.checked)}
+                  />
+                  <span className="relative h-5 w-5 rounded-full border border-white/30 bg-white/5 transition peer-checked:[&>svg]:opacity-100">
+                    <svg
+                      viewBox="0 0 20 20"
+                      aria-hidden="true"
+                      className="absolute inset-0 m-auto h-3.5 w-3.5 text-amber-400 opacity-0 transition"
+                      fill="none"
+                      stroke="currentColor"
+                      strokeWidth="2"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                    >
+                      <path d="M5 10.5l3 3 7-7" />
+                    </svg>
+                  </span>
+                  Show nodes
+                </label>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section className="mt-10">
+          <div className="grid gap-8 lg:grid-cols-[minmax(0,1fr)_minmax(0,1fr)] items-start lg:items-stretch">
+            <div className="text-white/85 leading-relaxed lg:flex lg:items-center lg:h-full">
+              <div className="flex flex-col gap-3">
+                <h2 className="text-white/90 text-xl">High-contrast designs</h2>
+                <p>
+                  Theoretically, any curve can be treated with Italify. Whether it actually makes
+                  sense for your design is your decision.
+                </p>
+                <label className="inline-flex items-center gap-2 text-white/80 text-sm">
+                  <input
+                    type="checkbox"
+                    className="peer sr-only"
+                    checked={showContrastNodes}
+                    onChange={(event) => setShowContrastNodes(event.target.checked)}
+                  />
+                  <span className="relative h-5 w-5 rounded-full border border-white/30 bg-white/5 transition peer-checked:[&>svg]:opacity-100">
+                    <svg
+                      viewBox="0 0 20 20"
+                      aria-hidden="true"
+                      className="absolute inset-0 m-auto h-3.5 w-3.5 text-amber-400 opacity-0 transition"
+                      fill="none"
+                      stroke="currentColor"
+                      strokeWidth="2"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                    >
+                      <path d="M5 10.5l3 3 7-7" />
+                    </svg>
+                  </span>
+                  Show nodes
+                </label>
+              </div>
+            </div>
+            <div className="bg-slate-900 p-5 w-full">
+              <svg
+                viewBox="0 0 618 642"
+                role="img"
+                aria-label="High-contrast interpolation"
+                className="w-full h-auto overflow-visible text-white"
+              >
+                <path ref={contrastPathRef} className="fill-none stroke-current" strokeWidth="2" />
+                <g ref={contrastNodesRef} className="nodes" fill="none" strokeWidth="2"></g>
+              </svg>
+            </div>
+          </div>
+        </section>
+
+        <section className="mt-16 border-t border-white/10 pt-10">
+
+          <h1 className="text-[clamp(2rem,4vw,2.8rem)] [font-variation-settings:'wght'_700]">Interested?</h1>
+          <p className="mt-3 text-white/85">
+            Italify is currently available as a service. Get in touch to request a quote for your
+            project: sebastian.carewe
+            <span className="email-protected" />
+          </p>
+        </section>
       </section>
     </main>
   );

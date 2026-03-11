@@ -230,6 +230,32 @@ export default function App() {
   }, []);
 
   useEffect(() => {
+    const applySectionFromUrl = () => {
+      const params = new URLSearchParams(window.location.search);
+      const rawSection =
+        params.get("section") ?? (window.location.hash ? window.location.hash.slice(1) : null);
+      if (!rawSection) {
+        return;
+      }
+      const sectionMap: Record<string, number> = {
+        home: 1,
+        hello: 1,
+        projects: 2,
+        expertise: 3,
+        about: 4,
+      };
+      const nextSection = sectionMap[rawSection.toLowerCase()];
+      if (nextSection) {
+        setActiveSection(nextSection);
+      }
+    };
+
+    applySectionFromUrl();
+    window.addEventListener("popstate", applySectionFromUrl);
+    return () => window.removeEventListener("popstate", applySectionFromUrl);
+  }, []);
+
+  useEffect(() => {
     window.localStorage.setItem("lang", language);
   }, [language]);
 
