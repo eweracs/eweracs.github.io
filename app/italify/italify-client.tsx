@@ -940,14 +940,13 @@ export default function ItalifyClient() {
             </label>
           </div>
         </div>
-
         <div className="grid gap-6">
-          <section className="bg-slate-900 p-5" data-pair="a">
+          <section className="bg-slate-900 p-5 max-[900px]:overflow-x-auto max-[900px]:-mx-[calc(6vw+1.25rem)]" data-pair="a">
             <svg
               viewBox="0 0 2784 712"
               role="img"
               aria-label="Interpolated outline"
-              className="w-full h-auto overflow-visible text-white"
+              className="w-full h-auto overflow-visible text-white max-[900px]:min-w-[900px]"
             >
               <path ref={morphOuterRef} className="fill-current"></path>
               <g ref={nodesRef} className="nodes" fill="none" strokeWidth="2"></g>
