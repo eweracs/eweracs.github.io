@@ -1403,6 +1403,18 @@ export default function ItalifyClient() {
             <span className="email-protected" />
           </p>
         </section>
+
+        <section className="mt-10 border-t border-white/10 pt-10 text-white/70 text-sm">
+          Italify wordmark by{" "}
+          <a
+            href="https://instagram.com/gagane_"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="hover:text-white transition-all"
+          >
+            Morgane Vantorre
+          </a>
+        </section>
       </section>
     </main>
   );
