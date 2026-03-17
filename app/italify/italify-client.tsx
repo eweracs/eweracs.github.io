@@ -863,8 +863,12 @@ export default function ItalifyClient() {
         </nav>
       </header>
       <section className="max-w-[1100px] mx-auto">
-        <h1 className="text-center text-[clamp(2rem,4vw,2.8rem)] [font-variation-settings:'wght'_700]">
-          Italify
+        <h1 className="flex justify-center">
+          <img
+            src="/italify/italify.svg"
+            alt="Italify"
+            className="h-24 w-auto"
+          />
         </h1>
         <p className="text-white/90 leading-[1.7] text-center">
           An algorithmic approach to optical correction of oblique curves
@@ -1037,40 +1041,24 @@ export default function ItalifyClient() {
           </p>
         </div>
 
-        <section className="mt-10">
-          <div className="grid gap-8 lg:grid-cols-[minmax(0,1fr)_minmax(0,1fr)] items-start lg:items-stretch">
-            <div className="bg-slate-900 p-5 w-full order-2 lg:order-1">
-              <svg
-                viewBox="0 0 526 510"
-                role="img"
-                aria-label="Interpolated stroke"
-                className="w-full h-auto overflow-visible text-white"
+        <section className="mt-8">
+          <figure className="border bg-white/5 p-6 text-white/85">
+            <blockquote className="leading-relaxed">
+              Italify not only saved me a great amount of time, but also guaranteed systematic results whose quality speaks for
+              itself. Adding italics to a major project was a breeze. I am a changed man.
+            </blockquote>
+            <figcaption className="mt-4 text-sm text-white/60">
+              – Henning Skibbe,{" "}
+              <a
+                href="https://charactertype.com"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-white/60 hover:text-white/70 transition-all"
               >
-                <path ref={sweepPathRef} className="fill-none stroke-current" strokeWidth="2" />
-                <g ref={sweepNodesRef} className="nodes" fill="none" strokeWidth="2"></g>
-              </svg>
-            </div>
-            <div className="text-white/85 leading-relaxed lg:flex lg:items-center lg:h-full order-1 lg:order-2">
-              <div className="flex flex-col gap-3">
-                <h2 className="text-white/90 text-xl">Extra nodes</h2>
-                <p>
-                  Thanks to Italify’s purely geometrical approach, curves with multiple intermediate
-                  points are transformed without a problem. This can be useful in cases where a pure
-                  extreme-to-extreme curve construction doesn’t allow for the desired curve shape.
-                  The result is exactly the same as if the extra nodes were omitted.
-                </p>
-              </div>
-            </div>
-          </div>
-          <div className="mt-4 flex items-center gap-4 text-white/70 text-sm w-full lg:max-w-[50%]">
-            <span>Correction</span>
-            <div className="relative flex-1 h-1 rounded-full bg-white/10 overflow-hidden">
-              <div
-                className="absolute inset-y-0 left-0 bg-amber-400"
-                style={{ width: `${Math.round(sweepValue * 100)}%` }}
-              ></div>
-            </div>
-          </div>
+                Character Type
+              </a>
+            </figcaption>
+          </figure>
         </section>
 
         <section className="mt-10">
@@ -1140,6 +1128,42 @@ export default function ItalifyClient() {
                 <path ref={overlapPathRef} className="fill-none stroke-current" strokeWidth="2" />
                 <g ref={overlapNodesRef} className="nodes" fill="none" strokeWidth="2"></g>
               </svg>
+            </div>
+          </div>
+          <div className="mt-4 flex items-center gap-4 text-white/70 text-sm w-full lg:max-w-[50%] lg:ml-auto">
+            <span>Correction</span>
+            <div className="relative flex-1 h-1 rounded-full bg-white/10 overflow-hidden">
+              <div
+                className="absolute inset-y-0 left-0 bg-amber-400"
+                style={{ width: `${Math.round(sweepValue * 100)}%` }}
+              ></div>
+            </div>
+          </div>
+        </section>
+
+        <section className="mt-10">
+          <div className="grid gap-8 lg:grid-cols-[minmax(0,1fr)_minmax(0,1fr)] items-start lg:items-stretch">
+            <div className="bg-slate-900 p-5 w-full order-2 lg:order-1">
+              <svg
+                viewBox="0 0 526 510"
+                role="img"
+                aria-label="Interpolated stroke"
+                className="w-full h-auto overflow-visible text-white"
+              >
+                <path ref={sweepPathRef} className="fill-none stroke-current" strokeWidth="2" />
+                <g ref={sweepNodesRef} className="nodes" fill="none" strokeWidth="2"></g>
+              </svg>
+            </div>
+            <div className="text-white/85 leading-relaxed lg:flex lg:items-center lg:h-full order-1 lg:order-2">
+              <div className="flex flex-col gap-3">
+                <h2 className="text-white/90 text-xl">Extra nodes</h2>
+                <p>
+                  Thanks to Italify’s purely geometrical approach, curves with multiple intermediate
+                  points are transformed without a problem. This can be useful in cases where a pure
+                  extreme-to-extreme curve construction doesn’t allow for the desired curve shape.
+                  The result is exactly the same as if the extra nodes were omitted.
+                </p>
+              </div>
             </div>
           </div>
         </section>
