@@ -973,7 +973,7 @@ export default function ItalifyClient() {
 
         <div className="mt-10 space-y-4 text-white/85">
           <p className="leading-relaxed">
-            Italify is a novel algorithm that offers a purely geometric approach to oblique curve
+            Italify is a novel algorithm that offers a purely geometrical approach to oblique curve
             correction. So far, the most popular approaches have been:
           </p>
           <ol className="list-decimal space-y-2 pl-5">
