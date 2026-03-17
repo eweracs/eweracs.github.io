@@ -1043,23 +1043,42 @@ export default function ItalifyClient() {
         </div>
 
         <section className="mt-8">
-          <figure className="border bg-white/5 p-6 text-white/85">
-            <blockquote className="leading-relaxed">
-              Italify not only saved me a great amount of time, but also guaranteed systematic results whose quality speaks for
-              itself. Adding italics to a major project was a breeze. I am a changed man.
-            </blockquote>
-            <figcaption className="mt-4 text-sm text-white/60">
-              – Henning Skibbe,{" "}
-              <a
-                href="https://charactertype.com"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="text-white/60 hover:text-white/70 transition-all"
-              >
-                Character Type
-              </a>
-            </figcaption>
-          </figure>
+          <div className="grid gap-6 lg:grid-cols-2">
+            <figure className="border bg-white/5 p-6 text-white/85">
+              <blockquote className="leading-relaxed">
+                Italify not only saved me a great amount of time, but also guaranteed systematic results whose quality speaks for
+                itself. Adding italics to a major project was a breeze. I am a changed man.
+              </blockquote>
+              <figcaption className="mt-4 text-sm text-white/60">
+                – Henning Skibbe,{" "}
+                <a
+                  href="https://charactertype.com"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-white/60 hover:text-white/70 transition-all"
+                >
+                  Character Type
+                </a>
+              </figcaption>
+            </figure>
+            <figure className="border bg-white/5 p-6 text-white/85">
+              <blockquote className="leading-relaxed">
+                Italify almost feels like an unfair advantage—I’d rather keep it to myself. But the results are simply too good:
+                optically precise, thoughtfully executed, and a huge relief in the process.
+              </blockquote>
+              <figcaption className="mt-4 text-sm text-white/60">
+                – René Bieder,{" "}
+                <a
+                  href="https://www.renebieder.com/"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-white/60 hover:text-white/70 transition-all"
+                >
+                  Studio René Bieder
+                </a>
+              </figcaption>
+            </figure>
+          </div>
         </section>
 
         <section className="mt-10">
