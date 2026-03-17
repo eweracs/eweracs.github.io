@@ -1063,7 +1063,7 @@ export default function ItalifyClient() {
             </figure>
             <figure className="border bg-white/5 p-6 text-white/85">
               <blockquote className="leading-relaxed">
-                Italify almost feels like an unfair advantage—I’d rather keep it to myself. But the results are simply too good:
+                Italify almost feels like an unfair advantage – I’d rather keep it to myself. But the results are simply too good:
                 optically precise, thoughtfully executed, and a huge relief in the process.
               </blockquote>
               <figcaption className="mt-4 text-sm text-white/60">
