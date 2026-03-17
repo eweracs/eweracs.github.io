@@ -925,6 +925,7 @@ export default function ItalifyClient() {
                 ref={toggleNodesRef}
                 id="toggle-nodes"
                 type="checkbox"
+                defaultChecked
                 className="peer sr-only"
               />
               <span className="relative h-5 w-5 rounded-full border border-white/30 bg-white/5 transition peer-checked:[&>svg]:opacity-100">
