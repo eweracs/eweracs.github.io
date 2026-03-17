@@ -60,6 +60,10 @@ const contrastA =
   "M232.902,642c127,0,243-69,321-188c-48,17-105,27-147,27c-125,0-161-89-120-253c27-106,68-175,104-175c34,0,35,62,4,187l10-3h-166l-10,39h379c40-170-34-276-204-276c-184,0-345,133-392,323c-47,186,49,319,221,319Z";
 const contrastB =
   "M274.261,642c106,0,222-69,286-187c-43,17-94,26-132,26c-156,0-188-104-143-283c22-88,56-145,87-145c37,0,41,62,13,187l11-3h-167l-10,39h376c23-171-65-276-247-276c-160,0-293,110-333,269c-54,217,36,373,259,373Z";
+const diagonalA =
+  "M327,760h243l-63-277l251-239h-226l-208,199l162-443h-209l-277,760h209l82-225Z";
+const diagonalB =
+  "M329,760h235l-60-265l264-251h-243l-197,188l158-432h-209l-277,760h209l84-230Z";
 
 const pairs = {
   a: {
@@ -422,6 +426,8 @@ export default function ItalifyClient() {
   const retalNodesRef = useRef<SVGGElement>(null);
   const contrastPathRef = useRef<SVGPathElement>(null);
   const contrastNodesRef = useRef<SVGGElement>(null);
+  const diagonalPathRef = useRef<SVGPathElement>(null);
+  const diagonalNodesRef = useRef<SVGGElement>(null);
   const morphAnimRef = useRef<number | null>(null);
   const currentOuterPathRef = useRef<string>(basePath);
   const syncStartRef = useRef<number | null>(null);
@@ -430,6 +436,7 @@ export default function ItalifyClient() {
   const showRoundedNodesRef = useRef(true);
   const showRetalNodesRef = useRef(true);
   const showContrastNodesRef = useRef(true);
+  const showDiagonalNodesRef = useRef(true);
   const removeOverlapRef = useRef(false);
   const roundedSlantRef = useRef(false);
   const overlapInterpolatorRef = useRef<((t: number) => string) | null>(null);
@@ -444,6 +451,7 @@ export default function ItalifyClient() {
   const [showRoundedNodes, setShowRoundedNodes] = useState(true);
   const [showRetalNodes, setShowRetalNodes] = useState(true);
   const [showContrastNodes, setShowContrastNodes] = useState(true);
+  const [showDiagonalNodes, setShowDiagonalNodes] = useState(true);
 
   useEffect(() => {
     showOverlapNodesRef.current = showOverlapNodes;
@@ -464,6 +472,10 @@ export default function ItalifyClient() {
   useEffect(() => {
     showContrastNodesRef.current = showContrastNodes;
   }, [showContrastNodes]);
+
+  useEffect(() => {
+    showDiagonalNodesRef.current = showDiagonalNodes;
+  }, [showDiagonalNodes]);
 
   useEffect(() => {
     removeOverlapRef.current = removeOverlap;
@@ -628,6 +640,8 @@ export default function ItalifyClient() {
     const retalNodes = retalNodesRef.current;
     const contrastPath = contrastPathRef.current;
     const contrastNodes = contrastNodesRef.current;
+    const diagonalPath = diagonalPathRef.current;
+    const diagonalNodes = diagonalNodesRef.current;
 
     if (
       (!sweepPath || !sweepNodes) &&
@@ -635,7 +649,8 @@ export default function ItalifyClient() {
       (!inflectPath || !inflectNodes) &&
       (!roundedPath || !roundedNodes) &&
       (!retalPath || !retalNodes) &&
-      (!contrastPath || !contrastNodes)
+      (!contrastPath || !contrastNodes) &&
+      (!diagonalPath || !diagonalNodes)
     ) {
       return;
     }
@@ -665,6 +680,9 @@ export default function ItalifyClient() {
       maxSegmentLength: 2,
     });
     const contrastInterpolator = flubber.interpolate(contrastA, contrastB, {
+      maxSegmentLength: 2,
+    });
+    const diagonalInterpolator = flubber.interpolate(diagonalA, diagonalB, {
       maxSegmentLength: 2,
     });
 
@@ -711,11 +729,8 @@ export default function ItalifyClient() {
           overlapPath.style.strokeWidth = "";
           overlapNodes.style.display = "none";
         }
-        const box = overlapPath.getBBox();
-        const viewWidth = 621;
-        const dx = viewWidth - (box.x + box.width);
-        overlapPath.setAttribute("transform", `translate(${dx}, 0)`);
-        overlapNodes.setAttribute("transform", `translate(${dx}, 0)`);
+        overlapPath.setAttribute("transform", "");
+        overlapNodes.setAttribute("transform", "");
       }
 
       if (inflectPath && inflectNodes) {
@@ -734,11 +749,8 @@ export default function ItalifyClient() {
           inflectPath.style.strokeWidth = "";
           inflectNodes.style.display = "none";
         }
-        const box = inflectPath.getBBox();
-        const viewWidth = 473;
-        const dx = viewWidth / 2 - (box.x + box.width / 2);
-        inflectPath.setAttribute("transform", `translate(${dx}, 0)`);
-        inflectNodes.setAttribute("transform", `translate(${dx}, 0)`);
+        inflectPath.setAttribute("transform", "");
+        inflectNodes.setAttribute("transform", "");
       }
 
       if (roundedPath && roundedNodes) {
@@ -759,10 +771,8 @@ export default function ItalifyClient() {
           roundedPath.style.strokeWidth = "";
           roundedNodes.style.display = "none";
         }
-        const box = roundedPath.getBBox();
-        const dx = viewWidth / 2 - (box.x + box.width / 2);
-        roundedPath.setAttribute("transform", `translate(${dx}, 0)`);
-        roundedNodes.setAttribute("transform", `translate(${dx}, 0)`);
+        roundedPath.setAttribute("transform", "");
+        roundedNodes.setAttribute("transform", "");
       }
 
       if (retalPath && retalNodes) {
@@ -781,11 +791,8 @@ export default function ItalifyClient() {
           retalPath.style.strokeWidth = "";
           retalNodes.style.display = "none";
         }
-        const box = retalPath.getBBox();
-        const viewWidth = retalPath.ownerSVGElement?.viewBox.baseVal.width || 553;
-        const dx = viewWidth / 2 - (box.x + box.width / 2);
-        retalPath.setAttribute("transform", `translate(${dx}, 0)`);
-        retalNodes.setAttribute("transform", `translate(${dx}, 0)`);
+        retalPath.setAttribute("transform", "");
+        retalNodes.setAttribute("transform", "");
       }
 
       if (contrastPath && contrastNodes) {
@@ -804,11 +811,28 @@ export default function ItalifyClient() {
           contrastPath.style.strokeWidth = "";
           contrastNodes.style.display = "none";
         }
-        const box = contrastPath.getBBox();
-        const viewWidth = contrastPath.ownerSVGElement?.viewBox.baseVal.width || 618;
-        const dx = viewWidth / 2 - (box.x + box.width / 2);
-        contrastPath.setAttribute("transform", `translate(${dx}, 0)`);
-        contrastNodes.setAttribute("transform", `translate(${dx}, 0)`);
+        contrastPath.setAttribute("transform", "");
+        contrastNodes.setAttribute("transform", "");
+      }
+
+      if (diagonalPath && diagonalNodes) {
+        const blend = interpolateSegments(diagonalA, diagonalB, eased);
+        const d = blend.path || diagonalInterpolator(eased);
+        diagonalPath.setAttribute("d", d);
+        if (showDiagonalNodesRef.current) {
+          diagonalPath.style.fill = "none";
+          diagonalPath.style.stroke = "currentColor";
+          diagonalPath.style.strokeWidth = "2";
+          diagonalNodes.style.display = "";
+          drawNodes(d, diagonalNodes, palette);
+        } else {
+          diagonalPath.style.fill = "currentColor";
+          diagonalPath.style.stroke = "none";
+          diagonalPath.style.strokeWidth = "";
+          diagonalNodes.style.display = "none";
+        }
+        diagonalPath.setAttribute("transform", "");
+        diagonalNodes.setAttribute("transform", "");
       }
 
       raf = requestAnimationFrame(tick);
@@ -871,7 +895,7 @@ export default function ItalifyClient() {
           />
         </h1>
         <p className="text-white/90 leading-[1.7] text-center">
-          An algorithmic approach to optical correction of oblique curves
+          An algorithmic approach to optical correction of obliques
         </p>
 
         <div className="my-6 py-4 border-y border-white/10">
@@ -974,7 +998,7 @@ export default function ItalifyClient() {
         <div className="mt-10 space-y-4 text-white/85">
           <p className="leading-relaxed">
             Italify is a novel algorithm that offers a purely geometrical approach to oblique curve
-            correction. So far, the most popular approaches have been:
+            correction and diagonal correction. So far, the most popular approaches have been:
           </p>
           <ol className="list-decimal space-y-2 pl-5">
             <li>
@@ -1039,6 +1063,7 @@ export default function ItalifyClient() {
             Italify, in stark contrast, actually produces usable results. It is a stem-agnostic, purely geometrical algorithm. It
             guarantees master compatibility, as it doesn’t add or remove any nodes.
             Furthermore, all horizontal extremes stay perfectly on their height coordinates.
+            Notably, Italify also corrects diagonal stems, not only curves.
           </p>
         </div>
 
@@ -1190,18 +1215,7 @@ export default function ItalifyClient() {
 
         <section className="mt-10">
           <div className="grid gap-8 lg:grid-cols-[minmax(0,1fr)_minmax(0,1fr)] items-start lg:items-stretch">
-            <div className="bg-slate-900 p-5 w-full order-2 lg:order-1">
-              <svg
-                viewBox="0 0 473 528"
-                role="img"
-                aria-label="Inflection interpolation"
-                className="w-full h-auto overflow-visible text-white"
-              >
-                <path ref={inflectPathRef} className="fill-none stroke-current" strokeWidth="2" />
-                <g ref={inflectNodesRef} className="nodes" fill="none" strokeWidth="2"></g>
-              </svg>
-            </div>
-            <div className="text-white/85 leading-relaxed lg:flex lg:items-center lg:h-full order-1 lg:order-2">
+            <div className="text-white/85 leading-relaxed lg:flex lg:items-center lg:h-full">
               <div className="flex flex-col gap-3">
                 <h2 className="text-white/90 text-xl">Inflections</h2>
                 <p>
@@ -1214,6 +1228,65 @@ export default function ItalifyClient() {
                     className="peer sr-only"
                     checked={showInflectNodes}
                     onChange={(event) => setShowInflectNodes(event.target.checked)}
+                  />
+                  <span className="relative h-5 w-5 rounded-full border border-white/30 bg-white/5 transition peer-checked:[&>svg]:opacity-100">
+                    <svg
+                      viewBox="0 0 20 20"
+                      aria-hidden="true"
+                      className="absolute inset-0 m-auto h-3.5 w-3.5 text-amber-400 opacity-0 transition"
+                      fill="none"
+                      stroke="currentColor"
+                      strokeWidth="2"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                    >
+                      <path d="M5 10.5l3 3 7-7" />
+                    </svg>
+                  </span>
+                  Show nodes
+                </label>
+              </div>
+            </div>
+            <div className="bg-slate-900 p-5 w-full">
+              <svg
+                viewBox="0 0 473 528"
+                role="img"
+                aria-label="Inflection interpolation"
+                className="w-full h-auto overflow-visible text-white"
+              >
+                <path ref={inflectPathRef} className="fill-none stroke-current" strokeWidth="2" />
+                <g ref={inflectNodesRef} className="nodes" fill="none" strokeWidth="2"></g>
+              </svg>
+            </div>
+          </div>
+        </section>
+
+        <section className="mt-10">
+          <div className="grid gap-8 lg:grid-cols-[minmax(0,1fr)_minmax(0,1fr)] items-start lg:items-stretch">
+            <div className="bg-slate-900 p-5 w-full order-2 lg:order-1">
+              <svg
+                viewBox="0 0 685 760"
+                role="img"
+                aria-label="Diagonal correction interpolation"
+                className="w-full h-auto overflow-visible text-white"
+              >
+                <path ref={diagonalPathRef} className="fill-current"></path>
+                <g ref={diagonalNodesRef} className="nodes" fill="none" strokeWidth="2"></g>
+              </svg>
+            </div>
+            <div className="text-white/85 leading-relaxed lg:flex lg:items-center lg:h-full order-1 lg:order-2">
+              <div className="flex flex-col gap-3">
+                <h2 className="text-white/90 text-xl">Diagonal correction</h2>
+                <p>
+                  Italify can also correct diagonals, otherwise too thick or thin after a pure
+                  slant. No stem information necessary and overlap-agnostic as usual.
+                </p>
+                <label className="inline-flex items-center gap-2 text-white/80 text-sm">
+                  <input
+                    type="checkbox"
+                    className="peer sr-only"
+                    checked={showDiagonalNodes}
+                    onChange={(event) => setShowDiagonalNodes(event.target.checked)}
                   />
                   <span className="relative h-5 w-5 rounded-full border border-white/30 bg-white/5 transition peer-checked:[&>svg]:opacity-100">
                     <svg
