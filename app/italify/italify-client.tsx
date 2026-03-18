@@ -1103,6 +1103,24 @@ export default function ItalifyClient() {
                 </a>
               </figcaption>
             </figure>
+            <figure className="border bg-white/5 p-6 text-white/85">
+              <blockquote className="leading-relaxed">
+                Having worked with Sebastian for years, Italify’s results were no surprise to me.
+                An efficient and reliable tool, it produces obliques that feel designed and significantly reduces
+                both time and friction while improving overall quality.
+              </blockquote>
+              <figcaption className="mt-4 text-sm text-white/60">
+                – Ermin Međedović,{" "}
+                <a
+                  href="https://lettermin.com/"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-white/60 hover:text-white/70 transition-all"
+                >
+                  Lettermin
+                </a>
+              </figcaption>
+            </figure>
           </div>
         </section>
 
