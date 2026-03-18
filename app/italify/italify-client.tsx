@@ -997,12 +997,17 @@ export default function ItalifyClient() {
 
         <div className="mt-10 space-y-4 text-white/85">
           <p className="leading-relaxed">
-            Italify is a novel algorithm that offers a purely geometrical approach to oblique curve
-            correction and diagonal correction. So far, the most popular approaches have been:
+            Italify is a novel algorithm that offers a purely geometrical approach
+            to oblique curve and diagonal correction.
+            So far, the most popular approaches, limited to curve correction, have been:
           </p>
           <ol className="list-decimal space-y-2 pl-5">
             <li>
-              Slanting and rotating curves (proposed by{" "}
+              Slanting and adjusting curves by hand. Very tedious and manual, with inconsistent
+              results and no formalisable algorithm.
+            </li>
+            <li>
+              A complex half-slant/rotate mix strategy (proposed by {" "}
               <a
                 href="https://help.fontlab.com/fontlab/8/tutorials/briem/4-3-italic/briem-4-34-curves"
                 target="_blank"
@@ -1011,11 +1016,19 @@ export default function ItalifyClient() {
               >
                 Karow/Briem
               </a>
-              ). The resulting outlines require a lot of manual intervention.
+              ). This process requires a lot of manual intervention.
             </li>
             <li>
-              Slanting and adjusting curves by hand. Very tedious and manual, with inconsistent
-              results and no formalisable algorithm.
+              A custom slant/rotate mix, for example published in the {" "}
+              <a
+                href="https://github.com/eweracs/italify"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-white/90 hover:text-white transition-all"
+              >
+                legacy Italify plugin
+              </a>
+              . Relatively limited, and doesn’t keep nodes on horizontal extremes.
             </li>
             <li>Stem-based transformation (e.g. Glyphs’ Cursivy algorithm). Some of the worst examples include {" "}
               <a
@@ -1028,7 +1041,7 @@ export default function ItalifyClient() {
               </a>
               ’s italics.
             </li>
-            <li>The {" "}
+            <li>Another stem-based {" "}
               <a
                   href="https://github.com/googlefonts/roboto-2/blob/main/scripts/lib/fontbuild/italics.py"
                   target="_blank"
@@ -1060,8 +1073,10 @@ export default function ItalifyClient() {
             </li>
           </ol>
           <p className="leading-relaxed">
-            Italify, in stark contrast, actually produces usable results. It is a stem-agnostic, purely geometrical algorithm. It
-            guarantees master compatibility, as it doesn’t add or remove any nodes.
+            Italify, in stark contrast, actually produces usable results. It is a stem-agnostic,
+            purely geometrical algorithm. Theoretically, it can run on quadratic outlines as well as on cubic ones
+            (although this is not implemented yet).
+            It guarantees master compatibility, as it doesn’t add or remove any nodes.
             Furthermore, all horizontal extremes stay perfectly on their height coordinates.
             Notably, Italify also corrects diagonal stems, not only curves.
           </p>
@@ -1106,8 +1121,8 @@ export default function ItalifyClient() {
             <figure className="border bg-white/5 p-6 text-white/85">
               <blockquote className="leading-relaxed">
                 Having worked with Sebastian for years, Italify’s results were no surprise to me.
-                An efficient and reliable tool, it produces obliques that feel designed and significantly reduces
-                both time and friction while improving overall quality.
+                An efficient and reliable tool, it produces obliques that feel designed, not mechanic,
+                while significantly reducing both time and friction.
               </blockquote>
               <figcaption className="mt-4 text-sm text-white/60">
                 – Ermin Međedović,{" "}
