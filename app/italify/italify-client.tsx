@@ -1136,6 +1136,24 @@ export default function ItalifyClient() {
                 </a>
               </figcaption>
             </figure>
+            <figure className="border bg-white/5 p-6 text-white/85">
+              <blockquote className="leading-relaxed">
+                We used Italify on a custom project – with striking results. In general, it creates
+                obliques remarkably close to what I’d draw by hand, and handles geometric designs in a way that fits
+                my workflow. The future Glyphs plugin is an insta-buy the moment it drops.
+              </blockquote>
+              <figcaption className="mt-4 text-sm text-white/60">
+                – Jakob Runge,{" "}
+                <a
+                  href="https://www.typemates.com/"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-white/60 hover:text-white/70 transition-all"
+                >
+                  TypeMates
+                </a>
+              </figcaption>
+            </figure>
           </div>
         </section>
 
