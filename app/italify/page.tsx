@@ -2,7 +2,7 @@ import ItalifyClient from "./italify-client";
 
 export const metadata = {
   title: "Italify",
-  description: "A novel algorithmic approach to optical correction of oblique curves.",
+  description: "An algorithmic approach to optical correction of obliques.",
 };
 
 export default function ItalifyPage() {
