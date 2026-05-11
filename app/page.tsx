@@ -114,7 +114,7 @@ function renderAboutP1(lang: Lang) {
           return (
             <a
               key={`gh-${i}`}
-              href="https://www.github.com/<USERNAME_PLACEHOLDER>"
+              href="https://www.github.com/eweracs"
               target="_blank"
               rel="noopener noreferrer"
             >
