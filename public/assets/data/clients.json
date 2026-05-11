@@ -940,5 +940,37 @@
         "url": "https://www.sunwookkim.com"
       }
     ]
+  },
+  {
+    "name": "Studio René Bieder",
+    "url": "https://www.renebieder.com/",
+    "logo": "assets/img/clients/renebieder.svg",
+    "projects": [
+      {
+        "name": {
+          "EN": "Library font mastering",
+          "FR": "Maîtrise de polices de bibliothèque",
+          "DE": "Bibliotheks-Schriftproduktion"
+        },
+        "description": {
+          "EN": "Mastering and technical support for library fonts and custom projects.",
+          "FR": "Maîtrise et support technique pour les polices de la bibliothèque et les projets sur mesure.",
+          "DE": "Schriftproduktion und technische Unterstützung bei Bibliotheks- und Custom-Projekten."
+        },
+        "year": "since 2025",
+        "type": {
+          "EN": [
+            "Mastering"
+          ],
+          "FR": [
+            "Maîtrise"
+          ],
+          "DE": [
+            "Produktion"
+          ]
+        },
+        "url": "https://www.renebieder.com/"
+      }
+    ]
   }
 ]
