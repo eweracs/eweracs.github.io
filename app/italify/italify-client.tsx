@@ -64,6 +64,10 @@ const diagonalA =
   "M327,760h243l-63-277l251-239h-226l-208,199l162-443h-209l-277,760h209l82-225Z";
 const diagonalB =
   "M329,760h235l-60-265l264-251h-243l-197,188l158-432h-209l-277,760h209l84-230Z";
+const implicitA =
+    "M260,530c118,0,184-55,221-141l-151-37c-13,42-37,63-74,63c-55,0-85-44-85-129v-53c0-73,27-119,86-119c58,0,83,43,74,125l54-30h-236v90h336c28-181-57-299-224-299c-169,0-261,108-261,266c0,164,95,264,260,264Z"
+const implicitB =
+    "M248.739,530c107,0,173-52,218-132l-148-50c-17,44-44,67-79,67c-63,0-88-51-68-149l10-52c12-61,43-100,92-100c65,0,85,46,63,125l60-30h-236l-18,90h339c51-175-19-299-203-299c-148,0-243,91-270,224c-38,190,49,306,240,306Z"
 
 const pairs = {
   a: {
@@ -428,6 +432,8 @@ export default function ItalifyClient() {
   const contrastNodesRef = useRef<SVGGElement>(null);
   const diagonalPathRef = useRef<SVGPathElement>(null);
   const diagonalNodesRef = useRef<SVGGElement>(null);
+  const implicitPathRef = useRef<SVGPathElement>(null);
+  const implicitNodesRef = useRef<SVGGElement>(null);
   const morphAnimRef = useRef<number | null>(null);
   const currentOuterPathRef = useRef<string>(basePath);
   const syncStartRef = useRef<number | null>(null);
@@ -437,6 +443,7 @@ export default function ItalifyClient() {
   const showRetalNodesRef = useRef(true);
   const showContrastNodesRef = useRef(true);
   const showDiagonalNodesRef = useRef(true);
+  const showImplicitNodesRef = useRef(true);
   const removeOverlapRef = useRef(false);
   const roundedSlantRef = useRef(false);
   const overlapInterpolatorRef = useRef<((t: number) => string) | null>(null);
@@ -452,6 +459,7 @@ export default function ItalifyClient() {
   const [showRetalNodes, setShowRetalNodes] = useState(true);
   const [showContrastNodes, setShowContrastNodes] = useState(true);
   const [showDiagonalNodes, setShowDiagonalNodes] = useState(true);
+  const [showImplicitNodes, setShowImplicitNodes] = useState(true);
 
   useEffect(() => {
     showOverlapNodesRef.current = showOverlapNodes;
@@ -476,6 +484,10 @@ export default function ItalifyClient() {
   useEffect(() => {
     showDiagonalNodesRef.current = showDiagonalNodes;
   }, [showDiagonalNodes]);
+
+  useEffect(() => {
+    showImplicitNodesRef.current = showImplicitNodes;
+  }, [showImplicitNodes]);
 
   useEffect(() => {
     removeOverlapRef.current = removeOverlap;
@@ -642,6 +654,8 @@ export default function ItalifyClient() {
     const contrastNodes = contrastNodesRef.current;
     const diagonalPath = diagonalPathRef.current;
     const diagonalNodes = diagonalNodesRef.current;
+    const implicitPath = implicitPathRef.current;
+    const implicitNodes = implicitNodesRef.current;
 
     if (
       (!sweepPath || !sweepNodes) &&
@@ -650,7 +664,8 @@ export default function ItalifyClient() {
       (!roundedPath || !roundedNodes) &&
       (!retalPath || !retalNodes) &&
       (!contrastPath || !contrastNodes) &&
-      (!diagonalPath || !diagonalNodes)
+      (!diagonalPath || !diagonalNodes) &&
+      (!implicitPath || !implicitNodes)
     ) {
       return;
     }
@@ -683,6 +698,9 @@ export default function ItalifyClient() {
       maxSegmentLength: 2,
     });
     const diagonalInterpolator = flubber.interpolate(diagonalA, diagonalB, {
+      maxSegmentLength: 2,
+    });
+    const implicitInterpolator = flubber.interpolate(implicitA, implicitB, {
       maxSegmentLength: 2,
     });
 
@@ -833,6 +851,26 @@ export default function ItalifyClient() {
         }
         diagonalPath.setAttribute("transform", "");
         diagonalNodes.setAttribute("transform", "");
+      }
+
+      if (implicitPath && implicitNodes) {
+        const blend = interpolateSegments(implicitA, implicitB, eased);
+        const d = blend.path || implicitInterpolator(eased);
+        implicitPath.setAttribute("d", d);
+        if (showImplicitNodesRef.current) {
+          implicitPath.style.fill = "none";
+          implicitPath.style.stroke = "currentColor";
+          implicitPath.style.strokeWidth = "2";
+          implicitNodes.style.display = "";
+          drawNodes(d, implicitNodes, palette);
+        } else {
+          implicitPath.style.fill = "currentColor";
+          implicitPath.style.stroke = "none";
+          implicitPath.style.strokeWidth = "";
+          implicitNodes.style.display = "none";
+        }
+        implicitPath.setAttribute("transform", "");
+        implicitNodes.setAttribute("transform", "");
       }
 
       raf = requestAnimationFrame(tick);
@@ -1534,6 +1572,53 @@ export default function ItalifyClient() {
                 <path ref={contrastPathRef} className="fill-none stroke-current" strokeWidth="2" />
                 <g ref={contrastNodesRef} className="nodes" fill="none" strokeWidth="2"></g>
               </svg>
+            </div>
+          </div>
+        </section>
+
+        <section className="mt-10">
+          <div className="grid gap-8 lg:grid-cols-[minmax(0,1fr)_minmax(0,1fr)] items-start lg:items-stretch">
+            <div className="bg-slate-900 p-5 w-full order-2 lg:order-1">
+              <svg
+                viewBox="0 0 500 500"
+                role="img"
+                aria-label="Implicit extreme handling"
+                className="w-full h-auto overflow-visible text-white"
+              >
+                <path ref={implicitPathRef} className="fill-current"></path>
+                <g ref={implicitNodesRef} className="nodes" fill="none" strokeWidth="2"></g>
+              </svg>
+            </div>
+            <div className="text-white/85 leading-relaxed lg:flex lg:items-center lg:h-full order-1 lg:order-2">
+              <div className="flex flex-col gap-3">
+                <h2 className="text-white/90 text-xl">Implicit extremes</h2>
+                <p>
+                  If you want to leave off your horizontal or vertical extreme nodes for curve segments, no problem.
+                </p>
+                <label className="inline-flex items-center gap-2 text-white/80 text-sm">
+                  <input
+                    type="checkbox"
+                    className="peer sr-only"
+                    checked={showImplicitNodes}
+                    onChange={(event) => setShowImplicitNodes(event.target.checked)}
+                  />
+                  <span className="relative h-5 w-5 rounded-full border border-white/30 bg-white/5 transition peer-checked:[&>svg]:opacity-100">
+                    <svg
+                      viewBox="0 0 20 20"
+                      aria-hidden="true"
+                      className="absolute inset-0 m-auto h-3.5 w-3.5 text-amber-400 opacity-0 transition"
+                      fill="none"
+                      stroke="currentColor"
+                      strokeWidth="2"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                    >
+                      <path d="M5 10.5l3 3 7-7" />
+                    </svg>
+                  </span>
+                  Show nodes
+                </label>
+              </div>
             </div>
           </div>
         </section>
