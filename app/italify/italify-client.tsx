@@ -936,6 +936,13 @@ export default function ItalifyClient() {
           An algorithmic approach to optical correction of obliques
         </p>
 
+        <div className="my-6 py-4 text-xl">
+          <p>
+            Plugin now available to rent for foundries. Get in touch to book a demo: sebastian.carewe
+            <span className="email-protected" />
+          </p>
+        </div>
+
         <div className="my-6 py-4 border-y border-white/10">
           <div className="grid grid-cols-[120px_1fr] gap-y-4 items-center text-white/80 text-sm">
             <span>Slant</span>
