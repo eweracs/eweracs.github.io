@@ -1,6 +1,6 @@
 # Italify Python API
 
-@lede Author stems, tags and anchor links from Macro-panel scripts and batch jobs – the same metadata the Stem tool writes, scripted.
+@lede Author stems, tags and anchor links from Macro-panel scripts and batch jobs – the same metadata the tagger writes, scripted.
 
 ```toc
 1. [Overview](#overview)
@@ -15,12 +15,13 @@
 10. [Per-node flags](#flags)
 11. [Anchor links](#anchor-links)
 12. [Bulk operations](#bulk)
-13. [Refusal reasons](#refusals)
+13. [Transfer between fonts](#transfer)
+14. [Refusal reasons](#refusals)
 ```
 
 ## Overview {#overview}
 
-The `italify` module exposes the [Stem tool](handbook#stem-tool)’s authoring verbs to Python. It accesses the same methods the items in the [Glyph → Italify menu](handbook#glyph-menu) use. A script therefore writes the exact `userData` the filter reads – and, like the tool, it **never moves geometry**: it only writes metadata.
+The `italify` module exposes the [Tagger](handbook#tagger)’s authoring verbs to Python. It accesses the same methods the items in the [Glyph → Italify menu](handbook#glyph-menu) use. A script therefore writes the exact `userData` the filter reads – and, like the tool, it **never moves geometry**: it only writes metadata.
 
 ## Installation {#installation}
 
@@ -183,6 +184,30 @@ The anchors a node belongs to.
 *Returns:*
 
 - `list[str]` – the anchor names linked to it
+
+**`has_limit_curve(node)`**
+
+Whether a node carries the [Limit Curve](handbook#node-flags) flag.
+
+*Parameters:*
+
+- `node` (`GSNode`) – the node to query (this verb takes no `layer`)
+
+*Returns:*
+
+- `bool` – `True` when the flag is set
+
+**`has_no_curve_correction(node)`**
+
+Whether a node carries the [No Curve Correction](handbook#node-flags) flag. The flag sits on both on-curve endpoints of an opted-out segment, so a `True` on either end identifies the segment.
+
+*Parameters:*
+
+- `node` (`GSNode`) – the node to query (this verb takes no `layer`)
+
+*Returns:*
+
+- `bool` – `True` when the flag is set
 
 ## Stems {#stems}
 
@@ -609,6 +634,41 @@ Mirror a chosen mix of kinds in one undo group.
 *Returns:*
 
 - `ItalifyResult` – `.count` is the total mirrored
+
+## Transfer between fonts {#transfer}
+
+`propagate_*` only reaches compatible masters of the *same* glyph. To copy metadata **between two fonts**, use `transfer` – it takes an explicit target layer, so source and target may belong to different fonts.
+
+**`transfer(source_layer, target_layer, stems=True, tags=True, anchor_links=True, replace=True)`**
+
+Copy a chosen mix of kinds from one layer onto another, in one undo group.
+
+The two layers must *index-map* – the same path and node counts, and the same on-/off-curve at every index (the same structural match `propagate_*` requires of compatible masters). The copy maps purely by `(path, node)` index, so stem ids, corner roles, anchored edges, hinges, the flip flag, per-node tag flags and anchor links all carry over verbatim.
+
+*Parameters:*
+
+- `source_layer` (`GSLayer`) – the layer to read from
+- `target_layer` (`GSLayer`) – the layer to write to (may be in another font)
+- `stems` (`bool`) – copy stems
+- `tags` (`bool`) – copy per-node flags
+- `anchor_links` (`bool`) – copy anchor links
+- `replace` (`bool`) – `True` mirrors the source exactly (clears whatever the source doesn't carry); `False` is additive (the target keeps marks the source lacks)
+
+*Returns:*
+
+- `ItalifyResult` – `.count` is how many kinds were applied; refuses with [`noCompatibleMasters`](#refusals) when the layers don’t index-map
+
+```python
+import italify
+
+src, dst = Glyphs.fonts[0], Glyphs.fonts[1]
+sid, did = src.masters[0].id, dst.masters[0].id
+
+for g in src.glyphs:
+    target = dst.glyphs[g.name]
+    if target:
+        italify.transfer(g.layers[sid], target.layers[did])
+```
 
 ## Refusal reasons {#refusals}
 

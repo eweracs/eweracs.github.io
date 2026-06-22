@@ -10,7 +10,7 @@
     - [Export](#export)
     - [Hidden settings](#hidden-settings)
 3. [Glyph groups](#groups)
-4. [The stem tool](#stem-tool)
+4. [The tagger](#tagger)
     - [What a stem is](#stems)
     - [Creating stems](#creating-stems)
     - [Anchored edges](#anchor-edges)
@@ -32,16 +32,16 @@
 ## Installation {#installation}
 
 1. Double-click `Italify.glyphsPlugin`; Glyphs installs it and asks to restart.
-2. After relaunching you have all of Italify: the *Italify* entry in the *Filter* menu, the *Italify Stem* tool in the Edit View toolbar (shortcut [[C]]), and the *Italify Groups* palette in the Window sidebar.
+2. After relaunching you have all of Italify: the *Italify* entry in the *Filter* menu, the *Italify Tagger* in the Edit View toolbar (shortcut [[C]]), and the *Italify Groups* palette in the Window sidebar.
 
 Italify requires **Glyphs 3.2 or later**.
 
 ```screenshot
 img: images/bundle.png
 tag: Screenshot – installed plugin
-desc: Two-part composite: (1) the Filter, (2) the Edit View toolbar with the Italify Stem tool icon
+desc: Two-part composite: (1) the Filter, (2) the Edit View toolbar with the Italify Tagger icon
   visible and selected.
-caption: After installing: the filter, with the stem tool in the toolbar.
+caption: After installing: the filter, with the tagger in the toolbar.
 ```
 
 ## The filter {#filter}
@@ -141,12 +141,13 @@ caption: Italify as an export-time filter on an instance.
 
 ### Hidden settings {#hidden-settings}
 
-Two behaviours have no dialogue control and are toggled via the Macro panel. Both default to the behaviour most users want. The are prefixed with `com.eweracs.italify.`.
+Three behaviours have no dialogue control and are toggled via the Macro panel. All default to the behaviour most users want. The are prefixed with `com.eweracs.italify.`.
 
 | Setting | Default | Effect |
 |---|---|---|
 | `diagonalCorrectionStemsOnly` | `True` | Diagonal correction and stem compensation apply only to tagged stems. Set to `False` to correct every diagonal segment, tagged or not. For untagged stems, the transformation origin will be (half layer width, half x-height). Experimental use only, results will be unexpected.|
 | `flattenIntersections` | `True` | When the correction pushes an outline past an adjacent short line (typical at tight junctions), Italify collapses the junction into a clean, master-compatible doubled node – the way you would draw it by hand. Set to `False` to keep the uncollapsed geometry. |
+| `autoSnapToMetrics` | `True` | An **unsmooth line-to-curve** node — where a straight segment meets a curve — whose height sits exactly on a metric (baseline, x-height, …) is held to that metric through the correction, so such corners don’t drift off it. Smooth nodes, line-to-line corners and curve-to-curve corners are left free. The tagger marks every node this affects with a violet pin. Set to `False` to disable the snap entirely. |
 
 For example, in the Macro panel:
 
@@ -179,9 +180,9 @@ You **edit a group’s parameters from the filter dialogue**, not the palette. W
 
 Both are disabled unless the active glyph is in a group. The ⋯ actions menu likewise gains matching *Clear ▸ Group (font) / Group (master)* entries.
 
-## The stem tool {#stem-tool}
+## The tagger {#tagger}
 
-The *Italify Stem* tool (toolbar icon, shortcut [[C]]) is where you describe your typeface’s stems to the filter. It is a metadata editor: it never moves points itself, and ordinary node selection and dragging keep working while it is active. Everything you tag is stored on the nodes in the file and drawn on the canvas, so what you see with the tool active is exactly what the filter will read.
+The *Italify Tagger* (toolbar icon, shortcut [[C]]) is where you describe your typeface’s stems to the filter. It is a metadata editor: it never moves points itself, and ordinary node selection and dragging keep working while it is active. Everything you tag is stored on the nodes in the file and drawn on the canvas, so what you see with the tool active is exactly what the filter will read.
 
 ### What a stem is {#stems}
 
@@ -300,7 +301,7 @@ Copy / Paste / Propagate / Clear for anchor links live in the right-click *Ancho
 ```screenshot wide
 img: images/anchorLinks.png
 tag: Screenshot – anchor links
-desc: A stem-tool view with one anchor selected (drawn as a solid purple
+desc: A tagger view with one anchor selected (drawn as a solid purple
   diamond with its name in a blue badge) linked to two on-curve nodes on a
   stem. Light-blue dotted lines run from the anchor to halos on each linked
   node; the rest of the stem / tag overlays are faded grey so the links
@@ -348,23 +349,23 @@ Hold [[Space]] to pan, as everywhere in Glyphs – while held, the tool shows th
 ```screenshot
 img: images/preview.png
 tag: Screenshot – live preview HUD
-desc: The stem tool’s Space+Shift preview: the filled, italified outline of a
+desc: The tagger’s Space+Shift preview: the filled, italified outline of a
   glyph with the floating parameter HUD below the baseline listing angle,
   curve correction, keep terminals, diagonal correction, stem compensation
   and retroactive. All node/stem chrome hidden (that is what the mode does),
   so the shot reads as “finished letter plus a small parameter readout”.
-caption: Hold Space + Shift in the stem tool for a live preview of the current parameters.
+caption: Hold Space + Shift in the tagger for a live preview of the current parameters.
 ```
 
 ## The Glyph → Italify menu {#glyph-menu}
 
-The stem tool only ever sees the single active layer. For batch work there is a second surface: an **Italify** submenu under the **Glyph** menu that runs the bulk verbs across *every selected glyph and layer at once*. Select the glyphs you want to treat (in Font View or Edit View), then:
+The tagger only ever sees the single active layer. For batch work there is a second surface: an **Italify** submenu under the **Glyph** menu that runs the bulk verbs across *every selected glyph and layer at once*. Select the glyphs you want to treat (in Font View or Edit View), then:
 
 - **Auto-Tag Stems** – runs the auto-tagger on every selected layer (additive; existing stems are left untouched).
 - **Propagate to all Masters → Stems / Tags / Anchor Links** – mirrors the chosen metadata from each selected layer onto its glyph’s other compatible masters.
 - **Clear all → Stems / Tags / Anchor Links** – wipes the chosen userData on every selected layer. Hold [[⌥]] for the “… in all Masters” variant.
 
-This is the only way to tag or propagate across many glyphs in one go – the stem tool’s equivalent commands always act on the layer in front of you.
+This is the only way to tag or propagate across many glyphs in one go – the tagger’s equivalent commands always act on the layer in front of you.
 
 ```screenshot
 img: images/glyphMenu.png
@@ -393,11 +394,11 @@ Component transformation might turn out very wrong in cases where you are using 
 
 ## Keyboard reference {#shortcuts}
 
-All shortcuts below apply while the Italify Stem tool is active. [[⌥]] added to any tagging action fans it out across compatible masters.
+All shortcuts below apply while the Italify Tagger is active. [[⌥]] added to any tagging action fans it out across compatible masters.
 
 | Keys | Action |
 |---|---|
-| [[C]] | Activate the Italify Stem tool |
+| [[C]] | Activate the Italify Tagger |
 | [[S]] | Add **S**tem from the selected nodes |
 | [[E]] | Toggle **E**xtras (add to selected stem / remove from owning stem) |
 | [[A]] | Toggle **A**nchor edge on two selected corners |

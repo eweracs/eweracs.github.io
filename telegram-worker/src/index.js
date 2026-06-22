@@ -57,7 +57,7 @@ export default {
       return new Response(null, { status: 204, headers: corsHeaders });
     }
 
-    if (pathname !== '/notify' || request.method !== 'POST') {
+    if (request.method !== 'POST' || (pathname !== '/notify' && pathname !== '/config')) {
       return jsonResponse({ error: 'not found' }, { status: 404, headers: corsHeaders });
     }
 
@@ -75,13 +75,43 @@ export default {
       }
     }
 
+    // /config: deliver a generated export-plugin submission (a zip with the config,
+    // logo and directory structure) as a Telegram document. Body is multipart, so
+    // the binary zip can be forwarded straight through.
+    if (pathname === '/config') {
+      let multipart;
+      try {
+        multipart = await request.formData();
+      } catch (err) {
+        return jsonResponse({ error: 'invalid form data' }, { status: 400, headers: corsHeaders });
+      }
+      const document = multipart.get('document');
+      const who = String(multipart.get('name') || '').trim();
+      if (!document || typeof document === 'string') {
+        return jsonResponse({ error: 'missing document' }, { status: 400, headers: corsHeaders });
+      }
+      const docName = document.name || 'config.zip';
+      const tgForm = new FormData();
+      tgForm.append('chat_id', chatId);
+      tgForm.append('caption', `🧩 New export-plugin submission${who ? ` from ${who}` : ''}: ${docName}`);
+      tgForm.append('document', document, docName);
+      const tg = await fetch(`https://api.telegram.org/bot${botToken}/sendDocument`, {
+        method: 'POST',
+        body: tgForm,
+      });
+      if (!tg.ok) {
+        return jsonResponse({ error: 'telegram request failed' }, { status: 502, headers: corsHeaders });
+      }
+      return jsonResponse({ ok: true }, { status: 200, headers: corsHeaders });
+    }
+
+    // /notify: simple download notification (JSON body).
     let payload;
     try {
       payload = await request.json();
     } catch (err) {
       return jsonResponse({ error: 'invalid JSON' }, { status: 400, headers: corsHeaders });
     }
-
     const fileName = String(payload?.fileName || 'Download File').trim() || 'Download File';
     const time = new Date().toLocaleTimeString('en-GB', {
       hour: '2-digit',

@@ -51,29 +51,30 @@ You have control over what is corrected, and how:
 The filter itself. A dialogue with live preview: set the angle (or get it from the master), then balance curve correction, diagonal correction, stem compensation and terminal handling with sliders. Also runs at export as a custom parameter, so your sources stay upright.
 ```screenshot wide
 img: images/filter.png
-tag: Screenshot – stem tool canvas
+tag: Screenshot – tagger canvas
 desc: The filter interface active on a glyph.
 caption: The Italify filter in use in Glyphs.
 ```
 
-### The Italify Stem tool
+### The Italify Tagger
 An Edit View tool (shortcut [[C]]) for tagging stems and nodes. It never moves your points – it writes metadata the filter reads, and draws it on the canvas so you can see what the filter will do before you run it.
 
 ```screenshot wide
 img: images/stemTagger.png
-tag: Screenshot – stem tool canvas
-desc: The Edit View with the Italify Stem tool active on a glyph with two or
+tag: Screenshot – tagger canvas
+desc: The Edit View with the Italify Tagger active on a glyph with two or
   three tagged stems (an “n” or “h” is ideal): blue stem trapezoids with
   corner halos, one stem selected (saturated) with its flip-axis button
   visible, a pink anchored edge on one stem. Include the Glyphs toolbar at the
-  top so the Italify Stem tool icon is visible and highlighted.
-caption: The stem tool visualises every diagonal the filter will treat.
+  top so the Italify Tagger icon is visible and highlighted.
+caption: The tagger visualises every diagonal the filter will treat.
 ```
 
 ### The Italify Groups palette
 A sidebar palette (Window) for **glyph groups** – named sets of glyphs that share Italify parameters, so you can tune “all the rounds” or “all the diagonals” at once. Assign the selection to a group in the palette; each group’s parameters are then edited from the filter dialogue.
 
 ```screenshot wide
+img: images/groupsPalette.png
 tag: Screenshot – Italify Groups palette
 desc: The Italify Groups sidebar palette: a glyph name on the first line, a
   “Group” pop-up beneath it, and the list of the font's groups below.
@@ -86,13 +87,13 @@ caption: The Italify Groups palette manages group membership.
 
 ```steps
 ## Tag the stems.
-Pick the Italify Stem tool, select the nodes of a stem and press [[S]] – or
+Pick the Italify Tagger, select the nodes of a stem and press [[S]] – or
 let *Auto-tag Stems* find them for you. Hold [[⌥]] to tag all masters at
 once. Pin an anchored edge with [[A]] where a stem must not move, or set hinge corners with [[H]] for a diagonal whose diagonally opposed corners shouldn’t move.
 ## Run the filter.
 Choose *Filter ▸ Italify*, click [[↺]] to adopt the master’s italic angle,
 and watch the live preview while you adjust the sliders. Apply when it looks
-right – or hold [[Space]]+[[Shift]] in the stem tool for a preview without
+right – or hold [[Space]]+[[Shift]] in the tagger for a preview without
 leaving the canvas.
 ## Refine the exceptions.
 Where a glyph needs special treatment, tag nodes with [[L]] (limit a curve’s correction) or [[N]] (skip curve
@@ -102,12 +103,12 @@ correction) and run the filter again.
 ```screenshot
 img: images/preview.png
 tag: Screenshot – live preview HUD
-desc: The stem tool’s Space+Shift preview: the filled, italified outline of a
+desc: The tagger’s Space+Shift preview: the filled, italified outline of a
   glyph with the floating parameter HUD below the baseline listing angle,
   curve correction, keep terminals, diagonal correction, stem compensation
   and retroactive. All node/stem chrome hidden (that is what the mode does),
   so the shot reads as “finished letter plus a small parameter readout”.
-caption: Hold Space + Shift in the stem tool for a live preview of the current parameters.
+caption: Hold Space + Shift in the tagger for a live preview of the current parameters.
 ```
 
 @overline Get started
@@ -115,7 +116,7 @@ caption: Hold Space + Shift in the stem tool for a live preview of the current p
 ## Installation {#get-started}
 
 1. Double-click `Italify.glyphsPlugin` – Glyphs installs it into your Plugins folder.
-2. Relaunch Glyphs. You’ll find *Filter ▸ Italify* in the menu and the *Italify Stem* tool in the toolbar.
+2. Relaunch Glyphs. You’ll find *Italify* in the Filter menu, the *Italify Tagger* in the toolbar and the *Italify Groups* palette in the sidebar.
 
 Italify requires **Glyphs 3.2 or later**.
 
