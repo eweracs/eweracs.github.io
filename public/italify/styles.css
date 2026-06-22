@@ -1,0 +1,741 @@
+/* Italify documentation — design system per formkunft.com-design.md
+   Monochrome editorial: black on white, restrained blue links,
+   narrow centered column, hierarchy through scale and whitespace. */
+
+:root {
+	--color-primary: #000000;
+	--color-secondary: #4b5563;
+	--color-link: #1d4ed8;
+	--color-surface: #ffffff;
+	--color-border: #e5e7eb;
+	--color-muted: #f9fafb;
+	--color-error: #dc2626;
+
+	--rounded-sm: 4px;
+	--rounded-md: 8px;
+	--rounded-full: 9999px;
+
+	--space-xs: 6px;
+	--space-sm: 10px;
+	--space-md: 16px;
+	--space-lg: 35px;
+	--space-xl: 106px;
+
+	--measure: 52rem;
+}
+
+/* Fizz (variable, wght 200–1000) is the site's voice. */
+@font-face {
+	font-family: "Fizz";
+	src: url("fonts/FizzVF-Regular.woff2") format("woff2");
+	font-weight: 200 1000;
+	font-style: normal;
+	font-display: swap;
+}
+
+@font-face {
+	font-family: "Fizz";
+	src: url("fonts/FizzVF-Italic.woff2") format("woff2");
+	font-weight: 200 1000;
+	font-style: italic;
+	font-display: swap;
+}
+
+* {
+	box-sizing: border-box;
+}
+
+html {
+	-webkit-text-size-adjust: 100%;
+}
+
+body {
+	margin: 0;
+	background: var(--color-surface);
+	color: var(--color-primary);
+	font-family: "Fizz", "Avenir Next", "Segoe UI", system-ui, sans-serif;
+	font-weight: 400;
+	font-size: 20px;
+	line-height: 30px;
+}
+
+/* ---- Layout ------------------------------------------------------ */
+
+.column {
+	max-width: var(--measure);
+	margin: 0 auto;
+	padding: 0 24px;
+}
+
+main section {
+	margin-top: var(--space-xl);
+}
+
+main section:first-child {
+	margin-top: calc(var(--space-xl) * 0.66);
+}
+
+footer {
+	margin-top: var(--space-xl);
+	padding: var(--space-lg) 0 var(--space-xl);
+	border-top: 1px solid var(--color-border);
+	color: var(--color-secondary);
+	font-size: 17px;
+	line-height: 26px;
+}
+
+footer a {
+	color: var(--color-secondary);
+}
+
+/* ---- Header / navigation ----------------------------------------- */
+
+header.site {
+	border-bottom: 1px solid var(--color-border);
+}
+
+header.site .column {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	padding-top: var(--space-md);
+	padding-bottom: var(--space-md);
+}
+
+.wordmark {
+	display: flex;
+	align-items: center;
+	color: var(--color-primary);
+	text-decoration: none;
+}
+
+.wordmark-logo {
+	display: block;
+	height: 26px;
+	width: auto;
+}
+
+nav.site-nav a {
+	margin-left: var(--space-md);
+	color: var(--color-primary);
+	text-decoration: none;
+	font-size: 19px;
+}
+
+nav.site-nav a:hover,
+nav.site-nav a[aria-current="page"] {
+	text-decoration: underline;
+	text-underline-offset: 4px;
+}
+
+/* ---- Typography --------------------------------------------------- */
+
+h1 {
+	font-size: 38px;
+	font-weight: 400;
+	line-height: 1.214;
+	letter-spacing: 0;
+	margin: 0 0 var(--space-md);
+}
+
+h2 {
+	font-size: 28px;
+	font-weight: 600;
+	line-height: 32px;
+	letter-spacing: 0.1px;
+	margin: 0 0 var(--space-md);
+}
+
+h3 {
+	font-size: 24px;
+	font-weight: 500;
+	line-height: 26px;
+	margin: var(--space-lg) 0 var(--space-sm);
+}
+
+h4 {
+	font-size: 23px;
+	font-weight: 400;
+	line-height: 28px;
+	margin: var(--space-md) 0 var(--space-sm);
+}
+
+p {
+	margin: 0 0 var(--space-md);
+}
+
+p.lede {
+	font-size: 22px;
+	line-height: 36px;
+	color: var(--color-secondary);
+}
+
+.overline {
+	display: block;
+	font-size: 17px;
+	line-height: 21px;
+	letter-spacing: 1.2px;
+	text-transform: uppercase;
+	color: var(--color-secondary);
+	margin-bottom: var(--space-sm);
+}
+
+a {
+	color: var(--color-link);
+	text-decoration: underline;
+	text-underline-offset: 3px;
+	/* Fizz is variable (wght 200–1000), so font-weight rides the wght
+	   axis and interpolates smoothly during the transition. */
+	transition: font-weight 0.3s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+a:not(.button-primary):not(.button-secondary):hover {
+	font-weight: 620;
+}
+
+ul,
+ol {
+	margin: 0 0 var(--space-md);
+	padding-left: 1.4em;
+}
+
+li {
+	margin-bottom: var(--space-xs);
+}
+
+hr {
+	border: none;
+	border-top: 1px solid var(--color-border);
+	margin: var(--space-lg) 0;
+}
+
+/* ---- Buttons ------------------------------------------------------ */
+
+.actions {
+	display: flex;
+	gap: var(--space-sm);
+	flex-wrap: wrap;
+	margin: var(--space-md) 0;
+}
+
+.button-primary,
+.button-secondary {
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	height: 46px;
+	min-width: 140px;
+	padding: 8px 18px;
+	border-radius: var(--rounded-sm);
+	font-size: 19px;
+	text-decoration: none;
+}
+
+.button-primary {
+	background: var(--color-primary);
+	color: var(--color-surface);
+	border: 1px solid var(--color-primary);
+}
+
+.button-primary:hover {
+	opacity: 0.85;
+}
+
+.button-secondary {
+	background: transparent;
+	color: var(--color-primary);
+	border: 1px solid var(--color-primary);
+}
+
+.button-secondary:hover {
+	background: var(--color-muted);
+}
+
+/* ---- Cards -------------------------------------------------------- */
+
+.card-row {
+	display: grid;
+	grid-template-columns: 1fr 1fr;
+	gap: var(--space-md);
+	margin: var(--space-md) 0;
+}
+
+@media (max-width: 640px) {
+	.card-row {
+		grid-template-columns: 1fr;
+	}
+}
+
+.card {
+	background: var(--color-surface);
+	border: 1px solid var(--color-border);
+	border-radius: var(--rounded-md);
+	padding: 16px;
+}
+
+.card h4 {
+	margin-top: 0;
+}
+
+.card p:last-child {
+	margin-bottom: 0;
+	font-size: 17px;
+	line-height: 26px;
+	color: var(--color-secondary);
+}
+
+/* ---- Chips & keys -------------------------------------------------- */
+
+.chip {
+	display: inline-block;
+	background: var(--color-muted);
+	border: 1px solid var(--color-border);
+	border-radius: var(--rounded-full);
+	padding: 3px 12px;
+	font-size: 16px;
+	line-height: 19px;
+	letter-spacing: 1.4px;
+	color: var(--color-primary);
+	white-space: nowrap;
+}
+
+kbd {
+	display: inline-block;
+	min-width: 1.6em;
+	text-align: center;
+	padding: 1px 6px;
+	border: 1px solid var(--color-border);
+	border-bottom-width: 2px;
+	border-radius: var(--rounded-sm);
+	background: var(--color-muted);
+	font-family: inherit;
+	font-size: 17px;
+	line-height: 24px;
+}
+
+/* ---- Code ---------------------------------------------------------- */
+
+code {
+	/* Fizz with ss05 ("Monaux alternates") as the code voice. */
+	font-family: "Fizz", ui-monospace, "SF Mono", Menlo, monospace;
+	font-feature-settings: "ss05";
+	font-size: 18px;
+	letter-spacing: 0.8px;
+	background: var(--color-muted);
+	border: 1px solid var(--color-border);
+	border-radius: var(--rounded-sm);
+	padding: 1px 5px;
+}
+
+pre {
+	background: var(--color-muted);
+	border: 1px solid var(--color-border);
+	border-radius: var(--rounded-md);
+	padding: 16px;
+	overflow-x: auto;
+	margin: 0 0 var(--space-md);
+}
+
+pre code {
+	background: none;
+	border: none;
+	padding: 0;
+	font-size: 16px;
+	line-height: 26px;
+}
+
+/* Code sample with a copy-to-clipboard button pinned to its top-right. The
+   wrapper carries the block's bottom spacing so the button can sit in the
+   pre's padding without being clipped by its horizontal scroll. */
+.code-block {
+	position: relative;
+	margin: 0 0 var(--space-md);
+}
+
+.code-block > pre {
+	margin-bottom: 0;
+}
+
+.copy-btn {
+	position: absolute;
+	top: 8px;
+	right: 8px;
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	width: 32px;
+	height: 32px;
+	padding: 0;
+	border: 1px solid var(--color-border);
+	border-radius: var(--rounded-sm);
+	background: var(--color-surface);
+	color: var(--color-secondary);
+	cursor: pointer;
+	opacity: 0.6;
+	transition: opacity 0.15s, color 0.15s, border-color 0.15s;
+}
+
+.code-block:hover .copy-btn,
+.copy-btn:focus-visible {
+	opacity: 1;
+}
+
+.copy-btn:hover {
+	color: var(--color-primary);
+	border-color: var(--color-secondary);
+	opacity: 1;
+}
+
+.copy-btn.copied {
+	color: #15803d;
+	border-color: #15803d;
+	opacity: 1;
+}
+
+.copy-btn svg {
+	width: 16px;
+	height: 16px;
+}
+
+/* Prism syntax highlighting (python only). No vendored Prism theme —
+   these restrained token colours match the site palette: strings green,
+   keywords blue, comments and punctuation grey, names/numbers default. */
+.token.comment {
+	color: #6b7280;
+	font-style: italic;
+}
+
+.token.string,
+.token.triple-quoted-string,
+.token.string-interpolation,
+.token.char {
+	color: #15803d;
+}
+
+.token.keyword,
+.token.boolean,
+.token.decorator {
+	color: var(--color-link);
+	font-weight: 600;
+}
+
+.token.operator,
+.token.punctuation {
+	color: var(--color-secondary);
+}
+
+/* ---- Tables -------------------------------------------------------- */
+
+table {
+	width: 100%;
+	border-collapse: collapse;
+	margin: 0 0 var(--space-md);
+	font-size: 17px;
+	line-height: 26px;
+}
+
+th {
+	text-align: left;
+	font-weight: 400;
+	font-size: 14px;
+	letter-spacing: 1.4px;
+	text-transform: uppercase;
+	color: var(--color-secondary);
+	padding: 8px 12px 8px 0;
+	border-bottom: 1px solid var(--color-primary);
+}
+
+td {
+	padding: 8px 12px 8px 0;
+	border-bottom: 1px solid var(--color-border);
+	vertical-align: top;
+}
+
+/* Code tokens in label columns never break mid-word; the auto table
+   layout then gives the column the full width of the token. */
+td code {
+	white-space: nowrap;
+}
+
+/* ---- Screenshot placeholders --------------------------------------
+   Each .shot marks a screenshot still to be produced. Replace the
+   .shot-frame with an <img> of the same aspect; keep the figcaption. */
+
+figure.shot {
+	margin: var(--space-lg) 0;
+}
+
+figure.shot img {
+	display: block;
+	width: 100%;
+	border-radius: var(--rounded-md);
+	box-shadow:
+		0 1px 3px rgba(0, 0, 0, 0.06),
+		0 12px 32px rgba(0, 0, 0, 0.12);
+}
+
+/* Annotated figure: the image sits right (with its own baked-in
+   shadow), notes sit left at percentage heights of the image. */
+.annotated-row {
+	display: flex;
+	align-items: flex-start;
+	gap: var(--space-md);
+}
+
+figure.shot.annotated img {
+	width: 46%;
+	/* The standard figure shadow, but as drop-shadow so it follows the
+	   window's rounded corners (the asset's alpha) instead of a box.
+	   drop-shadow blur is a Gaussian deviation — half the box-shadow
+	   radii renders visually identical. */
+	box-shadow: none;
+	border-radius: 0;
+	filter:
+		drop-shadow(0 1px 1.5px rgba(0, 0, 0, 0.06))
+		drop-shadow(0 12px 16px rgba(0, 0, 0, 0.12));
+	/* Optical nudge: drops the image slightly so the dialogue's controls
+	   line up with the note column. Tweak here if the asset changes. */
+	transform: translateY(8px);
+}
+
+.annotated-notes {
+	position: relative;
+	flex: 1;
+	align-self: stretch;
+}
+
+.annotated-note {
+	position: absolute;
+	left: 0;
+	right: 0;
+	transform: translateY(-50%);
+	margin: 0;
+	font-size: 17px;
+	line-height: 25px;
+	color: var(--color-secondary);
+}
+
+.annotated-note strong {
+	color: var(--color-primary);
+	font-weight: 500;
+}
+
+@media (max-width: 640px) {
+	.annotated-row {
+		flex-direction: column-reverse;
+	}
+
+	figure.shot.annotated img {
+		width: 100%;
+		transform: none;
+	}
+
+	.annotated-notes {
+		position: static;
+		align-self: auto;
+	}
+
+	.annotated-note {
+		position: static;
+		transform: none;
+		margin-bottom: var(--space-sm);
+	}
+}
+
+.shot-frame {
+	border: 1px dashed var(--color-secondary);
+	border-radius: var(--rounded-md);
+	background: var(--color-muted);
+	padding: var(--space-md);
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	min-height: 220px;
+}
+
+figure.shot[data-aspect="wide"] .shot-frame {
+	min-height: 280px;
+}
+
+figure.shot[data-aspect="tall"] .shot-frame {
+	min-height: 380px;
+}
+
+.shot-tag {
+	font-size: 13px;
+	line-height: 17px;
+	letter-spacing: 1.2px;
+	text-transform: uppercase;
+	color: var(--color-secondary);
+	margin-bottom: var(--space-sm);
+}
+
+.shot-desc {
+	font-size: 17px;
+	line-height: 26px;
+	color: var(--color-secondary);
+	margin: 0;
+}
+
+figure.shot figcaption {
+	font-size: 17px;
+	letter-spacing: 0.2px;
+	line-height: 26px;
+	color: var(--color-secondary);
+	margin-top: var(--space-sm);
+}
+
+/* ---- Handbook table of contents ------------------------------------ */
+
+.toc {
+	border: 1px solid var(--color-border);
+	border-radius: var(--rounded-md);
+	padding: 16px;
+	margin: var(--space-md) 0;
+	font-size: 17px;
+	line-height: 28px;
+}
+
+.toc ol {
+	margin: 0;
+	padding-left: 1.4em;
+}
+
+.toc ul {
+	list-style: none;
+	margin: 2px 0 8px;
+	padding-left: 1em;
+}
+
+.toc li {
+	margin-bottom: 2px;
+}
+
+.toc a {
+	color: var(--color-primary);
+	text-decoration: none;
+}
+
+.toc a:hover {
+	text-decoration: underline;
+}
+
+/* On wide viewports the TOC leaves the reading column and sits in the
+   left margin. Not sticky by design: it scrolls away with the intro. */
+@media (min-width: 1400px) {
+	main.column {
+		position: relative;
+	}
+
+	.toc {
+		position: absolute;
+		top: calc(var(--space-xl) * 0.66);
+		left: -32px;
+		transform: translateX(-100%);
+		width: 240px;
+		margin: 0;
+		padding: 0;
+		border: none;
+		border-radius: 0;
+	}
+}
+
+/* ---- Steps ---------------------------------------------------------- */
+
+ol.steps {
+	list-style: none;
+	counter-reset: step;
+	padding: 0;
+}
+
+ol.steps > li {
+	counter-increment: step;
+	position: relative;
+	padding-left: 64px;
+	margin-bottom: var(--space-md);
+}
+
+ol.steps > li::before {
+	content: counter(step);
+	position: absolute;
+	left: 0;
+	top: 0;
+	width: 42px;
+	height: 42px;
+	border: 1px solid var(--color-primary);
+	border-radius: var(--rounded-full);
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	font-size: 19px;
+}
+
+/* ---- Parameter entries ---------------------------------------------- */
+
+.param {
+	padding: var(--space-md) 0;
+	border-top: 1px solid var(--color-border);
+}
+
+.param:last-of-type {
+	border-bottom: 1px solid var(--color-border);
+}
+
+.param h4 {
+	margin: 0 0 var(--space-xs);
+	display: flex;
+	align-items: baseline;
+	gap: var(--space-sm);
+	flex-wrap: wrap;
+}
+
+.param p:last-child {
+	margin-bottom: 0;
+}
+
+/* ---- Python API reference entries ----------------------------------
+   Each "**`func(...)`**" becomes a div.api-entry: the name is the
+   header, its description and Parameters/Returns blocks are grouped and
+   indented beneath it (wrapApiEntries in main.js builds the markup). */
+
+.api-entry {
+	margin-top: var(--space-lg);
+}
+
+.api-entry .api-name {
+	margin: 0 0 var(--space-xs);
+}
+
+.api-body {
+	padding-left: var(--space-md);
+}
+
+.api-body p {
+	margin-bottom: var(--space-sm);
+}
+
+.api-body ul {
+	margin-bottom: var(--space-sm);
+}
+
+.api-body li {
+	margin-bottom: 2px;
+}
+
+/* Parameters / Returns: small-caps labels hugging their list, matching
+   the site's other section labels (.overline, th, .shot-tag). */
+.api-body .api-label {
+	margin: var(--space-sm) 0 2px;
+}
+
+.api-body .api-label em {
+	font-style: normal;
+	font-size: 14px;
+	letter-spacing: 1.4px;
+	text-transform: uppercase;
+	color: var(--color-secondary);
+}
+
+.api-body > :last-child {
+	margin-bottom: 0;
+}
