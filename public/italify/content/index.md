@@ -105,8 +105,8 @@ img: images/preview.png
 tag: Screenshot – live preview HUD
 desc: The tagger’s Space+Shift preview: the filled, italified outline of a
   glyph with the floating parameter HUD below the baseline listing angle,
-  curve correction, keep terminals, diagonal correction, stem compensation
-  and retroactive. All node/stem chrome hidden (that is what the mode does),
+  curve correction, keep terminals, diagonal correction, and stem
+  compensation. All node/stem chrome hidden (that is what the mode does),
   so the shot reads as “finished letter plus a small parameter readout”.
 caption: Hold Space + Shift in the tagger for a live preview of the current parameters.
 ```

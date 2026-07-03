@@ -49,9 +49,8 @@ caption: After installing: the filter, with the tagger in the toolbar.
 Choose *Filter → Italify* with one or more glyphs open in Edit View. You can adjust the parameters with the live preview showing the result you get when pressing *Apply*.
 ```annotated
 img: images/window.png
-alt: The Italify filter dialogue with the angle field, four correction sliders and the Retroactive checkbox.
+alt: The Italify filter dialogue with the angle field and four correction sliders.
 note 15.5%: **Angle** – the slant to apply. [[↺]] reads the current master’s italic angle.
-note 22.5%: **Retroactive** – re-correct already-slanted outlines.
 note 34%: **Curve correction** – rebalances curves against the shear’s distortion.
 note 48%: **Keep terminals** – preserves the cut of stroke endings.
 note 65.5%: **Diagonal correction** – corrects tagged diagonal stems’ width and angle.
@@ -80,12 +79,6 @@ Controls how much of the width change that slanting causes in stems is compensat
 #### Keep terminals | 0–100% | default 0%
 
 Governs the straight terminals at stroke ends – the cut of an *e*, *c* or *s*, for example. At 0%, a terminal is simply slanted. At 100%, it is rotated back against the rotation the correction gave the adjoining curves, preserving the original cut relative to the stroke. Terminals are detected automatically from the outline as line segments connecting two curves going in the same direction. This means it will not detect terminals designed using open corners.
-
-#### Retroactive | checkbox | default off
-
-For outlines that are **already slanted** – say, a mechanically obliqued master you inherited, which you would like to brush up now that you have Italify at your disposal.
-
-**Important:** Nodes are expected to be at **slanted extremes.**
 
 ### Saving parameters {#saving-parameters}
 
@@ -122,7 +115,7 @@ You can keep your sources upright and let Italify run when instances are generat
 Add a `Filter` custom parameter to an instance (Font Info → Exports) with a value like:
 
 ```
-Italify;angle:9.5;curveCorrection:0.8;diagonalCorrection:0.9;stemCompensation:1;keepTerminals:0;retroactiveCorrection:0;diagonalStemsOnly:1
+Italify;angle:9.5;curveCorrection:0.8;diagonalCorrection:0.9;stemCompensation:1;keepTerminals:0;diagonalStemsOnly:1
 ```
 
 You don’t need to type this: open the filter dialogue, set the parameters the way you want them, and choose *Copy Filter Parameter* from the dialogue’s gear menu – filter parameter lands on your clipboard ready to paste into the instance. All arguments are optional and named, so partial parameters like `Italify;angle:10` work and fall back to the defaults above.
@@ -173,12 +166,12 @@ desc: The popover that opens from a group row: a parameter matrix (rows Font +
 caption: A group’s popover: its parameter matrix, its members, and group actions.
 ```
 
-You **edit a group’s parameters from the filter dialogue**, not the palette. With a glyph that belongs to a group active, the **Save for:** picker gains two extra entries:
+You **edit a group’s parameters from the filter dialogue**, not the palette. With a glyph that belongs to a group active, the **Save for:** picker gains two extra entries, each labelled with the group’s own name so you can see exactly which group you are saving for (e.g. *round (font)* / *round (master)* for a group named “round”):
 
-- **Group (font)** – saves the value for *every* master of the group at once (e.g. curve correction = 0 across the whole font).
-- **Group (master)** – saves it for the current master only, overriding the all-masters value there.
+- **\<name\> (font)** – saves the value for *every* master of the group at once (e.g. curve correction = 0 across the whole font).
+- **\<name\> (master)** – saves it for the current master only, overriding the all-masters value there.
 
-Both are disabled unless the active glyph is in a group. The ⋯ actions menu likewise gains matching *Clear ▸ Group (font) / Group (master)* entries.
+Both are disabled unless the active glyph is in a group (where they fall back to the generic *Group (font)* / *Group (master)* labels). The ⋯ actions menu likewise gains matching *Clear ▸ \<name\> (font) / \<name\> (master)* entries, and the all-masters clear warning names the group.
 
 ## The tagger {#tagger}
 
@@ -294,7 +287,7 @@ Click an anchor to select it – the rest of the stem and tag overlays fade to g
 
 Anchors and stem selection are mutually exclusive: while a stem is selected the anchors grey out and stop responding to clicks, so a click lands on the stem’s own controls instead – handy when an anchor sits right over the flip-axis button. Click empty space to deselect the stem and the anchors are live again. (The [[⌘A]] cycle’s anchor phases are the exception, showing stems and anchors selected together.)
 
-A linked anchor renders **purple** instead of blue, and each link draws as a light-blue dotted line to its node. At correction time the anchor is shifted horizontally by **half the average movement** of the node(s) it is linked to, so at 0 % correction it lands exactly where a plain slant would put it, and with correction it tracks the node(s) it links to. Its vertical position is left untouched.
+A linked anchor renders **purple** instead of blue, and each link draws as a light-blue dotted line to its node. At correction time the anchor is shifted horizontally by the **average of its linked nodes' weighted movements**: a node sitting on only straight segments carries the anchor **100 %** of the way it moves, while a node with a curve on either side carries it **50 %**. So an anchor linked to a single line-to-line node tracks that node exactly, one linked to a curve node moves half as far, and one linked to both moves by the average of the two. At 0 % correction nothing moves, so the anchor lands exactly where a plain slant would put it. Its vertical position is left untouched.
 
 Copy / Paste / Propagate / Clear for anchor links live in the right-click *Anchors* section (see [below](#copy-paste)) and the [Glyph → Italify menu](#glyph-menu).
 
@@ -351,8 +344,8 @@ img: images/preview.png
 tag: Screenshot – live preview HUD
 desc: The tagger’s Space+Shift preview: the filled, italified outline of a
   glyph with the floating parameter HUD below the baseline listing angle,
-  curve correction, keep terminals, diagonal correction, stem compensation
-  and retroactive. All node/stem chrome hidden (that is what the mode does),
+  curve correction, keep terminals, diagonal correction, and stem
+  compensation. All node/stem chrome hidden (that is what the mode does),
   so the shot reads as “finished letter plus a small parameter readout”.
 caption: Hold Space + Shift in the tagger for a live preview of the current parameters.
 ```
@@ -362,8 +355,8 @@ caption: Hold Space + Shift in the tagger for a live preview of the current para
 The tagger only ever sees the single active layer. For batch work there is a second surface: an **Italify** submenu under the **Glyph** menu that runs the bulk verbs across *every selected glyph and layer at once*. Select the glyphs you want to treat (in Font View or Edit View), then:
 
 - **Auto-Tag Stems** – runs the auto-tagger on every selected layer (additive; existing stems are left untouched).
-- **Propagate to all Masters → Stems / Tags / Anchor Links** – mirrors the chosen metadata from each selected layer onto its glyph’s other compatible masters.
-- **Clear all → Stems / Tags / Anchor Links** – wipes the chosen userData on every selected layer. Hold [[⌥]] for the “… in all Masters” variant.
+- **Propagate to all Masters → Stems / Tags / Anchor Links / All** – mirrors the chosen metadata from each selected layer onto its glyph’s other compatible masters. *All* sends every kind at once.
+- **Clear all → Stems / Tags / Anchor Links / All** – wipes the chosen userData on every selected layer (*All* wipes every kind at once). Hold [[⌥]] for the “… in all Masters” variant.
 
 This is the only way to tag or propagate across many glyphs in one go – the tagger’s equivalent commands always act on the layer in front of you.
 
@@ -372,7 +365,7 @@ img: images/glyphMenu.png
 tag: Screenshot – Glyph → Italify menu
 desc: The macOS menu bar with the Glyph menu open and the Italify submenu
   expanded, showing Auto-Tag Stems and the Propagate to all Masters and
-  Clear all submenus with their Stems / Tags / Anchor Links entries. A
+  Clear all submenus with their Stems / Tags / Anchor Links / All entries. A
   multiple-glyph selection is visible behind it in Font View.
 caption: The Glyph → Italify menu runs the bulk verbs across every selected glyph.
 ```

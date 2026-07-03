@@ -405,6 +405,7 @@ Each returns an [`ItalifyResult`](#results) and keeps the underlying verb’s `a
 | `.set_hinge_corners(a, b, on=True, all_masters=False)` | pin (or clear) two diagonally-opposed [hinge](handbook#hinge-corners) corners |
 | `.add_extras(nodes, all_masters=False)` | add nodes as [extras](handbook#extras) |
 | `.remove_extras(nodes, all_masters=False)` | remove nodes from whichever stem owns them |
+| `.propagate()` | mirror this stem to the glyph’s compatible masters (see [`propagate_stems`](#bulk); no `all_masters` – inherently all-masters) |
 | `.delete(all_masters=False)` | remove the stem’s tags |
 
 ```python
@@ -463,7 +464,7 @@ Toggle [No Curve Correction](handbook#node-flags) on the segment between two nod
 
 *Returns:*
 
-- `ItalifyResult`
+- `ItalifyResult` – refuses with [`notCurveSegment`](#refusals) unless `node_a` and `node_b` are the on-curve endpoints of the same curve segment (at least one off-curve between them), the same precondition the tool's own Toggle No Curve Correction verb enforces
 
 ## Anchor links {#anchor-links}
 
@@ -687,3 +688,4 @@ When a write is refused, `result.reason` is one of these machine codes (`result.
 | `lockedHandle` | Those handles stay extras while both ends of their curve belong to the stem. |
 | `notFound` | No matching stem, anchor, or node was found on the layer. |
 | `trialBlocked` | The action requires a licensed copy of Italify. |
+| `notCurveSegment` | The two nodes must be on-curve endpoints of the same curve segment, with at least one off-curve between them. |
