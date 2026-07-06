@@ -209,6 +209,18 @@ Whether a node carries the [No Curve Correction](handbook#node-flags) flag. The 
 
 - `bool` – `True` when the flag is set
 
+**`has_inktrap(node)`**
+
+Whether a node carries the [Inktrap](handbook#node-flags) flag. The flag sits on both on-curve endpoints of the straight length-preserving segment, so a `True` on either end identifies the segment.
+
+*Parameters:*
+
+- `node` (`GSNode`) – the node to query (this verb takes no `layer`)
+
+*Returns:*
+
+- `bool` – `True` when the flag is set
+
 ## Stems {#stems}
 
 **`add_stem(layer, nodes, all_masters=False)`**
@@ -466,6 +478,22 @@ Toggle [No Curve Correction](handbook#node-flags) on the segment between two nod
 
 - `ItalifyResult` – refuses with [`notCurveSegment`](#refusals) unless `node_a` and `node_b` are the on-curve endpoints of the same curve segment (at least one off-curve between them), the same precondition the tool's own Toggle No Curve Correction verb enforces
 
+**`set_inktrap(layer, node_a, node_b, on, all_masters=False)`**
+
+Toggle [Inktrap](handbook#node-flags) on the straight segment between two nodes — held to its original length after the adjoining segments are corrected.
+
+*Parameters:*
+
+- `layer` (`GSLayer`)
+- `node_a` (`GSNode`) – one on-curve endpoint of the segment
+- `node_b` (`GSNode`) – the other on-curve endpoint of the segment
+- `on` (`bool`) – set the flag when `True`, clear it when `False`
+- `all_masters` (`bool`) – also flag it on every compatible master
+
+*Returns:*
+
+- `ItalifyResult` – refuses with [`notInktrapSegment`](#refusals) unless `node_a` and `node_b` are directly-connected, unsmooth on-curve endpoints of a straight segment, the same precondition the tool's own Toggle Inktrap verb enforces
+
 ## Anchor links {#anchor-links}
 
 **`link_anchor(layer, anchor_name, node, all_masters=False)`**
@@ -689,3 +717,4 @@ When a write is refused, `result.reason` is one of these machine codes (`result.
 | `notFound` | No matching stem, anchor, or node was found on the layer. |
 | `trialBlocked` | The action requires a licensed copy of Italify. |
 | `notCurveSegment` | The two nodes must be on-curve endpoints of the same curve segment, with at least one off-curve between them. |
+| `notInktrapSegment` | The two nodes must be directly-connected, unsmooth on-curve endpoints of a straight segment. |

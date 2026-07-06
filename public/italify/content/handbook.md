@@ -176,14 +176,13 @@ Both are disabled unless the active glyph is in a group (where they fall back to
 
 ## The tagger {#tagger}
 
-The *Italify Tagger* (toolbar icon, shortcut [[C]]) is where you describe your typeface’s stems to the filter. It is a metadata editor: it never moves points itself, and ordinary node selection and dragging keep working while it is active. Everything you tag is stored on the nodes in the file and drawn on the canvas, so what you see with the tool active is exactly what the filter will read.
+The *Italify Tagger* (toolbar icon, shortcut [[C]]) is where you can describe glyph features to the filter – diagonals to correct, how anchors should move, specific corrections. It is a metadata editor: it never moves points itself. Everything you tag is stored on the nodes in the file and drawn on the canvas, so what you see with the tool active is exactly what the filter will read.
 
 ### What a stem is {#stems}
 
-A stem is a group of nodes the filter moves as **one rigid unit**: four **corners** define its frame, and any number of optional **extras** – serif nodes, curve handles, cap details – ride along with it. Each stem gets a single shared transformation, so its width and angle behave coherently instead of every segment fending for itself. Curves tagged as stems will not be curve-corrected.
+A stem is a group of nodes the filter moves as **one rigid unit**: four **corners** define its frame, and any number of optional **extras** – additional nodes, details – ride along with it. Each stem gets a single shared transformation, so its width and angle behave coherently instead of every segment fending for itself. Curves tagged as stems will not be curve-corrected.
 
-On the canvas, a stem appears as a blue trapezoid with halos on its four corners and dots on its members. Click anywhere in the blue area to select a stem; [[Shift]]-click to select several; click empty space to deselect. [[⌘A]] steps through a select-all cycle – nodes, stems, tags, anchors and their combinations – including only the kinds actually present on the layer.
-
+On the canvas, a stem appears as a blue trapezoid with halos on its four corners and dots on its members. Click anywhere in the blue area to select a stem; [[Shift]]-click to select several. Click empty space to deselect. [[⌘A]] steps through a select-all cycle – nodes, stems, tags, anchors and their combinations.
 ```screenshot
 img: images/stem.png
 tag: Screenshot – stem anatomy
@@ -265,20 +264,48 @@ If the tool picked the wrong node as a corner, drag the corner’s halo onto the
 
 ### Per-node flags {#node-flags}
 
-Two flags are independent of stems and apply to individual nodes or segments. Each has a canvas marker, a shortcut, and a context-menu entry; each toggles off the same way it toggles on.
+Three flags live outside the stem model – they tag individual nodes or segments and change how the filter treats that one spot. Each has a canvas marker, a keyboard shortcut, and an entry in the right-click *Tags* section, and each is removed the same way it was added. Hold [[⌥]] on any of them to mirror the change across every compatible master.
 
-| Flag | Key | Marker | Effect |
-|---|---|---|---|
-| Limit Curve | [[L]] | Teal square | The tagged node becomes its own reference extreme: the filter never extends its curve past it, and the node and its handle can only slide along the node’s tangent. Restrains how far the correction may move a curve. |
-| No Curve Correction | [[N]] | Yellow segment overlay | Opts an entire curve segment out of curve correction (the flag sits on both of the segment’s on-curve endpoints). The segment is slanted only – corners at its ends are still resolved normally. |
+#### Limit Curve
+
+At an unsmooth curve boundary, the filter normally infers some extra context, which can lead to certain segments being transformed more strongly than desired. **Limit Curve** switches that off for one node – the tagged node becomes its own reference context. The node and its attached only slide **along the node’s own tangent**, so the curve can’t billow out beyond the corner. Use it wherever the inferred context drags a curve too far.
+
+Select the on-curve node (or several) at a curve→line or curve→curve corner and press [[L]], or right-click and choose *Toggle Limit Curve*. The marker is a teal square around the node.
 
 ```screenshot
-img: images/tags.png
-tag: Screenshot – node flag markers
-desc: One glyph carrying both markers at once: a teal Limit-Curve square on a bowl node, and a yellow
-  No-Curve-Correction overlay along one curve segment. Zoomed enough that
-  each marker shape is unmistakable; the table above refers to this image.
-caption: Limit Curve (teal), No Curve Correction (yellow).
+img: images/limitCurve.png
+tag: Screenshot – Limit Curve
+desc: A close crop of an unsmooth curve→line (or curve→curve) corner with the
+  teal Limit-Curve square around the tagged on-curve node.
+caption: Limit Curve pins a curve’s transformation direction to its own tangent.
+```
+
+#### No Curve Correction
+
+**No Curve Correction** takes a whole curve segment out of curve correction. The segment is then only slanted – its drawn shape is preserved exactly.
+
+The flag sits on **both** on-curve endpoints of the segment (any curve, cubic or quadratic, with at least one off-curve between them). Select those two nodes and press [[N]], or right-click and choose *Toggle No Curve Correction*; press [[N]] again to remove it. The segment draws with a yellow overlay along its length.
+
+```screenshot
+img: images/noCurveCorrection.png
+tag: Screenshot – No Curve Correction
+desc: A curve segment carrying the yellow No-Curve-Correction overlay 
+caption: No Curve Correction preserves a curve’s shape, only slanting it.
+```
+
+#### Inktrap
+
+Mark a two-nodes line segment as **Inktrap** to keep it at its original length. After Italify corrects the two adjoining segments, an ink trap is held rigid and shifted so it still spans exactly its original distance. The neighbours can be lines or curves; the segment’s two endpoints simply land back on the corrected neighbours.
+
+Select the two on-curve nodes at the ends of a straight segment – they must be directly connected and both **unsmooth** – and press [[I]], or right-click and choose *Add Inktrap*.
+
+On the canvas the tagged segment glows purple, a short stretch of each adjoining contour is highlighted. Click anywhere in the ink trap to select it and press [[⌫]] to remove the flag.
+
+```screenshot
+img: images/inktrap.png
+tag: Screenshot – Inktrap
+desc: A short straight segment tagged as an inktrap.
+caption: An Inktrap segment preserves its size even after correction of the adjoining segments.
 ```
 
 ### Anchor links {#anchor-links}
@@ -399,6 +426,7 @@ All shortcuts below apply while the Italify Tagger is active. [[⌥]] added to a
 | [[H]] | Toggle **H**inge corners (one selected corner implies its opposite) |
 | [[L]] | Toggle **L**imit Curve on selected on-curve nodes |
 | [[N]] | Toggle **N**o Curve Correction on selected curve segments |
+| [[I]] | Add / remove **I**nktrap on a selected straight segment between two unsmooth nodes |
 | [[⌫]] | Remove tag / stem; with a corner clicked, delete that corner; with an anchor selected, clear its links |
 | [[⌘A]] | Cycle select-all: nodes → stems → tags → anchors and their combinations (present kinds only) |
 | [[Tab]] / [[⇧Tab]] | With one mark type selected (stem, tag or anchor), select the next / previous item of that type |
