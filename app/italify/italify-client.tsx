@@ -938,7 +938,7 @@ export default function ItalifyClient() {
 
         <div className="my-6 py-4 text-xl">
           <p>
-            Plugin now available to rent for foundries. Get in touch to book a demo: sebastian.carewe
+            Plugin now available for foundries. Get in touch to book a demo: sebastian.carewe
             <span className="email-protected" />
           </p>
         </div>
