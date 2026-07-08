@@ -398,6 +398,33 @@
 		});
 	}
 
+	/* ---- Theme switch -------------------------------------------------
+	   The initial theme is set before paint by the inline script in each
+	   page's <head> (reads localStorage, else the OS preference). Here we
+	   only wire the header button: flip <html data-theme>, persist the
+	   choice, and keep the button's labels in sync. */
+	function initThemeToggle() {
+		var btn = document.getElementById("theme-toggle");
+		if (!btn) return;
+		var root = document.documentElement;
+
+		function sync() {
+			var dark = root.getAttribute("data-theme") === "dark";
+			var label = dark ? "Switch to light mode" : "Switch to dark mode";
+			btn.setAttribute("aria-label", label);
+			btn.setAttribute("title", label);
+			btn.setAttribute("aria-pressed", dark ? "true" : "false");
+		}
+
+		sync();
+		btn.addEventListener("click", function () {
+			var next = root.getAttribute("data-theme") === "dark" ? "light" : "dark";
+			root.setAttribute("data-theme", next);
+			try { localStorage.setItem("italify-theme", next); } catch (e) {}
+			sync();
+		});
+	}
+
 	/* ---- Boot --------------------------------------------------------- */
 
 	async function render() {
@@ -431,8 +458,12 @@
 	}
 
 	if (document.readyState === "loading") {
-		document.addEventListener("DOMContentLoaded", render);
+		document.addEventListener("DOMContentLoaded", function () {
+			initThemeToggle();
+			render();
+		});
 	} else {
+		initThemeToggle();
 		render();
 	}
 })();

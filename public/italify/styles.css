@@ -5,6 +5,7 @@
 :root {
 	--color-primary: #000000;
 	--color-secondary: #4b5563;
+	--color-lede: #1f2937;
 	--color-link: #1d4ed8;
 	--color-surface: #ffffff;
 	--color-border: #e5e7eb;
@@ -22,6 +23,19 @@
 	--space-xl: 106px;
 
 	--measure: 52rem;
+}
+
+/* Dark theme: same tokens, inverted. Set by the anti-FOUC script in each
+   page's <head> (data-theme on <html>), toggled by the header switch. */
+:root[data-theme="dark"] {
+	--color-primary: #f2f2f0;
+	--color-secondary: #9aa1ab;
+	--color-link: #8ab0ff;
+	--color-surface: #14161a;
+	--color-border: #2b2f37;
+	--color-muted: #1c1f26;
+	--color-error: #f87171;
+	--color-lede: #dfe2e7;
 }
 
 /* Fizz (variable, wght 200–1000) is the site's voice. */
@@ -57,6 +71,21 @@ body {
 	font-weight: 400;
 	font-size: 20px;
 	line-height: 30px;
+	transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+/* Surfaces that carry the palette ease between themes with the body. */
+header.site,
+footer,
+.card,
+pre,
+code,
+kbd,
+.chip,
+.button-primary,
+.button-secondary,
+.theme-toggle {
+	transition: background-color 0.3s ease, border-color 0.3s ease, color 0.15s ease;
 }
 
 /* ---- Layout ------------------------------------------------------ */
@@ -91,6 +120,7 @@ footer a {
 /* ---- Header / navigation ----------------------------------------- */
 
 header.site {
+	position: relative;
 	border-bottom: 1px solid var(--color-border);
 }
 
@@ -100,6 +130,60 @@ header.site .column {
 	justify-content: space-between;
 	padding-top: var(--space-md);
 	padding-bottom: var(--space-md);
+}
+
+/* Theme switch: sits just past the reading column's right edge — a 16px
+   gap from the last nav item, matching the nav's own inter-item spacing
+   (the column's 24px padding less the button's 8px inset). Below 961px the
+   gutter closes, so it falls back to the page edge (see media query). */
+.theme-toggle {
+	position: absolute;
+	top: 50%;
+	left: calc(50% + var(--measure) / 2 - 8px);
+	transform: translateY(-50%);
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	width: 38px;
+	height: 38px;
+	padding: 0;
+	background: transparent;
+	border: none;
+	color: var(--color-secondary);
+	cursor: pointer;
+}
+
+.theme-toggle:hover {
+	color: var(--color-primary);
+}
+
+.theme-toggle:focus-visible {
+	outline: 2px solid var(--color-link);
+	outline-offset: 2px;
+}
+
+.theme-icon {
+	display: block;
+	width: 20px;
+	height: 20px;
+	/* Fizz's link transition easing, reused so the mode flip feels of a
+	   piece with the rest of the site. */
+	transition: transform 0.4s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+:root[data-theme="dark"] .theme-icon {
+	transform: rotate(180deg);
+}
+
+@media (max-width: 960px) {
+	header.site .column {
+		padding-right: 52px;
+	}
+
+	.theme-toggle {
+		left: auto;
+		right: 12px;
+	}
 }
 
 .wordmark {
@@ -113,6 +197,12 @@ header.site .column {
 	display: block;
 	height: 26px;
 	width: auto;
+}
+
+/* The wordmark SVG has a fixed near-black fill; force it to white on the
+   dark surface (brightness(0) flattens it, invert(1) lifts it to white). */
+:root[data-theme="dark"] .wordmark-logo {
+	filter: brightness(0) invert(1);
 }
 
 nav.site-nav a {
@@ -167,7 +257,7 @@ p {
 p.lede {
 	font-size: 22px;
 	line-height: 36px;
-	color: var(--color-secondary);
+	color: var(--color-lede);
 }
 
 .overline {
@@ -738,4 +828,25 @@ ol.steps > li::before {
 
 .api-body > :last-child {
 	margin-bottom: 0;
+}
+
+/* ---- Dark-theme fine-tuning ----------------------------------------
+   The palette swap above covers most of the site; a few colours are
+   hard-coded (Prism tokens, the copied-state green) and want lifting so
+   they read on the dark surface. */
+
+:root[data-theme="dark"] .token.comment {
+	color: #8b93a1;
+}
+
+:root[data-theme="dark"] .token.string,
+:root[data-theme="dark"] .token.triple-quoted-string,
+:root[data-theme="dark"] .token.string-interpolation,
+:root[data-theme="dark"] .token.char {
+	color: #6ee7a0;
+}
+
+:root[data-theme="dark"] .copy-btn.copied {
+	color: #4ade80;
+	border-color: #4ade80;
 }

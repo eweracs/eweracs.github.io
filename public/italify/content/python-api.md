@@ -12,7 +12,7 @@
 7. [Corner roles](#corner-roles)
 8. [Extras](#extras)
 9. [Stem objects](#stem-objects)
-10. [Per-node flags](#flags)
+10. [Tags](#tags)
 11. [Anchor links](#anchor-links)
 12. [Bulk operations](#bulk)
 13. [Transfer between fonts](#transfer)
@@ -187,7 +187,7 @@ The anchors a node belongs to.
 
 **`has_limit_curve(node)`**
 
-Whether a node carries the [Limit Curve](handbook#node-flags) flag.
+Whether a node carries the [Limit Curve](handbook#limit-curve) tag.
 
 *Parameters:*
 
@@ -195,11 +195,11 @@ Whether a node carries the [Limit Curve](handbook#node-flags) flag.
 
 *Returns:*
 
-- `bool` – `True` when the flag is set
+- `bool` – `True` when the tag is set
 
 **`has_no_curve_correction(node)`**
 
-Whether a node carries the [No Curve Correction](handbook#node-flags) flag. The flag sits on both on-curve endpoints of an opted-out segment, so a `True` on either end identifies the segment.
+Whether a node carries the [No Curve Correction](handbook#no-curve-correction) tag. The tag sits on both on-curve endpoints of an opted-out segment, so a `True` on either end identifies the segment.
 
 *Parameters:*
 
@@ -207,11 +207,11 @@ Whether a node carries the [No Curve Correction](handbook#node-flags) flag. The 
 
 *Returns:*
 
-- `bool` – `True` when the flag is set
+- `bool` – `True` when the tag is set
 
 **`has_inktrap(node)`**
 
-Whether a node carries the [Inktrap](handbook#node-flags) flag. The flag sits on both on-curve endpoints of the straight length-preserving segment, so a `True` on either end identifies the segment.
+Whether a node carries the [Inktrap](handbook#inktrap) tag. The tag sits on both on-curve endpoints of the straight length-preserving segment, so a `True` on either end identifies the segment.
 
 *Parameters:*
 
@@ -219,7 +219,19 @@ Whether a node carries the [Inktrap](handbook#node-flags) flag. The flag sits on
 
 *Returns:*
 
-- `bool` – `True` when the flag is set
+- `bool` – `True` when the tag is set
+
+**`snap_y(node)`**
+
+The node's [Y-Snap](handbook#snap-y) override.
+
+*Parameters:*
+
+- `node` (`GSNode`) – the node to query (this verb takes no `layer`)
+
+*Returns:*
+
+- `bool | None` – `True` (force-retain the node's y), `False` (force-release it), or `None` (no override — the automatic metric-snap heuristic decides)
 
 ## Stems {#stems}
 
@@ -268,13 +280,13 @@ Remove a stem’s tags.
 
 **`set_flipped(layer, stem_id, flipped, all_masters=False)`**
 
-Set the stem’s [flip-axis](handbook#flip-axis) flag.
+Set the stem’s [flip-axis](handbook#flip-axis) state.
 
 *Parameters:*
 
 - `layer` (`GSLayer`)
 - `stem_id` (`str`) – the stem’s UUID
-- `flipped` (`bool`) – the flag’s new value
+- `flipped` (`bool`) – the state’s new value
 - `all_masters` (`bool`) – also set it on every compatible master
 
 *Returns:*
@@ -412,7 +424,7 @@ Each returns an [`ItalifyResult`](#results) and keeps the underlying verb’s `a
 
 | Method | Does |
 |---|---|
-| `.set_flipped(flipped, all_masters=False)` | set the [flip-axis](handbook#flip-axis) flag |
+| `.set_flipped(flipped, all_masters=False)` | set the [flip-axis](handbook#flip-axis) state |
 | `.set_anchored_edge(a, b, on=True, all_masters=False)` | pin (or clear) the [anchored edge](handbook#anchor-edges) of two adjacent corners |
 | `.set_hinge_corners(a, b, on=True, all_masters=False)` | pin (or clear) two diagonally-opposed [hinge](handbook#hinge-corners) corners |
 | `.add_extras(nodes, all_masters=False)` | add nodes as [extras](handbook#extras) |
@@ -445,18 +457,18 @@ for s in italify.stems(layer):
 
 An `ItalifyStem` is a thin wrapper, so it refuses exactly as the free functions do: a write returns a falsy result carrying a [reason](#refusals); set `strict=True` (per call or module-wide) to raise [`ItalifyError`](#results) instead.
 
-## Per-node flags {#flags}
+## Tags {#tags}
 
 **`set_limit_curve(layer, node, on, all_masters=False)`**
 
-Toggle [Limit Curve](handbook#node-flags) on an on-curve node.
+Toggle [Limit Curve](handbook#limit-curve) on an on-curve node.
 
 *Parameters:*
 
 - `layer` (`GSLayer`)
-- `node` (`GSNode`) – the on-curve node to flag
-- `on` (`bool`) – set the flag when `True`, clear it when `False`
-- `all_masters` (`bool`) – also flag it on every compatible master
+- `node` (`GSNode`) – the on-curve node to tag
+- `on` (`bool`) – set the tag when `True`, clear it when `False`
+- `all_masters` (`bool`) – also apply it on every compatible master
 
 *Returns:*
 
@@ -464,15 +476,15 @@ Toggle [Limit Curve](handbook#node-flags) on an on-curve node.
 
 **`set_no_curve_correction(layer, node_a, node_b, on, all_masters=False)`**
 
-Toggle [No Curve Correction](handbook#node-flags) on the segment between two nodes.
+Toggle [No Curve Correction](handbook#no-curve-correction) on the segment between two nodes.
 
 *Parameters:*
 
 - `layer` (`GSLayer`)
 - `node_a` (`GSNode`) – one on-curve node bounding the segment
 - `node_b` (`GSNode`) – the other on-curve node bounding the segment
-- `on` (`bool`) – set the flag when `True`, clear it when `False`
-- `all_masters` (`bool`) – also flag it on every compatible master
+- `on` (`bool`) – set the tag when `True`, clear it when `False`
+- `all_masters` (`bool`) – also apply it on every compatible master
 
 *Returns:*
 
@@ -480,19 +492,34 @@ Toggle [No Curve Correction](handbook#node-flags) on the segment between two nod
 
 **`set_inktrap(layer, node_a, node_b, on, all_masters=False)`**
 
-Toggle [Inktrap](handbook#node-flags) on the straight segment between two nodes — held to its original length after the adjoining segments are corrected.
+Toggle [Inktrap](handbook#inktrap) on the straight segment between two nodes — held to its original length after the adjoining segments are corrected.
 
 *Parameters:*
 
 - `layer` (`GSLayer`)
 - `node_a` (`GSNode`) – one on-curve endpoint of the segment
 - `node_b` (`GSNode`) – the other on-curve endpoint of the segment
-- `on` (`bool`) – set the flag when `True`, clear it when `False`
-- `all_masters` (`bool`) – also flag it on every compatible master
+- `on` (`bool`) – set the tag when `True`, clear it when `False`
+- `all_masters` (`bool`) – also apply it on every compatible master
 
 *Returns:*
 
 - `ItalifyResult` – refuses with [`notInktrapSegment`](#refusals) unless `node_a` and `node_b` are directly-connected, unsmooth on-curve endpoints of a straight segment, the same precondition the tool's own Toggle Inktrap verb enforces
+
+**`set_snap_y(layer, node, retain, all_masters=False)`**
+
+Set the [Y-Snap](handbook#snap-y) override on a node — force it to retain its y, release it, or hand it back to the automatic heuristic.
+
+*Parameters:*
+
+- `layer` (`GSLayer`)
+- `node` (`GSNode`) – the on-curve node to override
+- `retain` (`bool | None`) – `True` keeps the node's y, `False` releases it to the correction, `None` removes the override (back to auto)
+- `all_masters` (`bool`) – also apply on every compatible master
+
+*Returns:*
+
+- `ItalifyResult`
 
 ## Anchor links {#anchor-links}
 
@@ -570,7 +597,7 @@ Remove every stem.
 
 **`clear_tags(layer, all_masters=False)`**
 
-Remove every per-node flag.
+Remove every per-node tag.
 
 *Parameters:*
 
@@ -602,7 +629,7 @@ Clear a chosen mix of kinds in one undo group.
 
 - `layer` (`GSLayer`)
 - `stems` (`bool`) – remove stems
-- `tags` (`bool`) – remove per-node flags
+- `tags` (`bool`) – remove per-node tags
 - `anchor_links` (`bool`) – remove anchor links
 - `all_masters` (`bool`) – also clear every compatible master
 
@@ -625,16 +652,16 @@ Mirror stems to compatible masters.
 
 **`propagate_tags(layer, nodes=None)`**
 
-Mirror per-node flags to compatible masters.
+Mirror per-node tags to compatible masters.
 
 *Parameters:*
 
 - `layer` (`GSLayer`)
-- `nodes` (sequence of `GSNode`, optional) – the nodes whose flags to mirror, additively; `None` mirrors all
+- `nodes` (sequence of `GSNode`, optional) – the nodes whose tags to mirror, additively; `None` mirrors all
 
 *Returns:*
 
-- `ItalifyResult` – `.count` is how many flags were mirrored
+- `ItalifyResult` – `.count` is how many tags were mirrored
 
 **`propagate_anchor_links(layer, anchor_names=None)`**
 
@@ -657,7 +684,7 @@ Mirror a chosen mix of kinds in one undo group.
 
 - `layer` (`GSLayer`)
 - `stems` (`bool`) – mirror stems
-- `tags` (`bool`) – mirror per-node flags
+- `tags` (`bool`) – mirror per-node tags
 - `anchor_links` (`bool`) – mirror anchor links
 
 *Returns:*
@@ -672,14 +699,14 @@ Mirror a chosen mix of kinds in one undo group.
 
 Copy a chosen mix of kinds from one layer onto another, in one undo group.
 
-The two layers must *index-map* – the same path and node counts, and the same on-/off-curve at every index (the same structural match `propagate_*` requires of compatible masters). The copy maps purely by `(path, node)` index, so stem ids, corner roles, anchored edges, hinges, the flip flag, per-node tag flags and anchor links all carry over verbatim.
+The two layers must *index-map* – the same path and node counts, and the same on-/off-curve at every index (the same structural match `propagate_*` requires of compatible masters). The copy maps purely by `(path, node)` index, so stem ids, corner roles, anchored edges, hinges, the flip state, per-node tags and anchor links all carry over verbatim.
 
 *Parameters:*
 
 - `source_layer` (`GSLayer`) – the layer to read from
 - `target_layer` (`GSLayer`) – the layer to write to (may be in another font)
 - `stems` (`bool`) – copy stems
-- `tags` (`bool`) – copy per-node flags
+- `tags` (`bool`) – copy per-node tags
 - `anchor_links` (`bool`) – copy anchor links
 - `replace` (`bool`) – `True` mirrors the source exactly (clears whatever the source doesn't carry); `False` is additive (the target keeps marks the source lacks)
 

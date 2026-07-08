@@ -11,6 +11,7 @@
     - [Hidden settings](#hidden-settings)
 3. [Glyph groups](#groups)
 4. [The tagger](#tagger)
+5. [Stems](#stem-marks)
     - [What a stem is](#stems)
     - [Creating stems](#creating-stems)
     - [Anchored edges](#anchor-edges)
@@ -18,15 +19,19 @@
     - [Flip axis](#flip-axis)
     - [Extras](#extras)
     - [Rearranging corners](#corner-swap)
-    - [Node flags](#node-flags)
-    - [Anchor links](#anchor-links)
-    - [Copy, paste & propagate](#copy-paste)
-    - [Masters](#masters)
-    - [Repair](#corruption)
-    - [Preview](#preview)
-5. [The Glyph → Italify menu](#glyph-menu)
-6. [Tips](#tips)
-7. [Keyboard reference](#shortcuts)
+    - [Repairing corrupted stems](#corruption)
+6. [Tags](#node-flags)
+    - [Limit Curve](#limit-curve)
+    - [No Curve Correction](#no-curve-correction)
+    - [Inktrap](#inktrap)
+    - [Y-Snap](#snap-y)
+7. [Anchor links](#anchor-links)
+8. [Copy, paste & propagate](#copy-paste)
+9. [Working across masters](#masters)
+10. [Navigation & live preview](#preview)
+11. [The Glyph → Italify menu](#glyph-menu)
+12. [Tips](#tips)
+13. [Keyboard reference](#shortcuts)
 ```
 
 ## Installation {#installation}
@@ -34,7 +39,7 @@
 1. Double-click `Italify.glyphsPlugin`; Glyphs installs it and asks to restart.
 2. After relaunching you have all of Italify: the *Italify* entry in the *Filter* menu, the *Italify Tagger* in the Edit View toolbar (shortcut [[C]]), and the *Italify Groups* palette in the Window sidebar.
 
-Italify requires **Glyphs 3.2 or later**.
+Italify requires **Glyphs 3.2 or later**. Recommended minimum version is **3529** – get it by activating “Show cutting edge versions” in Preferences → Updates.
 
 ```screenshot
 img: images/bundle.png
@@ -178,6 +183,12 @@ Both are disabled unless the active glyph is in a group (where they fall back to
 
 The *Italify Tagger* (toolbar icon, shortcut [[C]]) is where you can describe glyph features to the filter – diagonals to correct, how anchors should move, specific corrections. It is a metadata editor: it never moves points itself. Everything you tag is stored on the nodes in the file and drawn on the canvas, so what you see with the tool active is exactly what the filter will read.
 
+It works with two kinds of marks: **[Stems](#stem-marks)** – groups of nodes corrected together as one rigid unit, with their own set of options – and **[Tags](#node-flags)** – per-node marks that change how the filter treats a single spot. It also lets you link Glyphs *anchors* to nodes. Each is covered below.
+
+## Stems {#stem-marks}
+
+Stems are the tagger's core: nodes the filter corrects together as one rigid unit. This section covers defining them, the per-stem options (anchored edges, hinges, extras, …), and repairing a stem a path operation broke.
+
 ### What a stem is {#stems}
 
 A stem is a group of nodes the filter moves as **one rigid unit**: four **corners** define its frame, and any number of optional **extras** – additional nodes, details – ride along with it. Each stem gets a single shared transformation, so its width and angle behave coherently instead of every segment fending for itself. Curves tagged as stems will not be curve-corrected.
@@ -262,11 +273,30 @@ You rarely need to do that by hand, though: whenever **both** on-curve ends of a
 
 If the tool picked the wrong node as a corner, drag the corner’s halo onto the node you actually want – on any stem, selected or not. The other stems fade while you drag so the one you’re editing stands out (it isn’t *selected*, just spotlighted for the drag). The old corner is demoted to an extra; the target becomes a corner. A travelling halo and guide line preview the drag, and invalid drop targets simply don’t snap.
 
-### Per-node flags {#node-flags}
+### Repairing corrupted stems {#corruption}
 
-Three flags live outside the stem model – they tag individual nodes or segments and change how the filter treats that one spot. Each has a canvas marker, a keyboard shortcut, and an entry in the right-click *Tags* section, and each is removed the same way it was added. Hold [[⌥]] on any of them to mirror the change across every compatible master.
+Path operations – Remove Overlap, deleting nodes, reordering contours – can orphan stem tags. The tool marks such stems in **red**: a red polygon through the remaining corners, red halos, alert dots on members. Three ways to fix them:
 
-#### Limit Curve
+- *Resolve corrupted Stems* (context menu) repairs everything on the layer at once: stems that can be re-derived are rebuilt, hopeless ones are stripped.
+- Hover over a red polygon edge, grab the ghost dot and drag it onto a node to add it as a missing corner – the polygon reshapes live.
+- Click a red corner halo and press [[⌫]] (or choose *Delete Corner*) to surgically remove one bad tag. *Delete Corner* works on any stem corner, not just corrupted ones – clicking a healthy stem’s corner halo and pressing [[⌫]] removes that corner too (which leaves the stem with three corners, so it then shows as corrupt).
+
+```screenshot
+img: images/corruptedStem.png
+tag: Screenshot – corrupted stem
+desc: A stem in its red corruption state after a destructive path operation:
+  red polygon through three remaining corners, red halos, alert dots – with
+  the cursor mid-drag on the ghost dot pulling a new corner toward a node,
+  the polygon reshaping live. This one shot covers both the diagnosis and
+  the repair gesture.
+caption: Corruption is drawn in red; dragging from an edge rebuilds the missing corner.
+```
+
+## Tags {#node-flags}
+
+Four **Tags** live outside the stem model – each marks an individual node or segment and changes how the filter treats that one spot. Every Tag has a canvas marker, a keyboard shortcut, and an entry in the right-click *Tags* section, and each is removed the same way it was added. Hold [[⌥]] on any of them to mirror the change across every compatible master.
+
+### Limit Curve {#limit-curve}
 
 At an unsmooth curve boundary, the filter normally infers some extra context, which can lead to certain segments being transformed more strongly than desired. **Limit Curve** switches that off for one node – the tagged node becomes its own reference context. The node and its attached only slide **along the node’s own tangent**, so the curve can’t billow out beyond the corner. Use it wherever the inferred context drags a curve too far.
 
@@ -280,11 +310,11 @@ desc: A close crop of an unsmooth curve→line (or curve→curve) corner with th
 caption: Limit Curve pins a curve’s transformation direction to its own tangent.
 ```
 
-#### No Curve Correction
+### No Curve Correction {#no-curve-correction}
 
 **No Curve Correction** takes a whole curve segment out of curve correction. The segment is then only slanted – its drawn shape is preserved exactly.
 
-The flag sits on **both** on-curve endpoints of the segment (any curve, cubic or quadratic, with at least one off-curve between them). Select those two nodes and press [[N]], or right-click and choose *Toggle No Curve Correction*; press [[N]] again to remove it. The segment draws with a yellow overlay along its length.
+The tag sits on **both** on-curve endpoints of the segment (any curve, cubic or quadratic, with at least one off-curve between them). Select those two nodes and press [[N]], or right-click and choose *Toggle No Curve Correction*; press [[N]] again to remove it. The segment draws with a yellow overlay along its length.
 
 ```screenshot
 img: images/noCurveCorrection.png
@@ -293,13 +323,13 @@ desc: A curve segment carrying the yellow No-Curve-Correction overlay
 caption: No Curve Correction preserves a curve’s shape, only slanting it.
 ```
 
-#### Inktrap
+### Inktrap {#inktrap}
 
 Mark a two-nodes line segment as **Inktrap** to keep it at its original length. After Italify corrects the two adjoining segments, an ink trap is held rigid and shifted so it still spans exactly its original distance. The neighbours can be lines or curves; the segment’s two endpoints simply land back on the corrected neighbours.
 
 Select the two on-curve nodes at the ends of a straight segment – they must be directly connected and both **unsmooth** – and press [[I]], or right-click and choose *Add Inktrap*.
 
-On the canvas the tagged segment glows purple, a short stretch of each adjoining contour is highlighted. Click anywhere in the ink trap to select it and press [[⌫]] to remove the flag.
+On the canvas the tagged segment glows purple, a short stretch of each adjoining contour is highlighted. Click anywhere in the ink trap to select it and press [[⌫]] to remove the tag.
 
 ```screenshot
 img: images/inktrap.png
@@ -308,7 +338,26 @@ desc: A short straight segment tagged as an inktrap.
 caption: An Inktrap segment preserves its size even after correction of the adjoining segments.
 ```
 
-### Anchor links {#anchor-links}
+### Y-Snap {#snap-y}
+
+By default the filter automatically holds a node's height in place in one common case: an **unsmooth line-to-curve** corner sitting exactly on a metric (baseline, x-height, …) is pinned to that metric through the correction, so it doesn't drift off it. Every node this affects is marked with a violet pin. (This automatic behaviour is governed by the [`autoSnapToMetrics`](#hidden-settings) hidden setting.)
+
+**Y-Snap** lets you take that decision by hand, node by node. It is a simple *retain the y position* – the metric is only how the automatic case is detected, so the override works on **any** on-curve node, on a metric or not:
+
+- Tag a node the automatic snap *misses* (a line-to-line or curve-to-curve corner, a smooth node, or a node at any height) and it will hold its y exactly.
+- Tag a node the automatic snap *catches* and it is released – free to move with the correction.
+
+Select the node (or several) and press [[Y]], or right-click and choose *Toggle Y-Snap*. The key flips each node's current state: one that snaps is released, one that doesn't is pinned. The marker is the same violet pin the automatic snap uses – a pinned node shows it, a released node shows nothing. To hand a node back to the automatic behaviour, clear its tag (right-click *Clear all Tags*, or [[⌫]]).
+
+```screenshot
+img: images/snapY.png
+tag: Screenshot – Y-Snap
+desc: A node tagged Y-Snap, off any metric, carrying the violet horizontal pin
+  marker, with the corrected outline holding that node's height in place.
+caption: Y-Snap keeps a node at its original height, on a metric or not.
+```
+
+## Anchor links {#anchor-links}
 
 An **anchor link** ties a Glyphs *anchor* to one or more outline nodes so it rides along when the filter corrects them. Useful for keeping anchors in sync with the curve shape they are designed to sit on.
 Click an anchor to select it – the rest of the stem and tag overlays fade to grey so the links stand out; [[Shift]]-click to select several. With an anchor selected, **drag**: the anchor itself never moves; a halo follows the cursor and snaps onto the nearest **on-curve** node, and releasing links the anchor to it. An anchor links to **any number of nodes** – attaching is additive. Grab an existing link’s halo to drag it onto another node (**move** the link) or clear of any node (**remove** it). Press [[⌫]] with the anchor selected to clear all of its links at once. Hold [[⌥]] on any of these to mirror the change across compatible masters (anchor matched by name, node by index).
@@ -330,7 +379,7 @@ desc: A tagger view with one anchor selected (drawn as a solid purple
 caption: An anchor linked to stem nodes – it rides them through correction.
 ```
 
-### Copy, paste & propagate {#copy-paste}
+## Copy, paste & propagate {#copy-paste}
 
 Stems, tags and anchor links all travel between layers without re-tagging. There are two ways to copy, and both write to the clipboard so you can paste onto another layer:
 
@@ -338,32 +387,13 @@ Stems, tags and anchor links all travel between layers without re-tagging. There
 - **Copy all (right-click).** Each section also has a *Copy all Stems* / *Copy all Tags* / *Copy all Anchor Links* verb that copies the whole layer’s items of that kind regardless of selection (greyed when there are none). These have no [[⌘C]] – that’s Copy Selection. *Paste* puts them on the target additively.
 - **Propagate ([[⌥]]).** Holding [[⌥]] on any *Copy all* turns it into *Propagate … to all Masters* – it writes that kind to every compatible master directly (no clipboard), mirroring the layer exactly.
 
-When pasting a single copied stem, a **node selection** matching its structure (same node groups, on-/off-curve pattern; order and direction don’t matter) pastes it onto those nodes as a new stem – corner roles, the anchored edge, extras and the flip flag land on the corresponding sides (the menu retitles to *Paste Stem onto Selection*).
+When pasting a single copied stem, a **node selection** matching its structure (same node groups, on-/off-curve pattern; order and direction don’t matter) pastes it onto those nodes as a new stem – corner roles, the anchored edge, extras and the flip state land on the corresponding sides (the menu retitles to *Paste Stem onto Selection*).
 
-### Working across masters {#masters}
+## Working across masters {#masters}
 
-Almost every action takes [[⌥]] as the “in all masters” modifier: add, delete, anchor, hinge, extras, the node flags, paste. “All masters” means every layer with a compatible outline – including brace (intermediate) and bracket (alternate) layers; incompatible layers are skipped and reported. [[⌥]]-clicking a stem also mirrors its node selection across masters, which is handy for checking that a stem sits on the same nodes everywhere.
+Almost every action takes [[⌥]] as the “in all masters” modifier: add, delete, anchor, hinge, extras, the Tags, paste. “All masters” means every layer with a compatible outline – including brace (intermediate) and bracket (alternate) layers; incompatible layers are skipped and reported. [[⌥]]-clicking a stem also mirrors its node selection across masters, which is handy for checking that a stem sits on the same nodes everywhere.
 
-### Repairing corrupted stems {#corruption}
-
-Path operations – Remove Overlap, deleting nodes, reordering contours – can orphan stem tags. The tool flags such stems in **red**: a red polygon through the remaining corners, red halos, alert dots on members. Three ways to fix them:
-
-- *Resolve corrupted Stems* (context menu) repairs everything on the layer at once: stems that can be re-derived are rebuilt, hopeless ones are stripped.
-- Hover over a red polygon edge, grab the ghost dot and drag it onto a node to add it as a missing corner – the polygon reshapes live.
-- Click a red corner halo and press [[⌫]] (or choose *Delete Corner*) to surgically remove one bad tag. *Delete Corner* works on any stem corner, not just corrupted ones – clicking a healthy stem’s corner halo and pressing [[⌫]] removes that corner too (which leaves the stem with three corners, so it then shows as corrupt).
-
-```screenshot
-img: images/corruptedStem.png
-tag: Screenshot – corrupted stem
-desc: A stem in its red corruption state after a destructive path operation:
-  red polygon through three remaining corners, red halos, alert dots – with
-  the cursor mid-drag on the ghost dot pulling a new corner toward a node,
-  the polygon reshaping live. This one shot covers both the diagnosis and
-  the repair gesture.
-caption: Corruption is drawn in red; dragging from an edge rebuilds the missing corner.
-```
-
-### Navigation & live preview {#preview}
+## Navigation & live preview {#preview}
 
 Hold [[Space]] to pan, as everywhere in Glyphs – while held, the tool shows the clean filled outline with all chrome hidden. Add [[Shift]] and the filled preview becomes a **live Italify preview:** the glyph rendered with the current filter parameters (your outline is untouched), with a small floating panel listing the parameters in effect. Change a value in the filter dialogue, hold [[Space]]+[[Shift]] again, and the preview reflects it – a fast way to judge the correction without applying anything. Useful for previewing different tagging results directly.
 
@@ -427,6 +457,7 @@ All shortcuts below apply while the Italify Tagger is active. [[⌥]] added to a
 | [[L]] | Toggle **L**imit Curve on selected on-curve nodes |
 | [[N]] | Toggle **N**o Curve Correction on selected curve segments |
 | [[I]] | Add / remove **I**nktrap on a selected straight segment between two unsmooth nodes |
+| [[Y]] | Toggle **Y**-Snap on selected on-curve nodes (retain ↔ release their y) |
 | [[⌫]] | Remove tag / stem; with a corner clicked, delete that corner; with an anchor selected, clear its links |
 | [[⌘A]] | Cycle select-all: nodes → stems → tags → anchors and their combinations (present kinds only) |
 | [[Tab]] / [[⇧Tab]] | With one mark type selected (stem, tag or anchor), select the next / previous item of that type |
