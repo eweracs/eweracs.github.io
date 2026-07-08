@@ -39,7 +39,7 @@
 1. Double-click `Italify.glyphsPlugin`; Glyphs installs it and asks to restart.
 2. After relaunching you have all of Italify: the *Italify* entry in the *Filter* menu, the *Italify Tagger* in the Edit View toolbar (shortcut [[C]]), and the *Italify Groups* palette in the Window sidebar.
 
-Italify requires **Glyphs 3.2 or later**. Recommended minimum version is **3529** – get it by activating “Show cutting edge versions” in Preferences → Updates.
+Italify requires **Glyphs 3.2 or later**.
 
 ```screenshot
 img: images/bundle.png
