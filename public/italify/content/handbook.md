@@ -83,7 +83,7 @@ The equivalent control for straight diagonal segments. Out of the box this appli
 
 Controls how much of the width change that slanting causes in stems is compensated. At 100%, a tagged stem comes out of the filter measuring what it did upright; at 0%, it keeps whatever width the shear left it with.
 
-The **advance width grows with it**. Because compensation widens the outline horizontally about the glyph centre, the layer’s advance is widened by the same factor and the outline is shifted by half the difference, so the growth is split equally between the two sidebearings — the outline never eats into a fixed advance. At 0 % (or 0° angle) the advance is left untouched.
+The **advance width grows with it**. Because compensation widens the outline horizontally about the glyph centre, the layer’s advance is widened by the same factor and the outline is shifted by half the difference, so the growth is split equally between the two sidebearings – the outline never eats into a fixed advance. At 0 % (or 0° angle) the advance is left untouched.
 
 #### Keep terminals | 0–100% | default 0%
 
@@ -149,7 +149,7 @@ Three behaviours have no dialogue control and are toggled via the Macro panel. A
 |---|---|---|
 | `diagonalCorrectionStemsOnly` | `True` | Diagonal correction and stem compensation apply only to tagged stems. Set to `False` to correct every diagonal segment, tagged or not. For untagged stems, the transformation origin will be (half layer width, half x-height). Experimental use only, results will be unexpected.|
 | `flattenIntersections` | `True` | When the correction pushes an outline past an adjacent short line (typical at tight junctions), Italify collapses the junction into a clean, master-compatible doubled node – the way you would draw it by hand. Set to `False` to keep the uncollapsed geometry. |
-| `autoSnapToMetrics` | `True` | An **unsmooth line-to-curve** node — where a straight segment meets a curve — whose height sits exactly on a metric (baseline, x-height, …) is held to that metric through the correction, so such corners don’t drift off it. Smooth nodes, line-to-line corners and curve-to-curve corners are left free. The tagger marks every node this affects with a violet pin. Set to `False` to disable the snap entirely. |
+| `autoSnapToMetrics` | `True` | An **unsmooth line-to-curve** node – where a straight segment meets a curve – whose height sits exactly on a metric (baseline, x-height, …) is held to that metric through the correction, so such corners don’t drift off it. Smooth nodes, line-to-line corners and curve-to-curve corners are left free. The tagger marks every node this affects with a violet pin. Set to `False` to disable the snap entirely. |
 
 For example, in the Macro panel:
 

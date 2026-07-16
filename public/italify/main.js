@@ -1,4 +1,4 @@
-/* Italify docs — Markdown loader.
+/* Italify docs – Markdown loader.
    Fetches the page's .md file (the <main data-source> attribute),
    expands the authoring conventions documented in AUTHORING.md, and
    renders with marked (vendored in vendor/marked.min.js). */
@@ -257,9 +257,9 @@
 		});
 	}
 
-	// On the Python API page, group each "**`func(...)`**" entry — its
+	// On the Python API page, group each "**`func(...)`**" entry – its
 	// name plus the description and Parameters/Returns blocks that follow
-	// — into div.api-entry, so the name reads as a header and the rest
+	// – into div.api-entry, so the name reads as a header and the rest
 	// indents beneath it. A function header is a paragraph whose sole
 	// content is `<strong><code>…</code></strong>`.
 	function wrapApiEntries(main) {

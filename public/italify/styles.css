@@ -1,4 +1,4 @@
-/* Italify documentation — design system per formkunft.com-design.md
+/* Italify documentation
    Monochrome editorial: black on white, restrained blue links,
    narrow centered column, hierarchy through scale and whitespace. */
 
@@ -132,7 +132,7 @@ header.site .column {
 	padding-bottom: var(--space-md);
 }
 
-/* Theme switch: sits just past the reading column's right edge — a 16px
+/* Theme switch: sits just past the reading column's right edge – a 16px
    gap from the last nav item, matching the nav's own inter-item spacing
    (the column's 24px padding less the button's 8px inset). Below 961px the
    gutter closes, so it falls back to the page edge (see media query). */
@@ -576,7 +576,7 @@ figure.shot.annotated img {
 	width: 46%;
 	/* The standard figure shadow, but as drop-shadow so it follows the
 	   window's rounded corners (the asset's alpha) instead of a box.
-	   drop-shadow blur is a Gaussian deviation — half the box-shadow
+	   drop-shadow blur is a Gaussian deviation – half the box-shadow
 	   radii renders visually identical. */
 	box-shadow: none;
 	border-radius: 0;
