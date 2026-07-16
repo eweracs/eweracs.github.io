@@ -3,10 +3,10 @@
 @lede Italify is an algorithmic approach to optical correction of obliques. It corrects curve deformation, diagonals and anchor positions, so a slanted master becomes a starting point you can actually work with.
 
 ```italify-hero
-caption: Slant the word, then dial in the correction. Font in use: [MNKY Wilson](https://mnkytype.com/wilson).
+caption: Font in use: [MNKY Wilson](https://mnkytype.com/wilson).
 ```
 
-The plugin is now available for foundries. Get in touch to book a demo: sebastian.carewe<span class="email-protected"></span>
+The plugin is now available for licensing. I am happy to give you a demo, in person or by video: sebastian.carewe<span class="email-protected"></span>
 
 ```buttons
 [Try free for 48 hours](trial) primary
@@ -49,11 +49,26 @@ You have control over what is corrected, and how:
 - **Diagonal correction** treats diagonal stems and adjusts their width and angle based on constraints you define with the built-in Stem Tagger.
 - **Stem compensation** compensates for the loss in vertical stems when slanted, maintaining the exact same contrast. Useful for later interpolation adjustments.
 
+@overline Testimonials
+
+## What designers say {#voices}
+
+```quotes
+## Henning Skibbe | Character Type | https://charactertype.com
+Italify not only saved me a great amount of time, but also guaranteed systematic results whose quality speaks for itself. Adding italics to a major project was a breeze. I am a changed man.
+## René Bieder | Studio René Bieder | https://www.renebieder.com/
+Italify almost feels like an unfair advantage – I’d rather keep it to myself. But the results are simply too good: optically precise, thoughtfully executed, and a huge relief in the process.
+## Ermin Međedović | Lettermin | https://lettermin.com/
+Having worked with Sebastian for years, Italify’s results were no surprise to me. An efficient and reliable tool, it produces obliques that feel designed, not mechanic, while significantly reducing both time and friction.
+## Jakob Runge | TypeMates | https://www.typemates.com/
+We used Italify on a custom project – with striking results. In general, it creates obliques remarkably close to what I’d draw by hand, and handles geometric designs in a way that fits my workflow.
+```
+
 @overline Capabilities
 
-## Built for the hard cases {#capabilities}
+## Tested on real fonts {#capabilities}
 
-Whatever your outlines throw at it – overlaps removed, extra nodes, inflections, backslants – the correction holds up.
+Italify handles all sorts of cases and designs.
 
 ```demos
 ## Overlap-agnostic | overlap
@@ -72,26 +87,11 @@ Theoretically, any curve can be treated with Italify. Whether it actually makes 
 If you want to leave off your horizontal or vertical extreme nodes for curve segments, no problem.
 ```
 
-@overline In the wild
-
-## What designers say {#voices}
-
-```quotes
-## Henning Skibbe | Character Type | https://charactertype.com
-Italify not only saved me a great amount of time, but also guaranteed systematic results whose quality speaks for itself. Adding italics to a major project was a breeze. I am a changed man.
-## René Bieder | Studio René Bieder | https://www.renebieder.com/
-Italify almost feels like an unfair advantage – I’d rather keep it to myself. But the results are simply too good: optically precise, thoughtfully executed, and a huge relief in the process.
-## Ermin Međedović | Lettermin | https://lettermin.com/
-Having worked with Sebastian for years, Italify’s results were no surprise to me. An efficient and reliable tool, it produces obliques that feel designed, not mechanic, while significantly reducing both time and friction.
-## Jakob Runge | TypeMates | https://www.typemates.com/
-We used Italify on a custom project – with striking results. In general, it creates obliques remarkably close to what I’d draw by hand, and handles geometric designs in a way that fits my workflow.
-```
-
 @overline Interested?
 
 ## Get Italify {#get-italify}
 
-The plugin is available for foundries. Get in touch to book a demo or request a quote for your project: sebastian.carewe<span class="email-protected"></span>
+Get in touch for licence purchases or custom quotes: sebastian.carewe<span class="email-protected"></span>
 
 Or see for yourself first – the free trial gives you full access for 48 hours, and the [handbook](handbook) covers everything from tagging stems to per-group parameters. The plugin itself is a [free download](https://github.com/eweracs/Italify/releases/latest/download/Italify.glyphsPlugin.zip); license and trial codes unlock it.
 
