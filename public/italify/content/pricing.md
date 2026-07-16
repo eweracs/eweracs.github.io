@@ -9,7 +9,7 @@
 For a sprint across a whole family, a time pass gives you **unlimited masters** – every master in every file, no activation, no counting – for the duration of the pass.
 
 | Pass | Price |
-|------|----------|-------|
+|------|-------|
 | One week | 600 € |
 | Two weeks | 1 000 € |
 
