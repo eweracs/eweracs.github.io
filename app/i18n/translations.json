@@ -12,7 +12,7 @@
       "contact": "Looking for me? I’m always happy to chat about new projects: {email}"
     },
     "projects": {
-      "italify": "Italify – my Glyphs plugin for algorithmically corrected obliques. Slant a master, keep the design. Now available for foundries.",
+      "italify": "Italify – a Glyphs plugin for algorithmically corrected obliques.",
       "italifyLink": "Discover Italify",
       "intro": "I have worked with clients of all sizes, be it indie foundries, established designers or major corporations.",
       "viewProject": "View project"
@@ -55,7 +55,7 @@
       "contact": "Vous me cherchez ? Je suis toujours ravi de discuter de nouveaux projets : {email}"
     },
     "projects": {
-      "italify": "Italify – mon plugin Glyphs pour des obliques corrigées par algorithme. Inclinez un master, conservez le dessin. Désormais disponible pour les fonderies.",
+      "italify": "Italify – un plugin Glyphs pour des obliques corrigées par algorithme.",
       "italifyLink": "Découvrir Italify",
       "intro": "Je travaille avec des clients de toutes tailles, qu’il s’agisse de fonderies indépendantes, de designers établis ou de grandes entreprises.",
       "viewProject": "Voir le projet"
@@ -98,7 +98,7 @@
       "contact": "Auf der Suche nach mir? Ich bin immer offen für Projektideen: {email}"
     },
     "projects": {
-      "italify": "Italify – mein Glyphs-Plugin für algorithmisch korrigierte Obliques. Der Master wird geneigt, die Zeichnung bleibt. Jetzt für Schriftverlage erhältlich.",
+      "italify": "Italify – ein Glyphs-Plugin für algorithmisch korrigierte Obliques.",
       "italifyLink": "Italify entdecken",
       "intro": "Ich habe mit Kunden jeder Größe zusammengearbeitet, seien es unabhängige Schriftverlage, etablierte Gestalter oder große Unternehmen.",
       "viewProject": "Projekt ansehen"
