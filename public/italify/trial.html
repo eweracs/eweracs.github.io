@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Italify – Free 48-hour trial</title>
+<meta name="description"
+      content="Try Italify free for 48 hours. Enter your email to receive a trial link.">
+<meta name="robots" content="noindex">
+<link rel="icon" href="/icon.svg" type="image/svg+xml" sizes="any">
+<!-- Set the theme before first paint to avoid a flash of the wrong mode:
+     stored choice wins, otherwise follow the OS preference. -->
+<script>
+(function () {
+	try {
+		var stored = localStorage.getItem("italify-theme");
+		var theme = stored || (window.matchMedia &&
+			window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light");
+		document.documentElement.setAttribute("data-theme", theme);
+	} catch (e) {}
+})();
+</script>
+<link rel="stylesheet" href="styles.css?v=16">
+<style>
+	/* Page-local form styling; everything else comes from styles.css. */
+	.trial-form {
+		display: flex;
+		gap: var(--space-sm);
+		flex-wrap: wrap;
+		margin: var(--space-md) 0;
+	}
+	.trial-form input {
+		flex: 1 1 240px;
+		height: 46px;
+		padding: 8px 14px;
+		border: 1px solid var(--color-border);
+		border-radius: var(--rounded-sm);
+		background: var(--color-surface);
+		color: var(--color-primary);
+		font: inherit;
+		font-size: 19px;
+	}
+	.trial-form input:focus-visible {
+		outline: 2px solid var(--color-link);
+		outline-offset: 1px;
+	}
+	.trial-form button {
+		font-family: inherit;
+		cursor: pointer;
+	}
+	.trial-status { color: var(--color-secondary); }
+	.trial-status.error { color: var(--color-error); }
+</style>
+</head>
+<body>
+
+<header class="site">
+	<div class="column">
+		<a class="wordmark" href="overview"><img class="wordmark-logo" src="images/italify.svg" alt="Italify"></a>
+		<nav class="site-nav">
+			<a href="overview">Overview</a>
+			<a href="handbook">Handbook</a>
+			<a href="python-api">Python API</a>
+		</nav>
+	</div>
+	<button id="theme-toggle" class="theme-toggle" type="button" aria-label="Switch to dark mode" title="Switch to dark mode" aria-pressed="false">
+		<svg class="theme-icon" viewBox="0 0 500 500" fill="currentColor" aria-hidden="true"><path d="M250 0C388 0 500 111 500 250C500 388 388 500 250 500C112 500 0 388 0 250C0 111 112 0 250 0ZM114 114C39 189 39 310 114 386C189 461 311 461 386 386L114 114Z"/></svg>
+	</button>
+</header>
+
+<main class="column">
+<section>
+	<span class="overline">Free trial</span>
+	<h1>Try Italify for 48 hours</h1>
+	<p class="lede">Enter your email address and you’ll receive a link to
+	your personal trial code.</p>
+
+	<form class="trial-form" id="trial-form">
+		<input type="email" id="trial-email" placeholder="you@example.com"
+			autocomplete="email" required aria-label="Email address">
+		<button type="submit" class="button-primary" id="trial-submit">Send trial link</button>
+	</form>
+	<p class="trial-status" id="trial-status" hidden></p>
+
+	<h3>How it works</h3>
+	<ol class="steps">
+		<li><strong>Get your link.</strong> You receive a link by email, valid
+			for one hour. Follow it to get a code for a 48h activation code.</li>
+		<li><strong>Copy the code.</strong> The link opens a page with your
+			personal license code. Your 48 hours start then.</li>
+		<li><strong>Paste it in Glyphs.</strong> Open
+			<em>Filter → Italify</em> and paste the code into the license
+			field. Full access to all features.</li>
+	</ol>
+	<p>One trial per email address. When it ends, nothing breaks – your
+	files stay untouched; the filter simply pauses until you
+	<a href="overview">license Italify</a>.</p>
+</section>
+</main>
+
+<footer>
+	<div class="column">
+		<p>Italify – a plugin for <a href="https://glyphsapp.com">Glyphs</a>. <a href="handbook">Handbook</a></p>
+	</div>
+</footer>
+
+<script>
+// The trial Worker's URL (from `wrangler deploy` in Scripts/TrialWorker/).
+var WORKER_URL = "https://italify-trial.file-manager-bot.workers.dev";
+
+(function () {
+	var form = document.getElementById("trial-form");
+	var email = document.getElementById("trial-email");
+	var submit = document.getElementById("trial-submit");
+	var status = document.getElementById("trial-status");
+
+	function show(message, isError) {
+		status.textContent = message;
+		status.classList.toggle("error", !!isError);
+		status.hidden = false;
+	}
+
+	form.addEventListener("submit", function (event) {
+		event.preventDefault();
+		submit.disabled = true;
+		show("Sending…", false);
+		fetch(WORKER_URL + "/signup", {
+			method: "POST",
+			headers: { "Content-Type": "application/json" },
+			body: JSON.stringify({ email: email.value }),
+		}).then(function (response) {
+			return response.json().then(function (data) {
+				if (!response.ok) throw new Error(data.error || "Something went wrong.");
+				show(data.message, false);
+				form.reset();
+			});
+		}).catch(function (error) {
+			show(error.message || "Something went wrong. Please try again.", true);
+		}).finally(function () {
+			submit.disabled = false;
+		});
+	});
+})();
+</script>
+<script src="main.js?v=9"></script>
+</body>
+</html>

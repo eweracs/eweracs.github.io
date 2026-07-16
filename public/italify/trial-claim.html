@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Italify — Your trial code</title>
+<meta name="robots" content="noindex">
+<link rel="icon" href="/icon.svg" type="image/svg+xml" sizes="any">
+<!-- Set the theme before first paint to avoid a flash of the wrong mode:
+     stored choice wins, otherwise follow the OS preference. -->
+<script>
+(function () {
+	try {
+		var stored = localStorage.getItem("italify-theme");
+		var theme = stored || (window.matchMedia &&
+			window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light");
+		document.documentElement.setAttribute("data-theme", theme);
+	} catch (e) {}
+})();
+</script>
+<link rel="stylesheet" href="styles.css?v=16">
+<style>
+	/* Page-local: the code block reuses the docs' .code-block/.copy-btn
+	   pattern; the code itself wraps (license codes are long). */
+	#code-block pre code {
+		white-space: pre-wrap;
+		overflow-wrap: anywhere;
+	}
+	.claim-status { color: var(--color-secondary); }
+	.claim-status.error { color: var(--color-error); }
+</style>
+</head>
+<body>
+
+<header class="site">
+	<div class="column">
+		<a class="wordmark" href="overview"><img class="wordmark-logo" src="images/italify.svg" alt="Italify"></a>
+		<nav class="site-nav">
+			<a href="overview">Overview</a>
+			<a href="handbook">Handbook</a>
+			<a href="python-api">Python API</a>
+		</nav>
+	</div>
+	<button id="theme-toggle" class="theme-toggle" type="button" aria-label="Switch to dark mode" title="Switch to dark mode" aria-pressed="false">
+		<svg class="theme-icon" viewBox="0 0 500 500" fill="currentColor" aria-hidden="true"><path d="M250 0C388 0 500 111 500 250C500 388 388 500 250 500C112 500 0 388 0 250C0 111 112 0 250 0ZM114 114C39 189 39 310 114 386C189 461 311 461 386 386L114 114Z"/></svg>
+	</button>
+</header>
+
+<main class="column">
+<section>
+	<span class="overline">Free trial</span>
+	<h1 id="claim-title">Fetching your trial code…</h1>
+	<p class="claim-status" id="claim-status" hidden></p>
+
+	<div id="claim-result" hidden>
+		<p class="lede">This is your personal Italify license code, valid
+		until <strong id="claim-expiry"></strong>.</p>
+
+		<div class="code-block" id="code-block">
+			<pre><code id="claim-code"></code></pre>
+			<button class="copy-btn" id="copy-code" type="button" aria-label="Copy code" title="Copy code">
+				<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><rect x="9" y="9" width="12" height="12" rx="2"/><path d="M5 15V5a2 2 0 0 1 2-2h10"/></svg>
+			</button>
+		</div>
+
+		<h3>Activate Italify</h3>
+		<ol class="steps">
+			<li><strong>Copy the code</strong> above.</li>
+			<li><strong>In Glyphs</strong>, open <em>Filter → Italify</em>.</li>
+			<li><strong>Paste the code</strong> into the license field and
+				click <em>Add</em>. That's it — full access on every master
+				for the next 48 hours.</li>
+		</ol>
+		<p>Keep this page's link: re-opening it during your trial shows the
+		same code. Questions? The <a href="handbook">handbook</a> is a
+		good place to start.</p>
+	</div>
+</section>
+</main>
+
+<footer>
+	<div class="column">
+		<p>Italify — a plugin for <a href="https://glyphsapp.com">Glyphs</a>. <a href="handbook">Handbook</a></p>
+	</div>
+</footer>
+
+<script>
+// The trial Worker's URL (from `wrangler deploy` in Scripts/TrialWorker/).
+var WORKER_URL = "https://italify-trial.file-manager-bot.workers.dev";
+
+(function () {
+	var title = document.getElementById("claim-title");
+	var status = document.getElementById("claim-status");
+	var result = document.getElementById("claim-result");
+
+	function fail(heading, message) {
+		title.textContent = heading;
+		status.innerHTML = message;
+		status.classList.add("error");
+		status.hidden = false;
+	}
+
+	var token = new URLSearchParams(window.location.search).get("token");
+	if (!token) {
+		fail("Missing link token",
+			'This page only works when opened from a trial email. '
+			+ '<a href="trial">Request a trial link</a>.');
+		return;
+	}
+
+	fetch(WORKER_URL + "/claim?token=" + encodeURIComponent(token))
+		.then(function (response) {
+			return response.json().then(function (data) { return { response: response, data: data }; });
+		})
+		.then(function (r) {
+			if (!r.response.ok) {
+				if (r.data.error === "already-used") {
+					fail("Trial already used",
+						"This email address has already used its Italify trial. "
+						+ 'Ready for the full version? See the <a href="overview">overview</a>.');
+				} else {
+					fail("This link has expired",
+						'Trial links are valid for one hour. '
+						+ '<a href="trial">Request a fresh one</a> — if your '
+						+ "trial is still running, you'll get the same code again.");
+				}
+				return;
+			}
+			title.textContent = r.data.reused ? "Your trial is already running" : "Your trial starts now";
+			document.getElementById("claim-code").textContent = r.data.code;
+			document.getElementById("claim-expiry").textContent =
+				new Date(r.data.expiresAt * 1000).toLocaleString(undefined, {
+					year: "numeric", month: "long", day: "numeric",
+					hour: "2-digit", minute: "2-digit",
+				});
+			result.hidden = false;
+
+			var copy = document.getElementById("copy-code");
+			copy.addEventListener("click", function () {
+				var code = document.getElementById("claim-code").textContent;
+				(navigator.clipboard
+					? navigator.clipboard.writeText(code)
+					: Promise.reject()
+				).catch(function () {
+					var ta = document.createElement("textarea");
+					ta.value = code;
+					document.body.appendChild(ta);
+					ta.select();
+					document.execCommand("copy");
+					ta.remove();
+				}).finally(function () {
+					copy.classList.add("copied");
+					setTimeout(function () { copy.classList.remove("copied"); }, 1200);
+				});
+			});
+		})
+		.catch(function () {
+			fail("Something went wrong",
+				'Please try again in a moment, or <a href="trial">request a new link</a>.');
+		});
+})();
+</script>
+<script src="main.js?v=9"></script>
+</body>
+</html>
