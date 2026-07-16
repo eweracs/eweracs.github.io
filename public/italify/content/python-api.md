@@ -233,6 +233,18 @@ The node's [Y-Snap](handbook#snap-y) override.
 
 - `bool | None` – `True` (force-retain the node's y), `False` (force-release it), or `None` (no override — the automatic metric-snap heuristic decides)
 
+**`terminal(node)`**
+
+The [Terminal](handbook#terminal) override for the segment `node` bounds. The tag sits on both endpoints, so either identifies the segment.
+
+*Parameters:*
+
+- `node` (`GSNode`) – the node to query (this verb takes no `layer`)
+
+*Returns:*
+
+- `bool | None` – `True` (force-terminal), `False` (opt out), or `None` (no override — auto detection decides)
+
 ## Stems {#stems}
 
 **`add_stem(layer, nodes, all_masters=False)`**
@@ -521,6 +533,22 @@ Set the [Y-Snap](handbook#snap-y) override on a node — force it to retain its 
 
 - `ItalifyResult`
 
+**`set_terminal(layer, node_a, node_b, on, all_masters=False)`**
+
+Set the [Terminal](handbook#terminal) override on the segment between `node_a` and `node_b` — force it to be a terminal, opt it out, or hand it back to the automatic detection.
+
+*Parameters:*
+
+- `layer` (`GSLayer`)
+- `node_a` (`GSNode`) – one on-curve endpoint of the segment
+- `node_b` (`GSNode`) – the other on-curve endpoint of the segment
+- `on` (`bool | None`) – `True` forces the segment to be a terminal, `False` opts it out, `None` removes the override (back to auto)
+- `all_masters` (`bool`) – also apply on every compatible master
+
+*Returns:*
+
+- `ItalifyResult` – refuses with [`notTerminalSegment`](#refusals) unless `node_a` and `node_b` are the on-curve endpoints of a directly-connected straight segment
+
 ## Anchor links {#anchor-links}
 
 **`link_anchor(layer, anchor_name, node, all_masters=False)`**
@@ -745,3 +773,4 @@ When a write is refused, `result.reason` is one of these machine codes (`result.
 | `trialBlocked` | The action requires a licensed copy of Italify. |
 | `notCurveSegment` | The two nodes must be on-curve endpoints of the same curve segment, with at least one off-curve between them. |
 | `notInktrapSegment` | The two nodes must be directly-connected, unsmooth on-curve endpoints of a straight segment. |
+| `notTerminalSegment` | The two nodes must be the on-curve endpoints of a directly-connected straight segment. |

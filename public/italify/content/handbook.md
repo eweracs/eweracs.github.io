@@ -25,6 +25,7 @@
     - [No Curve Correction](#no-curve-correction)
     - [Inktrap](#inktrap)
     - [Y-Snap](#snap-y)
+    - [Terminal](#terminal)
 7. [Anchor links](#anchor-links)
 8. [Copy, paste & propagate](#copy-paste)
 9. [Working across masters](#masters)
@@ -82,9 +83,11 @@ The equivalent control for straight diagonal segments. Out of the box this appli
 
 Controls how much of the width change that slanting causes in stems is compensated. At 100%, a tagged stem comes out of the filter measuring what it did upright; at 0%, it keeps whatever width the shear left it with.
 
+The **advance width grows with it**. Because compensation widens the outline horizontally about the glyph centre, the layer’s advance is widened by the same factor and the outline is shifted by half the difference, so the growth is split equally between the two sidebearings — the outline never eats into a fixed advance. At 0 % (or 0° angle) the advance is left untouched.
+
 #### Keep terminals | 0–100% | default 0%
 
-Governs the straight terminals at stroke ends – the cut of an *e*, *c* or *s*, for example. At 0%, a terminal is simply slanted. At 100%, it is rotated back against the rotation the correction gave the adjoining curves, preserving the original cut relative to the stroke. Terminals are detected automatically from the outline as line segments connecting two curves going in the same direction. This means it will not detect terminals designed using open corners.
+Governs the straight terminals at stroke ends – the cut of an *e*, *c* or *s*, for example. At 0%, a terminal is simply slanted. At 100%, it is rotated back against the rotation the correction gave the adjoining curves, preserving the original cut relative to the stroke. Terminals are detected automatically from the outline as line segments connecting two curves going in the same direction. Automatic detection stays narrow – terminals designed with open corners aren’t caught – but you can tag those (and any other cut) by hand with the [Terminal](#terminal) tag.
 
 ### Saving parameters {#saving-parameters}
 
@@ -294,7 +297,7 @@ caption: Corruption is drawn in red; dragging from an edge rebuilds the missing 
 
 ## Tags {#node-flags}
 
-Four **Tags** live outside the stem model – each marks an individual node or segment and changes how the filter treats that one spot. Every Tag has a canvas marker, a keyboard shortcut, and an entry in the right-click *Tags* section, and each is removed the same way it was added. Hold [[⌥]] on any of them to mirror the change across every compatible master.
+Five **Tags** live outside the stem model – each marks an individual node or segment and changes how the filter treats that one spot. Every Tag has a canvas marker, a keyboard shortcut, and an entry in the right-click *Tags* section, and each is removed the same way it was added. Hold [[⌥]] on any of them to mirror the change across every compatible master.
 
 ### Limit Curve {#limit-curve}
 
@@ -357,6 +360,27 @@ desc: A node tagged Y-Snap, off any metric, carrying the violet horizontal pin
 caption: Y-Snap keeps a node at its original height, on a metric or not.
 ```
 
+### Terminal {#terminal}
+
+A **terminal** is a straight segment that caps a stroke – the flat cut of a *c*, *e* or *s*. The [Keep Terminals](#parameters) parameter holds a terminal's cut in place through the italicisation: at 100% the angle it makes with its two adjoining segments after the slant matches the upright. The filter finds the obvious terminals automatically (a line between two curves heading the same way), and draws every one it will keep in **green**.
+
+**Terminal** lets you take that decision by hand. Tag any straight two-node segment whose end connections are **unsmooth** – it can be a line between two stems, not just between two curves – and the filter keeps it too. Tagging a segment the tool already detects instead **opts it out**.
+
+Select the two on-curve nodes at the ends of the segment and press [[T]], or right-click and choose *Toggle Terminal*. There is no restriction on the two neighbours – a straight cut holds its cleanest when they are roughly parallel, but the choice is yours; the filter keeps whatever you tag. The segment draws in green, the same as stem corners. To hand a segment back to the automatic detection, clear its tag.
+
+This works even when the terminal’s visible corners are **open corners** or when the outline carries a **duplicate node** at a corner: the tool looks past the short connector to the real curve or line on the other side, and the kept angle is measured at the visible intersection – which is also where the green highlight is drawn. The open corners themselves survive the correction: only the tagged line rotates, and the overlap structure stays intact.
+
+One related behaviour: an [anchor](#anchor-links) linked to a node that sits on a terminal follows that node **fully, in both x and y** – a terminal is a moving cut, so an anchor on it rides along completely rather than tracking only its horizontal shift.
+
+```screenshot
+img: images/terminal.png
+tag: Screenshot – Terminal
+desc: A straight terminal segment between two near-parallel stems drawn with
+  the green terminal highlight (glow + line), with the corrected outline
+  showing the terminal's angle to the stems held through the slant.
+caption: Terminals (green) keep their cut angle to the adjoining segments.
+```
+
 ## Anchor links {#anchor-links}
 
 An **anchor link** ties a Glyphs *anchor* to one or more outline nodes so it rides along when the filter corrects them. Useful for keeping anchors in sync with the curve shape they are designed to sit on.
@@ -364,7 +388,9 @@ Click an anchor to select it – the rest of the stem and tag overlays fade to g
 
 Anchors and stem selection are mutually exclusive: while a stem is selected the anchors grey out and stop responding to clicks, so a click lands on the stem’s own controls instead – handy when an anchor sits right over the flip-axis button. Click empty space to deselect the stem and the anchors are live again. (The [[⌘A]] cycle’s anchor phases are the exception, showing stems and anchors selected together.)
 
-A linked anchor renders **purple** instead of blue, and each link draws as a light-blue dotted line to its node. At correction time the anchor is shifted horizontally by the **average of its linked nodes' weighted movements**: a node sitting on only straight segments carries the anchor **100 %** of the way it moves, while a node with a curve on either side carries it **50 %**. So an anchor linked to a single line-to-line node tracks that node exactly, one linked to a curve node moves half as far, and one linked to both moves by the average of the two. At 0 % correction nothing moves, so the anchor lands exactly where a plain slant would put it. Its vertical position is left untouched.
+A linked anchor renders **purple** instead of blue, and each link draws as a light-blue dotted line to its node. At correction time the anchor is shifted horizontally by the **average of its linked nodes' weighted movements**: a node sitting on only straight segments carries the anchor **100 %** of the way it moves, while a node with a curve on either side carries it **50 %**. So an anchor linked to a single line-to-line node tracks that node exactly, one linked to a curve node moves half as far, and one linked to both moves by the average of the two. At 0 % correction nothing moves, so the anchor lands exactly where a plain slant would put it. Its vertical position is left untouched. (The exception is a node on a [terminal](#terminal), which carries its anchor fully in both x and y.)
+
+When a [terminal](#terminal)'s visible corner is an **open corner**, the link gesture also snaps onto the visible **intersection point** – the corner the outline actually shows, rather than the overshooting node beyond it. The link then draws at the intersection, and the anchor follows the intersection's corrected position in both x and y.
 
 Copy / Paste / Propagate / Clear for anchor links live in the right-click *Anchors* section (see [below](#copy-paste)) and the [Glyph → Italify menu](#glyph-menu).
 
@@ -458,6 +484,7 @@ All shortcuts below apply while the Italify Tagger is active. [[⌥]] added to a
 | [[N]] | Toggle **N**o Curve Correction on selected curve segments |
 | [[I]] | Add / remove **I**nktrap on a selected straight segment between two unsmooth nodes |
 | [[Y]] | Toggle **Y**-Snap on selected on-curve nodes (retain ↔ release their y) |
+| [[T]] | Toggle **T**erminal on a selected straight segment between two unsmooth on-curve nodes |
 | [[⌫]] | Remove tag / stem; with a corner clicked, delete that corner; with an anchor selected, clear its links |
 | [[⌘A]] | Cycle select-all: nodes → stems → tags → anchors and their combinations (present kinds only) |
 | [[Tab]] / [[⇧Tab]] | With one mark type selected (stem, tag or anchor), select the next / previous item of that type |
