@@ -1,4 +1,4 @@
-/* Italify docs – Markdown loader.
+/* Italify docs — Markdown loader.
    Fetches the page's .md file (the <main data-source> attribute),
    expands the authoring conventions documented in AUTHORING.md, and
    renders with marked (vendored in vendor/marked.min.js). */
@@ -107,6 +107,85 @@
 		toc(body) {
 			return '<div class="toc"><span class="overline">On this page</span>' +
 				marked.parse(body) + "</div>";
+		},
+
+		// The interactive slant/correction hero (index page). Markup only —
+		// behaviour and the outline data live in italify-demos.js, which
+		// boots on the `italify:rendered` event. Body: `caption: …`.
+		"italify-hero"(body) {
+			const data = parseKeyValues(body);
+			const caption = data.caption
+				? '<p class="hero-caption">' + inline(data.caption) + "</p>"
+				: "";
+			function check(cls, label, checked) {
+				return '<label class="demo-toggle ' + cls + '"><input type="checkbox"' +
+					(checked ? " checked" : "") + "><span>" + escapeHtml(label) + "</span></label>";
+			}
+			return '<div class="italify-hero" data-italify-hero>' +
+				'<div class="hero-controls">' +
+				check("hero-slant", "Slant", false) +
+				'<label class="hero-correction"><span>Correction</span>' +
+				'<input class="hero-slider" type="range" min="0" max="100" value="0" disabled></label>' +
+				check("hero-nodes-toggle", "Show nodes", true) +
+				"</div>" +
+				// The outline spans 0…2784 × 0…712; the viewBox margin keeps
+				// node circles and handles clear of the stage's scroll clip
+				// (generous left/right, matching the old standalone page).
+				'<div class="hero-stage"><svg viewBox="-60 -30 2904 772" role="img" ' +
+				'aria-label="Interactive interpolation between the upright and the Italify-corrected oblique">' +
+				'<path class="hero-outline demo-outline"></path></svg></div>' +
+				caption + "</div>";
+		},
+
+		// Horizontal carousel of animated outline demos. Chunk titles carry
+		// the demo id after a pipe — `## Overlap-agnostic | overlap` — and
+		// the body is the description (inline Markdown). The outline data,
+		// per-demo toggles and animation live in italify-demos.js.
+		demos(body) {
+			const TOGGLES = { overlap: "Remove overlap" };
+			const CHECKED = { overlap: false };
+			const cards = splitTitledChunks(body).map(function (c) {
+				const m = c.title.match(/^(.*?)\s*\|\s*(\S+)\s*$/);
+				const title = m ? m[1] : c.title;
+				const id = m ? m[2] : "";
+				const toggle = TOGGLES[id]
+					? '<label class="demo-toggle"><input type="checkbox"' +
+						(CHECKED[id] ? " checked" : "") + "><span>" +
+						escapeHtml(TOGGLES[id]) + "</span></label>"
+					: "";
+				return '<article class="demo-card" data-demo="' + escapeHtml(id) +
+					'" data-label="' + escapeHtml(title) + '">' +
+					'<div class="demo-figure"></div>' +
+					"<h4>" + inline(title) + "</h4>" +
+					"<p>" + inline(c.body.join(" ")) + "</p>" + toggle +
+					"</article>";
+			});
+			return '<div class="demo-carousel-wrap">' +
+				'<div class="demo-nav">' +
+				'<button type="button" class="demo-nav-prev" aria-label="Previous demo">←</button>' +
+				'<button type="button" class="demo-nav-next" aria-label="Next demo">→</button>' +
+				"</div>" +
+				'<div class="demo-carousel">' + cards.join("") + "</div>" +
+				'<div class="demo-dots" role="tablist"></div>' +
+				"</div>";
+		},
+
+		// Testimonials: `## Name | Affiliation | https://…` + quote body.
+		quotes(body) {
+			const items = splitTitledChunks(body).map(function (c) {
+				const parts = c.title.split("|").map(function (p) { return p.trim(); });
+				const name = parts[0] || "";
+				const affiliation = parts[1] || "";
+				const url = parts[2] || "";
+				const source = url
+					? '<a href="' + escapeHtml(url) + '" target="_blank" rel="noopener noreferrer">' +
+						escapeHtml(affiliation) + "</a>"
+					: escapeHtml(affiliation);
+				return '<figure class="quote"><blockquote>' + inline(c.body.join(" ")) +
+					"</blockquote><figcaption>– " + escapeHtml(name) +
+					(affiliation ? ", " + source : "") + "</figcaption></figure>";
+			});
+			return '<div class="quote-row">' + items.join("") + "</div>";
 		},
 
 		// Image on the right, notes on the left at percentage heights of
@@ -257,9 +336,9 @@
 		});
 	}
 
-	// On the Python API page, group each "**`func(...)`**" entry – its
+	// On the Python API page, group each "**`func(...)`**" entry — its
 	// name plus the description and Parameters/Returns blocks that follow
-	// – into div.api-entry, so the name reads as a header and the rest
+	// — into div.api-entry, so the name reads as a header and the rest
 	// indents beneath it. A function header is a paragraph whose sole
 	// content is `<strong><code>…</code></strong>`.
 	function wrapApiEntries(main) {
@@ -443,6 +522,10 @@
 			applyKbd(main);
 			highlightCode(main);
 			addCopyButtons(main);
+			// Let widget scripts (italify-demos.js) boot against the
+			// freshly rendered DOM, whichever load order won.
+			window.__italifyContentRendered = true;
+			document.dispatchEvent(new CustomEvent("italify:rendered"));
 			if (location.hash) {
 				const target = document.getElementById(location.hash.slice(1));
 				if (target) target.scrollIntoView();

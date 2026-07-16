@@ -1,15 +1,16 @@
 # A jump start for your italics
 
-@lede Italify is an algorithmic solution to optically corrected obliques. It corrects curve deformation, diagonals and anchor positions, so a slanted master becomes a starting point you can actually work with.
+@lede Italify is an algorithmic approach to optical correction of obliques. It corrects curve deformation, diagonals and anchor positions, so a slanted master becomes a starting point you can actually work with.
 
-```buttons
-[Read the handbook](handbook) primary
+```italify-hero
+caption: Slant the word, then dial in the correction. Font in use: [MNKY Wilson](https://mnkytype.com/wilson).
 ```
 
-```screenshot wide
-img: images/hero.png
-alt: “Bosen” set in a heavy italic – the Italify-corrected outline in blue, with the plain mechanical slant ghosting out from behind it in pink and cyan.
-caption: The Italify result in blue, with the plain mechanical slant behind it.
+The plugin is now available for foundries. Get in touch to book a demo: sebastian.carewe<span class="email-protected"></span>
+
+```buttons
+[Try free for 48 hours](trial) primary
+[Read the handbook](handbook)
 ```
 
 @overline The problem
@@ -20,16 +21,20 @@ You’ve drawn your upright masters, spent months refining details... and now yo
 
 Correcting all of that by hand, glyph by glyph, is most of the work of drawing an oblique. It is repetitive and time-consuming. Italify automates exactly that – while leaving you in control. You get a result that is already a very advanced state of your final italic, which you can later adjust by hand to meet your specific taste.
 
-```screenshot
-img: images/slantProblems.png
-tag: Screenshot – the problem
-desc: A single mechanically slanted “o” or “e” with the upright original
-  ghosted behind it, annotated with two or three short callouts pointing at
-  the typical defects: swollen lower-left / upper-right curve, thinned
-  opposite quadrants, rotated terminal. Keep annotations minimal – thin black
-  lines, small labels.
-caption: What a plain shear does to round shapes, diagonals and terminals.
-```
+@overline Prior art
+
+## Why not one of the existing approaches? {#prior-art}
+
+So far, the most popular approaches, limited to curve correction, have been:
+
+1. Slanting and adjusting curves by hand. Very tedious and manual, with inconsistent results and no formalisable algorithm.
+2. A complex half-slant/rotate mix strategy (proposed by [Karow/Briem](https://help.fontlab.com/fontlab/8/tutorials/briem/4-3-italic/briem-4-34-curves)). This process requires a lot of manual intervention.
+3. A custom slant/rotate mix, for example published in the [legacy Italify plugin](https://github.com/eweracs/italify). Relatively limited, and doesn’t keep nodes on horizontal extremes.
+4. Stem-based transformation (e.g. Glyphs’ Cursivy algorithm). Some of the worst examples include [Inter](https://fonts.google.com/specimen/Inter)’s italics.
+5. Another stem-based [algorithm](https://github.com/googlefonts/roboto-2/blob/main/scripts/lib/fontbuild/italics.py) used to generate [Roboto](https://fonts.google.com/specimen/Roboto)’s obliques. The resulting obliques have the same problems as Inter.
+6. Various other combinations (as demonstrated by [Jeremy Tribby](https://vimeo.com/1059825184)).
+
+Italify, in stark contrast, actually produces usable results. It is a stem-agnostic, purely geometrical algorithm. It guarantees master compatibility, as it doesn’t add or remove any nodes, and all horizontal extremes stay perfectly on their height coordinates. Notably, Italify also corrects diagonal stems, not only curves.
 
 @overline The idea
 
@@ -44,82 +49,55 @@ You have control over what is corrected, and how:
 - **Diagonal correction** treats diagonal stems and adjusts their width and angle based on constraints you define with the built-in Stem Tagger.
 - **Stem compensation** compensates for the loss in vertical stems when slanted, maintaining the exact same contrast. Useful for later interpolation adjustments.
 
-@overline What’s in the box
+@overline Capabilities
 
-## One plugin, three tools {#tools}
-### The Italify filter
-The filter itself. A dialogue with live preview: set the angle (or get it from the master), then balance curve correction, diagonal correction, stem compensation and terminal handling with sliders. Also runs at export as a custom parameter, so your sources stay upright.
-```screenshot wide
-img: images/filter.png
-tag: Screenshot – tagger canvas
-desc: The filter interface active on a glyph.
-caption: The Italify filter in use in Glyphs.
+## Built for the hard cases {#capabilities}
+
+Whatever your outlines throw at it – overlaps removed, extra nodes, inflections, backslants – the correction holds up.
+
+```demos
+## Overlap-agnostic | overlap
+The algorithm works even when overlap is removed and curve intentions would seem more difficult to guess.
+## Diagonal correction | diagonal
+Italify can also correct diagonals, otherwise too thick or thin after a pure slant. No stem information necessary and overlap-agnostic as usual.
+## Extra nodes | sweep
+Curves with multiple intermediate points are transformed without a problem – useful where a pure extreme-to-extreme construction doesn’t allow for the desired curve shape. The result is exactly the same as if the extra nodes were omitted.
+## Inflections | inflect
+Italify handles inflecting curves, without the need to insert explicit inflection points. This way, your outlines stay as smooth as possible.
+## Retalics | retal
+Whatever name you choose for your backslanted style, Italify has got you covered. Font in use: [Mae Soft](https://lettermin.com/fonts/mae-soft) (made with Italify).
+## High-contrast designs | contrast
+Theoretically, any curve can be treated with Italify. Whether it actually makes sense for your design is your decision.
+## Implicit extremes | implicit
+If you want to leave off your horizontal or vertical extreme nodes for curve segments, no problem.
 ```
 
-### The Italify Tagger
-An Edit View tool (shortcut [[C]]) for tagging stems and nodes. It never moves your points – it writes metadata the filter reads, and draws it on the canvas so you can see what the filter will do before you run it.
+@overline In the wild
 
-```screenshot wide
-img: images/stemTagger.png
-tag: Screenshot – tagger canvas
-desc: The Edit View with the Italify Tagger active on a glyph with two or
-  three tagged stems (an “n” or “h” is ideal): blue stem trapezoids with
-  corner halos, one stem selected (saturated) with its flip-axis button
-  visible, a pink anchored edge on one stem. Include the Glyphs toolbar at the
-  top so the Italify Tagger icon is visible and highlighted.
-caption: The tagger visualises every diagonal the filter will treat.
+## What designers say {#voices}
+
+```quotes
+## Henning Skibbe | Character Type | https://charactertype.com
+Italify not only saved me a great amount of time, but also guaranteed systematic results whose quality speaks for itself. Adding italics to a major project was a breeze. I am a changed man.
+## René Bieder | Studio René Bieder | https://www.renebieder.com/
+Italify almost feels like an unfair advantage – I’d rather keep it to myself. But the results are simply too good: optically precise, thoughtfully executed, and a huge relief in the process.
+## Ermin Međedović | Lettermin | https://lettermin.com/
+Having worked with Sebastian for years, Italify’s results were no surprise to me. An efficient and reliable tool, it produces obliques that feel designed, not mechanic, while significantly reducing both time and friction.
+## Jakob Runge | TypeMates | https://www.typemates.com/
+We used Italify on a custom project – with striking results. In general, it creates obliques remarkably close to what I’d draw by hand, and handles geometric designs in a way that fits my workflow.
 ```
 
-### The Italify Groups palette
-A sidebar palette (Window) for **glyph groups** – named sets of glyphs that share Italify parameters, so you can tune “all the rounds” or “all the diagonals” at once. Assign the selection to a group in the palette; each group’s parameters are then edited from the filter dialogue.
+@overline Interested?
 
-```screenshot wide
-img: images/groupsPalette.png
-tag: Screenshot – Italify Groups palette
-desc: The Italify Groups sidebar palette: a glyph name on the first line, a
-  “Group” pop-up beneath it, and the list of the font's groups below.
-caption: The Italify Groups palette manages group membership.
-```
+## Get Italify {#get-italify}
 
-@overline Workflow
+The plugin is available for foundries. Get in touch to book a demo or request a quote for your project: sebastian.carewe<span class="email-protected"></span>
 
-## A typical session {#workflow}
-
-```steps
-## Tag the stems.
-Pick the Italify Tagger, select the nodes of a stem and press [[S]] – or
-let *Auto-tag Stems* find them for you. Hold [[⌥]] to tag all masters at
-once. Pin an anchored edge with [[A]] where a stem must not move, or set hinge corners with [[H]] for a diagonal whose diagonally opposed corners shouldn’t move.
-## Run the filter.
-Choose *Filter ▸ Italify*, click [[↺]] to adopt the master’s italic angle,
-and watch the live preview while you adjust the sliders. Apply when it looks
-right – or hold [[Space]]+[[Shift]] in the tagger for a preview without
-leaving the canvas.
-## Refine the exceptions.
-Where a glyph needs special treatment, tag nodes with [[L]] (limit a curve’s correction) or [[N]] (skip curve
-correction) and run the filter again.
-```
-
-```screenshot
-img: images/preview.png
-tag: Screenshot – live preview HUD
-desc: The tagger’s Space+Shift preview: the filled, italified outline of a
-  glyph with the floating parameter HUD below the baseline listing angle,
-  curve correction, keep terminals, diagonal correction, and stem
-  compensation. All node/stem chrome hidden (that is what the mode does),
-  so the shot reads as “finished letter plus a small parameter readout”.
-caption: Hold Space + Shift in the tagger for a live preview of the current parameters.
-```
-
-@overline Get started
-
-## Installation {#get-started}
-
-1. Double-click `Italify.glyphsPlugin` – Glyphs installs it into your Plugins folder.
-2. Relaunch Glyphs. You’ll find *Italify* in the Filter menu, the *Italify Tagger* in the toolbar and the *Italify Groups* palette in the sidebar.
-
-Italify requires **Glyphs 3.2 or later**.
+Or see for yourself first – the free trial gives you full access for 48 hours, and the [handbook](handbook) covers everything from tagging stems to per-group parameters. The plugin itself is a [free download](https://github.com/eweracs/Italify/releases/latest/download/Italify.glyphsPlugin.zip); license and trial codes unlock it.
 
 ```buttons
-[Read the handbook](handbook) primary
+[Try free for 48 hours](trial) primary
+[Read the handbook](handbook)
 ```
+
+<small>Italify wordmark by [Morgane Vantorre](https://instagram.com/gagane_). Italify requires Glyphs 3.2 or later.</small>

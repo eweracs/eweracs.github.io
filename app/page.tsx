@@ -299,6 +299,23 @@ export default function App() {
           <div className="flex flex-col h-full">
             <div className="flex-1 overflow-y-auto">
               <div className="space-y-12">
+                <a
+                  href="/italify"
+                  className="group block border border-white/15 bg-white/5 p-6 no-underline transition-colors hover:bg-white/10"
+                >
+                  <img
+                    src="/italify/italify.svg"
+                    alt="Italify"
+                    className="h-10 w-auto mb-4"
+                  />
+                  <p className="text-white/80 mb-3">
+                    {tString(language, "projects.italify")}
+                  </p>
+                  <span className="text-white/50 group-hover:text-white/80 transition-colors text-sm">
+                    {tString(language, "projects.italifyLink")} →
+                  </span>
+                </a>
+
                 <p className="text-white/90">
                   {tString(language, "projects.intro")}
                 </p>

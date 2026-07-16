@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Italify – Your trial code</title>
+<title>Italify — Your trial code</title>
 <meta name="robots" content="noindex">
 <link rel="icon" href="/icon.svg" type="image/svg+xml" sizes="any">
 <!-- Set the theme before first paint to avoid a flash of the wrong mode:
@@ -18,7 +18,7 @@
 	} catch (e) {}
 })();
 </script>
-<link rel="stylesheet" href="styles.css?v=16">
+<link rel="stylesheet" href="styles.css?v=19">
 <style>
 	/* Page-local: the code block reuses the docs' .code-block/.copy-btn
 	   pattern; the code itself wraps (license codes are long). */
@@ -37,8 +37,10 @@
 		<a class="wordmark" href="overview"><img class="wordmark-logo" src="images/italify.svg" alt="Italify"></a>
 		<nav class="site-nav">
 			<a href="overview">Overview</a>
+			<a href="pricing">Pricing</a>
 			<a href="handbook">Handbook</a>
 			<a href="python-api">Python API</a>
+			<a class="site-home" href="/?section=projects">sebastiancarewe.com</a>
 		</nav>
 	</div>
 	<button id="theme-toggle" class="theme-toggle" type="button" aria-label="Switch to dark mode" title="Switch to dark mode" aria-pressed="false">
@@ -65,10 +67,13 @@
 
 		<h3>Activate Italify</h3>
 		<ol class="steps">
-			<li><strong>Copy the code</strong> above.</li>
-			<li><strong>In Glyphs</strong>, open <em>Filter → Italify</em>.</li>
+			<li><strong>Install Italify</strong> (skip if you have it):
+				<a href="https://github.com/eweracs/Italify/releases/latest/download/Italify.glyphsPlugin.zip">download the plugin</a>,
+				unzip, double-click, relaunch Glyphs.</li>
+			<li><strong>Copy the code</strong> above and open
+				<em>Filter → Italify</em> in Glyphs.</li>
 			<li><strong>Paste the code</strong> into the license field and
-				click <em>Add</em>. That's it – full access on every master
+				click <em>Add</em>. That's it — full access on every master
 				for the next 48 hours.</li>
 		</ol>
 		<p>Keep this page's link: re-opening it during your trial shows the
@@ -80,7 +85,7 @@
 
 <footer>
 	<div class="column">
-		<p>Italify – a plugin for <a href="https://glyphsapp.com">Glyphs</a>. <a href="handbook">Handbook</a></p>
+		<p>Italify — a plugin for <a href="https://glyphsapp.com">Glyphs</a>. <a href="handbook">Handbook</a></p>
 	</div>
 </footer>
 
@@ -121,7 +126,7 @@ var WORKER_URL = "https://italify-trial.file-manager-bot.workers.dev";
 				} else {
 					fail("This link has expired",
 						'Trial links are valid for one hour. '
-						+ '<a href="trial">Request a fresh one</a> – if your '
+						+ '<a href="trial">Request a fresh one</a> — if your '
 						+ "trial is still running, you'll get the same code again.");
 				}
 				return;
@@ -160,6 +165,6 @@ var WORKER_URL = "https://italify-trial.file-manager-bot.workers.dev";
 		});
 })();
 </script>
-<script src="main.js?v=9"></script>
+<script src="main.js?v=11"></script>
 </body>
 </html>

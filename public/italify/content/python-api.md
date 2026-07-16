@@ -231,7 +231,7 @@ The node's [Y-Snap](handbook#snap-y) override.
 
 *Returns:*
 
-- `bool | None` – `True` (force-retain the node's y), `False` (force-release it), or `None` (no override – the automatic metric-snap heuristic decides)
+- `bool | None` – `True` (force-retain the node's y), `False` (force-release it), or `None` (no override — the automatic metric-snap heuristic decides)
 
 **`terminal(node)`**
 
@@ -243,7 +243,7 @@ The [Terminal](handbook#terminal) override for the segment `node` bounds. The ta
 
 *Returns:*
 
-- `bool | None` – `True` (force-terminal), `False` (opt out), or `None` (no override – auto detection decides)
+- `bool | None` – `True` (force-terminal), `False` (opt out), or `None` (no override — auto detection decides)
 
 ## Stems {#stems}
 
@@ -504,7 +504,7 @@ Toggle [No Curve Correction](handbook#no-curve-correction) on the segment betwee
 
 **`set_inktrap(layer, node_a, node_b, on, all_masters=False)`**
 
-Toggle [Inktrap](handbook#inktrap) on the straight segment between two nodes – held to its original length after the adjoining segments are corrected.
+Toggle [Inktrap](handbook#inktrap) on the straight segment between two nodes — held to its original length after the adjoining segments are corrected.
 
 *Parameters:*
 
@@ -520,7 +520,7 @@ Toggle [Inktrap](handbook#inktrap) on the straight segment between two nodes –
 
 **`set_snap_y(layer, node, retain, all_masters=False)`**
 
-Set the [Y-Snap](handbook#snap-y) override on a node – force it to retain its y, release it, or hand it back to the automatic heuristic.
+Set the [Y-Snap](handbook#snap-y) override on a node — force it to retain its y, release it, or hand it back to the automatic heuristic.
 
 *Parameters:*
 
@@ -535,7 +535,7 @@ Set the [Y-Snap](handbook#snap-y) override on a node – force it to retain its 
 
 **`set_terminal(layer, node_a, node_b, on, all_masters=False)`**
 
-Set the [Terminal](handbook#terminal) override on the segment between `node_a` and `node_b` – force it to be a terminal, opt it out, or hand it back to the automatic detection.
+Set the [Terminal](handbook#terminal) override on the segment between `node_a` and `node_b` — force it to be a terminal, opt it out, or hand it back to the automatic detection.
 
 *Parameters:*
 

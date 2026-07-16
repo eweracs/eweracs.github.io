@@ -1,4 +1,4 @@
-/* Italify documentation
+/* Italify documentation — design system per formkunft.com-design.md
    Monochrome editorial: black on white, restrained blue links,
    narrow centered column, hierarchy through scale and whitespace. */
 
@@ -132,7 +132,7 @@ header.site .column {
 	padding-bottom: var(--space-md);
 }
 
-/* Theme switch: sits just past the reading column's right edge – a 16px
+/* Theme switch: sits just past the reading column's right edge — a 16px
    gap from the last nav item, matching the nav's own inter-item spacing
    (the column's 24px padding less the button's 8px inset). Below 961px the
    gutter closes, so it falls back to the page edge (see media query). */
@@ -216,6 +216,25 @@ nav.site-nav a:hover,
 nav.site-nav a[aria-current="page"] {
 	text-decoration: underline;
 	text-underline-offset: 4px;
+}
+
+/* Way back to the main site (Projects panel) — quieter than the section
+   links, separated by a hairline. Hidden on narrow screens, where the
+   nav row is already crowded. */
+nav.site-nav a.site-home {
+	color: var(--color-secondary);
+	border-left: 1px solid var(--color-border);
+	padding-left: var(--space-md);
+}
+
+nav.site-nav a.site-home:hover {
+	color: var(--color-primary);
+}
+
+@media (max-width: 700px) {
+	nav.site-nav a.site-home {
+		display: none;
+	}
 }
 
 /* ---- Typography --------------------------------------------------- */
@@ -576,7 +595,7 @@ figure.shot.annotated img {
 	width: 46%;
 	/* The standard figure shadow, but as drop-shadow so it follows the
 	   window's rounded corners (the asset's alpha) instead of a box.
-	   drop-shadow blur is a Gaussian deviation – half the box-shadow
+	   drop-shadow blur is a Gaussian deviation — half the box-shadow
 	   radii renders visually identical. */
 	box-shadow: none;
 	border-radius: 0;
@@ -828,6 +847,337 @@ ol.steps > li::before {
 
 .api-body > :last-child {
 	margin-bottom: 0;
+}
+
+/* ---- Interactive outline demos (index page) -------------------------
+   The hero widget and the capabilities carousel, drawn by
+   italify-demos.js. All colour comes from the tokens, so the theme
+   toggle restyles the outlines for free. */
+
+.demo-outline {
+	fill: none;
+	stroke: var(--color-primary);
+	stroke-width: 2;
+}
+
+.demo-outline-filled {
+	fill: var(--color-primary);
+	stroke: none;
+}
+
+.demo-handles line {
+	stroke: var(--color-link);
+	stroke-width: 1.2;
+	opacity: 0.65;
+}
+
+.demo-nodes circle {
+	fill: var(--color-surface);
+	stroke: var(--color-primary);
+	stroke-width: 1.4;
+}
+
+.demo-nodes .demo-cross {
+	stroke: var(--color-link);
+	stroke-width: 1.6;
+}
+
+/* Shared checkbox + label control (hero and demo cards). */
+.demo-toggle {
+	display: inline-flex;
+	align-items: center;
+	gap: 8px;
+	font-size: 17px;
+	line-height: 26px;
+	cursor: pointer;
+	user-select: none;
+}
+
+/* Round checkboxes, carried over from the original standalone Italify
+   page: a circle with a checkmark that fades/scales in, tinted with the
+   site's link blue. */
+.demo-toggle input {
+	appearance: none;
+	-webkit-appearance: none;
+	width: 20px;
+	height: 20px;
+	margin: 0;
+	border: 1px solid var(--color-secondary);
+	border-radius: var(--rounded-full);
+	background: var(--color-muted);
+	cursor: pointer;
+	display: inline-grid;
+	place-content: center;
+	flex: 0 0 auto;
+	transition: border-color 0.15s;
+}
+
+.demo-toggle input:hover {
+	border-color: var(--color-primary);
+}
+
+.demo-toggle input::before {
+	content: "";
+	width: 11px;
+	height: 11px;
+	transform: scale(0);
+	opacity: 0;
+	transition: transform 0.15s ease-in-out, opacity 0.15s ease-in-out;
+	background: var(--color-link);
+	clip-path: polygon(14% 44%, 0 65%, 50% 100%, 100% 16%, 80% 0%, 43% 62%);
+}
+
+.demo-toggle input:checked::before {
+	transform: scale(1);
+	opacity: 1;
+}
+
+.demo-toggle input:focus-visible {
+	outline: 2px solid var(--color-link);
+	outline-offset: 2px;
+}
+
+/* ---- Hero ---- */
+
+.italify-hero {
+	margin: var(--space-lg) 0;
+}
+
+.hero-controls {
+	display: flex;
+	align-items: center;
+	gap: var(--space-lg);
+	flex-wrap: wrap;
+	padding: var(--space-sm) 0;
+	border-top: 1px solid var(--color-border);
+	border-bottom: 1px solid var(--color-border);
+}
+
+.hero-correction {
+	display: inline-flex;
+	align-items: center;
+	gap: 10px;
+	font-size: 17px;
+	line-height: 26px;
+	flex: 1 1 220px;
+	max-width: 340px;
+	transition: opacity 0.2s;
+}
+
+.italify-hero:not(.hero-slant-on) .hero-correction {
+	opacity: 0.45;
+}
+
+.hero-slider {
+	appearance: none;
+	-webkit-appearance: none;
+	flex: 1;
+	height: 2px;
+	border-radius: var(--rounded-full);
+	background: var(--color-border);
+	outline-offset: 4px;
+	cursor: pointer;
+}
+
+.hero-slider:disabled {
+	cursor: default;
+}
+
+.hero-slider::-webkit-slider-thumb {
+	appearance: none;
+	-webkit-appearance: none;
+	width: 16px;
+	height: 16px;
+	border-radius: var(--rounded-full);
+	border: 1px solid var(--color-primary);
+	background: var(--color-surface);
+}
+
+.hero-slider::-moz-range-thumb {
+	width: 14px;
+	height: 14px;
+	border-radius: var(--rounded-full);
+	border: 1px solid var(--color-primary);
+	background: var(--color-surface);
+}
+
+.hero-stage {
+	margin-top: var(--space-md);
+	overflow-x: auto;
+}
+
+.hero-stage svg {
+	display: block;
+	width: 100%;
+	min-width: 720px;
+	height: auto;
+	overflow: visible;
+}
+
+.hero-caption {
+	margin-top: var(--space-sm);
+	font-size: 17px;
+	line-height: 26px;
+	color: var(--color-secondary);
+}
+
+/* ---- Capabilities carousel ---- */
+
+.demo-carousel-wrap {
+	margin: var(--space-md) 0;
+}
+
+.demo-nav {
+	display: flex;
+	justify-content: flex-end;
+	gap: var(--space-xs);
+	margin-bottom: var(--space-sm);
+}
+
+.demo-nav button {
+	width: 38px;
+	height: 38px;
+	border: 1px solid var(--color-border);
+	border-radius: var(--rounded-full);
+	background: var(--color-surface);
+	color: var(--color-primary);
+	font: inherit;
+	font-size: 17px;
+	cursor: pointer;
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	transition: border-color 0.15s, opacity 0.15s;
+}
+
+.demo-nav button:hover:not(:disabled) {
+	border-color: var(--color-secondary);
+}
+
+.demo-nav button:disabled {
+	opacity: 0.35;
+	cursor: default;
+}
+
+.demo-carousel {
+	display: flex;
+	gap: var(--space-md);
+	overflow-x: auto;
+	scroll-snap-type: x mandatory;
+	scrollbar-width: none;
+	/* Let node halos overdraw the card padding without clipping ugly. */
+	padding: 4px;
+	margin: -4px;
+}
+
+.demo-carousel::-webkit-scrollbar {
+	display: none;
+}
+
+.demo-card {
+	flex: 0 0 min(440px, 86%);
+	scroll-snap-align: start;
+	border: 1px solid var(--color-border);
+	border-radius: var(--rounded-md);
+	padding: var(--space-md);
+	display: flex;
+	flex-direction: column;
+	gap: var(--space-xs);
+}
+
+.demo-figure {
+	margin-bottom: var(--space-sm);
+}
+
+.demo-figure svg {
+	display: block;
+	width: 100%;
+	height: 300px;
+	overflow: visible;
+}
+
+.demo-card h4 {
+	margin: 0;
+}
+
+.demo-card p {
+	margin: 0;
+	font-size: 17px;
+	line-height: 26px;
+	color: var(--color-secondary);
+	flex: 1;
+}
+
+.demo-card .demo-toggle {
+	margin-top: var(--space-xs);
+}
+
+.demo-dots {
+	display: flex;
+	justify-content: center;
+	gap: 8px;
+	margin-top: var(--space-sm);
+}
+
+.demo-dot {
+	width: 8px;
+	height: 8px;
+	padding: 0;
+	border: 1px solid var(--color-secondary);
+	border-radius: var(--rounded-full);
+	background: transparent;
+	cursor: pointer;
+	transition: background 0.15s;
+}
+
+.demo-dot.active {
+	background: var(--color-primary);
+	border-color: var(--color-primary);
+}
+
+/* ---- Testimonials ---- */
+
+.quote-row {
+	display: grid;
+	grid-template-columns: 1fr 1fr;
+	gap: var(--space-md);
+	margin: var(--space-md) 0;
+}
+
+@media (max-width: 640px) {
+	.quote-row {
+		grid-template-columns: 1fr;
+	}
+}
+
+.quote {
+	margin: 0;
+	border: 1px solid var(--color-border);
+	border-radius: var(--rounded-md);
+	padding: var(--space-md);
+}
+
+.quote blockquote {
+	margin: 0;
+	font-size: 17px;
+	line-height: 26px;
+}
+
+.quote figcaption {
+	margin-top: var(--space-sm);
+	font-size: 17px;
+	line-height: 26px;
+	color: var(--color-secondary);
+}
+
+.quote figcaption a {
+	color: var(--color-secondary);
+}
+
+/* Obfuscated email: the domain is supplied by CSS, matching the main
+   site's convention. */
+.email-protected::after {
+	content: "@gmail.com";
 }
 
 /* ---- Dark-theme fine-tuning ----------------------------------------
