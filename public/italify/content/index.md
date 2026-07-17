@@ -9,7 +9,7 @@ caption: Font in use: [MNKY Wilson](https://mnkytype.com/wilson).
 The plugin is now available for licensing. I am happy to give you a demo, in person or by video: sebastian.carewe<span class="email-protected"></span>
 
 ```buttons
-[Try free for 48 hours](trial) primary
+[Download](https://github.com/eweracs/Italify/releases/latest/download/Italify.glyphsPlugin.zip) primary
 [Read the handbook](handbook)
 ```
 

@@ -2,6 +2,11 @@
 
 @lede Italify can be licensed in two ways. Either per master (unlimited duration), or for a time period (unlimited masters). One credit activates one master, forever. You can decide what option makes more sense for your project.
 
+Try the fully functional plugin for 48h, zero restrictions.
+```buttons
+[48h trial](trial) primary
+```
+
 @overline Per project
 
 ## Time passes {#time}

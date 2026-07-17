@@ -16,12 +16,13 @@
 11. [Anchor links](#anchor-links)
 12. [Bulk operations](#bulk)
 13. [Transfer between fonts](#transfer)
-14. [Refusal reasons](#refusals)
+14. [Correction](#correction)
+15. [Refusal reasons](#refusals)
 ```
 
 ## Overview {#overview}
 
-The `italify` module exposes the [Tagger](handbook#tagger)’s authoring verbs to Python. It accesses the same methods the items in the [Glyph → Italify menu](handbook#glyph-menu) use. A script therefore writes the exact `userData` the filter reads – and, like the tool, it **never moves geometry**: it only writes metadata.
+The `italify` module exposes the [Tagger](handbook#tagger)’s authoring verbs to Python. It accesses the same methods the items in the [Glyph → Italify menu](handbook#glyph-menu) use. A script therefore writes the exact `userData` the filter reads – and, like the tool, it only writes metadata, with one exception: the [`correct`](#correction) verb runs the filter’s actual correction pass, so a script can drive the whole tag-then-correct workflow headless.
 
 ## Installation {#installation}
 
@@ -754,6 +755,36 @@ for g in src.glyphs:
         italify.transfer(g.layers[sid], target.layers[did])
 ```
 
+## Correction {#correction}
+
+Everything above authors metadata. `correct` is the one verb that moves geometry: it runs the filter's actual correction pass — the same code the dialog's Apply button and instance export run — on an **upright** layer, with the parameters given explicitly.
+
+**`correct(layer, angle, curve_correction=1.0, diagonal_correction=1.0, stem_compensation=0.0, keep_terminals=0.0, diagonal_correction_stems_only=True)`**
+
+Shear-aware outline correction driven by the layer's stem tags, then the slant itself. The whole pass is one undo step.
+
+*Parameters* (mirroring the filter dialog):
+
+- `layer` (`GSLayer`) – the **upright** layer to correct and slant
+- `angle` (`float`) – the italic angle in degrees
+- `curve_correction` (`float`, 0.0–1.0) – curve correction strength
+- `diagonal_correction` (`float`, 0.0–1.0) – diagonal correction strength
+- `stem_compensation` (`float`, 0.0–1.0) – stem compensation strength
+- `keep_terminals` (`float`, 0.0–1.0) – how strongly terminals keep their upright shape
+- `diagonal_correction_stems_only` (`bool`) – restrict diagonal correction to tagged stems
+
+*Returns:*
+
+- `ItalifyResult` – refuses with [`masterNotActivated`](#refusals) on a license-enforced build when the layer's master hasn't been activated with a credit
+
+```python
+import italify
+
+for layer in Glyphs.font.selectedLayers:
+    italify.correct(layer, angle=10, curve_correction=0.6,
+                    diagonal_correction=0.85, stem_compensation=0)
+```
+
 ## Refusal reasons {#refusals}
 
 When a write is refused, `result.reason` is one of these machine codes (`result.message` carries the matching sentence):
@@ -771,6 +802,7 @@ When a write is refused, `result.reason` is one of these machine codes (`result.
 | `lockedHandle` | Those handles stay extras while both ends of their curve belong to the stem. |
 | `notFound` | No matching stem, anchor, or node was found on the layer. |
 | `trialBlocked` | The action requires a licensed copy of Italify. |
+| `masterNotActivated` | The layer’s master hasn’t been activated with a license credit. |
 | `notCurveSegment` | The two nodes must be on-curve endpoints of the same curve segment, with at least one off-curve between them. |
 | `notInktrapSegment` | The two nodes must be directly-connected, unsmooth on-curve endpoints of a straight segment. |
 | `notTerminalSegment` | The two nodes must be the on-curve endpoints of a directly-connected straight segment. |
