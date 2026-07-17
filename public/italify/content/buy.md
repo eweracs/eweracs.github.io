@@ -4,7 +4,7 @@
 
 Try the fully functional plugin for 48h, zero restrictions.
 ```buttons
-[48h trial](trial) primary
+[Try free for 48 hours](trial) primary
 ```
 
 @overline Per project
