@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Italify – Buy</title>
+<meta name="description" content="Buy Italify: per-master credits that never expire, or time passes with unlimited masters.">
+<link rel="icon" href="/icon.svg" type="image/svg+xml" sizes="any">
+<!-- Set the theme before first paint to avoid a flash of the wrong mode:
+     stored choice wins, otherwise follow the OS preference. -->
+<script>
+(function () {
+	try {
+		var stored = localStorage.getItem("italify-theme");
+		var theme = stored || (window.matchMedia &&
+			window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light");
+		document.documentElement.setAttribute("data-theme", theme);
+	} catch (e) {}
+})();
+</script>
+<link rel="stylesheet" href="styles.css?v=19">
+<style>
+	/* Page-local order-form styling; the form markup itself lives in
+	   content/buy.md (raw HTML block) so the surrounding text stays
+	   editable as Markdown. */
+	.order-form {
+		border: 1px solid var(--color-border);
+		border-radius: var(--rounded-md);
+		padding: var(--space-md);
+		display: grid;
+		grid-template-columns: 1fr 1fr;
+		gap: var(--space-sm) var(--space-md);
+		margin: var(--space-md) 0;
+	}
+	.order-form .span-2 { grid-column: 1 / -1; }
+	@media (max-width: 640px) {
+		.order-form { grid-template-columns: 1fr; }
+		.order-form .span-2 { grid-column: auto; }
+	}
+	.order-form label {
+		display: block;
+		font-size: 14px;
+		line-height: 21px;
+		letter-spacing: 1.4px;
+		text-transform: uppercase;
+		color: var(--color-secondary);
+		margin-bottom: 2px;
+	}
+	.order-form input,
+	.order-form select,
+	.order-form textarea {
+		width: 100%;
+		padding: 8px 10px;
+		border: 1px solid var(--color-border);
+		border-radius: var(--rounded-sm);
+		background: var(--color-surface);
+		color: var(--color-primary);
+		font: inherit;
+		font-size: 17px;
+		line-height: 24px;
+	}
+	.order-form textarea { resize: vertical; min-height: 96px; }
+	/* VAT IDs are codes, not prose – lining figures sit better next to
+	   the uppercase country prefix. */
+	#order-vat { font-feature-settings: "lnum"; }
+	.order-form input:focus-visible,
+	.order-form select:focus-visible,
+	.order-form textarea:focus-visible {
+		outline: 2px solid var(--color-link);
+		outline-offset: 1px;
+	}
+	.order-form .order-actions {
+		display: flex;
+		align-items: center;
+		gap: var(--space-md);
+		flex-wrap: wrap;
+	}
+	.order-form button { font-family: inherit; cursor: pointer; }
+	.order-total { font-size: 19px; }
+	.order-status { font-size: 17px; line-height: 26px; color: var(--color-secondary); }
+	.order-status.error { color: var(--color-error); }
+	/* Honeypot: invisible to people, tempting to bots. */
+	.order-form .hp { position: absolute; left: -9999px; }
+</style>
+</head>
+<body>
+
+<header class="site">
+	<div class="column">
+		<a class="wordmark" href="/italify"><img class="wordmark-logo" src="images/italify.svg" alt="Italify"></a>
+		<nav class="site-nav">
+			<a href="/italify">Overview</a>
+			<a href="buy" aria-current="page">Buy</a>
+			<a href="handbook">Handbook</a>
+			<a href="python-api">Python API</a>
+			<a class="site-home" href="/?section=projects">sebastiancarewe.com</a>
+		</nav>
+	</div>
+	<button id="theme-toggle" class="theme-toggle" type="button" aria-label="Switch to dark mode" title="Switch to dark mode" aria-pressed="false">
+		<svg class="theme-icon" viewBox="0 0 500 500" fill="currentColor" aria-hidden="true"><path d="M250 0C388 0 500 111 500 250C500 388 388 500 250 500C112 500 0 388 0 250C0 111 112 0 250 0ZM114 114C39 189 39 310 114 386C189 461 311 461 386 386L114 114Z"/></svg>
+	</button>
+</header>
+
+<!-- Page content lives in content/buy.md – edit that file, not this one.
+     Authoring conventions are documented in AUTHORING.md. -->
+<main class="column" data-source="content/buy.md"></main>
+
+<footer>
+	<div class="column">
+		<p>Italify – a plugin for <a href="https://glyphsapp.com">Glyphs</a>. <a href="handbook">Handbook</a></p>
+	</div>
+</footer>
+
+<script src="vendor/marked.min.js"></script>
+<script src="main.js?v=12"></script>
+<script>
+// Order form wiring. The form markup arrives with the rendered Markdown
+// (content/buy.md), so hook up after main.js dispatches italify:rendered.
+// The package catalog here is DISPLAY-only – the Worker recomputes every
+// price server-side and ignores anything else the client claims.
+var WORKER_URL = "https://italify-trial.file-manager-bot.workers.dev";
+
+document.addEventListener("italify:rendered", function () {
+	var form = document.getElementById("order-form");
+	if (!form) return;
+	var packageSelect = document.getElementById("order-package");
+	var total = document.getElementById("order-total");
+	var submit = document.getElementById("order-submit");
+	var status = document.getElementById("order-status");
+
+	var PRICES = {
+		solo: "300 €", trio: "650 €", handful: "900 €", studio: "1 350 €",
+		large: "1 700 €", foundry: "2 000 €", week: "600 €", twoweeks: "1 000 €",
+	};
+
+	function syncTotal() {
+		var price = PRICES[packageSelect.value];
+		total.textContent = price ? "Total: " + price + " (net)" : "";
+	}
+	packageSelect.addEventListener("change", syncTotal);
+	syncTotal();
+
+	function show(message, isError) {
+		status.textContent = message;
+		status.classList.toggle("error", !!isError);
+		status.hidden = false;
+	}
+
+	form.addEventListener("submit", function (event) {
+		event.preventDefault();
+		submit.disabled = true;
+		show("Sending your order…", false);
+		fetch(WORKER_URL + "/order", {
+			method: "POST",
+			headers: { "Content-Type": "application/json" },
+			body: JSON.stringify({
+				package: packageSelect.value,
+				name: document.getElementById("order-name").value,
+				company: document.getElementById("order-company").value,
+				email: document.getElementById("order-email").value,
+				address: document.getElementById("order-address").value,
+				country: document.getElementById("order-country").value,
+				vatId: document.getElementById("order-vat").value,
+				note: document.getElementById("order-note").value,
+				website: document.getElementById("order-website").value, // honeypot
+			}),
+		}).then(function (response) {
+			return response.json().then(function (data) {
+				if (!response.ok) throw new Error(data.error || "Something went wrong.");
+				show(data.message, false);
+				form.reset();
+				syncTotal();
+			});
+		}).catch(function (error) {
+			show(error.message || "Something went wrong. Please try again.", true);
+		}).finally(function () {
+			submit.disabled = false;
+		});
+	});
+});
+</script>
+</body>
+</html>
