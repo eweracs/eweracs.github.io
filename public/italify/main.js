@@ -128,10 +128,10 @@
 				'<input class="hero-slider" type="range" min="0" max="100" value="0" disabled></label>' +
 				check("hero-nodes-toggle", "Show nodes", true) +
 				"</div>" +
-				// The outline spans 0…2784 × 0…712; the viewBox margin keeps
+				// The outline spans 0…3463 × 0…712; the viewBox margin keeps
 				// node circles and handles clear of the stage's scroll clip
 				// (generous left/right, matching the old standalone page).
-				'<div class="hero-stage"><svg viewBox="-60 -30 2904 772" role="img" ' +
+				'<div class="hero-stage"><svg viewBox="-60 -30 3583 772" role="img" ' +
 				'aria-label="Interactive interpolation between the upright and the Italify-corrected oblique">' +
 				'<path class="hero-outline demo-outline"></path></svg></div>' +
 				caption + "</div>";

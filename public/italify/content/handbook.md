@@ -1,6 +1,6 @@
 # Italify Handbook
 
-@lede Everything the plugin does, in one place. New to Italify? Start with the [overview](overview).
+@lede Everything the plugin does, in one place. New to Italify? Start with the [overview](/italify).
 
 ```toc
 1. [Installation](#installation)

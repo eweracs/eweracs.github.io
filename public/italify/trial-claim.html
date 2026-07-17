@@ -34,9 +34,9 @@
 
 <header class="site">
 	<div class="column">
-		<a class="wordmark" href="overview"><img class="wordmark-logo" src="images/italify.svg" alt="Italify"></a>
+		<a class="wordmark" href="/italify"><img class="wordmark-logo" src="images/italify.svg" alt="Italify"></a>
 		<nav class="site-nav">
-			<a href="overview">Overview</a>
+			<a href="/italify">Overview</a>
 			<a href="pricing">Pricing</a>
 			<a href="handbook">Handbook</a>
 			<a href="python-api">Python API</a>
@@ -122,7 +122,7 @@ var WORKER_URL = "https://italify-trial.file-manager-bot.workers.dev";
 				if (r.data.error === "already-used") {
 					fail("Trial already used",
 						"This email address has already used its Italify trial. "
-						+ 'Ready for the full version? See the <a href="overview">overview</a>.');
+						+ 'Ready for the full version? See the <a href="/italify">overview</a>.');
 				} else {
 					fail("This link has expired",
 						'Trial links are valid for one hour. '
@@ -165,6 +165,6 @@ var WORKER_URL = "https://italify-trial.file-manager-bot.workers.dev";
 		});
 })();
 </script>
-<script src="main.js?v=11"></script>
+<script src="main.js?v=12"></script>
 </body>
 </html>
