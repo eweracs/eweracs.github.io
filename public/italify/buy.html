@@ -148,6 +148,14 @@ document.addEventListener("italify:rendered", function () {
 
 	form.addEventListener("submit", function (event) {
 		event.preventDefault();
+		// Belt and braces on top of the select's `required`: never submit
+		// without an explicit country — the VAT handling depends on it.
+		var country = document.getElementById("order-country");
+		if (!country.value) {
+			show("Please select your country.", true);
+			country.focus();
+			return;
+		}
 		submit.disabled = true;
 		show("Sending your order…", false);
 		fetch(WORKER_URL + "/order", {
@@ -155,11 +163,12 @@ document.addEventListener("italify:rendered", function () {
 			headers: { "Content-Type": "application/json" },
 			body: JSON.stringify({
 				package: packageSelect.value,
-				name: document.getElementById("order-name").value,
+				firstName: document.getElementById("order-first-name").value,
+				lastName: document.getElementById("order-last-name").value,
 				company: document.getElementById("order-company").value,
 				email: document.getElementById("order-email").value,
 				address: document.getElementById("order-address").value,
-				country: document.getElementById("order-country").value,
+				country: country.value,
 				vatId: document.getElementById("order-vat").value,
 				note: document.getElementById("order-note").value,
 				website: document.getElementById("order-website").value, // honeypot

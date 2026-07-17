@@ -51,10 +51,14 @@ Pick your package and fill in your billing details. You’ll receive the invoice
 		</select>
 	</div>
 	<div>
-		<label for="order-name">Name</label>
-		<input id="order-name" type="text" required autocomplete="name">
+		<label for="order-first-name">First name</label>
+		<input id="order-first-name" type="text" required autocomplete="given-name">
 	</div>
 	<div>
+		<label for="order-last-name">Surname</label>
+		<input id="order-last-name" type="text" required autocomplete="family-name">
+	</div>
+	<div class="span-2">
 		<label for="order-company">Company / foundry (optional)</label>
 		<input id="order-company" type="text" autocomplete="organization">
 	</div>
