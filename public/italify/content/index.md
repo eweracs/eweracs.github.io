@@ -74,9 +74,9 @@ Italify handles all sorts of cases and designs.
 ## Overlap-agnostic | overlap
 The algorithm works even when overlap is removed and curve intentions would seem more difficult to guess.
 ## Diagonal correction | diagonal
-Italify can also correct diagonals, otherwise too thick or thin after a pure slant. No stem information necessary and overlap-agnostic as usual.
+Italify can also correct diagonals, otherwise too thick or thin after a pure slant. Overlap-agnostic as usual.
 ## Extra nodes | sweep
-Curves with multiple intermediate points are transformed without a problem – useful where a pure extreme-to-extreme construction doesn’t allow for the desired curve shape. The result is exactly the same as if the extra nodes were omitted.
+Curves with multiple intermediate points between extremes are transformed without a problem – useful where a pure extreme-to-extreme construction doesn’t allow for the desired curve shape. The result is exactly the same as if the extra nodes were omitted.
 ## Inflections | inflect
 Italify handles inflecting curves, without the need to insert explicit inflection points. This way, your outlines stay as smooth as possible.
 ## Retalics | retal
