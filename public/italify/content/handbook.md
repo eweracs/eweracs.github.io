@@ -103,7 +103,7 @@ desc: The Italify filter dialogue’s lower band, annotated: a status line readi
 caption: Saving a scoped set of parameters from the filter dialogue.
 ```
 
-Set the sliders the way you want them, pick a scope from **Save for:** – *Font*, *Master*, *Glyph*, or *Layer*, plus *Group (font)* and *Group (master)* when the active glyph belongs to a [group](#groups) – and press **Save**. The status line above the picker always tells you which scope is currently in effect (“Using *Glyph* parameters”, say) and warns when you have edited the sliders without saving.
+Set the sliders the way you want them, pick a scope from **Save for:** – *Font*, *Master*, *Glyph*, or *Layer*, plus *Group (font)* and *Group (master)* when the active glyph belongs to a [group](#groups) – and press **Save**. The status line above the picker always tells you which scope is currently in effect (“Using *Glyph* parameters”, say) and warns when you have edited the sliders without saving. The picker opens **pre-selected to that same scope** – if the glyph is currently using *Glyph* parameters, *Glyph* is already chosen, so Save writes back to where the values came from; with nothing saved anywhere it defaults to *Font*.
 
 When the filter runs, it resolves each of the four parameters independently through a **cascade**, from most specific to least:
 
@@ -128,6 +128,14 @@ Italify;angle:9.5;curveCorrection:0.8;diagonalCorrection:0.9;stemCompensation:1;
 ```
 
 You don’t need to type this: open the filter dialogue, set the parameters the way you want them, and choose *Copy Filter Parameter* from the dialogue’s gear menu – filter parameter lands on your clipboard ready to paste into the instance. All arguments are optional and named, so partial parameters like `Italify;angle:10` work and fall back to the defaults above.
+
+Like many Glyphs export filters, Italify also accepts an **`include`** or **`exclude`** argument to scope which glyphs it runs on – comma-separated glyph names, with `*` wildcards allowed:
+
+```
+Italify;angle:10;exclude:A,B,*-ar
+```
+
+`include` means “run *only* on these glyphs”; `exclude` means “run on everything *except* these”. The two can’t be combined – if both are given, `include` wins. A scoped-out glyph is left completely untouched.
 
 At export the angle is also written into each generated instance’s metadata: Glyphs derives `post.italicAngle`, the `hhea` caret slope and related fields from it, so the exported italics carry the correct angle without you ever editing the upright source’s *Font Info*.
 
@@ -163,7 +171,7 @@ A **group** is a named set of glyphs that share Italify parameters – the natur
 
 Membership is managed from the **Italify Groups** palette (Window sidebar). Select one or more glyphs and use the **Group** pop-up to assign them – to an existing group, to *None*, or to *New Group…* to create one. The list below shows every group defined in the font.
 
-**Click a group** in the list to open its popover. It shows the group’s saved parameters as a matrix – one row for the whole font plus a row per master, one column each for Curve, Terminal, Diagonal, and Stem – with values inherited from the all-masters row greyed and unset cells shown as “–”. Below the matrix an **editable glyph list** holds the group’s members: edit it and the names are validated against the font on close (valid names join the group, removed ones leave it). The buttons at the bottom **Open in new Tab**, **Rename**, or **Delete** the group; the same three sit on each row’s right-click menu, where *Show all glyphs in group* also carries a badge with the member count.
+**Click a group** in the list to open its popover. It shows the group’s saved parameters as a matrix – one row for the whole font plus a row per master, one column each for Curve, Terminal, Diagonal, and Stem – with values inherited from the all-masters row greyed and unset cells shown as “–”. Below the matrix an **editable glyph list** holds the group’s members: edit it and the names are validated against the font on close (valid names join the group, removed ones leave it). The list accepts `*` **wildcards** – type `*-ar` and every glyph whose name ends in `-ar` belongs to the group. The pattern is stored **as written**, never expanded into names: membership through a wildcard is *live*, so a glyph added to the font later that matches the pattern joins automatically, and the list stays short and manageable. Explicitly assigning a glyph to a *different* group always wins over a pattern match; to take a pattern-matched glyph out of the group otherwise, adjust the pattern (assigning *None* in the palette clears only an explicit assignment). The buttons at the bottom **Open in new Tab**, **Rename**, or **Delete** the group; the same three sit on each row’s right-click menu, where *Show all glyphs in group* also carries a badge with the member count.
 
 ```screenshot tall
 img: images/groupsPalette.png
@@ -274,7 +282,7 @@ You rarely need to do that by hand, though: whenever **both** on-curve ends of a
 
 ### Rearranging corners {#corner-swap}
 
-If the tool picked the wrong node as a corner, drag the corner’s halo onto the node you actually want – on any stem, selected or not. The other stems fade while you drag so the one you’re editing stands out (it isn’t *selected*, just spotlighted for the drag). The old corner is demoted to an extra; the target becomes a corner. A travelling halo and guide line preview the drag, and invalid drop targets simply don’t snap.
+If the tool picked the wrong node as a corner, drag the corner’s halo onto the node you actually want – on any stem, selected or not. The other stems fade while you drag so the one you’re editing stands out (it isn’t *selected*, just spotlighted for the drag). The old corner is demoted to an extra; the target becomes a corner. A travelling halo and guide line preview the drag, and invalid drop targets simply don’t snap. A node that already belongs to **another stem** is not a valid target – with one exception: an **extra of the dragged stem itself** can always be promoted to a corner, whatever else it belongs to.
 
 ### Repairing corrupted stems {#corruption}
 
@@ -366,7 +374,7 @@ A **terminal** is a straight segment that caps a stroke – the flat cut of a *c
 
 **Terminal** lets you take that decision by hand. Tag any straight two-node segment whose end connections are **unsmooth** – it can be a line between two stems, not just between two curves – and the filter keeps it too. Tagging a segment the tool already detects instead **opts it out**.
 
-Select the two on-curve nodes at the ends of the segment and press [[T]], or right-click and choose *Toggle Terminal*. There is no restriction on the two neighbours – a straight cut holds its cleanest when they are roughly parallel, but the choice is yours; the filter keeps whatever you tag. The segment draws in green, the same as stem corners. To hand a segment back to the automatic detection, clear its tag.
+Select the two on-curve nodes at the ends of the segment and press [[C]] (think of *C*ap), or right-click and choose *Toggle Terminal*. There is no restriction on the two neighbours – a straight cut holds its cleanest when they are roughly parallel, but the choice is yours; the filter keeps whatever you tag. The segment draws in green, the same as stem corners. To hand a segment back to the automatic detection, clear its tag.
 
 This works even when the terminal’s visible corners are **open corners** or when the outline carries a **duplicate node** at a corner: the tool looks past the short connector to the real curve or line on the other side, and the kept angle is measured at the visible intersection – which is also where the green highlight is drawn. The open corners themselves survive the correction: only the tagged line rotates, and the overlap structure stays intact.
 
@@ -391,6 +399,12 @@ Anchors and stem selection are mutually exclusive: while a stem is selected the 
 A linked anchor renders **purple** instead of blue, and each link draws as a light-blue dotted line to its node. At correction time the anchor is shifted horizontally by the **average of its linked nodes' weighted movements**: a node sitting on only straight segments carries the anchor **100 %** of the way it moves, while a node with a curve on either side carries it **50 %**. So an anchor linked to a single line-to-line node tracks that node exactly, one linked to a curve node moves half as far, and one linked to both moves by the average of the two. At 0 % correction nothing moves, so the anchor lands exactly where a plain slant would put it. Its vertical position is left untouched. (The exception is a node on a [terminal](#terminal), which carries its anchor fully in both x and y.)
 
 When a [terminal](#terminal)'s visible corner is an **open corner**, the link gesture also snaps onto the visible **intersection point** – the corner the outline actually shows, rather than the overshooting node beyond it. The link then draws at the intersection, and the anchor follows the intersection's corrected position in both x and y.
+
+The gesture also snaps onto **path intersections** – the crossing points where two contours overlap (the bar of a *t* through its stem, say). Drag the halo onto a crossing and the link attaches to the intersection itself: it draws at the crossing, and the anchor follows the crossing's corrected position at **100 % in both x and y**, counting as one participant in the average like any linked node. The crossing is recomputed from the outline whenever it is needed, so the link tracks the corrected geometry exactly. Grab the crossing link's halo to move it – drop it on a node, a candidate ring, or another crossing – or pull it clear to remove it; [[⌫]] with the anchor selected clears it along with the rest, and copy / paste / propagate carry it like any other link.
+
+While an anchor is selected, small **rings pop up on curve segments** wherever the horizontal line at the anchor's y – or the vertical line at its x – crosses a curve. Drag the halo onto a ring to link the anchor to that **x/y intersection**: the link point is “where the curve passes my height (or my x)”, recomputed live, and the anchor follows it at **100 %** – so an anchor sitting beside a bowl tracks exactly how far the curve drifts at its own height through the correction. Move or remove it by its halo like any other link – any lifted link can be dropped onto a node, a candidate ring, or a crossing, whatever kind it started as.
+
+**Auto-Link Anchors** (last item in the right-click *Anchors* section, and in the [Glyph → Italify menu](#glyph-menu)) links every unlinked anchor in one go: an anchor sitting **on a curve** (within 4‰ of the UPM, e.g. 4 units in a 1000 UPM font) gets an x/y-intersection link onto that curve – the axis is chosen across the curve's direction – and every other anchor links to its **nearest on-curve node**. With anchors selected the item reads *Auto-Link Selected Anchors* and runs on just those. Anchors that already have a link are never touched, so you can auto-link first and refine by hand after. There is no “in all masters” variant – propagate the links afterwards instead.
 
 Copy / Paste / Propagate / Clear for anchor links live in the right-click *Anchors* section (see [below](#copy-paste)) and the [Glyph → Italify menu](#glyph-menu).
 
@@ -439,6 +453,7 @@ caption: Hold Space + Shift in the tagger for a live preview of the current para
 The tagger only ever sees the single active layer. For batch work there is a second surface: an **Italify** submenu under the **Glyph** menu that runs the bulk verbs across *every selected glyph and layer at once*. Select the glyphs you want to treat (in Font View or Edit View), then:
 
 - **Auto-Tag Stems** – runs the auto-tagger on every selected layer (additive; existing stems are left untouched).
+- **Auto-Link Anchors** – links every unlinked anchor on every selected layer (an x/y-intersection link when the anchor sits on a curve, else the nearest on-curve node – see [Anchor links](#anchor-links)). Already-linked anchors are left untouched.
 - **Propagate to all Masters → Stems / Tags / Anchor Links / All** – mirrors the chosen metadata from each selected layer onto its glyph’s other compatible masters. *All* sends every kind at once.
 - **Clear all → Stems / Tags / Anchor Links / All** – wipes the chosen userData on every selected layer (*All* wipes every kind at once). Hold [[⌥]] for the “… in all Masters” variant.
 
@@ -473,22 +488,23 @@ Component transformation might turn out very wrong in cases where you are using 
 
 All shortcuts below apply while the Italify Tagger is active. [[⌥]] added to any tagging action fans it out across compatible masters.
 
-| Keys | Action |
-|---|---|
-| [[C]] | Activate the Italify Tagger |
-| [[S]] | Add **S**tem from the selected nodes |
-| [[E]] | Toggle **E**xtras (add to selected stem / remove from owning stem) |
-| [[A]] | Toggle **A**nchor edge on two selected corners |
-| [[H]] | Toggle **H**inge corners (one selected corner implies its opposite) |
-| [[L]] | Toggle **L**imit Curve on selected on-curve nodes |
-| [[N]] | Toggle **N**o Curve Correction on selected curve segments |
-| [[I]] | Add / remove **I**nktrap on a selected straight segment between two unsmooth nodes |
-| [[Y]] | Toggle **Y**-Snap on selected on-curve nodes (retain ↔ release their y) |
-| [[T]] | Toggle **T**erminal on a selected straight segment between two unsmooth on-curve nodes |
-| [[⌫]] | Remove tag / stem; with a corner clicked, delete that corner; with an anchor selected, clear its links |
-| [[⌘A]] | Cycle select-all: nodes → stems → tags → anchors and their combinations (present kinds only) |
-| [[Tab]] / [[⇧Tab]] | With one mark type selected (stem, tag or anchor), select the next / previous item of that type |
-| [[⌘C]] | Copy Selection – copies the selected stems / tags / anchor links (any mix) |
-| [[⌘V]] / [[⌘⌥V]] | Paste whatever Italify items are on the clipboard (additive); [[⌘⌥V]] pastes into all masters |
-| [[Space]] | Pan, with filled outline preview |
-| [[Space]]+[[Shift]] | Live Italify preview with parameter panel |
+| Keys                | Action                                                                                                 |
+|---------------------|--------------------------------------------------------------------------------------------------------|
+| [[C]]               | Activate the Italify Tagger.                                                                           |
+| [[Esc]]             | Leave the tagger and return to Glyphs’ Select tool                                                     |
+| [[S]]               | Add **S**tem from the selected nodes                                                                   |
+| [[E]]               | Toggle **E**xtras (add to selected stem / remove from owning stem)                                     |
+| [[A]]               | Toggle **A**nchor edge on two selected corners                                                         |
+| [[H]]               | Toggle **H**inge corners (one selected corner implies its opposite)                                    |
+| [[L]]               | Toggle **L**imit Curve on selected on-curve nodes                                                      |
+| [[N]]               | Toggle **N**o Curve Correction on selected curve segments                                              |
+| [[I]]               | Add / remove **I**nktrap on a selected straight segment between two unsmooth nodes                     |
+| [[Y]]               | Toggle **Y**-Snap on selected on-curve nodes (retain ↔ release their y)                                |
+| [[C]]               | Toggle Terminal (think **C**ap) on a selected straight segment between two unsmooth on-curve nodes     |
+| [[⌫]]               | Remove tag / stem; with a corner clicked, delete that corner; with an anchor selected, clear its links |
+| [[⌘A]]              | Cycle select-all: nodes → stems → tags → anchors and their combinations (present kinds only)           |
+| [[Tab]] / [[⇧Tab]]  | With one mark type selected (stem, tag or anchor), select the next / previous item of that type        |
+| [[⌘C]]              | Copy Selection – copies the selected stems / tags / anchor links (any mix)                             |
+| [[⌘V]] / [[⌘⌥V]]    | Paste whatever Italify items are on the clipboard (additive); [[⌘⌥V]] pastes into all masters          |
+| [[Space]]           | Pan, with filled outline preview                                                                       |
+| [[Space]]+[[Shift]] | Live Italify preview with parameter panel                                                              |
