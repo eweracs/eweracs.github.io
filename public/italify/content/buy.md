@@ -171,5 +171,5 @@ Not sure yet? The free trial gives you full access to everything for 48 hours.
 
 ```buttons
 [Try free for 48 hours](trial) primary
-[Read the handbook](handbook)
+[Read the handbook](handbook/)
 ```

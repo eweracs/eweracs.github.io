@@ -22,7 +22,7 @@
 
 ## Overview {#overview}
 
-The `italify` module exposes the [Tagger](handbook#tagger)’s authoring verbs to Python. It accesses the same methods the items in the [Glyph → Italify menu](handbook#glyph-menu) use. A script therefore writes the exact `userData` the filter reads – and, like the tool, it only writes metadata, with one exception: the [`correct`](#correction) verb runs the filter’s actual correction pass, so a script can drive the whole tag-then-correct workflow headless.
+The `italify` module exposes the [Tagger](handbook/tagger#tagger)’s authoring verbs to Python. It accesses the same methods the items in the [Glyph → Italify menu](handbook/glyph-menu#glyph-menu) use. A script therefore writes the exact `userData` the filter reads – and, like the tool, it only writes metadata, with one exception: the [`correct`](#correction) verb runs the filter’s actual correction pass, so a script can drive the whole tag-then-correct workflow headless.
 
 ## Installation {#installation}
 
@@ -188,7 +188,7 @@ The anchors a node belongs to.
 
 **`has_limit_curve(node)`**
 
-Whether a node carries the [Limit Curve](handbook#limit-curve) tag.
+Whether a node carries the [Limit Curve](handbook/tags#limit-curve) tag.
 
 *Parameters:*
 
@@ -200,7 +200,7 @@ Whether a node carries the [Limit Curve](handbook#limit-curve) tag.
 
 **`has_no_curve_correction(node)`**
 
-Whether a node carries the [No Curve Correction](handbook#no-curve-correction) tag. The tag sits on both on-curve endpoints of an opted-out segment, so a `True` on either end identifies the segment.
+Whether a node carries the [No Curve Correction](handbook/tags#no-curve-correction) tag. The tag sits on both on-curve endpoints of an opted-out segment, so a `True` on either end identifies the segment.
 
 *Parameters:*
 
@@ -212,7 +212,7 @@ Whether a node carries the [No Curve Correction](handbook#no-curve-correction) t
 
 **`has_inktrap(node)`**
 
-Whether a node carries the [Inktrap](handbook#inktrap) tag. The tag sits on both on-curve endpoints of the straight length-preserving segment, so a `True` on either end identifies the segment.
+Whether a node carries the [Inktrap](handbook/tags#inktrap) tag. The tag sits on both on-curve endpoints of the straight length-preserving segment, so a `True` on either end identifies the segment.
 
 *Parameters:*
 
@@ -224,7 +224,7 @@ Whether a node carries the [Inktrap](handbook#inktrap) tag. The tag sits on both
 
 **`snap_y(node)`**
 
-The node's [Y-Snap](handbook#snap-y) override.
+The node's [Y-Snap](handbook/tags#snap-y) override.
 
 *Parameters:*
 
@@ -236,7 +236,7 @@ The node's [Y-Snap](handbook#snap-y) override.
 
 **`terminal(node)`**
 
-The [Terminal](handbook#terminal) override for the segment `node` bounds. The tag sits on both endpoints, so either identifies the segment.
+The [Terminal](handbook/tags#terminal) override for the segment `node` bounds. The tag sits on both endpoints, so either identifies the segment.
 
 *Parameters:*
 
@@ -293,7 +293,7 @@ Remove a stem’s tags.
 
 **`set_flipped(layer, stem_id, flipped, all_masters=False)`**
 
-Set the stem’s [flip-axis](handbook#flip-axis) state.
+Set the stem’s [flip-axis](handbook/stems#flip-axis) state.
 
 *Parameters:*
 
@@ -312,7 +312,7 @@ A stem has at most one pin – setting an anchored edge clears any hinge and vic
 
 **`set_anchored_edge(layer, stem_id, node_a, node_b, on=True, all_masters=False)`**
 
-Pin (or, with `on=False`, clear) the [anchored edge](handbook#anchor-edges) formed by two adjacent corners.
+Pin (or, with `on=False`, clear) the [anchored edge](handbook/stems#anchor-edges) formed by two adjacent corners.
 
 *Parameters:*
 
@@ -329,7 +329,7 @@ Pin (or, with `on=False`, clear) the [anchored edge](handbook#anchor-edges) form
 
 **`set_hinge_corners(layer, stem_id, node_a, node_b, on=True, all_masters=False)`**
 
-Pin (or clear) two diagonally-opposed corners as a [hinge](handbook#hinge-corners).
+Pin (or clear) two diagonally-opposed corners as a [hinge](handbook/stems#hinge-corners).
 
 *Parameters:*
 
@@ -348,7 +348,7 @@ Pin (or clear) two diagonally-opposed corners as a [hinge](handbook#hinge-corner
 
 **`add_extras(layer, stem_id, nodes, all_masters=False)`**
 
-Add nodes as [extras](handbook#extras) of a stem.
+Add nodes as [extras](handbook/stems#extras) of a stem.
 
 *Parameters:*
 
@@ -437,10 +437,10 @@ Each returns an [`ItalifyResult`](#results) and keeps the underlying verb’s `a
 
 | Method | Does |
 |---|---|
-| `.set_flipped(flipped, all_masters=False)` | set the [flip-axis](handbook#flip-axis) state |
-| `.set_anchored_edge(a, b, on=True, all_masters=False)` | pin (or clear) the [anchored edge](handbook#anchor-edges) of two adjacent corners |
-| `.set_hinge_corners(a, b, on=True, all_masters=False)` | pin (or clear) two diagonally-opposed [hinge](handbook#hinge-corners) corners |
-| `.add_extras(nodes, all_masters=False)` | add nodes as [extras](handbook#extras) |
+| `.set_flipped(flipped, all_masters=False)` | set the [flip-axis](handbook/stems#flip-axis) state |
+| `.set_anchored_edge(a, b, on=True, all_masters=False)` | pin (or clear) the [anchored edge](handbook/stems#anchor-edges) of two adjacent corners |
+| `.set_hinge_corners(a, b, on=True, all_masters=False)` | pin (or clear) two diagonally-opposed [hinge](handbook/stems#hinge-corners) corners |
+| `.add_extras(nodes, all_masters=False)` | add nodes as [extras](handbook/stems#extras) |
 | `.remove_extras(nodes, all_masters=False)` | remove nodes from whichever stem owns them |
 | `.propagate()` | mirror this stem to the glyph’s compatible masters (see [`propagate_stems`](#bulk); no `all_masters` – inherently all-masters) |
 | `.delete(all_masters=False)` | remove the stem’s tags |
@@ -474,7 +474,7 @@ An `ItalifyStem` is a thin wrapper, so it refuses exactly as the free functions 
 
 **`set_limit_curve(layer, node, on, all_masters=False)`**
 
-Toggle [Limit Curve](handbook#limit-curve) on an on-curve node.
+Toggle [Limit Curve](handbook/tags#limit-curve) on an on-curve node.
 
 *Parameters:*
 
@@ -489,7 +489,7 @@ Toggle [Limit Curve](handbook#limit-curve) on an on-curve node.
 
 **`set_no_curve_correction(layer, node_a, node_b, on, all_masters=False)`**
 
-Toggle [No Curve Correction](handbook#no-curve-correction) on the segment between two nodes.
+Toggle [No Curve Correction](handbook/tags#no-curve-correction) on the segment between two nodes.
 
 *Parameters:*
 
@@ -505,7 +505,7 @@ Toggle [No Curve Correction](handbook#no-curve-correction) on the segment betwee
 
 **`set_inktrap(layer, node_a, node_b, on, all_masters=False)`**
 
-Toggle [Inktrap](handbook#inktrap) on the straight segment between two nodes – held to its original length after the adjoining segments are corrected.
+Toggle [Inktrap](handbook/tags#inktrap) on the straight segment between two nodes – held to its original length after the adjoining segments are corrected.
 
 *Parameters:*
 
@@ -521,7 +521,7 @@ Toggle [Inktrap](handbook#inktrap) on the straight segment between two nodes –
 
 **`set_snap_y(layer, node, retain, all_masters=False)`**
 
-Set the [Y-Snap](handbook#snap-y) override on a node – force it to retain its y, release it, or hand it back to the automatic heuristic.
+Set the [Y-Snap](handbook/tags#snap-y) override on a node – force it to retain its y, release it, or hand it back to the automatic heuristic.
 
 *Parameters:*
 
@@ -536,7 +536,7 @@ Set the [Y-Snap](handbook#snap-y) override on a node – force it to retain its 
 
 **`set_terminal(layer, node_a, node_b, on, all_masters=False)`**
 
-Set the [Terminal](handbook#terminal) override on the segment between `node_a` and `node_b` – force it to be a terminal, opt it out, or hand it back to the automatic detection.
+Set the [Terminal](handbook/tags#terminal) override on the segment between `node_a` and `node_b` – force it to be a terminal, opt it out, or hand it back to the automatic detection.
 
 *Parameters:*
 
@@ -554,7 +554,7 @@ Set the [Terminal](handbook#terminal) override on the segment between `node_a` a
 
 **`link_anchor(layer, anchor_name, node, all_masters=False)`**
 
-Link an [anchor](handbook#anchor-links) to a node (additive – an anchor links to any number of nodes).
+Link an [anchor](handbook/anchor-links#anchor-links) to a node (additive – an anchor links to any number of nodes).
 
 *Parameters:*
 
@@ -584,11 +584,11 @@ Remove one anchor → node link.
 
 ## Bulk operations {#bulk}
 
-These mirror the [Glyph → Italify menu](handbook#glyph-menu) verbs.
+These mirror the [Glyph → Italify menu](handbook/glyph-menu#glyph-menu) verbs.
 
 **`auto_tag(layer)`**
 
-Run the stem [auto-tagger](handbook#creating-stems) on the layer (active layer only; additive).
+Run the stem [auto-tagger](handbook/stems#creating-stems) on the layer (active layer only; additive).
 
 *Parameters:*
 
@@ -600,7 +600,7 @@ Run the stem [auto-tagger](handbook#creating-stems) on the layer (active layer o
 
 **`resolve_corrupted(layer, all_masters=False)`**
 
-[Repair or strip](handbook#corruption) corrupted stems.
+[Repair or strip](handbook/stems#corruption) corrupted stems.
 
 *Parameters:*
 

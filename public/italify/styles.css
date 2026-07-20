@@ -289,10 +289,23 @@ p.lede {
 	margin-bottom: var(--space-sm);
 }
 
-a {
-	color: var(--color-link);
+/* A handbook chapter's overline is the breadcrumb back to the index –
+   keep it looking like a label, revealing itself as a link on hover. */
+.overline a {
+	color: inherit;
+	text-decoration: none;
+}
+
+.overline a:hover {
 	text-decoration: underline;
 	text-underline-offset: 3px;
+}
+
+a {
+	/* No underline anywhere in the docs – the link colour is enough;
+	   hover feedback is the weight transition below. */
+	color: var(--color-link);
+	text-decoration: none;
 	/* Fizz is variable (wght 200–1000), so font-weight rides the wght
 	   axis and interpolates smoothly during the transition. */
 	transition: font-weight 0.3s cubic-bezier(0.22, 1, 0.36, 1);
@@ -749,6 +762,47 @@ figure.shot figcaption {
 	}
 }
 
+/* ---- Handbook prev/next chapter links ------------------------------ */
+/* Appended to every chapter page by main.js (addChapterNav). */
+
+.page-nav {
+	display: flex;
+	justify-content: space-between;
+	gap: var(--space-md);
+	border-top: 1px solid var(--color-border);
+	padding-top: var(--space-md);
+	margin-top: var(--space-xl);
+}
+
+.page-nav a {
+	display: flex;
+	flex-direction: column;
+	gap: 4px;
+	max-width: 46%;
+	font-size: 20px;
+	line-height: 26px;
+	color: var(--color-primary);
+	text-decoration: none;
+}
+
+.page-nav a:hover {
+	text-decoration: underline;
+	text-underline-offset: 3px;
+}
+
+.page-nav-next {
+	text-align: right;
+	margin-left: auto;
+}
+
+.page-nav-label {
+	font-size: 15px;
+	line-height: 19px;
+	letter-spacing: 1.2px;
+	text-transform: uppercase;
+	color: var(--color-secondary);
+}
+
 /* ---- Steps ---------------------------------------------------------- */
 
 ol.steps {
@@ -777,6 +831,29 @@ ol.steps > li::before {
 	align-items: center;
 	justify-content: center;
 	font-size: 19px;
+}
+
+/* The unnumbered variant (```steps plain) – same list, no circles, a
+   hairline divider between the entries instead. */
+ol.steps.steps-plain > li {
+	padding: var(--space-md) 0;
+	margin-bottom: 0;
+}
+
+ol.steps.steps-plain > li + li {
+	border-top: 1px solid var(--color-border);
+}
+
+ol.steps.steps-plain > li::before {
+	content: none;
+}
+
+ol.steps.steps-plain > li h4 {
+	margin-top: 0;
+}
+
+ol.steps.steps-plain > li p:last-child {
+	margin-bottom: 0;
 }
 
 /* ---- Parameter entries ---------------------------------------------- */

@@ -2,53 +2,13 @@
 <html lang="en">
 <head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Italify Handbook</title>
-<meta name="description" content="Reference documentation for the Italify Glyphs plugin: the filter, its parameters, export usage, and the Italify Stem tool.">
-<link rel="icon" href="/icon.svg" type="image/svg+xml" sizes="any">
-<!-- Set the theme before first paint to avoid a flash of the wrong mode:
-     stored choice wins, otherwise follow the OS preference. -->
-<script>
-(function () {
-	try {
-		var stored = localStorage.getItem("italify-theme");
-		var theme = stored || (window.matchMedia &&
-			window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light");
-		document.documentElement.setAttribute("data-theme", theme);
-	} catch (e) {}
-})();
-</script>
-<link rel="stylesheet" href="styles.css?v=19">
+<link rel="canonical" href="handbook/">
+<!-- The handbook moved from this single page to one page per chapter under
+     handbook/. The JS redirect preserves #anchors (the handbook index maps
+     them to the right chapter); the meta refresh is the no-JS fallback. -->
+<script>location.replace("handbook/" + location.hash);</script>
+<meta http-equiv="refresh" content="0; url=handbook/">
 </head>
-<body>
-
-<header class="site">
-	<div class="column">
-		<a class="wordmark" href="/italify"><img class="wordmark-logo" src="images/italify.svg" alt="Italify"></a>
-		<nav class="site-nav">
-			<a href="/italify">Overview</a>
-			<a href="buy">Buy</a>
-			<a href="handbook" aria-current="page">Handbook</a>
-			<a href="python-api">Python API</a>
-			<a class="site-home" href="/?section=projects">sebastiancarewe.com</a>
-		</nav>
-	</div>
-	<button id="theme-toggle" class="theme-toggle" type="button" aria-label="Switch to dark mode" title="Switch to dark mode" aria-pressed="false">
-		<svg class="theme-icon" viewBox="0 0 500 500" fill="currentColor" aria-hidden="true"><path d="M250 0C388 0 500 111 500 250C500 388 388 500 250 500C112 500 0 388 0 250C0 111 112 0 250 0ZM114 114C39 189 39 310 114 386C189 461 311 461 386 386L114 114Z"/></svg>
-	</button>
-</header>
-
-<!-- Page content lives in content/handbook.md – edit that file, not this one.
-     Authoring conventions are documented in AUTHORING.md. -->
-<main class="column" data-source="content/handbook.md"></main>
-
-<footer>
-	<div class="column">
-		<p>Italify – a plugin for <a href="https://glyphsapp.com">Glyphs</a>. <a href="/italify">Overview</a></p>
-	</div>
-</footer>
-
-<script src="vendor/marked.min.js"></script>
-<script src="main.js?v=12"></script>
-</body>
+<body><p>The handbook moved to <a href="handbook/">handbook/</a>.</p></body>
 </html>

@@ -96,12 +96,15 @@
 			return '<div class="card-row">' + cards.join("") + "</div>";
 		},
 
-		steps(body) {
+		// ```steps plain``` drops the numbered circles (used for the
+		// handbook's chapter list, which is an index, not a sequence).
+		steps(body, modifier) {
 			const items = splitTitledChunks(body).map(function (c) {
 				return "<li><h4>" + inline(c.title) + "</h4><p>" +
 					inline(c.body.join(" ")) + "</p></li>";
 			});
-			return '<ol class="steps">' + items.join("") + "</ol>";
+			const cls = modifier === "plain" ? "steps steps-plain" : "steps";
+			return '<ol class="' + cls + '">' + items.join("") + "</ol>";
 		},
 
 		toc(body) {
@@ -235,7 +238,9 @@
 	function transformLine(line) {
 		let m = line.match(/^@overline\s+(.*)$/);
 		if (m) {
-			return '<p class="overline">' + escapeHtml(m[1]) + "</p>";
+			// Inline Markdown so a handbook chapter's overline can be the
+			// breadcrumb link back to the handbook index.
+			return '<p class="overline">' + inline(m[1]) + "</p>";
 		}
 		m = line.match(/^@lede\s+(.*)$/);
 		if (m) {
@@ -379,6 +384,54 @@
 		});
 	}
 
+	/* ---- Handbook chapter navigation --------------------------------
+	   The handbook is one page per chapter (shells in handbook/, sources
+	   in content/handbook/). This ordered manifest drives the prev/next
+	   links appended to every chapter page – keep it in sync with the
+	   chapter list in content/handbook/index.md when chapters are added,
+	   removed or reordered. */
+	var HANDBOOK_CHAPTERS = [
+		{ slug: "installation", title: "Installation" },
+		{ slug: "workflow", title: "A typical workflow" },
+		{ slug: "filter", title: "The filter" },
+		{ slug: "groups", title: "Glyph groups" },
+		{ slug: "tagger", title: "The tagger" },
+		{ slug: "stems", title: "Stems" },
+		{ slug: "tags", title: "Tags" },
+		{ slug: "anchor-links", title: "Anchor links" },
+		{ slug: "copy-paste", title: "Copy, paste & propagate" },
+		{ slug: "glyph-menu", title: "The Glyph → Italify menu" },
+		{ slug: "tips", title: "Tips" },
+		{ slug: "shortcuts", title: "Keyboard reference" },
+	];
+
+	// Append prev/next chapter links to every handbook chapter page.
+	// Served locally the pages carry their .html extension, published
+	// they are extensionless – mirror whatever the current URL uses.
+	function addChapterNav(main) {
+		var m = (main.dataset.source || "").match(/content\/handbook\/([\w-]+)\.md$/);
+		if (!m || m[1] === "index") return;
+		var index = -1;
+		HANDBOOK_CHAPTERS.forEach(function (c, i) {
+			if (c.slug === m[1]) index = i;
+		});
+		if (index < 0) return;
+		var ext = /\.html$/.test(location.pathname) ? ".html" : "";
+		function link(chapter, cls, label) {
+			if (!chapter) return "<span></span>";
+			return '<a class="' + cls + '" href="' + chapter.slug + ext + '">' +
+				'<span class="page-nav-label">' + label + "</span>" +
+				escapeHtml(chapter.title) + "</a>";
+		}
+		var nav = document.createElement("nav");
+		nav.className = "page-nav";
+		nav.setAttribute("aria-label", "Chapter navigation");
+		nav.innerHTML =
+			link(HANDBOOK_CHAPTERS[index - 1], "page-nav-prev", "← Previous") +
+			link(HANDBOOK_CHAPTERS[index + 1], "page-nav-next", "Next →");
+		main.appendChild(nav);
+	}
+
 	// Group top-level content into <section>s, splitting at every h2.
 	// An overline immediately before an h2 moves into the new section.
 	function wrapSections(main) {
@@ -519,6 +572,7 @@
 			wrapParams(main);
 			wrapApiEntries(main);
 			wrapSections(main);
+			addChapterNav(main);
 			applyKbd(main);
 			highlightCode(main);
 			addCopyButtons(main);
