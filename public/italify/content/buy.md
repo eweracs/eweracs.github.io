@@ -29,10 +29,13 @@ One credit activates one master, **permanently**: run the filter on that master 
 | Package | Credits | Price | Rate/credit | Savings vs. single |
 |---------|---------|-------|-------------|--------------------|
 | Solo | 1 | 300 € | 300 € | — |
+| Duo | 2 | 500 € | 250 € | 17% |
 | Trio | 3 | 650 € | 217 € | 28% |
-| Handful | 5 | 900 € | 180 € | 40% |
-| Studio | 10 | 1 350 € | 135 € | 55% |
-| Large | 16 | 1 700 € | 106 € | 65% |
+| Starter | 4 | 800 € | 200 € | 33% |
+| Medium | 6 | 1 000 € | 167 € | 44% |
+| Ambitious | 8 | 1 200 € | 150 € | 50% |
+| Family | 10 | 1 350 € | 135 € | 55% |
+| Studio | 16 | 1 700 € | 106 € | 65% |
 | Foundry | 24 | 2 000 € | 83 € | 72% |
 
 @overline Order
@@ -46,10 +49,13 @@ Pick your package and fill in your billing details. You’ll receive the invoice
 		<label for="order-package">Package</label>
 		<select id="order-package" required>
 			<option value="solo">Solo – 1 master credit – 300 €</option>
+			<option value="duo">Duo – 2 master credits – 500 €</option>
 			<option value="trio">Trio – 3 master credits – 650 €</option>
-			<option value="handful">Handful – 5 master credits – 900 €</option>
-			<option value="studio">Studio – 10 master credits – 1 350 €</option>
-			<option value="large">Large – 16 master credits – 1 700 €</option>
+			<option value="starter">Starter – 4 master credits – 800 €</option>
+			<option value="medium">Medium – 6 master credits – 1 000 €</option>
+			<option value="ambitious">Ambitious – 8 master credits – 1 200 €</option>
+			<option value="family">Family – 10 master credits – 1 350 €</option>
+			<option value="studio">Studio – 16 master credits – 1 700 €</option>
 			<option value="foundry">Foundry – 24 master credits – 2 000 €</option>
 			<option value="week">Time pass – one week – 600 €</option>
 			<option value="twoweeks">Time pass – two weeks – 1 000 €</option>
