@@ -757,7 +757,7 @@ for g in src.glyphs:
 
 ## Correction {#correction}
 
-Everything above authors metadata. `correct` is the one verb that moves geometry: it runs the filter's actual correction pass — the same code the dialog's Apply button and instance export run — on an **upright** layer, with the parameters given explicitly.
+Everything above authors metadata. `correct` is the one verb that moves geometry: it runs the filter's actual correction pass – the same code the dialog's Apply button and instance export run – on an **upright** layer, with the parameters given explicitly.
 
 **`correct(layer, angle, curve_correction=1.0, diagonal_correction=1.0, stem_compensation=0.0, keep_terminals=0.0, diagonal_correction_stems_only=True)`**
 
