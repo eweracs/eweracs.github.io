@@ -41,8 +41,8 @@ Activate the [tagger](tagger) ([[C]]) and walk through the font. For each glyph,
 A glyph that looks under-corrected in preview usually just has an untagged stem – check the tagging before touching the parameters.
 
 ```screenshot
-
-tag: ../images/taggedStems.png
+img: ../images/taggedStems.png
+tag: The stems, tagged
 desc: A lowercase “k” or “w” in the tagger with all stems tagged: blue
   trapezoids, one anchored edge in pink, corner halos visible. Conveys the
   “fully described glyph” end state of the review step.
