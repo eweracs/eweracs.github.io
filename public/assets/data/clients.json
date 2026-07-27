@@ -647,6 +647,33 @@
           ]
         },
         "url": "https://pstypelab.com/panel"
+      },
+      {
+        "name": "Detail",
+        "description": {
+          "EN": "Italic creation, spacing, kerning and mastering for a rounded sans-serif display font.",
+          "FR": "Création d’italique, espacement, crénage et mise au point pour une police display arrondie",
+          "DE": "Erstellung von Kursiven, Spationierung, Kerning und Produktion für eine gerundete Display-Schriftfamilie."
+        },
+        "year": "2026",
+        "type": {
+          "EN": [
+            "Spacing/Kerning",
+            "Mastering",
+            "Italics"
+          ],
+          "FR": [
+            "Espacement/Crénage",
+            "Finalisation",
+            "Italiques"
+          ],
+          "DE": [
+            "Spationierung/Kerning",
+            "Finalisierung",
+            "Kursiven"
+          ]
+        },
+        "url": "https://pstypelab.com/detail"
       }
     ]
   },
