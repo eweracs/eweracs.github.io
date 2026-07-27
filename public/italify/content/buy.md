@@ -1,6 +1,12 @@
 # Buy Italify
 
-@lede Italify can be licensed in two ways. Either per master (unlimited duration), or for a time period (unlimited masters). One credit activates one master, forever. You can decide what option makes more sense for your project.
+@lede Italify can be licensed in two ways. Either per master (unlimited duration), or for a time period (unlimited masters).
+
+If you activate a master, you can use Italify on it forever. Add glyphs, change outlines, change metadata – Italify is yours on this master, forever.
+
+A time pass gives you unlimited masters, for a limited duration. Recommended if you are familiar with setting up Italify and have many masters to process.
+
+It’s up to you to decide what option makes more sense for your project.
 
 Try the fully functional plugin for 48h, zero restrictions.
 ```buttons
@@ -170,8 +176,8 @@ Prefer email? Custom order? Get in touch directly: sebastian.carewe<span class="
 ## After your order {#how}
 
 1. You receive your invoice by email, usually within a day.
-2. Once the payment arrives, your licence code follows – along with the [plugin download](https://github.com/eweracs/Italify/releases/latest/download/Italify.glyphsPlugin.zip) if you don't have it yet (the download itself is free, and updates are too: replacing the plugin keeps your licence and activated masters in place).
-3. Paste the code into the Italify filter dialogue in Glyphs – done. Later top-ups are just another code.
+2. Once the payment arrives, your licence code follows.
+3. Paste the code into the Italify filter dialogue in Glyphs – done. Your purchase is activated. You can top up credits later simply by entering a new code.
 
 Not sure yet? The free trial gives you full access to everything for 48 hours.
 

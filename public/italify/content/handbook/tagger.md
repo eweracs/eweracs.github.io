@@ -4,11 +4,6 @@
 
 @lede The Edit View tool that describes your glyphs to the filter. It writes metadata only – it never moves a point.
 
-```toc
-1. [What it does](#tagger-overview)
-2. [Navigation & live preview](#preview)
-```
-
 ## What it does {#tagger-overview}
 
 The *Italify Tagger* (toolbar icon, shortcut [[C]]) is where you can describe glyph features to the filter – diagonals to correct, how anchors should move, specific corrections. It is a metadata editor: it never moves points itself. Everything you tag is stored on the nodes in the file and drawn on the canvas, so what you see with the tool active is exactly what the filter will read.

@@ -4,17 +4,6 @@
 
 @lede Nodes the filter corrects together as one rigid unit. Defining them, the per-stem options, and repairing a stem a path operation broke.
 
-```toc
-1. [What a stem is](#stems)
-2. [Creating and deleting stems](#creating-stems)
-3. [Anchored edges](#anchor-edges)
-4. [Hinge corners](#hinge-corners)
-5. [Flipping the axis](#flip-axis)
-6. [Extras](#extras)
-7. [Rearranging corners](#corner-swap)
-8. [Repairing corrupted stems](#corruption)
-```
-
 ## What a stem is {#stems}
 
 A stem is a group of nodes the filter moves as **one rigid unit**: four **corners** define its frame, and any number of optional **extras** – additional nodes, details – ride along with it. Each stem gets a single shared transformation, so its width and angle behave coherently instead of every segment fending for itself. Curves tagged as stems will not be curve-corrected.

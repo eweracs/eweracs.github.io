@@ -4,14 +4,6 @@
 
 @lede Five per-node marks outside the stem model – each changes how the filter treats one spot.
 
-```toc
-1. [Limit Curve](#limit-curve)
-2. [No Curve Correction](#no-curve-correction)
-3. [Inktrap](#inktrap)
-4. [Y-Snap](#snap-y)
-5. [Terminal](#terminal)
-```
-
 Five **Tags** live outside the stem model – each marks an individual node or segment and changes how the filter treats that one spot. Every Tag has a canvas marker, a keyboard shortcut, and an entry in the right-click *Tags* section, and each is removed the same way it was added. Hold [[⌥]] on any of them to mirror the change across every compatible master.
 
 ## Limit Curve {#limit-curve}
@@ -54,14 +46,14 @@ caption: An Inktrap segment preserves its size even after correction of the adjo
 
 ## Y-Snap {#snap-y}
 
-By default the filter automatically holds a node's height in place in one common case: an **unsmooth line-to-curve** corner sitting exactly on a metric (baseline, x-height, …) is pinned to that metric through the correction, so it doesn't drift off it. Every node this affects is marked with a violet pin. (This automatic behaviour is governed by the [`autoSnapToMetrics`](filter#hidden-settings) hidden setting.)
+By default the filter automatically holds a node’s height in place in one common case: an **unsmooth line-to-curve** corner sitting exactly on a metric (baseline, x-height, …) is pinned to that metric through the correction, so it doesn’t drift off it. Every node this affects is marked with a violet pin. (This automatic behaviour is governed by the [`autoSnapToMetrics`](filter#hidden-settings) hidden setting.)
 
 **Y-Snap** lets you take that decision by hand, node by node. It is a simple *retain the y position* – the metric is only how the automatic case is detected, so the override works on **any** on-curve node, on a metric or not:
 
 - Tag a node the automatic snap *misses* (a line-to-line or curve-to-curve corner, a smooth node, or a node at any height) and it will hold its y exactly.
 - Tag a node the automatic snap *catches* and it is released – free to move with the correction.
 
-Select the node (or several) and press [[Y]], or right-click and choose *Toggle Y-Snap*. The key flips each node's current state: one that snaps is released, one that doesn't is pinned. The marker is the same violet pin the automatic snap uses – a pinned node shows it, a released node shows nothing. To hand a node back to the automatic behaviour, clear its tag (right-click *Clear all Tags*, or [[⌫]]).
+Select the node (or several) and press [[Y]], or right-click and choose *Toggle Y-Snap*. The key flips each node’s current state: one that snaps is released, one that doesn’t is pinned. The marker is the same violet pin the automatic snap uses – a pinned node shows it, a released node shows nothing. To hand a node back to the automatic behaviour, clear its tag (right-click *Clear all Tags*, or [[⌫]]).
 
 ```screenshot
 img: ../images/snapY.png
@@ -71,7 +63,7 @@ caption: Y-Snap keeps a node at its original height, on a metric or not.
 
 ## Terminal {#terminal}
 
-A **terminal** is a straight segment that caps a stroke – the flat cut of a *c*, *e* or *s*. The [Keep Terminals](filter#parameters) parameter holds a terminal's cut in place through the italicisation: at 100% the angle it makes with its two adjoining segments after the slant matches the upright. The filter finds the obvious terminals automatically (a line between two curves heading the same way), and draws every one it will keep in **green**.
+A **terminal** is a straight segment that caps a stroke – the flat cut of a *c*, *e* or *s*. The [Keep Terminals](filter#parameters) parameter holds a terminal’s cut in place through the italicisation: at 100% the angle it makes with its two adjoining segments after the slant matches the upright. The filter finds the obvious terminals automatically (a line between two curves heading the same way), and draws every one it will keep in **green**.
 
 **Terminal** lets you take that decision by hand. Tag any straight two-node segment whose end connections are **unsmooth** – it can be a line between two stems, not just between two curves – and the filter keeps it too. Tagging a segment the tool already detects instead **opts it out**.
 

@@ -107,6 +107,10 @@
 			return '<ol class="' + cls + '">' + items.join("") + "</ol>";
 		},
 
+		// A hand-written "On this page" box. Handbook chapters don't use
+		// this – they get the whole-handbook TOC built by
+		// buildHandbookToc(), whose section list is derived from the page's
+		// own headings.
 		toc(body) {
 			return '<div class="toc"><span class="overline">On this page</span>' +
 				marked.parse(body) + "</div>";
@@ -405,15 +409,82 @@
 		{ slug: "shortcuts", title: "Keyboard reference" },
 	];
 
+	// The handbook slug of the page being rendered, or null for anything
+	// else (index page included – its content is the chapter list already).
+	function chapterSlug(main) {
+		var m = (main.dataset.source || "").match(/content\/handbook\/([\w-]+)\.md$/);
+		return m && m[1] !== "index" ? m[1] : null;
+	}
+
+	// Build the handbook's table of contents: every chapter, with the
+	// current one's own sections nested underneath it. This replaces the
+	// per-page "On this page" box on chapter pages, so a reader can reach
+	// any chapter from any chapter instead of only stepping prev/next.
+	// The section list is derived from the rendered h2s, so it never drifts
+	// from the page (call this after applyHeadingIds, before wrapSections).
+	function buildHandbookToc(main) {
+		var slug = chapterSlug(main);
+		if (!slug) return;
+		var ext = /\.html$/.test(location.pathname) ? ".html" : "";
+
+		var nav = document.createElement("nav");
+		nav.className = "toc handbook-toc";
+		nav.setAttribute("aria-label", "Handbook contents");
+		var home = document.createElement("a");
+		home.className = "overline toc-home";
+		home.href = "./";
+		// "Contents", not "Italify Handbook" – the chapter pages already
+		// carry that as their breadcrumb overline.
+		home.textContent = "Contents";
+		nav.appendChild(home);
+
+		var list = document.createElement("ol");
+		HANDBOOK_CHAPTERS.forEach(function (chapter) {
+			var li = document.createElement("li");
+			var a = document.createElement("a");
+			a.href = chapter.slug + ext;
+			a.textContent = chapter.title;
+			li.appendChild(a);
+			if (chapter.slug === slug) {
+				li.className = "toc-current";
+				a.setAttribute("aria-current", "page");
+				var sections = document.createElement("ul");
+				main.querySelectorAll("h2[id]").forEach(function (h) {
+					var item = document.createElement("li");
+					var link = document.createElement("a");
+					link.href = "#" + h.id;
+					link.textContent = h.textContent.trim();
+					item.appendChild(link);
+					sections.appendChild(item);
+				});
+				if (sections.children.length) li.appendChild(sections);
+			}
+			list.appendChild(li);
+		});
+		nav.appendChild(list);
+
+		// Chapters written before this was generated may still carry a
+		// hand-written ```toc``` box; the generated one takes its place.
+		// Otherwise the nav goes after the lede, where that box used to sit.
+		var existing = main.querySelector(".toc");
+		if (existing) {
+			existing.parentNode.replaceChild(nav, existing);
+			return;
+		}
+		var anchor = main.querySelector("p.lede") || main.querySelector("h1");
+		if (anchor) anchor.parentNode.insertBefore(nav, anchor.nextSibling);
+		else main.insertBefore(nav, main.firstChild);
+	}
+
 	// Append prev/next chapter links to every handbook chapter page.
 	// Served locally the pages carry their .html extension, published
 	// they are extensionless – mirror whatever the current URL uses.
 	function addChapterNav(main) {
-		var m = (main.dataset.source || "").match(/content\/handbook\/([\w-]+)\.md$/);
-		if (!m || m[1] === "index") return;
+		var slug = chapterSlug(main);
+		if (!slug) return;
 		var index = -1;
 		HANDBOOK_CHAPTERS.forEach(function (c, i) {
-			if (c.slug === m[1]) index = i;
+			if (c.slug === slug) index = i;
 		});
 		if (index < 0) return;
 		var ext = /\.html$/.test(location.pathname) ? ".html" : "";
@@ -571,6 +642,7 @@
 			applyHeadingIds(main);
 			wrapParams(main);
 			wrapApiEntries(main);
+			buildHandbookToc(main);
 			wrapSections(main);
 			addChapterNav(main);
 			applyKbd(main);

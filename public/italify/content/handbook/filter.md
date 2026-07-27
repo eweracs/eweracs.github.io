@@ -4,14 +4,6 @@
 
 @lede *Filter → Italify* – the correction itself: its parameters, saving scoped parameter sets, running at export, and the hidden settings.
 
-```toc
-1. [The dialogue](#dialogue)
-2. [Parameters](#parameters)
-3. [Saving parameters](#saving-parameters)
-4. [Using Italify at export](#export)
-5. [Hidden settings](#hidden-settings)
-```
-
 ## The dialogue {#dialogue}
 
 Choose *Filter → Italify* with one or more glyphs open in Edit View. You can adjust the parameters with the live preview showing the result you get when pressing *Apply*.

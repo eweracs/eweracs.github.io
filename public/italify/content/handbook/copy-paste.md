@@ -4,11 +4,6 @@
 
 @lede Stems, tags and anchor links travel between layers and masters without re-tagging.
 
-```toc
-1. [Copying and pasting](#copying)
-2. [Working across masters](#masters)
-```
-
 ## Copying and pasting {#copying}
 
 There are two ways to copy, and both write to the clipboard so you can paste onto another layer:

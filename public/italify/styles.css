@@ -707,6 +707,15 @@ figure.shot figcaption {
 	margin-top: var(--space-sm);
 }
 
+/* Code in a caption (or an annotated figure's notes) sizes with that
+   text instead of jumping to the body-copy 18px – the same 0.9 ratio
+   code keeps against running text. */
+figure.shot figcaption code,
+.annotated-note code,
+.shot-desc code {
+	font-size: 0.9em;
+}
+
 /* ---- Handbook table of contents ------------------------------------ */
 
 .toc {
@@ -729,6 +738,58 @@ figure.shot figcaption {
 	padding-left: 1em;
 }
 
+/* The handbook TOC (built by main.js) lists every chapter, with the
+   current chapter's sections nested under it – so any chapter is one
+   click away, not a prev/next walk. */
+
+.handbook-toc {
+	font-size: 16px;
+	line-height: 24px;
+}
+
+.handbook-toc ol {
+	list-style: none;
+	padding-left: 0;
+}
+
+.handbook-toc .toc-home {
+	display: block;
+	margin-bottom: 10px;
+	color: var(--color-secondary);
+	text-decoration: none;
+}
+
+.handbook-toc .toc-home:hover {
+	color: var(--color-primary);
+}
+
+.handbook-toc li {
+	margin-bottom: 4px;
+}
+
+.handbook-toc .toc-current > a {
+	font-weight: 600;
+}
+
+.handbook-toc .toc-current ul {
+	margin: 4px 0 10px;
+	padding-left: 0;
+	border-left: 1px solid var(--color-border);
+}
+
+.handbook-toc .toc-current ul li {
+	margin-bottom: 0;
+	padding-left: 12px;
+}
+
+.handbook-toc .toc-current ul a {
+	color: var(--color-secondary);
+}
+
+.handbook-toc .toc-current ul a:hover {
+	color: var(--color-primary);
+}
+
 .toc li {
 	margin-bottom: 2px;
 }
@@ -743,7 +804,8 @@ figure.shot figcaption {
 }
 
 /* On wide viewports the TOC leaves the reading column and sits in the
-   left margin. Not sticky by design: it scrolls away with the intro. */
+   left margin. The hand-written per-page box is not sticky by design: it
+   scrolls away with the intro (the handbook TOC below pins instead). */
 @media (min-width: 1400px) {
 	main.column {
 		position: relative;
@@ -759,6 +821,20 @@ figure.shot figcaption {
 		padding: 0;
 		border: none;
 		border-radius: 0;
+	}
+
+	/* The handbook TOC is navigation rather than a page summary, so it
+	   stays put while the chapter scrolls – pinned in the margin beside
+	   the centred column (hence the calc rather than main-relative
+	   offsets), and scrollable itself when a long chapter's section list
+	   outgrows the viewport. */
+	.handbook-toc {
+		position: fixed;
+		top: 120px;
+		left: calc(50% - var(--measure) / 2 - 32px);
+		max-height: calc(100vh - 160px);
+		overflow-y: auto;
+		overscroll-behavior: contain;
 	}
 }
 

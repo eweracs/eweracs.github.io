@@ -224,7 +224,7 @@ Whether a node carries the [Inktrap](handbook/tags#inktrap) tag. The tag sits on
 
 **`snap_y(node)`**
 
-The node's [Y-Snap](handbook/tags#snap-y) override.
+The node’s [Y-Snap](handbook/tags#snap-y) override.
 
 *Parameters:*
 
@@ -232,7 +232,7 @@ The node's [Y-Snap](handbook/tags#snap-y) override.
 
 *Returns:*
 
-- `bool | None` – `True` (force-retain the node's y), `False` (force-release it), or `None` (no override – the automatic metric-snap heuristic decides)
+- `bool | None` – `True` (force-retain the node’s y), `False` (force-release it), or `None` (no override – the automatic metric-snap heuristic decides)
 
 **`terminal(node)`**
 
@@ -501,7 +501,7 @@ Toggle [No Curve Correction](handbook/tags#no-curve-correction) on the segment b
 
 *Returns:*
 
-- `ItalifyResult` – refuses with [`notCurveSegment`](#refusals) unless `node_a` and `node_b` are the on-curve endpoints of the same curve segment (at least one off-curve between them), the same precondition the tool's own Toggle No Curve Correction verb enforces
+- `ItalifyResult` – refuses with [`notCurveSegment`](#refusals) unless `node_a` and `node_b` are the on-curve endpoints of the same curve segment (at least one off-curve between them), the same precondition the tool’s own Toggle No Curve Correction verb enforces
 
 **`set_inktrap(layer, node_a, node_b, on, all_masters=False)`**
 
@@ -517,7 +517,7 @@ Toggle [Inktrap](handbook/tags#inktrap) on the straight segment between two node
 
 *Returns:*
 
-- `ItalifyResult` – refuses with [`notInktrapSegment`](#refusals) unless `node_a` and `node_b` are directly-connected, unsmooth on-curve endpoints of a straight segment, the same precondition the tool's own Toggle Inktrap verb enforces
+- `ItalifyResult` – refuses with [`notInktrapSegment`](#refusals) unless `node_a` and `node_b` are directly-connected, unsmooth on-curve endpoints of a straight segment, the same precondition the tool’s own Toggle Inktrap verb enforces
 
 **`set_snap_y(layer, node, retain, all_masters=False)`**
 
@@ -527,7 +527,7 @@ Set the [Y-Snap](handbook/tags#snap-y) override on a node – force it to retain
 
 - `layer` (`GSLayer`)
 - `node` (`GSNode`) – the on-curve node to override
-- `retain` (`bool | None`) – `True` keeps the node's y, `False` releases it to the correction, `None` removes the override (back to auto)
+- `retain` (`bool | None`) – `True` keeps the node’s y, `False` releases it to the correction, `None` removes the override (back to auto)
 - `all_masters` (`bool`) – also apply on every compatible master
 
 *Returns:*
@@ -737,7 +737,7 @@ The two layers must *index-map* – the same path and node counts, and the same 
 - `stems` (`bool`) – copy stems
 - `tags` (`bool`) – copy per-node tags
 - `anchor_links` (`bool`) – copy anchor links
-- `replace` (`bool`) – `True` mirrors the source exactly (clears whatever the source doesn't carry); `False` is additive (the target keeps marks the source lacks)
+- `replace` (`bool`) – `True` mirrors the source exactly (clears whatever the source doesn’t carry); `False` is additive (the target keeps marks the source lacks)
 
 *Returns:*
 
@@ -757,11 +757,11 @@ for g in src.glyphs:
 
 ## Correction {#correction}
 
-Everything above authors metadata. `correct` is the one verb that moves geometry: it runs the filter's actual correction pass – the same code the dialog's Apply button and instance export run – on an **upright** layer, with the parameters given explicitly.
+Everything above authors metadata. `correct` is the one verb that moves geometry: it runs the filter’s actual correction pass – the same code the dialog’s Apply button and instance export run – on an **upright** layer, with the parameters given explicitly.
 
 **`correct(layer, angle, curve_correction=1.0, diagonal_correction=1.0, stem_compensation=0.0, keep_terminals=0.0, diagonal_correction_stems_only=True)`**
 
-Shear-aware outline correction driven by the layer's stem tags, then the slant itself. The whole pass is one undo step.
+Shear-aware outline correction driven by the layer’s stem tags, then the slant itself. The whole pass is one undo step.
 
 *Parameters* (mirroring the filter dialog):
 
@@ -775,7 +775,7 @@ Shear-aware outline correction driven by the layer's stem tags, then the slant i
 
 *Returns:*
 
-- `ItalifyResult` – refuses with [`masterNotActivated`](#refusals) on a license-enforced build when the layer's master hasn't been activated with a credit
+- `ItalifyResult` – refuses with [`masterNotActivated`](#refusals) on a license-enforced build when the layer’s master hasn’t been activated with a credit
 
 ```python
 import italify
