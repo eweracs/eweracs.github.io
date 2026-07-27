@@ -6,12 +6,20 @@
 caption: Font in use: [MNKY Wilson](https://mnkytype.com/wilson).
 ```
 
-The plugin is now available for licensing. I am happy to give you a demo, in person or by video: sebastian.carewe<span class="email-protected"></span>
+The Glyphs 3 plugin is now available for licensing. I am happy to give you a demo, in person or by video: sebastian.carewe<span class="email-protected"></span>
 
 ```buttons
 [Download](https://github.com/eweracs/Italify/releases/latest/download/Italify.glyphsPlugin.zip) primary
 [Read the handbook](handbook/)
 ```
+
+```screenshot wide
+img: ../images/italifyFilter.png
+tag: Screenshot – Italify
+desc: Italify applied on a whole Latin alphabet.
+caption: Italify can make you a corrected oblique in an instant.
+```
+
 
 @overline The problem
 
