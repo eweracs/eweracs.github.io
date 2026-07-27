@@ -14,7 +14,7 @@ The Glyphs 3 plugin is now available for licensing. I am happy to give you a dem
 ```
 
 ```screenshot wide
-img: ../images/italifyFilter.png
+img: images/italifyFilter.png
 tag: Screenshot – Italify
 desc: Italify applied on a whole Latin alphabet.
 caption: Italify can make you a corrected oblique in an instant.
