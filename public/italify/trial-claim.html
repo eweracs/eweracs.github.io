@@ -55,8 +55,9 @@
 	<p class="claim-status" id="claim-status" hidden></p>
 
 	<div id="claim-result" hidden>
-		<p class="lede">This is your personal Italify license code, valid
-		until <strong id="claim-expiry"></strong>.</p>
+		<p class="lede">This is your personal Italify license code. It runs
+		for <strong id="claim-duration"></strong> from the moment you enter
+		it in Glyphs — there's no rush.</p>
 
 		<div class="code-block" id="code-block">
 			<pre><code id="claim-code"></code></pre>
@@ -73,12 +74,12 @@
 			<li><strong>Copy the code</strong> above and open
 				<em>Filter → Italify</em> in Glyphs.</li>
 			<li><strong>Paste the code</strong> into the license field and
-				click <em>Add</em>. That's it – full access on every master
-				for the next 48 hours.</li>
+				click <em>Add</em>. That's it – full access on every master,
+				and your 48 hours start right there.</li>
 		</ol>
-		<p>Keep this page's link: re-opening it during your trial shows the
-		same code. Questions? The <a href="handbook/">handbook</a> is a
-		good place to start.</p>
+		<p>Keep this page's link: re-opening it always shows the same code.
+		Questions? The <a href="handbook/">handbook</a> is a good place to
+		start.</p>
 	</div>
 </section>
 </main>
@@ -119,25 +120,16 @@ var WORKER_URL = "https://italify-trial.file-manager-bot.workers.dev";
 		})
 		.then(function (r) {
 			if (!r.response.ok) {
-				if (r.data.error === "already-used") {
-					fail("Trial already used",
-						"This email address has already used its Italify trial. "
-						+ 'Ready for the full version? See the <a href="/italify">overview</a>.');
-				} else {
-					fail("This link has expired",
-						'Trial links are valid for one hour. '
-						+ '<a href="trial">Request a fresh one</a> – if your '
-						+ "trial is still running, you'll get the same code again.");
-				}
+				fail("This link has expired",
+					'Trial links are valid for one hour. '
+					+ '<a href="trial">Request a fresh one</a> – you will '
+					+ "get the same code again.");
 				return;
 			}
-			title.textContent = r.data.reused ? "Your trial is already running" : "Your trial starts now";
+			title.textContent = r.data.reused ? "Here is your trial code again" : "Your trial code is ready";
 			document.getElementById("claim-code").textContent = r.data.code;
-			document.getElementById("claim-expiry").textContent =
-				new Date(r.data.expiresAt * 1000).toLocaleString(undefined, {
-					year: "numeric", month: "long", day: "numeric",
-					hour: "2-digit", minute: "2-digit",
-				});
+			document.getElementById("claim-duration").textContent =
+				(r.data.durationHours || 48) + " hours";
 			result.hidden = false;
 
 			var copy = document.getElementById("copy-code");

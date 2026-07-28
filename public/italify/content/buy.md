@@ -24,6 +24,9 @@ For a sprint across a whole family, a time pass gives you **unlimited masters** 
 | One week | 600 € |
 | Two weeks | 1 000 € |
 
+A pass starts when you enter its code in Glyphs, not when you buy it – so there is no rush between purchasing and 
+getting set up.
+
 Credits and passes combine freely: masters you activate with credits stay activated after a pass ends.
 
 @overline Per master
