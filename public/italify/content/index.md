@@ -6,10 +6,10 @@
 caption: Font in use: [MNKY Wilson](https://mnkytype.com/wilson).
 ```
 
-The Glyphs 3 plugin is now available for licensing. I am happy to give you a demo, in person or by video: sebastian.carewe<span class="email-protected"></span>
+The Glyphs plugin is now available for licensing. I am happy to give you a demo, in person or by video: sebastian.carewe<span class="email-protected"></span>
 
 ```buttons
-[Download](https://github.com/eweracs/Italify/releases/latest/download/Italify.glyphsPlugin.zip) primary
+[Download](https://github.com/eweracs/Italify/releases/latest/download/Italify.zip) primary
 [Read the handbook](handbook/)
 ```
 
@@ -101,7 +101,7 @@ If you want to leave off your horizontal or vertical extreme nodes for curve seg
 
 Get in touch for licence purchases or custom quotes: sebastian.carewe<span class="email-protected"></span>
 
-Or see for yourself first – the free trial gives you full access for 48 hours, and the [handbook](handbook/) covers everything from tagging stems to per-group parameters. The plugin itself is a [free download](https://github.com/eweracs/Italify/releases/latest/download/Italify.glyphsPlugin.zip); license and trial codes unlock it.
+Or see for yourself first – the free trial gives you full access for 48 hours, and the [handbook](handbook/) covers everything from tagging stems to per-group parameters. The plugin itself is a [free download](https://github.com/eweracs/Italify/releases/latest/download/Italify.zip); license and trial codes unlock it.
 
 ```buttons
 [Try free for 48 hours](trial) primary
