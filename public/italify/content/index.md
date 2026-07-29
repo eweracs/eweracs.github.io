@@ -99,9 +99,9 @@ If you want to leave off your horizontal or vertical extreme nodes for curve seg
 
 ## Get Italify {#get-italify}
 
-Get in touch for licence purchases or custom quotes: sebastian.carewe<span class="email-protected"></span>
+Head over to the [Buy](buy/) page to license Italify.
 
-Or see for yourself first – the free trial gives you full access for 48 hours, and the [handbook](handbook/) covers everything from tagging stems to per-group parameters. The plugin itself is a [free download](https://github.com/eweracs/Italify/releases/latest/download/Italify.zip); license and trial codes unlock it.
+Or see for yourself first – the free trial gives you full access for 48 hours.
 
 ```buttons
 [Try free for 48 hours](trial) primary
