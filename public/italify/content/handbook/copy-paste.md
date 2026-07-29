@@ -9,6 +9,7 @@
 There are two ways to copy, and both write to the clipboard so you can paste onto another layer:
 
 - **[[⌘C]] – Copy Selection.** Whenever you have something selected – stems, tagged nodes, anchors, or any mix – [[⌘C]] copies *exactly that*. (The right-click menu shows it under a **Selection** heading; hold [[⌥]] there for *Propagate Selection to all Masters*, which writes just the selected items straight to every compatible master.) [[⌘V]] pastes whatever the clipboard holds; pasting is **additive** – it adds the copied items without wiping the target’s existing ones – so a copied selection drops cleanly onto another layer.
+- **[[⌘X]] – Cut Selection.** Like when copying, you can also cut the current selection. Useful when you want to remove metadata from a layer and paste it in another, in one step. This action has no *in all Masters* option.
 - **Copy all (right-click).** Each section also has a *Copy all Stems* / *Copy all Tags* / *Copy all Anchor Links* verb that copies the whole layer’s items of that kind regardless of selection (greyed when there are none). These have no [[⌘C]] – that’s Copy Selection. *Paste* puts them on the target additively.
 - **Propagate ([[⌥]]).** Holding [[⌥]] on any *Copy all* turns it into *Propagate … to all Masters* – it writes that kind to every compatible master directly (no clipboard), mirroring the layer exactly.
 

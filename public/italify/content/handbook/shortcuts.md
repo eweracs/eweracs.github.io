@@ -22,7 +22,8 @@ All shortcuts below apply while the Italify Tagger is active. [[⌥]] added to a
 | [[⌫]]               | Remove tag / stem; with a corner clicked, delete that corner; with an anchor selected, clear its links |
 | [[⌘A]]              | Cycle select-all: nodes → stems → tags → anchors and their combinations (present kinds only)           |
 | [[Tab]] / [[⇧Tab]]  | With one mark type selected (stem, tag or anchor), select the next / previous item of that type        |
-| [[⌘C]]              | Copy Selection – copies the selected stems / tags / anchor links (any mix)                             |
+| [[⌘C]]              | Copy Selection – copies the selected stems / tags / anchor links (any mix)
+| [[⌘X]]              | Cut Selection – cuts the selected stems / tags / anchor links (any mix)                                        |
 | [[⌘V]] / [[⌘⌥V]]    | Paste whatever Italify items are on the clipboard (additive); [[⌘⌥V]] pastes into all masters          |
 | [[Space]]           | Pan, with filled outline preview                                                                       |
 | [[Space]]+[[Shift]] | Live Italify preview with parameter panel                                                              |
