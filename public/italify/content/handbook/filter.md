@@ -10,13 +10,14 @@ Choose *Filter → Italify* with one or more glyphs open in Edit View. You can a
 ```annotated
 img: ../images/window.png
 alt: The Italify filter dialogue with the angle field and four correction sliders.
-note 15.5%: **Angle** – the slant to apply. [[↺]] reads the current master’s italic angle.
-note 26%: **Saved parameters** – Use the same parameters for the whole font, single masters, glyphs, layers or groups.
-note 42%: **Curve correction** – rebalances curves against the shear’s distortion.
-note 52%: **Keep terminals** – preserves the cut of stroke endings.
-note 69%: **Diagonal correction** – corrects tagged diagonal stems’ width and angle.
-note 82%: **Stem compensation** – how much of a stem’s width change is restored.
-note 96%: The gear menu holds *Copy Filter Parameter* for [export](#export).
+note 14.5%: **Angle** – the slant to apply. [[↺]] reads the current master’s italic angle.
+note 24%: **Saved parameters** – Use the same parameters for the whole font, single masters, glyphs, layers or groups.
+note 39.5%: **Curve correction** – rebalances curves against the shear’s distortion.
+note 49.5%: **Keep terminals** – preserves the cut of stroke endings.
+note 65.5%: **Diagonal correction** – corrects tagged diagonal stems’ width and angle.
+note 77%: **Stem compensation** – how much of a stem’s width change is restored.
+note 89%: **Keep nodes on extremes** – Attempts to keep nodes on orthogonal extremes.
+note 97%: The gear menu holds *Copy Filter Parameter* for [export](#export).
 ```
 
 ## Parameters {#parameters}

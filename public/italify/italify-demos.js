@@ -1,5 +1,5 @@
 /* Italify docs – interactive outline demos.
-   Replaces the retired standalone Next.js Italify page's React/flubber
+   Replaces the retired standalone Next.js Italify page’s React/flubber
    implementation with a small vanilla engine:
 
    • Every path pair is PARSED ONCE at boot into a shared command
@@ -18,7 +18,7 @@
    • prefers-reduced-motion: the sweep demos hold the corrected outline
      statically; the hero stays fully interactive (user-initiated).
 
-   Markup contract (emitted by main.js's `italify-hero` and `demos`
+   Markup contract (emitted by main.js’s `italify-hero` and `demos`
    fences): [data-italify-hero] for the hero, [data-demo="<id>"] cards
    inside .demo-carousel. Boots on the `italify:rendered` event. */
 
@@ -71,7 +71,7 @@
 
 	/* ---- Path parsing (once, at boot) ---------------------------------
 	   Absolute-command path strings (M/L/H/V/C/S/Z, upper or lower) →
-	   { types: ['M','C','L','Z',…], coords: Float64Array } where every
+	   { types: ['M’,'C’,'L’,'Z’,…], coords: Float64Array } where every
 	   M/L holds 2 numbers and every C holds 6, in command order. */
 
 	function parsePath(d) {
@@ -497,7 +497,7 @@
 		}
 
 		var overlay = makeOverlay(svg, morph.types);
-		var current = new Float64Array(base.coords); // what's on screen now
+		var current = new Float64Array(base.coords); // what’s on screen now
 		var scratch = new Float64Array(base.coords.length);
 		var anim = 0;
 

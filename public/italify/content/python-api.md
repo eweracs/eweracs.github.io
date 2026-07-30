@@ -60,7 +60,7 @@ if r:
     a, b = layer.selection[0], layer.selection[1]
     italify.set_anchored_edge(layer, r.stem_id, a, b)
 else:
-    print("refused:", r.reason, "—", r.message)
+    print("refused:", r.reason, "–", r.message)
 
 # Or let the auto-tagger do the whole layer, then mirror to all masters.
 italify.auto_tag(layer)
@@ -465,7 +465,7 @@ for s in italify.stems(layer):
     a, b = s.corners[:2]
     res = s.set_anchored_edge(a, b)
     if not res:
-        print("skipped", s.id, "—", res.message)
+        print("skipped", s.id, "–", res.message)
 ```
 
 An `ItalifyStem` is a thin wrapper, so it refuses exactly as the free functions do: a write returns a falsy result carrying a [reason](#refusals); set `strict=True` (per call or module-wide) to raise [`ItalifyError`](#results) instead.
@@ -775,7 +775,7 @@ Shear-aware outline correction driven by the layer’s stem tags, then the slant
 
 *Returns:*
 
-- `ItalifyResult` – refuses with [`masterNotActivated`](#refusals) on a license-enforced build when the layer’s master hasn’t been activated with a credit
+- `ItalifyResult` – refuses with [`masterNotActivated`](#refusals) on a licence-enforced build when the layer’s master hasn’t been activated with a credit
 
 ```python
 import italify
@@ -802,7 +802,7 @@ When a write is refused, `result.reason` is one of these machine codes (`result.
 | `lockedHandle` | Those handles stay extras while both ends of their curve belong to the stem. |
 | `notFound` | No matching stem, anchor, or node was found on the layer. |
 | `trialBlocked` | The action requires a licensed copy of Italify. |
-| `masterNotActivated` | The layer’s master hasn’t been activated with a license credit. |
+| `masterNotActivated` | The layer’s master hasn’t been activated with a licence credit. |
 | `notCurveSegment` | The two nodes must be on-curve endpoints of the same curve segment, with at least one off-curve between them. |
 | `notInktrapSegment` | The two nodes must be directly-connected, unsmooth on-curve endpoints of a straight segment. |
 | `notTerminalSegment` | The two nodes must be the on-curve endpoints of a directly-connected straight segment. |

@@ -1,5 +1,5 @@
 /* Italify docs – Markdown loader.
-   Fetches the page's .md file (the <main data-source> attribute),
+   Fetches the page’s .md file (the <main data-source> attribute),
    expands the authoring conventions documented in AUTHORING.md, and
    renders with marked (vendored in vendor/marked.min.js). */
 
@@ -97,7 +97,7 @@
 		},
 
 		// ```steps plain``` drops the numbered circles (used for the
-		// handbook's chapter list, which is an index, not a sequence).
+		// handbook’s chapter list, which is an index, not a sequence).
 		steps(body, modifier) {
 			const items = splitTitledChunks(body).map(function (c) {
 				return "<li><h4>" + inline(c.title) + "</h4><p>" +
@@ -107,16 +107,16 @@
 			return '<ol class="' + cls + '">' + items.join("") + "</ol>";
 		},
 
-		// A hand-written "On this page" box. Handbook chapters don't use
+		// A hand-written "On this page" box. Handbook chapters don’t use
 		// this – they get the whole-handbook TOC built by
-		// buildHandbookToc(), whose section list is derived from the page's
+		// buildHandbookToc(), whose section list is derived from the page’s
 		// own headings.
 		toc(body) {
 			return '<div class="toc"><span class="overline">On this page</span>' +
 				marked.parse(body) + "</div>";
 		},
 
-		// The interactive slant/correction hero (index page). Markup only —
+		// The interactive slant/correction hero (index page). Markup only –
 		// behaviour and the outline data live in italify-demos.js, which
 		// boots on the `italify:rendered` event. Body: `caption: …`.
 		"italify-hero"(body) {
@@ -136,7 +136,7 @@
 				check("hero-nodes-toggle", "Show nodes", true) +
 				"</div>" +
 				// The outline spans 0…3463 × 0…712; the viewBox margin keeps
-				// node circles and handles clear of the stage's scroll clip
+				// node circles and handles clear of the stage’s scroll clip
 				// (generous left/right, matching the old standalone page).
 				'<div class="hero-stage"><svg viewBox="-60 -30 3583 772" role="img" ' +
 				'aria-label="Interactive interpolation between the upright and the Italify-corrected oblique">' +
@@ -242,7 +242,7 @@
 	function transformLine(line) {
 		let m = line.match(/^@overline\s+(.*)$/);
 		if (m) {
-			// Inline Markdown so a handbook chapter's overline can be the
+			// Inline Markdown so a handbook chapter’s overline can be the
 			// breadcrumb link back to the handbook index.
 			return '<p class="overline">' + inline(m[1]) + "</p>";
 		}
@@ -416,8 +416,8 @@
 		return m && m[1] !== "index" ? m[1] : null;
 	}
 
-	// Build the handbook's table of contents: every chapter, with the
-	// current one's own sections nested underneath it. This replaces the
+	// Build the handbook’s table of contents: every chapter, with the
+	// current one’s own sections nested underneath it. This replaces the
 	// per-page "On this page" box on chapter pages, so a reader can reach
 	// any chapter from any chapter instead of only stepping prev/next.
 	// The section list is derived from the rendered h2s, so it never drifts
@@ -534,7 +534,7 @@
 		});
 	}
 
-	// Syntax-highlight fenced code with Prism, where it's loaded (only the
+	// Syntax-highlight fenced code with Prism, where it’s loaded (only the
 	// Python API page pulls in vendor/prism.min.js). marked emits
 	// `<code class="language-python">`, which Prism tokenises in place;
 	// the token colours live in styles.css, not a vendored Prism theme.
@@ -543,7 +543,7 @@
 	}
 
 	// Clipboard + check glyphs for the copy button (Feather-style line icons,
-	// inheriting currentColor so the button's CSS controls them).
+	// inheriting currentColor so the button’s CSS controls them).
 	var COPY_ICON = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>';
 	var CHECK_ICON = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg>';
 
@@ -603,9 +603,9 @@
 
 	/* ---- Theme switch -------------------------------------------------
 	   The initial theme is set before paint by the inline script in each
-	   page's <head> (reads localStorage, else the OS preference). Here we
+	   page’s <head> (reads localStorage, else the OS preference). Here we
 	   only wire the header button: flip <html data-theme>, persist the
-	   choice, and keep the button's labels in sync. */
+	   choice, and keep the button’s labels in sync. */
 	function initThemeToggle() {
 		var btn = document.getElementById("theme-toggle");
 		if (!btn) return;

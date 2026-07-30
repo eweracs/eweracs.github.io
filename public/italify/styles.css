@@ -26,7 +26,7 @@
 }
 
 /* Dark theme: same tokens, inverted. Set by the anti-FOUC script in each
-   page's <head> (data-theme on <html>), toggled by the header switch. */
+   page’s <head> (data-theme on <html>), toggled by the header switch. */
 :root[data-theme="dark"] {
 	--color-primary: #f2f2f0;
 	--color-secondary: #9aa1ab;
@@ -38,7 +38,7 @@
 	--color-lede: #dfe2e7;
 }
 
-/* Fizz (variable, wght 200–1000) is the site's voice. */
+/* Fizz (variable, wght 200–1000) is the site’s voice. */
 @font-face {
 	font-family: "Fizz";
 	src: url("fonts/FizzVF-Regular.woff2") format("woff2");
@@ -132,9 +132,9 @@ header.site .column {
 	padding-bottom: var(--space-md);
 }
 
-/* Theme switch: sits just past the reading column's right edge – a 16px
-   gap from the last nav item, matching the nav's own inter-item spacing
-   (the column's 24px padding less the button's 8px inset). Below 961px the
+/* Theme switch: sits just past the reading column’s right edge – a 16px
+   gap from the last nav item, matching the nav’s own inter-item spacing
+   (the column’s 24px padding less the button’s 8px inset). Below 961px the
    gutter closes, so it falls back to the page edge (see media query). */
 .theme-toggle {
 	position: absolute;
@@ -166,7 +166,7 @@ header.site .column {
 	display: block;
 	width: 20px;
 	height: 20px;
-	/* Fizz's link transition easing, reused so the mode flip feels of a
+	/* Fizz’s link transition easing, reused so the mode flip feels of a
 	   piece with the rest of the site. */
 	transition: transform 0.4s cubic-bezier(0.22, 1, 0.36, 1);
 }
@@ -289,7 +289,7 @@ p.lede {
 	margin-bottom: var(--space-sm);
 }
 
-/* A handbook chapter's overline is the breadcrumb back to the index –
+/* A handbook chapter’s overline is the breadcrumb back to the index –
    keep it looking like a label, revealing itself as a link on hover. */
 .overline a {
 	color: inherit;
@@ -467,8 +467,8 @@ pre code {
 }
 
 /* Code sample with a copy-to-clipboard button pinned to its top-right. The
-   wrapper carries the block's bottom spacing so the button can sit in the
-   pre's padding without being clipped by its horizontal scroll. */
+   wrapper carries the block’s bottom spacing so the button can sit in the
+   pre’s padding without being clipped by its horizontal scroll. */
 .code-block {
 	position: relative;
 	margin: 0 0 var(--space-md);
@@ -519,7 +519,7 @@ pre code {
 	height: 16px;
 }
 
-/* Prism syntax highlighting (python only). No vendored Prism theme —
+/* Prism syntax highlighting (python only). No vendored Prism theme –
    these restrained token colours match the site palette: strings green,
    keywords blue, comments and punctuation grey, names/numbers default. */
 .token.comment {
@@ -607,7 +607,7 @@ figure.shot img {
 figure.shot.annotated img {
 	width: 46%;
 	/* The standard figure shadow, but as drop-shadow so it follows the
-	   window's rounded corners (the asset's alpha) instead of a box.
+	   window’s rounded corners (the asset’s alpha) instead of a box.
 	   drop-shadow blur is a Gaussian deviation – half the box-shadow
 	   radii renders visually identical. */
 	box-shadow: none;
@@ -615,7 +615,7 @@ figure.shot.annotated img {
 	filter:
 		drop-shadow(0 1px 1.5px rgba(0, 0, 0, 0.06))
 		drop-shadow(0 12px 16px rgba(0, 0, 0, 0.12));
-	/* Optical nudge: drops the image slightly so the dialogue's controls
+	/* Optical nudge: drops the image slightly so the dialogue’s controls
 	   line up with the note column. Tweak here if the asset changes. */
 	transform: translateY(8px);
 }
@@ -707,7 +707,7 @@ figure.shot figcaption {
 	margin-top: var(--space-sm);
 }
 
-/* Code in a caption (or an annotated figure's notes) sizes with that
+/* Code in a caption (or an annotated figure’s notes) sizes with that
    text instead of jumping to the body-copy 18px – the same 0.9 ratio
    code keeps against running text. */
 figure.shot figcaption code,
@@ -739,7 +739,7 @@ figure.shot figcaption code,
 }
 
 /* The handbook TOC (built by main.js) lists every chapter, with the
-   current chapter's sections nested under it – so any chapter is one
+   current chapter’s sections nested under it – so any chapter is one
    click away, not a prev/next walk. */
 
 .handbook-toc {
@@ -826,7 +826,7 @@ figure.shot figcaption code,
 	/* The handbook TOC is navigation rather than a page summary, so it
 	   stays put while the chapter scrolls – pinned in the margin beside
 	   the centred column (hence the calc rather than main-relative
-	   offsets), and scrollable itself when a long chapter's section list
+	   offsets), and scrollable itself when a long chapter’s section list
 	   outgrows the viewport. */
 	.handbook-toc {
 		position: fixed;
@@ -985,7 +985,7 @@ ol.steps.steps-plain > li p:last-child {
 }
 
 /* Parameters / Returns: small-caps labels hugging their list, matching
-   the site's other section labels (.overline, th, .shot-tag). */
+   the site’s other section labels (.overline, th, .shot-tag). */
 .api-body .api-label {
 	margin: var(--space-sm) 0 2px;
 }
@@ -1048,7 +1048,7 @@ ol.steps.steps-plain > li p:last-child {
 
 /* Round checkboxes, carried over from the original standalone Italify
    page: a circle with a checkmark that fades/scales in, tinted with the
-   site's link blue. */
+   site’s link blue. */
 .demo-toggle input {
 	appearance: none;
 	-webkit-appearance: none;
@@ -1328,7 +1328,7 @@ ol.steps.steps-plain > li p:last-child {
 }
 
 /* Obfuscated email: the domain is supplied by CSS, matching the main
-   site's convention. */
+   site’s convention. */
 .email-protected::after {
 	content: "@gmail.com";
 }
