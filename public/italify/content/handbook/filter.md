@@ -75,10 +75,14 @@ You can keep your sources upright and let Italify run when instances are generat
 Add a `Filter` custom parameter to an instance (Font Info → Exports) with a value like:
 
 ```
-Italify;angle:9.5;curveCorrection:0.8;diagonalCorrection:0.9;stemCompensation:1;keepTerminals:0;diagonalStemsOnly:1
+Italify;angle:9.5;curveCorrection:0.8;diagonalCorrection:0.9;stemCompensation:1;keepTerminals:0;diagonalStemsOnly:1;keepExtremes:0
 ```
 
 You don’t need to type this: open the filter dialogue, set the parameters the way you want them, and choose *Copy Filter Parameter* from the dialogue’s gear menu – filter parameter lands on your clipboard ready to paste into the instance. All arguments are optional and named, so partial parameters like `Italify;angle:10` work and fall back to the defaults above.
+
+Two arguments are **switches** rather than values: **`keepExtremes`** and **`diagonalStemsOnly`**. Write them as `1` or `0` (`true`/`false` and `yes`/`no` are accepted too). `keepExtremes:1` turns [Keep nodes on extremes](#parameters) on for the export; leave the argument out and it stays off, matching the checkbox’s default. `diagonalStemsOnly` mirrors the [hidden setting](#hidden-settings) of the same name and is on unless you set it to `0`.
+
+Neither switch takes part in the [saved-parameter cascade](#saving-parameters) – only the four numeric parameters can be saved to a layer, glyph, group, master or font. At export the two switches are therefore read from the `Filter` parameter alone and apply to every glyph the filter runs on.
 
 Like many Glyphs export filters, Italify also accepts an **`include`** or **`exclude`** argument to scope which glyphs it runs on – comma-separated glyph names, with `*` wildcards allowed:
 

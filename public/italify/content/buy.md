@@ -37,7 +37,7 @@ One credit activates one master, **permanently**: run the filter on that master 
 
 | Package | Credits | Price | Rate/credit | Savings vs. single |
 |---------|---------|-------|-------------|--------------------|
-| Solo | 1 | 300 € | 300 € | — |
+| Solo | 1 | 300 € | 300 € | – |
 | Duo | 2 | 500 € | 250 € | 17% |
 | Trio | 3 | 650 € | 217 € | 28% |
 | Starter | 4 | 800 € | 200 € | 33% |
