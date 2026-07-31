@@ -13,62 +13,85 @@ Try the fully functional plugin for 48h, zero restrictions.
 [Try free for 48 hours](trial) primary
 ```
 
-@overline Per project
+## Your organisation size {#size}
+
+Italify is licensed based on organisation size. Get in touch for custom licensing options.
+
+<!-- The size picker is wired up in buy: choosing a size filters both
+     pricing tables below and the package list in the order form, and the
+     switch turns the full grid back on. Keep the names in sync with the
+     table headings below, which is what the script matches on. -->
+<div class="size-picker" id="size-picker" role="radiogroup" aria-label="Organisation size">
+	<button type="button" class="size-option" data-size="designer" role="radio" aria-checked="true">
+		<span class="size-name">Designer</span>
+		<span class="size-desc">1–3 employees.</span>
+	</button>
+	<button type="button" class="size-option" data-size="studio" role="radio" aria-checked="false">
+		<span class="size-name">Studio</span>
+		<span class="size-desc">4–7 employees.</span>
+	</button>
+	<button type="button" class="size-option" data-size="foundry" role="radio" aria-checked="false">
+		<span class="size-name">Foundry</span>
+		<span class="size-desc">8+ employees.</span>
+	</button>
+	<p class="size-compare-row">
+		<button type="button" class="size-compare" id="size-compare" role="switch" aria-checked="false">
+			<span class="switch" aria-hidden="true"><span class="switch-knob"></span></span>
+			<span>Compare all sizes</span>
+		</button>
+	</p>
+</div>
 
 ## Time passes {#time}
 
 For a sprint across a whole family, a time pass gives you **unlimited masters** – every master in every file, no activation, no counting – for the duration of the pass.
 
-| Pass | Price |
-|------|-------|
-| One week | 600 € |
-| Two weeks | 1 000 € |
+| Pass | Designer | Studio | Foundry |
+|------|----------|--------|---------|
+| One week | – | – | 300 € |
+| Two weeks | – | 250 € | 500 € |
+| One month | 100 € | 300 € | 600 € |
 
-A pass starts when you enter its code in Glyphs, not when you buy it – so there is no rush between purchasing and 
-getting set up.
+A pass starts when you enter the code in Glyphs.
 
 Credits and passes combine freely: masters you activate with credits stay activated after a pass ends.
 
-@overline Per master
-
 ## Master credits {#credits}
 
-One credit activates one master, **permanently**: run the filter on that master as often as you like, keep editing and re-italifying it forever, including at export. Credits never expire, and top-ups are delivered as a licence code by email.
+One credit activates one master, **forever**: run the filter on that master as often as you like, keep editing, add glyphs, use Italify on it forever, including at export. Credits never expire, and you can easily top up with a new licence code.
 
-| Package | Credits | Price | Rate/credit | Savings vs. single |
-|---------|---------|-------|-------------|--------------------|
-| Solo | 1 | 300 € | 300 € | – |
-| Duo | 2 | 500 € | 250 € | 17% |
-| Trio | 3 | 650 € | 217 € | 28% |
-| Starter | 4 | 800 € | 200 € | 33% |
-| Medium | 6 | 1 000 € | 167 € | 44% |
-| Ambitious | 8 | 1 200 € | 150 € | 50% |
-| Family | 10 | 1 350 € | 135 € | 55% |
-| Studio | 16 | 1 700 € | 106 € | 65% |
-| Foundry | 24 | 2 000 € | 83 € | 72% |
-
-@overline Order
+| Credits | Designer | Studio | Foundry |
+|---------|----------|--------|---------|
+| 1 | 50 € | 90 € | 150 € |
+| 2 | 80 € | 150 € | 250 € |
+| 3 | 110 € | 200 € | 350 € |
+| 4 | 140 € | 240 € | 400 € |
+| 6 | 180 € | 310 € | 500 € |
+| 8 | 220 € | 370 € | 600 € |
+| 10 | 250 € | 420 € | 700 € |
+| 16 | 330 € | 530 € | 850 € |
+| 24 | 400 € | 630 € | 1 000 € |
 
 ## Place your order {#order}
 
 Pick your package and fill in your billing details. You’ll receive the invoice by email and your licence code follows as soon as the payment arrives.
 
+Prices exclude VAT. German and EU customers are invoiced plus 19% German VAT; EU businesses that give a VAT ID are invoiced without it under the reverse-charge rule, and customers outside the EU pay no EU VAT. The total below says which applies to you as soon as you pick your country.
+
 <form class="order-form" id="order-form">
-	<div class="span-2">
-		<label for="order-package">Package</label>
-		<select id="order-package" required>
-			<option value="solo">Solo – 1 master credit – 300 €</option>
-			<option value="duo">Duo – 2 master credits – 500 €</option>
-			<option value="trio">Trio – 3 master credits – 650 €</option>
-			<option value="starter">Starter – 4 master credits – 800 €</option>
-			<option value="medium">Medium – 6 master credits – 1 000 €</option>
-			<option value="ambitious">Ambitious – 8 master credits – 1 200 €</option>
-			<option value="family">Family – 10 master credits – 1 350 €</option>
-			<option value="studio">Studio – 16 master credits – 1 700 €</option>
-			<option value="foundry">Foundry – 24 master credits – 2 000 €</option>
-			<option value="week">Time pass – one week – 600 €</option>
-			<option value="twoweeks">Time pass – two weeks – 1 000 €</option>
+	<div>
+		<label for="order-size">Size</label>
+		<select id="order-size" required>
+			<option value="designer">Designer</option>
+			<option value="studio">Studio</option>
+			<option value="foundry">Foundry</option>
 		</select>
+	</div>
+	<div>
+		<!-- Filled in by buy from the pricing tables above, for the
+		     size selected on the left. -->
+		<label for="order-package">Package</label>
+		<select id="order-package" required></select>
 	</div>
 	<div>
 		<label for="order-first-name">First name</label>
@@ -173,8 +196,6 @@ Pick your package and fill in your billing details. You’ll receive the invoice
 </form>
 
 Prefer email? Custom order? Get in touch directly: sebastian.carewe<span class="email-protected"></span>
-
-@overline How it works
 
 ## After your order {#how}
 

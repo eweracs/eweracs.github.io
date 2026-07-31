@@ -20,9 +20,172 @@
 </script>
 <link rel="stylesheet" href="styles.css?v=25">
 <style>
-	/* Page-local order-form styling; the form markup itself lives in
-	   content/buy.md (raw HTML block) so the surrounding text stays
-	   editable as Markdown. */
+	/* Page-local styling for the size picker and the order form; both
+	   markup blocks live in content/buy.md (raw HTML) so the surrounding
+	   text stays editable as Markdown. */
+	.size-picker {
+		display: grid;
+		grid-template-columns: repeat(3, 1fr);
+		gap: var(--space-sm);
+		margin: var(--space-md) 0;
+	}
+	.size-option {
+		display: flex;
+		flex-direction: column;
+		gap: 2px;
+		text-align: left;
+		padding: 12px 14px;
+		border: 1px solid var(--color-border);
+		border-radius: var(--rounded-md);
+		background: var(--color-surface);
+		color: var(--color-primary);
+		font: inherit;
+		cursor: pointer;
+		transition: background-color 0.15s ease, border-color 0.15s ease;
+	}
+	.size-option:hover { border-color: var(--color-secondary); }
+	.size-option[aria-checked="true"] {
+		border-color: var(--color-primary);
+		background: var(--color-muted);
+	}
+	.size-name { font-size: 19px; line-height: 28px; }
+	.size-desc { font-size: 15px; line-height: 22px; color: var(--color-secondary); }
+	.size-compare-row { grid-column: 1 / -1; margin: 4px 0 0; }
+	/* A switch rather than a link: it is a state of the page, not a place
+	   to go, so the label stays put and the control carries the state. */
+	.size-compare {
+		display: inline-flex;
+		align-items: center;
+		gap: var(--space-sm);
+		padding: 0;
+		border: 0;
+		background: none;
+		color: var(--color-primary);
+		font: inherit;
+		font-size: 17px;
+		cursor: pointer;
+	}
+	.size-compare .switch {
+		position: relative;
+		flex: none;
+		width: 36px;
+		height: 20px;
+		border: 1px solid var(--color-border);
+		border-radius: var(--rounded-full);
+		transition: background-color 0.15s ease, border-color 0.15s ease;
+	}
+	.size-compare .switch-knob {
+		position: absolute;
+		top: 2px;
+		left: 2px;
+		width: 14px;
+		height: 14px;
+		border-radius: var(--rounded-full);
+		background: var(--color-secondary);
+		transition: transform 0.15s ease, background-color 0.15s ease;
+	}
+	.size-compare:hover .switch { border-color: var(--color-secondary); }
+	.size-compare[aria-checked="true"] .switch {
+		background: var(--color-primary);
+		border-color: var(--color-primary);
+	}
+	.size-compare[aria-checked="true"] .switch-knob {
+		background: var(--color-surface);
+		transform: translateX(16px);
+	}
+	.size-compare:focus-visible {
+		outline: 2px solid var(--color-link);
+		outline-offset: 2px;
+		border-radius: var(--rounded-sm);
+	}
+	@media (max-width: 640px) {
+		.size-picker { grid-template-columns: 1fr; }
+	}
+	/* Columns the picker filters out. Spelled out rather than left to the
+	   UA default, because `display` on table cells is easily overridden. */
+	main table th[hidden],
+	main table td[hidden] { display: none; }
+	/* The two pricing tables keep a fixed column grid (widths pinned in
+	   the script): with the automatic layout every size sized its own
+	   columns, so switching between them shunted the whole table about.
+	   Fixed, a size change only swaps what stands in the columns. */
+	main table.price-grid { table-layout: fixed; }
+	/* Every column but the label one is inset by the same amount, so the
+	   tint below reads as a band rather than as a ragged edge against the
+	   figures – and so nothing shifts when the tint moves. */
+	main table.price-grid th:not(:first-child),
+	main table.price-grid td:not(:first-child) { padding-left: 12px; }
+	/* Comparing all sizes: the one that was picked stays marked. */
+	main table.price-grid th.is-size,
+	main table.price-grid td.is-size { background: var(--color-muted); }
+	/* Filtered to one size, a pass it cannot buy says so in place of the
+	   price. The comparison shows the sizes that do offer it side by side,
+	   so there the bare dash is enough. */
+	main table.price-grid .pass-note {
+		color: var(--color-secondary);
+		font-size: 15px;
+		line-height: 22px;
+	}
+	main table.price-grid.is-compare .pass-note,
+	main table.price-grid:not(.is-compare) .pass-dash { display: none; }
+	/* Fixed columns leave the headings no room to spare on a phone, and
+	   the tracking is what costs the most of it. */
+	@media (max-width: 640px) {
+		main table.price-grid th { letter-spacing: 0.4px; }
+		main table.price-grid th:not(:first-child),
+		main table.price-grid td:not(:first-child) { padding-left: 6px; }
+	}
+
+	/* The two offerings are one choice, not two chapters. The sections
+	   stay ordinary Markdown in content/buy.md – the script folds them
+	   into this group – so the page shows one table at a time. */
+	.tab-group { margin-top: var(--space-xl); }
+	.tab-list {
+		display: flex;
+		gap: var(--space-lg);
+		border-bottom: 1px solid var(--color-border);
+	}
+	.tab {
+		margin-bottom: -1px;
+		padding: 0 0 10px;
+		border: 0;
+		border-bottom: 2px solid transparent;
+		background: none;
+		color: var(--color-secondary);
+		font: inherit;
+		font-size: 28px;
+		font-weight: 600;
+		line-height: 32px;
+		letter-spacing: 0.1px;
+		cursor: pointer;
+		transition: color 0.15s ease, border-color 0.15s ease;
+	}
+	.tab:hover { color: var(--color-primary); }
+	.tab[aria-selected="true"] {
+		color: var(--color-primary);
+		border-bottom-color: var(--color-primary);
+	}
+	.tab:focus-visible { outline: 2px solid var(--color-link); outline-offset: 2px; }
+	main .tab-group section.tab-panel { margin-top: var(--space-lg); }
+	/* The tab is the panel's heading; printing it again inside would say
+	   it twice. It stays in the document for its structure and for the
+	   deep links that point at it. */
+	.tab-panel > .overline,
+	.tab-panel > h2 {
+		position: absolute;
+		width: 1px;
+		height: 1px;
+		margin: -1px;
+		padding: 0;
+		overflow: hidden;
+		clip-path: inset(50%);
+		white-space: nowrap;
+	}
+	@media (max-width: 640px) {
+		.tab-list { gap: var(--space-md); }
+		.tab { font-size: 22px; line-height: 28px; }
+	}
+
 	.order-form {
 		border: 1px solid var(--color-border);
 		border-radius: var(--rounded-md);
@@ -114,32 +277,459 @@
 <script src="vendor/marked.min.js"></script>
 <script src="main.js?v=16"></script>
 <script>
-// Order form wiring. The form markup arrives with the rendered Markdown
-// (content/buy.md), so hook up after main.js dispatches italify:rendered.
-// The package catalog here is DISPLAY-only – the Worker recomputes every
-// price server-side and ignores anything else the client claims.
+// Size picker and order form. Both markup blocks arrive with the rendered
+// Markdown (content/buy.md), so hook up after main.js dispatches
+// italify:rendered.
+//
+// Prices are NOT duplicated here: the catalog is read out of the two
+// pricing tables in content/buy.md, which keeps the tables and the order
+// form from ever disagreeing. It is display-only regardless – the Worker
+// holds its own catalog and recomputes every price server-side, ignoring
+// whatever the client claims (Scripts/TrialWorker/src/index.mjs).
 var WORKER_URL = "https://italify-trial.file-manager-bot.workers.dev";
+
+// Time passes and master credits are one choice between two ways of
+// paying, not two chapters to read in turn – so they are folded into a
+// tab group here, and the page never shows more than one of them. The
+// sections stay ordinary `##` sections in content/buy.md: this only
+// rearranges what main.js has already rendered, which keeps their
+// anchors (#time, #credits) working as link targets.
+document.addEventListener("italify:rendered", function () {
+	// In page order; the first is the one that opens. Each tab is named
+	// after its section's heading, so the Markdown stays the one place
+	// these are written.
+	var PANEL_IDS = ["time", "credits"];
+	var panels = PANEL_IDS.map(function (id) {
+		return document.querySelector('section[data-section="' + id + '"]');
+	});
+	if (panels.indexOf(null) !== -1) return;
+
+	var group = document.createElement("div");
+	group.className = "tab-group";
+	panels[0].parentNode.insertBefore(group, panels[0]);
+	var list = document.createElement("div");
+	list.className = "tab-list";
+	list.setAttribute("role", "tablist");
+	group.appendChild(list);
+
+	var tabs = PANEL_IDS.map(function (id, index) {
+		var heading = panels[index].querySelector("h2");
+		var tab = document.createElement("button");
+		tab.type = "button";
+		tab.className = "tab";
+		tab.id = "tab-" + id;
+		tab.setAttribute("role", "tab");
+		tab.setAttribute("aria-controls", "panel-" + id);
+		tab.textContent = heading ? heading.textContent.trim() : id;
+		list.appendChild(tab);
+
+		panels[index].id = "panel-" + id;
+		panels[index].className += " tab-panel";
+		panels[index].setAttribute("role", "tabpanel");
+		panels[index].setAttribute("aria-labelledby", tab.id);
+		group.appendChild(panels[index]);
+		return tab;
+	});
+
+	function select(index) {
+		tabs.forEach(function (tab, i) {
+			var current = i === index;
+			tab.setAttribute("aria-selected", current ? "true" : "false");
+			tab.tabIndex = current ? 0 : -1;
+			panels[i].hidden = !current;
+		});
+	}
+
+	tabs.forEach(function (tab, index) {
+		tab.addEventListener("click", function () { select(index); });
+	});
+	list.addEventListener("keydown", function (event) {
+		var back = event.key === "ArrowLeft" || event.key === "ArrowUp";
+		var forward = event.key === "ArrowRight" || event.key === "ArrowDown";
+		if (!back && !forward) return;
+		event.preventDefault();
+		var current = tabs.indexOf(document.activeElement);
+		if (current === -1) return;
+		var next = (current + (back ? -1 : 1) + tabs.length) % tabs.length;
+		select(next);
+		tabs[next].focus();
+	});
+
+	// A link to a heading inside a closed panel has to open it first –
+	// main.js scrolls to the hash right after this event, and the other
+	// pages link to #credits and #time.
+	function panelFor(hash) {
+		var target = hash ? document.getElementById(hash.replace(/^#/, "")) : null;
+		if (!target) return -1;
+		for (var i = 0; i < panels.length; i++) {
+			if (panels[i].contains(target)) return i;
+		}
+		return -1;
+	}
+	function openForHash() {
+		var index = panelFor(location.hash);
+		if (index === -1) return;
+		select(index);
+		// Both main.js on load and the browser on a hashchange scroll to
+		// the heading itself, which is hidden at the top of the panel –
+		// landing there would put the tabs just off screen and leave the
+		// table unexplained. Take the scroll back on the next frame.
+		requestAnimationFrame(function () { group.scrollIntoView(); });
+	}
+	window.addEventListener("hashchange", openForHash);
+
+	select(0);
+	openForHash();
+});
+
+// The organisation sizes, matched against the pricing tables' column
+// headings. A key is also the first half of the package key the Worker
+// validates: `designer-4`, `foundry-month`.
+var SIZES = ["designer", "studio", "foundry"];
+
+// The time-pass rows, keyed by their label in the pricing table; the slug
+// completes the package key.
+var PASSES = {
+	"one week": { slug: "week", label: "One week" },
+	"two weeks": { slug: "2weeks", label: "Two weeks" },
+	"one month": { slug: "month", label: "One month" },
+};
+
+// "1 000 €" – space as the thousands separator, as everywhere on the page.
+function euros(value) {
+	return String(value).replace(/\B(?=(\d{3})+(?!\d))/g, " ") + " €";
+}
+
+// The number in a table cell, or null if there isn't one (an em dash in
+// the pass table means that size cannot buy that pass).
+function amount(text) {
+	var digits = String(text == null ? "" : text).replace(/[^\d]/g, "");
+	return digits ? Number(digits) : null;
+}
 
 document.addEventListener("italify:rendered", function () {
 	var form = document.getElementById("order-form");
 	if (!form) return;
+	var picker = document.getElementById("size-picker");
+	var compareToggle = document.getElementById("size-compare");
+	var sizeSelect = document.getElementById("order-size");
 	var packageSelect = document.getElementById("order-package");
 	var total = document.getElementById("order-total");
 	var submit = document.getElementById("order-submit");
 	var status = document.getElementById("order-status");
 
-	var PRICES = {
-		solo: "300 €", duo: "500 €", trio: "650 €", starter: "800 €",
-		medium: "1 000 €", ambitious: "1 200 €", family: "1 350 €",
-		studio: "1 700 €", foundry: "2 000 €", week: "600 €", twoweeks: "1 000 €",
-	};
+	var size = SIZES[0];
+	var compare = false;
+
+	function tableIn(sectionId) {
+		var section = document.querySelector('section[data-section="' + sectionId + '"]');
+		return section ? section.querySelector("table") : null;
+	}
+	var creditTable = tableIn("credits");
+	var passTable = tableIn("time");
+	[creditTable, passTable].forEach(function (table) {
+		if (table) table.classList.add("price-grid");
+	});
+
+	function bodyRows(table) {
+		return table ? Array.prototype.slice.call(table.querySelectorAll("tbody tr")) : [];
+	}
+
+	// Which column holds which size, read from the table's own headings.
+	function columnsOf(table) {
+		var map = {};
+		if (!table) return map;
+		Array.prototype.forEach.call(table.querySelectorAll("thead th"), function (th, index) {
+			var key = th.textContent.trim().toLowerCase();
+			if (SIZES.indexOf(key) !== -1) map[key] = index;
+		});
+		return map;
+	}
+
+	function priceIn(row, index) {
+		if (index === undefined) return null;
+		var cell = row.children[index];
+		return cell ? amount(cell.textContent) : null;
+	}
+
+	// Everything each size can buy, in the order the page presents it.
+	function readCatalog() {
+		var catalog = {};
+		SIZES.forEach(function (key) { catalog[key] = []; });
+
+		var creditColumns = columnsOf(creditTable);
+		bodyRows(creditTable).forEach(function (row) {
+			var credits = amount(row.children[0].textContent);
+			if (!credits) return;
+			SIZES.forEach(function (key) {
+				var price = priceIn(row, creditColumns[key]);
+				if (price === null) return;
+				catalog[key].push({
+					value: key + "-" + credits,
+					group: "Master credits",
+					label: credits + (credits === 1 ? " master" : " masters"),
+					price: price,
+				});
+			});
+		});
+
+		var passColumns = columnsOf(passTable);
+		bodyRows(passTable).forEach(function (row) {
+			var pass = PASSES[row.children[0].textContent.trim().toLowerCase()];
+			if (!pass) return;
+			SIZES.forEach(function (key) {
+				var price = priceIn(row, passColumns[key]);
+				if (price === null) return;
+				catalog[key].push({
+					value: key + "-" + pass.slug,
+					group: "Time passes",
+					label: pass.label + " pass",
+					price: price,
+				});
+			});
+		});
+		return catalog;
+	}
+	var catalog = readCatalog();
+
+	// Where a size cannot buy something, the cell says where it can be had
+	// instead of standing empty. Both readings are built once, here: the
+	// bare dash belongs to the comparison, where the sizes that do offer
+	// it are on show anyway, and the notice to the filtered view, where
+	// they are not. Reading the names off the headings keeps them the
+	// table's business.
+	function markUnavailable(table) {
+		if (!table) return;
+		var columns = columnsOf(table);
+		var headings = table.querySelectorAll("thead th");
+		bodyRows(table).forEach(function (row) {
+			var offered = SIZES.filter(function (key) {
+				return priceIn(row, columns[key]) !== null;
+			});
+			// Nothing to point at, or nothing missing.
+			if (!offered.length || offered.length === SIZES.length) return;
+			var notice = "Only available to " + offered.map(function (key) {
+				return headings[columns[key]].textContent.trim();
+			}).join(" and ") + ".";
+			SIZES.forEach(function (key) {
+				if (offered.indexOf(key) !== -1) return;
+				var cell = row.children[columns[key]];
+				if (!cell) return;
+				var dash = document.createElement("span");
+				dash.className = "pass-dash";
+				dash.textContent = cell.textContent.trim();
+				var note = document.createElement("span");
+				note.className = "pass-note";
+				note.textContent = notice;
+				cell.textContent = "";
+				cell.appendChild(dash);
+				cell.appendChild(note);
+			});
+		});
+	}
+	[creditTable, passTable].forEach(markUnavailable);
+
+	// Prices exclude VAT, so the total says what will be added as soon as
+	// the country is known. The rule mirrors the Worker's vatHandlingFor
+	// and is read off the country select's own optgroups, so there is no
+	// second list of EU countries to keep in step – and the Worker remains
+	// the authority regardless.
+	function vatSuffix() {
+		var country = document.getElementById("order-country");
+		var option = country.selectedOptions[0];
+		if (!country.value || !option) return " + VAT where it applies";
+		var inEu = option.parentNode && option.parentNode.label === "European Union";
+		var hasVatId = !!document.getElementById("order-vat").value.trim();
+		if (country.value === "DE" || (inEu && !hasVatId)) return " + 19% VAT";
+		return inEu ? " (no VAT, reverse charge)" : " (no VAT)";
+	}
 
 	function syncTotal() {
-		var price = PRICES[packageSelect.value];
-		total.textContent = price ? "Total: " + price + " (net)" : "";
+		var chosen = null;
+		catalog[size].forEach(function (item) {
+			if (item.value === packageSelect.value) chosen = item;
+		});
+		total.textContent = chosen
+			? "Total: " + euros(chosen.price) + vatSuffix()
+			: "";
 	}
+
+	function fillPackages() {
+		var previous = packageSelect.value;
+		packageSelect.textContent = "";
+		var groups = {};
+		catalog[size].forEach(function (item) {
+			if (!groups[item.group]) {
+				groups[item.group] = document.createElement("optgroup");
+				groups[item.group].label = item.group;
+				packageSelect.appendChild(groups[item.group]);
+			}
+			var option = document.createElement("option");
+			option.value = item.value;
+			option.textContent = item.label + " – " + euros(item.price);
+			groups[item.group].appendChild(option);
+		});
+		// Changing size keeps the equivalent package where the new size has
+		// one – 4 credits stays 4 credits – and otherwise falls back to the
+		// first entry (a one-week pass has no Designer counterpart).
+		var equivalent = previous.replace(/^[a-z]+-/, size + "-");
+		if (previous && packageSelect.querySelector('option[value="' + equivalent + '"]')) {
+			packageSelect.value = equivalent;
+		}
+		syncTotal();
+	}
+
+	// A phone fits the label column and two prices, no more – below that
+	// width the derived columns come off rather than squeeze the rest.
+	// The decision lives here and not in a media query so that the pinned
+	// column widths are always calculated over the columns that are
+	// actually there.
+	var narrow = window.matchMedia("(max-width: 640px)");
+
+	// Filtered down to one size, the credits table has room for what the
+	// three-column comparison cannot show: what a credit actually costs in
+	// each pack. Derived from the prices in the table, never a second copy.
+	function renderRates() {
+		if (!creditTable) return;
+		Array.prototype.forEach.call(creditTable.querySelectorAll(".rate-cell"), function (cell) {
+			cell.remove();
+		});
+		if (compare || narrow.matches) return;
+		var index = columnsOf(creditTable)[size];
+		if (index === undefined) return;
+
+		function rateCell(tag, text) {
+			var cell = document.createElement(tag);
+			cell.className = "rate-cell";
+			cell.textContent = text;
+			return cell;
+		}
+		var head = creditTable.querySelector("thead tr");
+		if (head) {
+			head.appendChild(rateCell("th", "Per credit"));
+			head.appendChild(rateCell("th", "Saving"));
+		}
+		var single = null;
+		bodyRows(creditTable).forEach(function (row) {
+			var credits = amount(row.children[0].textContent);
+			var price = priceIn(row, index);
+			if (!credits || price === null) return;
+			var rate = price / credits;
+			if (credits === 1) single = rate;
+			row.appendChild(rateCell("td", euros(Math.round(rate))));
+			row.appendChild(rateCell("td", single && credits > 1
+				? Math.round((1 - rate / single) * 100) + "%"
+				: "–"));
+		});
+	}
+
+	// The column grid, pinned so it survives every filtering combination:
+	// the label column, then equal columns for whatever prices are on
+	// show, and the last one takes the rest. Everything in these tables is
+	// left-aligned, so what has to stay put is each column's left edge –
+	// which these widths put in the same place whether one size is shown
+	// or all three.
+	var LABEL_WIDTH = "22%";
+	var COLUMN_WIDTH = "26%";
+
+	function pinColumns(table) {
+		var head = table.querySelector("thead tr");
+		if (!head) return;
+		var shown = Array.prototype.filter.call(head.children, function (cell) {
+			return !cell.hidden;
+		});
+		shown.forEach(function (cell, index) {
+			cell.style.width = index === shown.length - 1
+				? ""
+				: (index === 0 ? LABEL_WIDTH : COLUMN_WIDTH);
+		});
+	}
+
+	function renderGrid() {
+		[creditTable, passTable].forEach(function (table) {
+			if (!table) return;
+			var columns = columnsOf(table);
+			Array.prototype.forEach.call(table.querySelectorAll("tr"), function (row) {
+				SIZES.forEach(function (key) {
+					var cell = row.children[columns[key]];
+					if (!cell) return;
+					cell.hidden = !compare && key !== size;
+					cell.classList.toggle("is-size", compare && key === size);
+				});
+			});
+			// A row this size cannot buy stays on show as long as it can say
+			// where it can be had; one that has nothing to say goes.
+			table.classList.toggle("is-compare", compare);
+			bodyRows(table).forEach(function (row) {
+				var cell = row.children[columns[size]];
+				row.hidden = !compare && (!cell
+					|| (priceIn(row, columns[size]) === null && !cell.querySelector(".pass-note")));
+			});
+		});
+		// After renderRates, which is what settles how many columns there
+		// are to pin.
+		renderRates();
+		[creditTable, passTable].forEach(function (table) {
+			if (table) pinColumns(table);
+		});
+	}
+
+	function setSize(next) {
+		if (SIZES.indexOf(next) === -1) return;
+		size = next;
+		if (picker) {
+			Array.prototype.forEach.call(picker.querySelectorAll(".size-option"), function (button) {
+				var chosen = button.dataset.size === size;
+				button.setAttribute("aria-checked", chosen ? "true" : "false");
+				button.tabIndex = chosen ? 0 : -1;
+			});
+		}
+		if (sizeSelect.value !== size) sizeSelect.value = size;
+		renderGrid();
+		fillPackages();
+	}
+
+	if (picker) {
+		picker.addEventListener("click", function (event) {
+			var button = event.target.closest(".size-option");
+			if (button) setSize(button.dataset.size);
+		});
+		// role="radio" comes with keyboard expectations: the arrows move
+		// the choice, and only the chosen option is a tab stop. Only from
+		// an option, though – the compare switch sits inside the picker
+		// too, and arrowing away from it should scroll the page, not
+		// quietly change the size.
+		picker.addEventListener("keydown", function (event) {
+			if (!event.target.closest(".size-option")) return;
+			var back = event.key === "ArrowLeft" || event.key === "ArrowUp";
+			var forward = event.key === "ArrowRight" || event.key === "ArrowDown";
+			if (!back && !forward) return;
+			event.preventDefault();
+			var next = SIZES[(SIZES.indexOf(size) + (back ? -1 : 1) + SIZES.length) % SIZES.length];
+			setSize(next);
+			var button = picker.querySelector('.size-option[data-size="' + next + '"]');
+			if (button) button.focus();
+		});
+	}
+	if (compareToggle) {
+		compareToggle.addEventListener("click", function () {
+			compare = !compare;
+			compareToggle.setAttribute("aria-checked", compare ? "true" : "false");
+			renderGrid();
+		});
+	}
+	// Crossing the narrow breakpoint changes which columns exist.
+	if (narrow.addEventListener) narrow.addEventListener("change", renderGrid);
+	sizeSelect.addEventListener("change", function () { setSize(sizeSelect.value); });
 	packageSelect.addEventListener("change", syncTotal);
-	syncTotal();
+	// Both feed the VAT the total shows.
+	document.getElementById("order-country").addEventListener("change", syncTotal);
+	document.getElementById("order-vat").addEventListener("input", syncTotal);
+	// Adopt whatever the size select holds rather than forcing the default:
+	// on a reload or a step back the browser restores its value, and the
+	// picker and the pricing tables have to follow it, not contradict it.
+	setSize(sizeSelect.value || size);
+	window.addEventListener("pageshow", function () { setSize(sizeSelect.value || size); });
 
 	function show(message, isError) {
 		status.textContent = message;
@@ -179,7 +769,9 @@ document.addEventListener("italify:rendered", function () {
 				if (!response.ok) throw new Error(data.error || "Something went wrong.");
 				show(data.message, false);
 				form.reset();
-				syncTotal();
+				// reset() puts the size select back to its markup default;
+				// bring the picker and the package list along with it.
+				setSize(sizeSelect.value);
 			});
 		}).catch(function (error) {
 			show(error.message || "Something went wrong. Please try again.", true);
