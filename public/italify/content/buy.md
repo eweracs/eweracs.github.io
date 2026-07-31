@@ -22,17 +22,21 @@ Italify is licensed based on organisation size. Get in touch for custom licensin
      switch turns the full grid back on. Keep the names in sync with the
      table headings below, which is what the script matches on. -->
 <div class="size-picker" id="size-picker" role="radiogroup" aria-label="Organisation size">
-	<button type="button" class="size-option" data-size="designer" role="radio" aria-checked="true">
-		<span class="size-name">Designer</span>
-		<span class="size-desc">1–3 employees.</span>
+	<button type="button" class="size-option" data-size="solo" role="radio" aria-checked="true">
+		<span class="size-name">Solo</span>
+		<span class="size-desc">1 person.</span>
+	</button>
+	<button type="button" class="size-option" data-size="team" role="radio" aria-checked="false">
+		<span class="size-name">Team</span>
+		<span class="size-desc">2–3 people.</span>
 	</button>
 	<button type="button" class="size-option" data-size="studio" role="radio" aria-checked="false">
 		<span class="size-name">Studio</span>
-		<span class="size-desc">4–7 employees.</span>
+		<span class="size-desc">4–7 people.</span>
 	</button>
 	<button type="button" class="size-option" data-size="foundry" role="radio" aria-checked="false">
 		<span class="size-name">Foundry</span>
-		<span class="size-desc">8+ employees.</span>
+		<span class="size-desc">8+ people.</span>
 	</button>
 	<p class="size-compare-row">
 		<button type="button" class="size-compare" id="size-compare" role="switch" aria-checked="false">
@@ -46,11 +50,11 @@ Italify is licensed based on organisation size. Get in touch for custom licensin
 
 For a sprint across a whole family, a time pass gives you **unlimited masters** – every master in every file, no activation, no counting – for the duration of the pass.
 
-| Pass | Designer | Studio | Foundry |
-|------|----------|--------|---------|
-| One week | – | – | 300 € |
-| Two weeks | – | 250 € | 500 € |
-| One month | 100 € | 300 € | 600 € |
+| Pass | Solo | Team | Studio | Foundry |
+|------|------|------|--------|---------|
+| One week | – | – | – | 300 € |
+| Two weeks | – | – | 300 € | 500 € |
+| One month | 100 € | 200 € | 400 € | 600 € |
 
 A pass starts when you enter the code in Glyphs.
 
@@ -60,17 +64,17 @@ Credits and passes combine freely: masters you activate with credits stay activa
 
 One credit activates one master, **forever**: run the filter on that master as often as you like, keep editing, add glyphs, use Italify on it forever, including at export. Credits never expire, and you can easily top up with a new licence code.
 
-| Credits | Designer | Studio | Foundry |
-|---------|----------|--------|---------|
-| 1 | 50 € | 90 € | 150 € |
-| 2 | 80 € | 150 € | 250 € |
-| 3 | 110 € | 200 € | 350 € |
-| 4 | 140 € | 240 € | 400 € |
-| 6 | 180 € | 310 € | 500 € |
-| 8 | 220 € | 370 € | 600 € |
-| 10 | 250 € | 420 € | 700 € |
-| 16 | 330 € | 530 € | 850 € |
-| 24 | 400 € | 630 € | 1 000 € |
+| Credits | Solo | Team | Studio | Foundry |
+|---------|------|------|--------|---------|
+| 1 | 50 € | 70 € | 100 € | 150 € |
+| 2 | 80 € | 120 € | 170 € | 250 € |
+| 3 | 110 € | 160 € | 220 € | 350 € |
+| 4 | 140 € | 190 € | 270 € | 400 € |
+| 6 | 180 € | 250 € | 350 € | 500 € |
+| 8 | 220 € | 300 € | 420 € | 600 € |
+| 10 | 250 € | 340 € | 480 € | 700 € |
+| 16 | 330 € | 440 € | 620 € | 850 € |
+| 24 | 400 € | 540 € | 740 € | 1 000 € |
 
 ## Place your order {#order}
 
@@ -82,7 +86,8 @@ Prices exclude VAT. German and EU customers are invoiced plus 19% German VAT; EU
 	<div>
 		<label for="order-size">Size</label>
 		<select id="order-size" required>
-			<option value="designer">Designer</option>
+			<option value="solo">Solo</option>
+			<option value="team">Team</option>
 			<option value="studio">Studio</option>
 			<option value="foundry">Foundry</option>
 		</select>

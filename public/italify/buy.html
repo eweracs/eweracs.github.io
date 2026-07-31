@@ -25,7 +25,7 @@
 	   text stays editable as Markdown. */
 	.size-picker {
 		display: grid;
-		grid-template-columns: repeat(3, 1fr);
+		grid-template-columns: repeat(4, 1fr);
 		gap: var(--space-sm);
 		margin: var(--space-md) 0;
 	}
@@ -98,7 +98,12 @@
 		outline-offset: 2px;
 		border-radius: var(--rounded-sm);
 	}
-	@media (max-width: 640px) {
+	/* Four cards need more room than three: two rows rather than one long
+	   column, which on a phone would push the pricing off the screen. */
+	@media (max-width: 760px) {
+		.size-picker { grid-template-columns: 1fr 1fr; }
+	}
+	@media (max-width: 340px) {
 		.size-picker { grid-template-columns: 1fr; }
 	}
 	/* Columns the picker filters out. Spelled out rather than left to the
@@ -134,7 +139,13 @@
 		main table.price-grid th { letter-spacing: 0.4px; }
 		main table.price-grid th:not(:first-child),
 		main table.price-grid td:not(:first-child) { padding-left: 6px; }
+		/* Four sizes side by side do not fit a phone, and squeezing them
+		   would collide the headings. The comparison scrolls instead – in
+		   its own box, so the page itself never does. A filtered view is
+		   at most three columns and still fits, so it never scrolls. */
+		main table.price-grid.is-compare { min-width: 460px; }
 	}
+	.price-scroll { overflow-x: auto; }
 
 	/* The two offerings are one choice, not two chapters. The sections
 	   stay ordinary Markdown in content/buy.md – the script folds them
@@ -384,8 +395,8 @@ document.addEventListener("italify:rendered", function () {
 
 // The organisation sizes, matched against the pricing tables' column
 // headings. A key is also the first half of the package key the Worker
-// validates: `designer-4`, `foundry-month`.
-var SIZES = ["designer", "studio", "foundry"];
+// validates: `solo-4`, `foundry-month`.
+var SIZES = ["solo", "team", "studio", "foundry"];
 
 // The time-pass rows, keyed by their label in the pricing table; the slug
 // completes the package key.
@@ -428,7 +439,14 @@ document.addEventListener("italify:rendered", function () {
 	var creditTable = tableIn("credits");
 	var passTable = tableIn("time");
 	[creditTable, passTable].forEach(function (table) {
-		if (table) table.classList.add("price-grid");
+		if (!table) return;
+		table.classList.add("price-grid");
+		// Own scroll box, so a comparison too wide for a phone scrolls
+		// itself rather than dragging the whole page sideways.
+		var scroll = document.createElement("div");
+		scroll.className = "price-scroll";
+		table.parentNode.insertBefore(scroll, table);
+		scroll.appendChild(table);
 	});
 
 	function bodyRows(table) {
@@ -627,10 +645,11 @@ document.addEventListener("italify:rendered", function () {
 	// the label column, then equal columns for whatever prices are on
 	// show, and the last one takes the rest. Everything in these tables is
 	// left-aligned, so what has to stay put is each column's left edge –
-	// which these widths put in the same place whether one size is shown
-	// or all three.
-	var LABEL_WIDTH = "22%";
-	var COLUMN_WIDTH = "26%";
+	// and with the widths fixed, swapping which size is shown cannot move
+	// any of them. The share is worked out from the number of columns
+	// actually on show, so the comparison's four sizes and a filtered
+	// view's two or three columns each come out evenly spaced.
+	var LABEL_WIDTH = 22;
 
 	function pinColumns(table) {
 		var head = table.querySelector("thead tr");
@@ -638,10 +657,11 @@ document.addEventListener("italify:rendered", function () {
 		var shown = Array.prototype.filter.call(head.children, function (cell) {
 			return !cell.hidden;
 		});
+		var share = (100 - LABEL_WIDTH) / Math.max(1, shown.length - 1);
 		shown.forEach(function (cell, index) {
 			cell.style.width = index === shown.length - 1
 				? ""
-				: (index === 0 ? LABEL_WIDTH : COLUMN_WIDTH);
+				: (index === 0 ? LABEL_WIDTH : share) + "%";
 		});
 	}
 
