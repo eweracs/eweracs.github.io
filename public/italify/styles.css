@@ -537,9 +537,10 @@ table {
 th {
 	text-align: left;
 	font-weight: 400;
-	font-size: 14px;
-	letter-spacing: 1.4px;
-	text-transform: uppercase;
+	font-size: 16px;
+	letter-spacing: 1.1px;
+	text-transform: lowercase;
+	font-feature-settings: 'smcp';
 	color: var(--color-secondary);
 	padding: 8px 12px 8px 0;
 	border-bottom: 1px solid var(--color-primary);
@@ -662,10 +663,11 @@ figure.shot[data-aspect="tall"] .shot-frame {
 }
 
 .shot-tag {
-	font-size: 13px;
+	font-size: 15px;
 	line-height: 17px;
-	letter-spacing: 1.2px;
-	text-transform: uppercase;
+	letter-spacing: 1.1px;
+	text-transform: lowercase;
+	font-feature-settings: 'smcp';
 	color: var(--color-secondary);
 	margin-bottom: var(--space-sm);
 }
@@ -850,10 +852,11 @@ figure.shot figcaption code,
 }
 
 .page-nav-label {
-	font-size: 15px;
+	font-size: 17px;
 	line-height: 19px;
-	letter-spacing: 1.2px;
-	text-transform: uppercase;
+	letter-spacing: 1.1px;
+	text-transform: lowercase;
+	font-feature-settings: 'smcp';
 	color: var(--color-secondary);
 }
 
