@@ -1,5 +1,3 @@
-@overline [Italify Handbook](./)
-
 # Tips {#tips}
 
 @lede Path-drawing advice that makes the correction behave – most “wrong” results trace back to one of these.

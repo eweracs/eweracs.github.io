@@ -20,16 +20,11 @@ desc: Italify applied on a whole Latin alphabet.
 caption: Italify can make you a corrected oblique in an instant.
 ```
 
-
-@overline The problem
-
 ## Good obliques are a huge amount of work. {#problem}
 
 You’ve drawn your upright masters, spent months refining details... and now you want to tackle the italics. Just applying a slant looks terrible: Curves gain weight or are too thin in many places, while diagonals shift in contrast.
 
 Correcting all of that by hand, glyph by glyph, is most of the work of drawing an oblique. It is repetitive and time-consuming. Italify automates exactly that – while leaving you in control. You get a result that is already a very advanced state of your final italic, which you can later adjust by hand to meet your specific taste.
-
-@overline Prior art
 
 ## Why not one of the existing approaches? {#prior-art}
 
@@ -44,8 +39,6 @@ So far, the most popular approaches, limited to curve correction, have been:
 
 Italify, in stark contrast, actually produces usable results. It is a stem-agnostic, purely geometrical algorithm. It guarantees master compatibility, as it doesn’t add or remove any nodes, and all horizontal extremes stay perfectly on their height coordinates. Notably, Italify also corrects diagonal stems, not only curves.
 
-@overline The idea
-
 ## Algorithmic precision for *really good* obliques. {#idea}
 
 Italify is based on pure geometry. This means it works on any script and any outline. It treats every curve and line segment individually and compensates each one for the distortion the shear introduces. The result is a slanted outline whose curves and stems still measure and feel like the upright.
@@ -56,8 +49,6 @@ You have control over what is corrected, and how:
 - **Terminal correction** adjusts the difference in angle for terminals, which varies depending on each design.
 - **Diagonal correction** treats diagonal stems and adjusts their width and angle based on constraints you define with the built-in Stem Tagger.
 - **Stem compensation** compensates for the loss in vertical stems when slanted, maintaining the exact same contrast. Useful for later interpolation adjustments.
-
-@overline Testimonials
 
 ## What designers say {#voices}
 
@@ -71,8 +62,6 @@ Having worked with Sebastian for years, Italify’s results were no surprise to 
 ## Jakob Runge | TypeMates | https://www.typemates.com/
 We used Italify on a custom project – with striking results. In general, it creates obliques remarkably close to what I’d draw by hand, and handles geometric designs in a way that fits my workflow.
 ```
-
-@overline Capabilities
 
 ## Tested on real fonts {#capabilities}
 
@@ -94,8 +83,6 @@ Theoretically, any curve can be treated with Italify. Whether it actually makes 
 ## Implicit extremes | implicit
 If you want to leave off your horizontal or vertical extreme nodes for curve segments, no problem.
 ```
-
-@overline Interested?
 
 ## Get Italify {#get-italify}
 

@@ -1,5 +1,3 @@
-@overline [Italify Handbook](./)
-
 # Tags {#node-flags}
 
 @lede Five per-node marks outside the stem model – each changes how the filter treats one spot.

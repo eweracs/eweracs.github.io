@@ -181,7 +181,6 @@
 	/* The tab is the panel's heading; printing it again inside would say
 	   it twice. It stays in the document for its structure and for the
 	   deep links that point at it. */
-	.tab-panel > .overline,
 	.tab-panel > h2 {
 		position: absolute;
 		width: 1px;
@@ -213,10 +212,11 @@
 	}
 	.order-form label {
 		display: block;
-		font-size: 14px;
+		font-size: 16px;
 		line-height: 21px;
-		letter-spacing: 1.4px;
-		text-transform: uppercase;
+		letter-spacing: 1.1px;
+		text-transform: lowercase;
+		font-feature-settings: 'smcp';
 		color: var(--color-secondary);
 		margin-bottom: 2px;
 	}

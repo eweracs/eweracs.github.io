@@ -1,5 +1,3 @@
-@overline [Italify Handbook](./)
-
 # Installation {#installation}
 
 @lede Two clicks and a relaunch – then all of Italify is in place.

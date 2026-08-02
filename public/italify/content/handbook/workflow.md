@@ -1,5 +1,3 @@
-@overline [Italify Handbook](./)
-
 # A typical workflow {#workflow}
 
 @lede The advised order of steps for italicising a project. Each step links to the chapter that covers it in depth.
@@ -22,7 +20,6 @@ Select all glyphs in Font View and run *Glyph → Italify → [Auto-Tag Stems](g
 
 ```screenshot wide
 img: ../images/autoTagStems.png
-tag: Screenshot – bulk auto-tagging
 desc: Font View with all glyphs selected and the Glyph → Italify → Auto-Tag
   Stems menu item highlighted; a few glyphs already showing their blue stem
   overlays in a preview strip.
@@ -42,7 +39,6 @@ A glyph that looks under-corrected in preview usually just has an untagged stem 
 
 ```screenshot
 img: ../images/taggedStems.png
-tag: The stems, tagged
 desc: A lowercase “k” or “w” in the tagger with all stems tagged: blue
   trapezoids, one anchored edge in pink, corner halos visible. Conveys the
   “fully described glyph” end state of the review step.
@@ -70,7 +66,6 @@ Open *Filter → Italify*, press [[↺]] to adopt the master’s angle, and judg
 
 ```screenshot
 img: ../images/filterPreview.png
-tag: Screenshot – tuning against the preview
 desc: The filter dialogue beside an Edit View glyph showing the live preview,
   mid-adjustment: one slider being dragged, the outline visibly responding.
 caption: Judge every parameter against the live preview before applying anything.

@@ -1,5 +1,3 @@
-@overline [Italify Handbook](./)
-
 # The tagger {#tagger}
 
 @lede The Edit View tool that describes your glyphs to the filter. It writes metadata only – it never moves a point.

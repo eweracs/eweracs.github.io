@@ -112,8 +112,7 @@
 		// buildHandbookToc(), whose section list is derived from the page’s
 		// own headings.
 		toc(body) {
-			return '<div class="toc"><span class="overline">On this page</span>' +
-				marked.parse(body) + "</div>";
+			return '<div class="toc">' + marked.parse(body) + "</div>";
 		},
 
 		// The interactive slant/correction hero (index page). Markup only –
@@ -235,18 +234,11 @@
 	};
 
 	/* ---- Line directives (outside fences) ----------------------------
-	   @overline TEXT              small-caps section label
 	   @lede TEXT                  large grey intro paragraph
 	   #### Title | chip | chip    parameter heading with chips */
 
 	function transformLine(line) {
-		let m = line.match(/^@overline\s+(.*)$/);
-		if (m) {
-			// Inline Markdown so a handbook chapter’s overline can be the
-			// breadcrumb link back to the handbook index.
-			return '<p class="overline">' + inline(m[1]) + "</p>";
-		}
-		m = line.match(/^@lede\s+(.*)$/);
+		let m = line.match(/^@lede\s+(.*)$/);
 		if (m) {
 			return '<p class="lede">' + inline(m[1]) + "</p>";
 		}
@@ -431,10 +423,8 @@
 		nav.className = "toc handbook-toc";
 		nav.setAttribute("aria-label", "Handbook contents");
 		var home = document.createElement("a");
-		home.className = "overline toc-home";
+		home.className = "toc-home";
 		home.href = "./";
-		// "Contents", not "Italify Handbook" – the chapter pages already
-		// carry that as their breadcrumb overline.
 		home.textContent = "Contents";
 		nav.appendChild(home);
 
@@ -504,19 +494,13 @@
 	}
 
 	// Group top-level content into <section>s, splitting at every h2.
-	// An overline immediately before an h2 moves into the new section.
 	function wrapSections(main) {
 		const groups = [];
 		let current = [];
 		Array.from(main.children).forEach(function (el) {
 			if (el.tagName === "H2") {
-				let overline = null;
-				const last = current[current.length - 1];
-				if (last && last.classList && last.classList.contains("overline")) {
-					overline = current.pop();
-				}
 				if (current.length) groups.push(current);
-				current = overline ? [overline, el] : [el];
+				current = [el];
 			} else {
 				current.push(el);
 			}

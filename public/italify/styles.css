@@ -279,28 +279,6 @@ p.lede {
 	color: var(--color-lede);
 }
 
-.overline {
-	display: block;
-	font-size: 17px;
-	line-height: 21px;
-	letter-spacing: 1.2px;
-	text-transform: uppercase;
-	color: var(--color-secondary);
-	margin-bottom: var(--space-sm);
-}
-
-/* A handbook chapter’s overline is the breadcrumb back to the index –
-   keep it looking like a label, revealing itself as a link on hover. */
-.overline a {
-	color: inherit;
-	text-decoration: none;
-}
-
-.overline a:hover {
-	text-decoration: underline;
-	text-underline-offset: 3px;
-}
-
 a {
 	/* No underline anywhere in the docs – the link colour is enough;
 	   hover feedback is the weight transition below. */
@@ -985,16 +963,17 @@ ol.steps.steps-plain > li p:last-child {
 }
 
 /* Parameters / Returns: small-caps labels hugging their list, matching
-   the site’s other section labels (.overline, th, .shot-tag). */
+   the site’s other section labels (th, .shot-tag). */
 .api-body .api-label {
 	margin: var(--space-sm) 0 2px;
 }
 
 .api-body .api-label em {
 	font-style: normal;
-	font-size: 14px;
-	letter-spacing: 1.4px;
-	text-transform: uppercase;
+	font-size: 16px;
+	letter-spacing: 1.1px;
+	text-transform: lowercase;
+	font-feature-settings: 'smcp';
 	color: var(--color-secondary);
 }
 

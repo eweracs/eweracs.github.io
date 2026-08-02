@@ -1,5 +1,3 @@
-@overline [Italify Handbook](./)
-
 # The Glyph → Italify menu {#glyph-menu}
 
 @lede Batch verbs that run across every selected glyph and layer at once.

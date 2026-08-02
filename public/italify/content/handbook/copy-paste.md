@@ -1,5 +1,3 @@
-@overline [Italify Handbook](./)
-
 # Copy, paste & propagate {#copy-paste}
 
 @lede Stems, tags and anchor links travel between layers and masters without re-tagging.

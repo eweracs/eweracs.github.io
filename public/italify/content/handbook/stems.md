@@ -1,5 +1,3 @@
-@overline [Italify Handbook](./)
-
 # Stems {#stem-marks}
 
 @lede Nodes the filter corrects together as one rigid unit. Defining them, the per-stem options, and repairing a stem a path operation broke.

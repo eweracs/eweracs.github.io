@@ -1,5 +1,3 @@
-@overline [Italify Handbook](./)
-
 # Anchor links {#anchor-links}
 
 @lede Tie a Glyphs anchor to the outline so it rides along when the filter corrects it.

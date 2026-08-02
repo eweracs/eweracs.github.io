@@ -1,5 +1,3 @@
-@overline [Italify Handbook](./)
-
 # Keyboard reference {#shortcuts}
 
 @lede Every tagger shortcut on one page.

@@ -1,5 +1,3 @@
-@overline [Italify Handbook](./)
-
 # Glyph groups {#groups}
 
 @lede Named sets of glyphs that share Italify parameters – the natural way to tune “all the rounds” or “all the diagonals” together.

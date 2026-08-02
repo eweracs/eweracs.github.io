@@ -763,7 +763,7 @@ Everything above authors metadata. `correct` is the one verb that moves geometry
 
 Shear-aware outline correction driven by the layer’s stem tags, then the slant itself. The whole pass is one undo step.
 
-*Parameters* (mirroring the filter dialog):
+*Parameters:*
 
 - `layer` (`GSLayer`) – the **upright** layer to correct and slant
 - `angle` (`float`) – the italic angle in degrees
