@@ -86,7 +86,7 @@ If you want to leave off your horizontal or vertical extreme nodes for curve seg
 
 ## Get Italify {#get-italify}
 
-Head over to the [Buy](buy/) page to license Italify.
+Head over to the [Buy](buy) page to license Italify.
 
 Or see for yourself first – the free trial gives you full access for 48 hours.
 
