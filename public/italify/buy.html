@@ -221,8 +221,7 @@
 		margin-bottom: 2px;
 	}
 	.order-form input,
-	.order-form select,
-	.order-form textarea {
+	.order-form select {
 		width: 100%;
 		padding: 8px 10px;
 		border: 1px solid var(--color-border);
@@ -233,13 +232,12 @@
 		font-size: 17px;
 		line-height: 24px;
 	}
-	.order-form textarea { resize: vertical; min-height: 96px; }
-	/* VAT IDs are codes, not prose – lining figures sit better next to
-	   the uppercase country prefix. */
-	#order-vat { font-feature-settings: "lnum"; }
+	/* VAT IDs and postcodes are codes, not prose – lining figures sit
+	   better next to uppercase letters. */
+	#order-vat,
+	#order-postcode { font-feature-settings: "lnum"; }
 	.order-form input:focus-visible,
-	.order-form select:focus-visible,
-	.order-form textarea:focus-visible {
+	.order-form select:focus-visible {
 		outline: 2px solid var(--color-link);
 		outline-offset: 1px;
 	}
@@ -562,6 +560,30 @@ document.addEventListener("italify:rendered", function () {
 		return inEu ? " (no VAT, reverse charge)" : " (no VAT)";
 	}
 
+	// What an address needs is the country's business: a few countries
+	// have no postcode at all, and in a few the state is as ordinary a
+	// part of an address as the town. Mirrors NO_POSTCODE_COUNTRIES and
+	// STATE_COUNTRIES in the Worker's countries.mjs, which is what
+	// actually gates the order – this only spares the buyer a round trip.
+	var NO_POSTCODE = ["HK", "AE", "XX"];
+	var STATE_REQUIRED = ["US", "CA", "AU", "BR", "MX", "IN"];
+
+	// A field says which it is in its own label, so the form never asks
+	// for something it does not need without saying so.
+	function setRequired(id, required) {
+		var input = document.getElementById(id);
+		var label = document.querySelector('label[for="' + id + '"]');
+		input.required = required;
+		if (!label.dataset.label) label.dataset.label = label.textContent;
+		label.textContent = label.dataset.label + (required ? "" : " (optional)");
+	}
+
+	function syncAddressFields() {
+		var code = document.getElementById("order-country").value;
+		setRequired("order-postcode", NO_POSTCODE.indexOf(code) === -1);
+		setRequired("order-state", STATE_REQUIRED.indexOf(code) !== -1);
+	}
+
 	function syncTotal() {
 		var chosen = null;
 		catalog[size].forEach(function (item) {
@@ -742,14 +764,23 @@ document.addEventListener("italify:rendered", function () {
 	if (narrow.addEventListener) narrow.addEventListener("change", renderGrid);
 	sizeSelect.addEventListener("change", function () { setSize(sizeSelect.value); });
 	packageSelect.addEventListener("change", syncTotal);
-	// Both feed the VAT the total shows.
-	document.getElementById("order-country").addEventListener("change", syncTotal);
+	// Both feed the VAT the total shows; the country also settles which
+	// of the address fields are asked for.
+	document.getElementById("order-country").addEventListener("change", function () {
+		syncAddressFields();
+		syncTotal();
+	});
 	document.getElementById("order-vat").addEventListener("input", syncTotal);
+	syncAddressFields();
 	// Adopt whatever the size select holds rather than forcing the default:
 	// on a reload or a step back the browser restores its value, and the
 	// picker and the pricing tables have to follow it, not contradict it.
 	setSize(sizeSelect.value || size);
-	window.addEventListener("pageshow", function () { setSize(sizeSelect.value || size); });
+	window.addEventListener("pageshow", function () {
+		setSize(sizeSelect.value || size);
+		// A restored country brings its own address rules back with it.
+		syncAddressFields();
+	});
 
 	function show(message, isError) {
 		status.textContent = message;
@@ -778,7 +809,13 @@ document.addEventListener("italify:rendered", function () {
 				lastName: document.getElementById("order-last-name").value,
 				company: document.getElementById("order-company").value,
 				email: document.getElementById("order-email").value,
-				address: document.getElementById("order-address").value,
+				// The address goes over as its parts; the Worker composes
+				// the line-broken block the invoice prints.
+				street: document.getElementById("order-street").value,
+				addressLine2: document.getElementById("order-address-2").value,
+				postcode: document.getElementById("order-postcode").value,
+				city: document.getElementById("order-city").value,
+				state: document.getElementById("order-state").value,
 				country: country.value,
 				vatId: document.getElementById("order-vat").value,
 				note: document.getElementById("order-note").value,
@@ -790,8 +827,10 @@ document.addEventListener("italify:rendered", function () {
 				show(data.message, false);
 				form.reset();
 				// reset() puts the size select back to its markup default;
-				// bring the picker and the package list along with it.
+				// bring the picker and the package list along with it, and
+				// the address fields with the country it also cleared.
 				setSize(sizeSelect.value);
+				syncAddressFields();
 			});
 		}).catch(function (error) {
 			show(error.message || "Something went wrong. Please try again.", true);

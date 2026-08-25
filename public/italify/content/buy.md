@@ -114,9 +114,30 @@ Prices exclude VAT. German and EU customers are invoiced plus 19% German VAT; EU
 		<label for="order-email">Email (invoice and licence code are sent here)</label>
 		<input id="order-email" type="email" required autocomplete="email">
 	</div>
+	<!-- The address is asked for a part at a time so autofill can fill it
+	     and nothing is left out; the Worker composes the parts into the
+	     line-broken block the invoice prints. Which of them are required
+	     depends on the country – buy keeps that in step, and the
+	     Worker's countries.mjs is what actually gates the order. -->
 	<div class="span-2">
-		<label for="order-address">Billing address</label>
-		<textarea id="order-address" required autocomplete="street-address" placeholder="Street, postal code, city"></textarea>
+		<label for="order-street">Street and number</label>
+		<input id="order-street" type="text" required autocomplete="address-line1">
+	</div>
+	<div class="span-2">
+		<label for="order-address-2">Address line 2 (optional)</label>
+		<input id="order-address-2" type="text" autocomplete="address-line2">
+	</div>
+	<div>
+		<label for="order-postcode">Postcode</label>
+		<input id="order-postcode" type="text" required autocomplete="postal-code">
+	</div>
+	<div>
+		<label for="order-city">Town / city</label>
+		<input id="order-city" type="text" required autocomplete="address-level2">
+	</div>
+	<div>
+		<label for="order-state">State / province</label>
+		<input id="order-state" type="text" autocomplete="address-level1">
 	</div>
 	<div>
 		<label for="order-country">Country</label>
@@ -185,7 +206,7 @@ Prices exclude VAT. German and EU customers are invoiced plus 19% German VAT; EU
 		<label for="order-vat">VAT ID (EU businesses, optional)</label>
 		<input id="order-vat" type="text" placeholder="e.g. DE123456789">
 	</div>
-	<div class="span-2">
+	<div>
 		<label for="order-note">Note (optional)</label>
 		<input id="order-note" type="text">
 	</div>
