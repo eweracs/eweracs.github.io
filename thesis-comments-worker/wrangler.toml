@@ -1,0 +1,16 @@
+name = "thesis-comments-worker"
+compatibility_date = "2024-12-01"
+
+main = "src/index.js"
+
+[vars]
+ALLOWED_ORIGINS = "https://www.sebastiancarewe.com,https://sebastiancarewe.com,http://localhost:8000,http://127.0.0.1:8000"
+
+# PASSWORD is a secret, not a var:
+#   npx wrangler secret put PASSWORD
+# For local dev it comes from .dev.vars (gitignored).
+
+[[d1_databases]]
+binding = "DB"
+database_name = "thesis-comments-db"
+database_id = "9cd1109a-3bd4-44dd-927b-f1d796562ddf"

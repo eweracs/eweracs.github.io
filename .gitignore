@@ -35,3 +35,6 @@ Thumbs.db
 
 # Wrangler
 shortener-worker/.wrangler/
+# Wrangler (thesis comments)
+thesis-comments-worker/.wrangler/
+thesis-comments-worker/.dev.vars
