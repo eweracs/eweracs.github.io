@@ -188,7 +188,7 @@ The anchors a node belongs to.
 
 **`has_limit_curve(node)`**
 
-Whether a node carries the [Limit Curve](handbook/tags#limit-curve) tag.
+Whether a node effectively limits its curve – a [Curve Extension](handbook/tags#curve-extension) of `0` (the [Limit Curve](handbook/tags#limit-curve) point), via either the ratio key or the legacy boolean tag.
 
 *Parameters:*
 
@@ -196,7 +196,19 @@ Whether a node carries the [Limit Curve](handbook/tags#limit-curve) tag.
 
 *Returns:*
 
-- `bool` – `True` when the tag is set
+- `bool` – `True` when the effective curve extension is `0`
+
+**`curve_extension(node)`**
+
+The node’s effective [Curve Extension](handbook/tags#curve-extension) ratio: an explicit stored value, `0.0` for the legacy Limit Curve tag, `1.0` when untagged (the default full extension).
+
+*Parameters:*
+
+- `node` (`GSNode`) – the node to query (this verb takes no `layer`)
+
+*Returns:*
+
+- `float` – the effective ratio in `0 … 1`
 
 **`has_no_curve_correction(node)`**
 
@@ -472,15 +484,30 @@ An `ItalifyStem` is a thin wrapper, so it refuses exactly as the free functions 
 
 ## Tags {#tags}
 
-**`set_limit_curve(layer, node, on, all_masters=False)`**
+**`set_curve_extension(layer, node, ratio, all_masters=False)`**
 
-Toggle [Limit Curve](handbook/tags#limit-curve) on an on-curve node.
+Store a [Curve Extension](handbook/tags#curve-extension) ratio on an on-curve node – the same value the tagger’s curve-centre control writes. `0` is the [Limit Curve](handbook/tags#limit-curve) point (no extension); `1` removes the override, restoring the default full extension. Any legacy Limit Curve flag on the node is migrated away by the write.
 
 *Parameters:*
 
 - `layer` (`GSLayer`)
 - `node` (`GSNode`) – the on-curve node to tag
-- `on` (`bool`) – set the tag when `True`, clear it when `False`
+- `ratio` (`float`) – the extension amount, `0 … 1`
+- `all_masters` (`bool`) – also apply it on every compatible master
+
+*Returns:*
+
+- `ItalifyResult`
+
+**`set_limit_curve(layer, node, on, all_masters=False)`**
+
+Legacy spelling of the above: `on=True` writes a curve extension of `0` ([Limit Curve](handbook/tags#limit-curve)), `on=False` removes the override.
+
+*Parameters:*
+
+- `layer` (`GSLayer`)
+- `node` (`GSNode`) – the on-curve node to tag
+- `on` (`bool`) – `True` = curve extension `0`, `False` = default full extension
 - `all_masters` (`bool`) – also apply it on every compatible master
 
 *Returns:*

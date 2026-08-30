@@ -17,7 +17,7 @@ All shortcuts below apply while the Italify Tagger is active. [[⌥]] added to a
 | [[I]]               | Add / remove **I**nktrap on a selected straight segment between two unsmooth nodes                     |
 | [[Y]]               | Toggle **Y**-Snap on selected on-curve nodes (retain ↔ release their y)                                |
 | [[C]]               | Toggle Terminal (think **C**ap) on a selected straight segment between two unsmooth on-curve nodes     |
-| [[⌫]]               | Remove tag / stem; with a corner clicked, delete that corner; with an anchor selected, clear its links |
+| [[⌫]]               | Remove tag / stem / custom curve extension; with a corner clicked, delete that corner; with an anchor selected, clear its links |
 | [[⌘A]]              | Cycle select-all: nodes → stems → tags → anchors and their combinations (present kinds only)           |
 | [[Tab]] / [[⇧Tab]]  | With one mark type selected (stem, tag or anchor), select the next / previous item of that type        |
 | [[⌘C]]              | Copy Selection – copies the selected stems / tags / anchor links (any mix)

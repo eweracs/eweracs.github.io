@@ -20,7 +20,7 @@
 </script>
 <script>
 (function () {
-	var map = { "installation": "installation", "workflow": "workflow", "filter": "filter", "parameters": "filter", "saving-parameters": "filter", "export": "filter", "hidden-settings": "filter", "groups": "groups", "tagger": "tagger", "preview": "tagger", "stem-marks": "stems", "stems": "stems", "creating-stems": "stems", "anchor-edges": "stems", "hinge-corners": "stems", "flip-axis": "stems", "extras": "stems", "corner-swap": "stems", "corruption": "stems", "node-flags": "tags", "limit-curve": "tags", "no-curve-correction": "tags", "inktrap": "tags", "snap-y": "tags", "terminal": "tags", "anchor-links": "anchor-links", "copy-paste": "copy-paste", "masters": "copy-paste", "glyph-menu": "glyph-menu", "tips": "tips", "shortcuts": "shortcuts" };
+	var map = { "installation": "installation", "workflow": "workflow", "filter": "filter", "parameters": "filter", "saving-parameters": "filter", "export": "filter", "hidden-settings": "filter", "groups": "groups", "tagger": "tagger", "preview": "tagger", "stem-marks": "stems", "stems": "stems", "creating-stems": "stems", "anchor-edges": "stems", "hinge-corners": "stems", "flip-axis": "stems", "extras": "stems", "corner-swap": "stems", "corruption": "stems", "node-flags": "tags", "curve-extension": "tags", "limit-curve": "tags", "no-curve-correction": "tags", "inktrap": "tags", "snap-y": "tags", "terminal": "tags", "anchor-links": "anchor-links", "copy-paste": "copy-paste", "masters": "copy-paste", "glyph-menu": "glyph-menu", "tips": "tips", "shortcuts": "shortcuts" };
 	var hash = location.hash.slice(1);
 	if (hash && map[hash]) location.replace(map[hash] + "#" + hash);
 })();

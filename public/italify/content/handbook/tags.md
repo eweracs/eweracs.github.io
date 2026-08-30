@@ -2,18 +2,35 @@
 
 @lede Five per-node marks outside the stem model – each changes how the filter treats one spot.
 
-Five **Tags** live outside the stem model – each marks an individual node or segment and changes how the filter treats that one spot. Every Tag has a canvas marker, a keyboard shortcut, and an entry in the right-click *Tags* section, and each is removed the same way it was added. Hold [[⌥]] on any of them to mirror the change across every compatible master.
+Five **Tags** live outside the stem model – each marks an individual node or segment and changes how the filter treats that one spot. Every Tag has a canvas marker and an entry in the right-click *Tags* section, most have a keyboard shortcut, and each is removed the same way it was added. Hold [[⌥]] on any of them to mirror the change across every compatible master.
 
-## Limit Curve {#limit-curve}
+## Curve Extension {#curve-extension}
 
-At an unsmooth curve boundary, the filter normally infers some extra context, which can lead to certain segments being transformed more strongly than desired. **Limit Curve** switches that off for one node – the tagged node becomes its own reference context. The node and its attached only slide **along the node’s own tangent**, so the curve can’t billow out beyond the corner. Use it wherever the inferred context drags a curve too far.
+If a curve doesn’t have its nodes on extremes, Italify will try to infer a larger curve for calculations based on the existing curves. While mathematically correct, the resulting correction can look wrong, or simply not match the design intent. In that case, you can set a custom amount by which the existing curve is extended for the calculations.
 
-Select the on-curve node (or several) at a curve→line or curve→curve corner and press [[L]], or right-click and choose *Toggle Limit Curve*. The marker is a teal square around the node.
+Select the curve end that is *not* on an extreme and you get a teal **control point** which you can drag in order to adjust the amount of curve extension.
+
+- The **round tick** fully extends the curve – the default.
+- The **square tick** is the same as [Limit Curve](#limit-curve), where the curve is taken as-is.
+
+Hold [[⌥]] when releasing to mirror the value onto every compatible master. The setting interpolates between masters.
+
+When the non-extreme node is the connection between two curves, the value is shared between the curves. A node with a partial setting is marked with a **teal circle** – select it to bring the control back. To return to the default, drag the point back to the round tick or select Remove Custom Extension [[⌫]].
+
+```screenshot
+img: ../images/curveExtension.png
+tag: Screenshot – curve-centre control
+caption: The curve extension control: drag the teal point to adjust how much additional curve information Italify infers.
+```
+
+### Limit Curve {#limit-curve}
+
+If you drag the custom extension slider to 0, Italify infers no extra information. The shortcut for this is **Limit Curve**, marked with a teal marker.
 
 ```screenshot
 img: ../images/limitCurve.png
 alt: An unsmooth curve corner with the teal Limit-Curve square around the tagged node.
-caption: Limit Curve pins a curve’s transformation direction to its own tangent.
+caption: Limit Curve pins a curve’s transformation to the node’s own tangent.
 ```
 
 ## No Curve Correction {#no-curve-correction}

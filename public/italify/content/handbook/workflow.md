@@ -50,7 +50,8 @@ caption: A fully described glyph: every stem tagged, constraints in place.
 With the stems in place, handle the local exceptions with [Tags](tags):
 
 - [Terminal](tags#terminal) ([[C]]) for stroke cuts the automatic detection misses – the filter already finds the obvious ones and draws them green.
-- [Limit Curve](tags#limit-curve) ([[L]]) where a curve billows out past an unsmooth corner.
+- [Curve Extension](tags#curve-extension) where a small curve bends in unwanted ways – drag the control to 
+  adjust how much Italify infers, or press [[L]] to jump straight to [Limit Curve](tags#limit-curve) (0%).
 - [Inktrap](tags#inktrap) ([[I]]) to hold an ink trap at its original size.
 - [Y-Snap](tags#snap-y) ([[Y]]) to pin (or release) a node’s height by hand.
 
