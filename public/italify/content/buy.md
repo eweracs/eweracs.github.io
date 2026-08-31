@@ -78,7 +78,7 @@ One credit activates one master, **forever**: run the filter on that master as o
 
 ## Place your order {#order}
 
-Pick your package and how you’d like to pay. **Card** payments are fulfilled through Stripe and give you your licence code within minutes. If you prefer a standard **bank transfer**, you receive the invoice first, then your code follows as soon as the payment arrives.
+Pick your package and how you’d like to pay. Card payments are fulfilled through Stripe and give you your licence code instantly. If you prefer a standard bank transfer, you receive the invoice first, then your code follows as soon as the payment arrives.
 
 <div class="pay-picker" id="pay-picker" role="radiogroup" aria-label="Payment method">
 	<button type="button" class="pay-option" data-pay="card" role="radio" aria-checked="true">
