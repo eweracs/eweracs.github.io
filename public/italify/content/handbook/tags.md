@@ -15,6 +15,8 @@ Select the curve end that is *not* on an extreme and you get a teal **control po
 
 Hold [[⌥]] when releasing to mirror the value onto every compatible master. The setting interpolates between masters.
 
+Occasionally a curve can’t be meaningfully extended by default – no usable extreme exists anywhere near it, so Italify takes the curve as-is. The control still appears at such corners, resting at the square tick: drag it to add as much extension as the geometry supports (the track simply ends where the result would stop being useful).
+
 When the non-extreme node is the connection between two curves, the value is shared between the curves. A node with a partial setting is marked with a **teal circle** – select it to bring the control back. To return to the default, drag the point back to the round tick or select Remove Custom Extension [[⌫]].
 
 ```screenshot
