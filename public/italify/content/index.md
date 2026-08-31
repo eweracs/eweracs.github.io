@@ -6,10 +6,10 @@
 caption: Font in use: [MNKY Wilson](https://mnkytype.com/wilson).
 ```
 
-The Glyphs plugin is now available for licensing. I am happy to give you a demo, in person or by video: sebastian.carewe<span class="email-protected"></span>
+The Glyphs plugin is available directly from the Plugin Manager in Glyphs 3 and Glyphs 4, and is licensed per master or per time period. I am happy to give you a demo, in person or by video: sebastian.carewe<span class="email-protected"></span>
 
 ```buttons
-[Download](https://github.com/eweracs/Italify/releases/latest/download/Italify.zip) primary
+[Buy Italify](buy) primary
 [Read the handbook](handbook/)
 ```
 
