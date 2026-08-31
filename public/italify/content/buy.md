@@ -78,7 +78,18 @@ One credit activates one master, **forever**: run the filter on that master as o
 
 ## Place your order {#order}
 
-Pick your package and fill in your billing details. You’ll receive the invoice by email and your licence code follows as soon as the payment arrives.
+Pick your package and how you’d like to pay. **Card** payments are fulfilled through Stripe and give you your licence code within minutes. If you prefer a standard **bank transfer**, you receive the invoice first, then your code follows as soon as the payment arrives.
+
+<div class="pay-picker" id="pay-picker" role="radiogroup" aria-label="Payment method">
+	<button type="button" class="pay-option" data-pay="card" role="radio" aria-checked="true">
+		<span class="pay-name">Card</span>
+		<span class="pay-desc">Licence code right away.</span>
+	</button>
+	<button type="button" class="pay-option" data-pay="bank" role="radio" aria-checked="false">
+		<span class="pay-name">Bank transfer</span>
+		<span class="pay-desc">Invoice first, code on payment.</span>
+	</button>
+</div>
 
 Prices exclude VAT. German and EU customers are invoiced plus 19% German VAT; EU businesses that give a VAT ID are invoiced without it under the reverse-charge rule, and customers outside the EU pay no EU VAT. The total below says which applies to you as soon as you pick your country.
 
@@ -98,11 +109,11 @@ Prices exclude VAT. German and EU customers are invoiced plus 19% German VAT; EU
 		<label for="order-package">Package</label>
 		<select id="order-package" required></select>
 	</div>
-	<div>
+	<div class="bank-only">
 		<label for="order-first-name">First name</label>
 		<input id="order-first-name" type="text" required autocomplete="given-name">
 	</div>
-	<div>
+	<div class="bank-only">
 		<label for="order-last-name">Surname</label>
 		<input id="order-last-name" type="text" required autocomplete="family-name">
 	</div>
@@ -110,7 +121,7 @@ Prices exclude VAT. German and EU customers are invoiced plus 19% German VAT; EU
 		<label for="order-company">Company / foundry (optional)</label>
 		<input id="order-company" type="text" autocomplete="organization">
 	</div>
-	<div class="span-2">
+	<div class="bank-only span-2">
 		<label for="order-email">Email (invoice and licence code are sent here)</label>
 		<input id="order-email" type="email" required autocomplete="email">
 	</div>
@@ -119,23 +130,23 @@ Prices exclude VAT. German and EU customers are invoiced plus 19% German VAT; EU
 	     line-broken block the invoice prints. Which of them are required
 	     depends on the country – buy keeps that in step, and the
 	     Worker's countries.mjs is what actually gates the order. -->
-	<div class="span-2">
+	<div class="bank-only span-2">
 		<label for="order-street">Street and number</label>
 		<input id="order-street" type="text" required autocomplete="address-line1">
 	</div>
-	<div class="span-2">
+	<div class="bank-only span-2">
 		<label for="order-address-2">Address line 2 (optional)</label>
 		<input id="order-address-2" type="text" autocomplete="address-line2">
 	</div>
-	<div>
+	<div class="bank-only">
 		<label for="order-postcode">Postcode</label>
 		<input id="order-postcode" type="text" required autocomplete="postal-code">
 	</div>
-	<div>
+	<div class="bank-only">
 		<label for="order-city">Town / city</label>
 		<input id="order-city" type="text" required autocomplete="address-level2">
 	</div>
-	<div>
+	<div class="bank-only">
 		<label for="order-state">State / province</label>
 		<input id="order-state" type="text" autocomplete="address-level1">
 	</div>
@@ -206,7 +217,7 @@ Prices exclude VAT. German and EU customers are invoiced plus 19% German VAT; EU
 		<label for="order-vat">VAT ID (EU businesses, optional)</label>
 		<input id="order-vat" type="text" placeholder="e.g. DE123456789">
 	</div>
-	<div>
+	<div class="bank-only">
 		<label for="order-note">Note (optional)</label>
 		<input id="order-note" type="text">
 	</div>
@@ -225,9 +236,9 @@ Prefer email? Custom order? Get in touch directly: sebastian.carewe<span class="
 
 ## After your order {#how}
 
-1. You receive your invoice by email, usually within a day.
-2. Once the payment arrives, your licence code follows.
-3. Paste the code into the Italify filter dialogue in Glyphs – done. Your purchase is activated. You can top up credits later simply by entering a new code.
+**Paid by card?** Your licence code lands in your inbox right away; the invoice follows by email within a day.
+
+**Ordered by bank transfer?** You receive your invoice by email, usually within a day. Once the payment arrives, your licence code follows.
 
 Not sure yet? The free trial gives you full access to everything for 48 hours.
 

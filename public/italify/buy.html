@@ -196,6 +196,37 @@
 		.tab { font-size: 22px; line-height: 28px; }
 	}
 
+	.pay-picker {
+		display: grid;
+		grid-template-columns: repeat(2, minmax(0, 1fr));
+		gap: 0.6rem;
+		max-width: 34rem;
+		margin: 1rem 0 1.5rem;
+	}
+	.pay-option {
+		display: flex;
+		flex-direction: column;
+		gap: 0.15rem;
+		padding: 0.7rem 0.9rem;
+		text-align: left;
+		background: none;
+		font: inherit;
+		color: inherit;
+		cursor: pointer;
+		border: 1px solid var(--color-border);
+		border-radius: var(--rounded-md);
+		transition: background-color 0.15s ease, border-color 0.15s ease;
+	}
+	.pay-option:hover { border-color: var(--color-secondary); }
+	.pay-option[aria-checked="true"] {
+		border-color: var(--color-primary);
+	}
+	.pay-name { font-weight: 600; }
+	.pay-desc { color: var(--color-secondary); font-size: 0.85em; }
+	/* Card payment: Stripe's checkout collects the personal and address
+	   details itself, so only the package, company, country and VAT ID
+	   remain ours to ask for. */
+	.order-form[data-pay="card"] .bank-only { display: none; }
 	.order-form {
 		border: 1px solid var(--color-border);
 		border-radius: var(--rounded-md);
@@ -295,7 +326,13 @@
 // form from ever disagreeing. It is display-only regardless – the Worker
 // holds its own catalog and recomputes every price server-side, ignoring
 // whatever the client claims (Scripts/TrialWorker/src/index.mjs).
-var WORKER_URL = "https://italify-trial.file-manager-bot.workers.dev";
+// Local previews talk to the STAGING Worker (its own KV namespace and
+// the Stripe SANDBOX keys – see wrangler.toml [env.staging]), so the
+// whole flow can be exercised without touching live data. The published
+// page talks to production.
+var WORKER_URL = /^(localhost|127\.0\.0\.1)$/.test(location.hostname)
+	? "https://italify-trial-staging.file-manager-bot.workers.dev"
+	: "https://italify-trial.file-manager-bot.workers.dev";
 
 // Time passes and master credits are one choice between two ways of
 // paying, not two chapters to read in turn – so they are folded into a
@@ -782,6 +819,50 @@ document.addEventListener("italify:rendered", function () {
 		syncAddressFields();
 	});
 
+	// Payment method: "card" (Stripe Checkout, code right away) or
+	// "bank" (the classic order → invoice → code flow). Card mode hides
+	// the fields Stripe collects itself AND disables them, so the
+	// browser neither validates nor keeps values the submit won't send.
+	var payPicker = document.getElementById("pay-picker");
+	var payMode = "card";
+
+	function setPayMode(next) {
+		if (next !== "card" && next !== "bank") return;
+		payMode = next;
+		form.setAttribute("data-pay", payMode);
+		Array.prototype.forEach.call(form.querySelectorAll(".bank-only input"), function (input) {
+			input.disabled = payMode === "card";
+		});
+		submit.textContent = payMode === "card" ? "Pay by card" : "Order now";
+		if (payPicker) {
+			Array.prototype.forEach.call(payPicker.querySelectorAll(".pay-option"), function (button) {
+				var chosen = button.dataset.pay === payMode;
+				button.setAttribute("aria-checked", chosen ? "true" : "false");
+				button.tabIndex = chosen ? 0 : -1;
+			});
+		}
+		status.hidden = true;
+	}
+
+	if (payPicker) {
+		payPicker.addEventListener("click", function (event) {
+			var button = event.target.closest(".pay-option");
+			if (button) setPayMode(button.dataset.pay);
+		});
+		payPicker.addEventListener("keydown", function (event) {
+			if (!event.target.closest(".pay-option")) return;
+			var back = event.key === "ArrowLeft" || event.key === "ArrowUp";
+			var forward = event.key === "ArrowRight" || event.key === "ArrowDown";
+			if (!back && !forward) return;
+			event.preventDefault();
+			var next = payMode === "card" ? "bank" : "card";
+			setPayMode(next);
+			var chosen = payPicker.querySelector('.pay-option[data-pay="' + next + '"]');
+			if (chosen) chosen.focus();
+		});
+	}
+	setPayMode(payMode);
+
 	function show(message, isError) {
 		status.textContent = message;
 		status.classList.toggle("error", !!isError);
@@ -796,6 +877,32 @@ document.addEventListener("italify:rendered", function () {
 		if (!country.value) {
 			show("Please select your country.", true);
 			country.focus();
+			return;
+		}
+		if (payMode === "card") {
+			submit.disabled = true;
+			show("Taking you to the secure payment page…", false);
+			fetch(WORKER_URL + "/checkout", {
+				method: "POST",
+				headers: { "Content-Type": "application/json" },
+				body: JSON.stringify({
+					package: packageSelect.value,
+					company: document.getElementById("order-company").value,
+					country: country.value,
+					vatId: document.getElementById("order-vat").value,
+				}),
+			}).then(function (response) {
+				return response.json().then(function (data) {
+					if (!response.ok || !data.url) throw new Error(data.error || "Something went wrong.");
+					// Stripe collects email, name, billing address and the
+					// payment itself; the licence code goes out from the
+					// Worker the moment the payment lands.
+					window.location.href = data.url;
+				});
+			}).catch(function (error) {
+				show(error.message || "Something went wrong. Please try again.", true);
+				submit.disabled = false;
+			});
 			return;
 		}
 		submit.disabled = true;
