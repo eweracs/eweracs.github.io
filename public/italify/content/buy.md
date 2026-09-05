@@ -6,6 +6,8 @@ If you activate a master, you can use Italify on it forever. Add glyphs, change 
 
 A time pass gives you unlimited masters, for a limited duration. Recommended if you are familiar with setting up Italify and have many masters to process.
 
+One licence, one seat. One seat includes three devices.
+
 ```buttons
 [Try free for 48 hours](trial) primary
 ```
@@ -47,6 +49,8 @@ Get in touch for custom licensing options.
 
 ## Time passes {#time}
 
+Prices shown for one seat. Each additional seat is 80% off.
+
 | Pass | Solo | Team | Studio | Foundry |
 |------|------|------|--------|---------|
 | One week | – | – | – | 300 € |
@@ -54,6 +58,8 @@ Get in touch for custom licensing options.
 | One month | 100 € | 200 € | 400 € | 600 € |
 
 ## Master credits {#credits}
+
+Prices shown for one seat. Each additional seat is 80% off.
 
 | Credits | Solo | Team | Studio | Foundry |
 |---------|------|------|--------|---------|
@@ -69,7 +75,7 @@ Get in touch for custom licensing options.
 
 ## Place your order {#order}
 
-Prices exclude VAT. Your licence code arrives by email within minutes of the payment.
+Prices exclude VAT. Your licence code arrives by email within minutes of the payment. By purchasing you accept the [licence terms](eula).
 
 <form class="order-form" id="order-form">
 	<div>
@@ -82,8 +88,26 @@ Prices exclude VAT. Your licence code arrives by email within minutes of the pay
 		</select>
 	</div>
 	<div>
+		<!-- Seats: the first at full price, each further one at 20 % –
+		     the same rule the Worker prices from, server-side. -->
+		<label for="order-seats">Seats</label>
+		<select id="order-seats">
+			<option value="1">1 seat</option>
+			<option value="2">2 seats</option>
+			<option value="3">3 seats</option>
+			<option value="4">4 seats</option>
+			<option value="5">5 seats</option>
+			<option value="6">6 seats</option>
+			<option value="7">7 seats</option>
+			<option value="8">8 seats</option>
+			<option value="9">9 seats</option>
+			<option value="10">10 seats</option>
+		</select>
+	</div>
+	<div>
 		<!-- Filled in by buy from the pricing tables above, for the
-		     size selected on the left. -->
+		     size and seats selected on the left – each package priced at
+		     that seat count. -->
 		<label for="order-package">Package</label>
 		<select id="order-package" required></select>
 	</div>

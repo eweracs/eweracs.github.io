@@ -323,7 +323,7 @@
 
 <footer>
 	<div class="column">
-		<p>Italify – a plugin for <a href="https://glyphsapp.com">Glyphs</a>. <a href="handbook/">Handbook</a></p>
+		<p>Italify – a plugin for <a href="https://glyphsapp.com">Glyphs</a>. <a href="handbook/">Handbook</a> · <a href="eula">Licence terms</a></p>
 	</div>
 </footer>
 
@@ -504,6 +504,7 @@ document.addEventListener("italify:rendered", function () {
 	var compareToggle = document.getElementById("size-compare");
 	var sizeSelect = document.getElementById("order-size");
 	var packageSelect = document.getElementById("order-package");
+	var seatsSelect = document.getElementById("order-seats");
 	var total = document.getElementById("order-total");
 	var submit = document.getElementById("order-submit");
 	var status = document.getElementById("order-status");
@@ -626,6 +627,20 @@ document.addEventListener("italify:rendered", function () {
 	}
 	[creditTable, passTable].forEach(markUnavailable);
 
+	// Seats: the first at the package price, every further one at 20 %
+	// of it. The Worker recomputes the same figure from the package key
+	// and the seat count, so this is display only.
+	var EXTRA_SEAT_FACTOR = 0.2;
+
+	function seatsChosen() {
+		var n = seatsSelect ? parseInt(seatsSelect.value, 10) : 1;
+		return n > 0 ? n : 1;
+	}
+
+	function priceFor(item, seats) {
+		return Math.round(item.price * (1 + EXTRA_SEAT_FACTOR * (seats - 1)));
+	}
+
 	function syncTotal() {
 		var chosen = null;
 		catalog[size].forEach(function (item) {
@@ -633,7 +648,11 @@ document.addEventListener("italify:rendered", function () {
 		});
 		// The amount alone: what VAT is added to it is settled on the
 		// invoice, and the page says so above the form.
-		total.textContent = chosen ? "Total: " + euros(chosen.price) : "";
+		var seats = seatsChosen();
+		total.textContent = chosen
+			? "Total: " + euros(priceFor(chosen, seats))
+				+ (seats > 1 ? " for " + seats + " seats" : "")
+			: "";
 	}
 
 	function fillPackages() {
@@ -648,7 +667,7 @@ document.addEventListener("italify:rendered", function () {
 			}
 			var option = document.createElement("option");
 			option.value = item.value;
-			option.textContent = item.label + " – " + euros(item.price);
+			option.textContent = item.label + " – " + euros(priceFor(item, seatsChosen()));
 			groups[item.group].appendChild(option);
 		});
 		// Changing size keeps the equivalent package where the new size has
@@ -806,6 +825,8 @@ document.addEventListener("italify:rendered", function () {
 	if (narrow.addEventListener) narrow.addEventListener("change", renderGrid);
 	sizeSelect.addEventListener("change", function () { setSize(sizeSelect.value); });
 	packageSelect.addEventListener("change", syncTotal);
+	// A seat change reprices every package on show, not just the total.
+	if (seatsSelect) seatsSelect.addEventListener("change", fillPackages);
 	// Adopt whatever the size select holds rather than forcing the default:
 	// on a reload or a step back the browser restores its value, and the
 	// picker and the pricing tables have to follow it, not contradict it.
@@ -835,6 +856,7 @@ document.addEventListener("italify:rendered", function () {
 			headers: { "Content-Type": "application/json" },
 			body: JSON.stringify({
 				package: packageSelect.value,
+				seats: seatsChosen(),
 				company: document.getElementById("order-company").value,
 				country: country.value,
 				vatId: document.getElementById("order-vat").value,
