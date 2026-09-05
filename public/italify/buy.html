@@ -196,37 +196,6 @@
 		.tab { font-size: 22px; line-height: 28px; }
 	}
 
-	.pay-picker {
-		display: grid;
-		grid-template-columns: repeat(2, minmax(0, 1fr));
-		gap: 0.6rem;
-		max-width: 34rem;
-		margin: 1rem 0 1.5rem;
-	}
-	.pay-option {
-		display: flex;
-		flex-direction: column;
-		gap: 0.15rem;
-		padding: 0.7rem 0.9rem;
-		text-align: left;
-		background: none;
-		font: inherit;
-		color: inherit;
-		cursor: pointer;
-		border: 1px solid var(--color-border);
-		border-radius: var(--rounded-md);
-		transition: background-color 0.15s ease, border-color 0.15s ease;
-	}
-	.pay-option:hover { border-color: var(--color-secondary); }
-	.pay-option[aria-checked="true"] {
-		border-color: var(--color-primary);
-	}
-	.pay-name { font-weight: 600; }
-	.pay-desc { color: var(--color-secondary); font-size: 0.85em; }
-	/* Card payment: Stripe's checkout collects the personal and address
-	   details itself, so only the package, company, country and VAT ID
-	   remain ours to ask for. */
-	.order-form[data-pay="card"] .bank-only { display: none; }
 	.order-form {
 		border: 1px solid var(--color-border);
 		border-radius: var(--rounded-md);
@@ -263,10 +232,9 @@
 		font-size: 17px;
 		line-height: 24px;
 	}
-	/* VAT IDs and postcodes are codes, not prose – lining figures sit
-	   better next to uppercase letters. */
-	#order-vat,
-	#order-postcode { font-feature-settings: "lnum"; }
+	/* VAT IDs are codes, not prose – lining figures sit better next to
+	   the uppercase country prefix. */
+	#order-vat { font-feature-settings: "lnum"; }
 	.order-form input:focus-visible,
 	.order-form select:focus-visible {
 		outline: 2px solid var(--color-link);
@@ -282,8 +250,53 @@
 	.order-total { font-size: 19px; }
 	.order-status { font-size: 17px; line-height: 26px; color: var(--color-secondary); }
 	.order-status.error { color: var(--color-error); }
-	/* Honeypot: invisible to people, tempting to bots. */
-	.order-form .hp { position: absolute; left: -9999px; }
+	/* FAQ: the answers are reference rather than reading, so the page
+	   shows the questions and opens one at a time. The markup stays plain
+	   `####` headings and paragraphs in content/buy.md – the script folds
+	   each question into a <details>, which brings the keyboard and
+	   find-in-page behaviour with it. */
+	.faq-item { border-bottom: 1px solid var(--color-border); }
+	.faq-item:first-of-type { border-top: 1px solid var(--color-border); }
+	.faq-question {
+		display: flex;
+		align-items: center;
+		gap: var(--space-md);
+		padding: 14px 0;
+		cursor: pointer;
+		list-style: none;
+	}
+	/* Safari still draws the disclosure triangle without this. */
+	.faq-question::-webkit-details-marker { display: none; }
+	.faq-question:hover { color: var(--color-secondary); }
+	.faq-question:focus-visible {
+		outline: 2px solid var(--color-link);
+		outline-offset: 2px;
+		border-radius: var(--rounded-sm);
+	}
+	.faq-question h3,
+	.faq-question h4 { margin: 0; flex: 1; }
+	.faq-mark {
+		flex: none;
+		width: 18px;
+		height: 18px;
+		color: var(--color-secondary);
+		transition: transform 0.2s ease;
+	}
+	.faq-item[open] .faq-mark { transform: rotate(90deg); }
+	.faq-answer { padding-bottom: 4px; }
+	.faq-answer > :first-child { margin-top: 0; }
+	.faq-answer > :last-child { margin-bottom: var(--space-md); }
+	/* Where the browser can animate a disclosure, it should – the answer
+	   slides rather than snaps. Everywhere else it simply appears. */
+	@supports selector(details::details-content) {
+		.faq-item { interpolate-size: allow-keywords; }
+		.faq-item::details-content {
+			block-size: 0;
+			overflow: hidden;
+			transition: block-size 0.2s ease, content-visibility 0.2s allow-discrete;
+		}
+		.faq-item[open]::details-content { block-size: auto; }
+	}
 </style>
 </head>
 <body>
@@ -317,6 +330,37 @@
 <script src="vendor/marked.min.js"></script>
 <script src="main.js?v=16"></script>
 <script>
+// FAQ: each question folds into a disclosure. The section stays ordinary
+// `####` headings and paragraphs in content/buy.md – this only refolds
+// what main.js rendered, so editing the answers is still editing
+// Markdown.
+document.addEventListener("italify:rendered", function () {
+	var faq = document.querySelector('section[data-section="faq"]');
+	if (!faq) return;
+	var CHEVRON = '<svg class="faq-mark" viewBox="0 0 24 24" fill="none" '
+		+ 'stroke="currentColor" stroke-width="2" stroke-linecap="round" '
+		+ 'stroke-linejoin="round" aria-hidden="true"><polyline points="9 6 15 12 9 18"/></svg>';
+	// Either heading level – the questions are `####` in the Markdown, and
+	// changing that should not silently unfold the section.
+	Array.prototype.forEach.call(faq.querySelectorAll("h3, h4"), function (heading) {
+		var item = document.createElement("details");
+		item.className = "faq-item";
+		heading.parentNode.insertBefore(item, heading);
+		var summary = document.createElement("summary");
+		summary.className = "faq-question";
+		summary.appendChild(heading);
+		summary.insertAdjacentHTML("beforeend", CHEVRON);
+		item.appendChild(summary);
+		// Everything up to the next question is this question's answer.
+		var answer = document.createElement("div");
+		answer.className = "faq-answer";
+		while (item.nextSibling && !/^H[34]$/.test(item.nextSibling.tagName || "")) {
+			answer.appendChild(item.nextSibling);
+		}
+		item.appendChild(answer);
+	});
+});
+
 // Size picker and order form. Both markup blocks arrive with the rendered
 // Markdown (content/buy.md), so hook up after main.js dispatches
 // italify:rendered.
@@ -582,53 +626,14 @@ document.addEventListener("italify:rendered", function () {
 	}
 	[creditTable, passTable].forEach(markUnavailable);
 
-	// Prices exclude VAT, so the total says what will be added as soon as
-	// the country is known. The rule mirrors the Worker's vatHandlingFor
-	// and is read off the country select's own optgroups, so there is no
-	// second list of EU countries to keep in step – and the Worker remains
-	// the authority regardless.
-	function vatSuffix() {
-		var country = document.getElementById("order-country");
-		var option = country.selectedOptions[0];
-		if (!country.value || !option) return " + VAT where it applies";
-		var inEu = option.parentNode && option.parentNode.label === "European Union";
-		var hasVatId = !!document.getElementById("order-vat").value.trim();
-		if (country.value === "DE" || (inEu && !hasVatId)) return " + 19% VAT";
-		return inEu ? " (no VAT, reverse charge)" : " (no VAT)";
-	}
-
-	// What an address needs is the country's business: a few countries
-	// have no postcode at all, and in a few the state is as ordinary a
-	// part of an address as the town. Mirrors NO_POSTCODE_COUNTRIES and
-	// STATE_COUNTRIES in the Worker's countries.mjs, which is what
-	// actually gates the order – this only spares the buyer a round trip.
-	var NO_POSTCODE = ["HK", "AE", "XX"];
-	var STATE_REQUIRED = ["US", "CA", "AU", "BR", "MX", "IN"];
-
-	// A field says which it is in its own label, so the form never asks
-	// for something it does not need without saying so.
-	function setRequired(id, required) {
-		var input = document.getElementById(id);
-		var label = document.querySelector('label[for="' + id + '"]');
-		input.required = required;
-		if (!label.dataset.label) label.dataset.label = label.textContent;
-		label.textContent = label.dataset.label + (required ? "" : " (optional)");
-	}
-
-	function syncAddressFields() {
-		var code = document.getElementById("order-country").value;
-		setRequired("order-postcode", NO_POSTCODE.indexOf(code) === -1);
-		setRequired("order-state", STATE_REQUIRED.indexOf(code) !== -1);
-	}
-
 	function syncTotal() {
 		var chosen = null;
 		catalog[size].forEach(function (item) {
 			if (item.value === packageSelect.value) chosen = item;
 		});
-		total.textContent = chosen
-			? "Total: " + euros(chosen.price) + vatSuffix()
-			: "";
+		// The amount alone: what VAT is added to it is settled on the
+		// invoice, and the page says so above the form.
+		total.textContent = chosen ? "Total: " + euros(chosen.price) : "";
 	}
 
 	function fillPackages() {
@@ -801,67 +806,11 @@ document.addEventListener("italify:rendered", function () {
 	if (narrow.addEventListener) narrow.addEventListener("change", renderGrid);
 	sizeSelect.addEventListener("change", function () { setSize(sizeSelect.value); });
 	packageSelect.addEventListener("change", syncTotal);
-	// Both feed the VAT the total shows; the country also settles which
-	// of the address fields are asked for.
-	document.getElementById("order-country").addEventListener("change", function () {
-		syncAddressFields();
-		syncTotal();
-	});
-	document.getElementById("order-vat").addEventListener("input", syncTotal);
-	syncAddressFields();
 	// Adopt whatever the size select holds rather than forcing the default:
 	// on a reload or a step back the browser restores its value, and the
 	// picker and the pricing tables have to follow it, not contradict it.
 	setSize(sizeSelect.value || size);
-	window.addEventListener("pageshow", function () {
-		setSize(sizeSelect.value || size);
-		// A restored country brings its own address rules back with it.
-		syncAddressFields();
-	});
-
-	// Payment method: "card" (Stripe Checkout, code right away) or
-	// "bank" (the classic order → invoice → code flow). Card mode hides
-	// the fields Stripe collects itself AND disables them, so the
-	// browser neither validates nor keeps values the submit won't send.
-	var payPicker = document.getElementById("pay-picker");
-	var payMode = "card";
-
-	function setPayMode(next) {
-		if (next !== "card" && next !== "bank") return;
-		payMode = next;
-		form.setAttribute("data-pay", payMode);
-		Array.prototype.forEach.call(form.querySelectorAll(".bank-only input"), function (input) {
-			input.disabled = payMode === "card";
-		});
-		submit.textContent = payMode === "card" ? "Pay by card" : "Order now";
-		if (payPicker) {
-			Array.prototype.forEach.call(payPicker.querySelectorAll(".pay-option"), function (button) {
-				var chosen = button.dataset.pay === payMode;
-				button.setAttribute("aria-checked", chosen ? "true" : "false");
-				button.tabIndex = chosen ? 0 : -1;
-			});
-		}
-		status.hidden = true;
-	}
-
-	if (payPicker) {
-		payPicker.addEventListener("click", function (event) {
-			var button = event.target.closest(".pay-option");
-			if (button) setPayMode(button.dataset.pay);
-		});
-		payPicker.addEventListener("keydown", function (event) {
-			if (!event.target.closest(".pay-option")) return;
-			var back = event.key === "ArrowLeft" || event.key === "ArrowUp";
-			var forward = event.key === "ArrowRight" || event.key === "ArrowDown";
-			if (!back && !forward) return;
-			event.preventDefault();
-			var next = payMode === "card" ? "bank" : "card";
-			setPayMode(next);
-			var chosen = payPicker.querySelector('.pay-option[data-pay="' + next + '"]');
-			if (chosen) chosen.focus();
-		});
-	}
-	setPayMode(payMode);
+	window.addEventListener("pageshow", function () { setSize(sizeSelect.value || size); });
 
 	function show(message, isError) {
 		status.textContent = message;
@@ -879,69 +828,27 @@ document.addEventListener("italify:rendered", function () {
 			country.focus();
 			return;
 		}
-		if (payMode === "card") {
-			submit.disabled = true;
-			show("Taking you to the secure payment page…", false);
-			fetch(WORKER_URL + "/checkout", {
-				method: "POST",
-				headers: { "Content-Type": "application/json" },
-				body: JSON.stringify({
-					package: packageSelect.value,
-					company: document.getElementById("order-company").value,
-					country: country.value,
-					vatId: document.getElementById("order-vat").value,
-				}),
-			}).then(function (response) {
-				return response.json().then(function (data) {
-					if (!response.ok || !data.url) throw new Error(data.error || "Something went wrong.");
-					// Stripe collects email, name, billing address and the
-					// payment itself; the licence code goes out from the
-					// Worker the moment the payment lands.
-					window.location.href = data.url;
-				});
-			}).catch(function (error) {
-				show(error.message || "Something went wrong. Please try again.", true);
-				submit.disabled = false;
-			});
-			return;
-		}
 		submit.disabled = true;
-		show("Sending your order…", false);
-		fetch(WORKER_URL + "/order", {
+		show("Taking you to the secure payment page…", false);
+		fetch(WORKER_URL + "/checkout", {
 			method: "POST",
 			headers: { "Content-Type": "application/json" },
 			body: JSON.stringify({
 				package: packageSelect.value,
-				firstName: document.getElementById("order-first-name").value,
-				lastName: document.getElementById("order-last-name").value,
 				company: document.getElementById("order-company").value,
-				email: document.getElementById("order-email").value,
-				// The address goes over as its parts; the Worker composes
-				// the line-broken block the invoice prints.
-				street: document.getElementById("order-street").value,
-				addressLine2: document.getElementById("order-address-2").value,
-				postcode: document.getElementById("order-postcode").value,
-				city: document.getElementById("order-city").value,
-				state: document.getElementById("order-state").value,
 				country: country.value,
 				vatId: document.getElementById("order-vat").value,
-				note: document.getElementById("order-note").value,
-				website: document.getElementById("order-website").value, // honeypot
 			}),
 		}).then(function (response) {
 			return response.json().then(function (data) {
-				if (!response.ok) throw new Error(data.error || "Something went wrong.");
-				show(data.message, false);
-				form.reset();
-				// reset() puts the size select back to its markup default;
-				// bring the picker and the package list along with it, and
-				// the address fields with the country it also cleared.
-				setSize(sizeSelect.value);
-				syncAddressFields();
+				if (!response.ok || !data.url) throw new Error(data.error || "Something went wrong.");
+				// Stripe collects email, name, billing address and the
+				// payment itself; the licence code goes out from the
+				// Worker the moment the payment lands.
+				window.location.href = data.url;
 			});
 		}).catch(function (error) {
 			show(error.message || "Something went wrong. Please try again.", true);
-		}).finally(function () {
 			submit.disabled = false;
 		});
 	});
