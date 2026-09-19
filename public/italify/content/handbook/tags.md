@@ -67,7 +67,7 @@ caption: An Inktrap segment preserves its size even after correction of the adjo
 
 ## Y-Snap {#snap-y}
 
-By default the filter automatically holds a node’s height in place in one common case: an **unsmooth line-to-curve** corner sitting exactly on a metric (baseline, x-height, …) is pinned to that metric through the correction, so it doesn’t drift off it. Every node this affects is marked with a violet pin. (This automatic behaviour is governed by the [`autoSnapToMetrics`](filter#hidden-settings) hidden setting.)
+By default the filter automatically holds a node’s height in place in one common case: an **unsmooth line-to-curve** corner sitting exactly on a metric (baseline, x-height, …) is pinned to that metric through the correction, so it doesn’t drift off it. Every node this affects is marked with a violet pin. (This automatic behaviour is governed by the [advanced setting](filter#hidden-settings) *Keep line-to-curve corners on metrics*.)
 
 **Y-Snap** lets you take that decision by hand, node by node. It is a simple *retain the y position* – the metric is only how the automatic case is detected, so the override works on **any** on-curve node, on a metric or not:
 

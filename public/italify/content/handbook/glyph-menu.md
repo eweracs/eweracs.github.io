@@ -9,6 +9,7 @@ The tagger only ever sees the single active layer. For batch work there is a sec
 - **Propagate to all Masters → Stems / Tags / Anchor Links / All** – mirrors the chosen metadata from each selected layer onto its glyph’s other compatible masters. *All* sends every kind at once.
 - **Clear → Stems / Tags / Anchor Links / All** – wipes the chosen userData on every selected layer (*All* wipes every kind at once). Hold [[⌥]] for the “… in all Masters” variant.
 - **Import → from Master… / from other Font…** – copies stems, tags and anchor links from another master for the selected glyphs. **Overwrites existing data** in those glyphs. In the dialogue: pick the kinds to import and the source master *Import*. Glyphs missing from the source font or with incompatible outlines are skipped untouched and reported. Use *Propagate to all Masters* after verifying the import.
+- **Settings and Licences…** – opens the [Settings window](settings): licence codes and your licence history, the tagger’s keyboard shortcuts, the advanced options and the release notes. Always available, with or without a selection.
 
 ```screenshot
 img: ../images/glyphMenu.png

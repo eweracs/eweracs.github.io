@@ -4,6 +4,8 @@
 
 All shortcuts below apply while the Italify Tagger is active. [[⌥]] added to any tagging action fans it out across compatible masters.
 
+The single-letter keys are the defaults: each of them – and the [[C]] that activates the tagger – can be re-assigned in [*Settings and Licences… → Shortcuts*](settings#custom-shortcuts).
+
 | Keys                | Action                                                                                                 |
 |---------------------|--------------------------------------------------------------------------------------------------------|
 | [[C]]               | Activate the Italify Tagger.                                                                           |

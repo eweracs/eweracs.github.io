@@ -1,6 +1,6 @@
 # The filter {#filter}
 
-@lede *Filter → Italify* – the correction itself: its parameters, saving scoped parameter sets, running at export, and the hidden settings.
+@lede *Filter → Italify* – the correction itself: its parameters, saving scoped parameter sets, running at export, and the advanced settings.
 
 ## The dialogue {#dialogue}
 
@@ -16,7 +16,7 @@ note 54%: **Keep terminals** – preserves the cut of stroke endings: its *Angle
 note 67.5%: **Diagonal correction** – corrects tagged diagonal stems’ width and angle.
 note 78%: **Stem compensation** – how much of a stem’s width change is restored.
 note 91%: **Keep nodes on extremes** – Attempts to keep nodes on orthogonal extremes.
-note 99%: The gear menu holds *Copy Filter Parameter* for [export](#export).
+note 99%: The gear menu holds *Copy Filter Parameter* for [export](#export) and *Settings and Licences…*.
 ```
 
 ## Parameters {#parameters}
@@ -31,7 +31,7 @@ How strongly curved segments are corrected against the distortion the shear intr
 
 #### Diagonal correction | 0–100% | default 100%
 
-The equivalent control for straight diagonal segments. Out of the box this applies **only to tagged stems** – untagged diagonals are simply slanted – so the correction never second-guesses geometry you haven’t described. (A [hidden setting](#hidden-settings) extends it to all diagonals.)
+The equivalent control for straight diagonal segments. Out of the box this applies **only to tagged stems** – untagged diagonals are simply slanted – so the correction never second-guesses geometry you haven’t described. (An [advanced setting](#hidden-settings) extends it to all diagonals.)
 
 #### Stem compensation | 0–100% | default 100%
 
@@ -50,9 +50,7 @@ Terminals are detected automatically from the outline as line segments connectin
 
 ## Generating a layer from another master {#generate-from}
 
-Normally the filter works on the outlines of the layer you run it on. **Generate from** makes a layer a *derivative* of another one instead: tick the checkbox below the angle and pick a source from the popup, and every time the filter runs on this layer it first **replaces the layer’s outlines, anchors and width with a fresh copy of the source layer’s** – then slants and corrects that. The typical use is an italic master that is generated from its upright: draw and [tag](tagger#tagger) the upright, run the filter on the italic master’s layer with *Generate from: Regular*, and Apply.
-
-The popup lists the glyph’s **other masters**, and below a separator its **special layers** (intermediate and alternate layers). When you switch the setting on for the first time it suggests the likeliest source – for a master called *Bold Italic*, the master called *Bold*.
+Normally, the filter runs directly on the selected layer’s outline. You can, however, select another source layer/master (and bulk-edit this by selecting multiple glyphs). Then, the filter uses that layer as the source instead. Useful for quickly updating an italic layer when the upright source changes. The dropdown guesses the source based on axis location and name.
 
 A few things worth knowing:
 
@@ -81,7 +79,7 @@ layer → glyph → group → master → font → app-wide defaults
 
 The first scope that has a saved value for a given parameter wins, so a value saved on the layer overrides one on its glyph, which overrides the master, and so on. Parameters with no saved override anywhere fall back to the global defaults. The [group](groups) rung sits between glyph and master.
 
-The **⋯ actions menu** beside the picker handles removal: *Clear parameters for ▸ Layer / Glyph / Group (font) / Group (master) / Master / Font* drops a scope’s saved values (master and font ask for confirmation), and *Reset parameters* discards unsaved slider edits. A scope you have not saved anything to reads “No parameters saved”.
+The **⋯ actions menu** beside the picker handles removal: *Clear parameters for ▸ Layer / Glyph / Group (font) / Group (master) / Master / Font* drops a scope’s saved values (master and font ask for confirmation). While the sliders differ from the saved values – the status line reads “… parameters modified.” – a **↺ reset button** appears to the left of the menu; it discards the unsaved edits. A scope you have not saved anything to reads “No parameters saved”.
 
 Selecting several glyphs that resolve to **different** values shows “Multiple parameters set.” instead of guessing – each keeps its own parameters, and saving is disabled until the selection agrees. Saved scopes are honoured both in the live preview and at [export](#export), where a saved value beats the instance’s `Filter` parameter for that glyph.
 
@@ -97,7 +95,7 @@ Italify;angle:9.5;curveCorrection:0.8;diagonalCorrection:0.9;stemCompensation:1;
 
 You don’t need to type this: open the filter dialogue, set the parameters the way you want them, and choose *Copy Filter Parameter* from the dialogue’s gear menu – filter parameter lands on your clipboard ready to paste into the instance. All arguments are optional and named, so partial parameters like `Italify;angle:10` work and fall back to the defaults above. The older single `keepTerminals:` argument is still read – as `keepTerminalAngle`, which is what it was.
 
-Two arguments are **switches** rather than values: **`keepExtremes`** and **`diagonalStemsOnly`**. Write them as `1` or `0` (`true`/`false` and `yes`/`no` are accepted too). `keepExtremes:1` turns [Keep nodes on extremes](#parameters) on for the export; leave the argument out and it stays off, matching the checkbox’s default. `diagonalStemsOnly` mirrors the [hidden setting](#hidden-settings) of the same name and is on unless you set it to `0`.
+Two arguments are **switches** rather than values: **`keepExtremes`** and **`diagonalStemsOnly`**. Write them as `1` or `0` (`true`/`false` and `yes`/`no` are accepted too). `keepExtremes:1` turns [Keep nodes on extremes](#parameters) on for the export; leave the argument out and it stays off, matching the checkbox’s default. `diagonalStemsOnly` mirrors the [advanced setting](#hidden-settings) *Correct tagged stems only* and is on unless you set it to `0`.
 
 Neither switch takes part in the [saved-parameter cascade](#saving-parameters) – only the numeric parameters (the sliders) can be saved to a layer, glyph, group, master or font. At export the two switches are therefore read from the `Filter` parameter alone and apply to every glyph the filter runs on.
 
@@ -117,17 +115,18 @@ alt: Font Info → Exports with an instance’s Filter custom parameter carrying
 caption: Italify as an export-time filter on an instance.
 ```
 
-## Hidden settings {#hidden-settings}
+## Advanced settings {#hidden-settings}
 
-Three behaviours have no dialogue control and are toggled via the Macro panel. All default to the behaviour most users want. The are prefixed with `com.eweracs.italify.`.
+A few behaviours have no control in the dialogue. They live in [*Settings and Licences… → Advanced*](settings#advanced) (*Glyph → Italify*, or the dialogue’s gear menu) and apply app-wide. All default to the behaviour most users want; a change shows in an open dialogue’s preview straight away.
 
 | Setting | Default | Effect |
 |---|---|---|
-| `diagonalCorrectionStemsOnly` | `True` | Diagonal correction and stem compensation apply only to tagged stems. Set to `False` to correct every diagonal segment, tagged or not. For untagged stems, the transformation origin will be (half layer width, half x-height). Experimental use only, results will be unexpected.|
-| `flattenIntersections` | `True` | When the correction pushes an outline past an adjacent short line (typical at tight junctions), Italify collapses the junction into a clean, master-compatible doubled node – the way you would draw it by hand. Set to `False` to keep the uncollapsed geometry. |
-| `autoSnapToMetrics` | `True` | An **unsmooth line-to-curve** node – where a straight segment meets a curve – whose height sits exactly on a metric (baseline, x-height, …) is held to that metric through the correction, so such corners don’t drift off it. Smooth nodes, line-to-line corners and curve-to-curve corners are left free. The tagger marks every node this affects with a violet pin. Set to `False` to disable the snap entirely. |
+| *Flatten intersections* | on | When the correction pushes an outline past an adjacent short line (typical at tight junctions), Italify collapses the junction into a clean, master-compatible doubled node – the way you would draw it by hand. Switch it off to keep the uncollapsed geometry. |
+| *Keep line-to-curve corners on metrics* | on | An **unsmooth line-to-curve** node – where a straight segment meets a curve – whose height sits exactly on a metric (baseline, x-height, …) is held to that metric through the correction, so such corners don’t drift off it. Smooth nodes, line-to-line corners and curve-to-curve corners are left free. The tagger marks every node this affects with a violet pin. Switch it off to disable the snap entirely. |
+| *Correct tagged stems only* | on | Diagonal correction and stem compensation apply only to tagged stems. Switch it off to correct every diagonal segment, tagged or not. For untagged stems, the transformation origin will be (half layer width, half x-height). Experimental use only, results will be unexpected. |
+| *Keep nodes on extremes – tolerance* | 1 unit | With [Keep nodes on extremes](#parameters) on, a node is only moved onto the extreme when the corrected shape can be re-drawn within this distance; otherwise it stays where the correction put it. |
 
-For example, in the Macro panel:
+Scripts can still set them as `Glyphs.defaults` – the keys are `flattenIntersections`, `autoSnapToMetrics`, `diagonalCorrectionStemsOnly` and `keepExtremesTolerance`, each prefixed with `com.eweracs.italify.`:
 
 ```
 Glyphs.defaults["com.eweracs.italify.flattenIntersections"] = False

@@ -397,6 +397,7 @@
 		{ slug: "anchor-links", title: "Anchor links" },
 		{ slug: "copy-paste", title: "Copy, paste & propagate" },
 		{ slug: "glyph-menu", title: "The Glyph → Italify menu" },
+		{ slug: "settings", title: "Settings and licences" },
 		{ slug: "tips", title: "Tips" },
 		{ slug: "shortcuts", title: "Keyboard reference" },
 	];

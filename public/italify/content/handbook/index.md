@@ -9,7 +9,7 @@ Install the plugin and find its three surfaces: the filter, the tagger, and the 
 ## [A typical workflow](workflow)
 The advised order of steps for italicising a project – from clean upright drawings to exported italics.
 ## [The filter](filter)
-*Filter → Italify*: the [parameters](filter#parameters), [saving scoped parameters](filter#saving-parameters), [running at export](filter#export), and the [hidden settings](filter#hidden-settings).
+*Filter → Italify*: the [parameters](filter#parameters), [saving scoped parameters](filter#saving-parameters), [running at export](filter#export), and the [advanced settings](filter#hidden-settings).
 ## [Glyph groups](groups)
 Named sets of glyphs that share parameters – tune “all the rounds” together.
 ## [The tagger](tagger)
@@ -24,6 +24,8 @@ Tie Glyphs anchors to outline nodes so they ride along through the correction.
 Move stems, tags and anchor links between layers – and [across masters](copy-paste#masters).
 ## [The Glyph → Italify menu](glyph-menu)
 Batch verbs that run across every selected glyph and layer at once.
+## [Settings and licences](settings)
+One window for [licence codes](settings#licences), [custom shortcuts](settings#custom-shortcuts), the [advanced options](settings#advanced) and the release notes.
 ## [Tips](tips)
 Path-drawing advice that makes the correction behave.
 ## [Keyboard reference](shortcuts)
