@@ -7,11 +7,12 @@
 Choose *Filter → Italify* with one or more glyphs open in Edit View. You can adjust the parameters with the live preview showing the result you get when pressing *Apply*.
 ```annotated
 img: ../images/window.png
-alt: The Italify filter dialogue with the angle field and four correction sliders.
+alt: The Italify filter dialogue with the angle field and the correction sliders.
 note 14.5%: **Angle** – the slant to apply. [[↺]] reads the current master’s italic angle.
+note 19%: **Generate from** – rebuild this layer from another master’s outlines each time the filter runs.
 note 24%: **Saved parameters** – Use the same parameters for the whole font, single masters, glyphs, layers or groups.
 note 39.5%: **Curve correction** – rebalances curves against the shear’s distortion.
-note 49.5%: **Keep terminals** – preserves the cut of stroke endings.
+note 49.5%: **Keep terminals** – preserves the cut of stroke endings: its *Angle* and its *Position* along the stroke.
 note 65.5%: **Diagonal correction** – corrects tagged diagonal stems’ width and angle.
 note 77%: **Stem compensation** – how much of a stem’s width change is restored.
 note 89%: **Keep nodes on extremes** – Attempts to keep nodes on orthogonal extremes.
@@ -38,13 +39,31 @@ Controls how much of the width change that slanting causes in stems is compensat
 
 The **advance width grows with it**. Because compensation widens the outline horizontally about the glyph centre, the layer’s advance is widened by the same factor and the outline is shifted by half the difference, so the growth is split equally between the two sidebearings – the outline never eats into a fixed advance. At 0 % (or 0° angle) the advance is left untouched.
 
-#### Keep terminals | 0–100% | default 0%
+#### Keep terminals – Angle | 0–100% | default 0% · Position | 0–100% | default 100%
 
-Governs the straight terminals at stroke ends – the cut of an *e*, *c* or *s*, for example. At 0%, a terminal is simply slanted. At 100%, it is rotated back against the rotation the correction gave the adjoining curves, preserving the original cut relative to the stroke. Terminals are detected automatically from the outline as line segments connecting two curves going in the same direction. Automatic detection stays narrow – terminals designed with open corners aren’t caught – but you can tag those (and any other cut) by hand with the [Terminal](tags#terminal) tag.
+Governs the straight terminals at stroke ends – the cut of an *e*, *c* or *s*, for example. Two things can happen to a terminal when the curves either side of it are corrected, and each has its own slider:
+
+- **Position** – where along its adjoining curves the terminal sits. At **100%**, the terminal sits where a slant would put it. At **0%**, it follows the curves and their correction. Think of it like a rotation, rather than a slant.
+- **Angle** – the angle of the terminal. At 0%, it is a pure slant. At 100%, the angles at which the terminal attaches to the adjoining segments matches that in the upright source.
+
+Terminals are detected automatically from the outline as line segments connecting two curves going in the same direction. Automatic detection stays narrow – terminals designed with open corners aren’t caught – but you can tag those (and any other cut) by hand with the [Terminal](tags#terminal) tag. Terminals can also be given [angle and position settings](tags#terminal-settings), which override the filter’s sliders.
+
+## Generating a layer from another master {#generate-from}
+
+Normally the filter works on the outlines of the layer you run it on. **Generate from** makes a layer a *derivative* of another one instead: tick the checkbox below the angle and pick a source from the popup, and every time the filter runs on this layer it first **replaces the layer’s outlines, anchors and width with a fresh copy of the source layer’s** – then slants and corrects that. The typical use is an italic master that is generated from its upright: draw and [tag](tagger#tagger) the upright, run the filter on the italic master’s layer with *Generate from: Regular*, and Apply.
+
+The popup lists the glyph’s **other masters**, and below a separator its **special layers** (intermediate and alternate layers). When you switch the setting on for the first time it suggests the likeliest source – for a master called *Bold Italic*, the master called *Bold*.
+
+A few things worth knowing:
+
+- Stems, tags and anchor links travel with the outlines, so they only need to exist on the **source** layer. Anything drawn or tagged by hand on the generated layer is replaced on the next run – switch *Generate from* off before retouching a layer you want to keep.
+- The generated layer still uses **its own** [saved parameters](#saving-parameters).
+- With several glyphs open, the checkbox and popup apply to all of them at once. A special layer exists in one glyph only, so choosing one affects just the glyphs that have it. The checkbox shows a dash when the open layers differ.
+- The setting only concerns the source file. It plays no part [at export](#export), where the filter runs on interpolated instances.
 
 ## Saving parameters {#saving-parameters}
 
-Out of the box, the four correction sliders edit one app-wide set of defaults: change them once and every glyph you run the filter on uses those values. Often you want finer control – a tighter curve correction on just the rounds, or a different stem compensation in the Bold master. Italify lets you **save a set of parameters scoped to a single layer, glyph, [group](groups), master, or the whole font**, and resolves the right one automatically.
+Out of the box, the correction sliders edit one app-wide set of defaults: change them once and every glyph you run the filter on uses those values. Often you want finer control – a tighter curve correction on just the rounds, or a different stem compensation in the Bold master. Italify lets you **save a set of parameters scoped to a single layer, glyph, [group](groups), master, or the whole font**, and resolves the right one automatically.
 
 ```screenshot wide
 img: ../images/savingParameters.png
@@ -54,7 +73,7 @@ caption: Saving a scoped set of parameters from the filter dialogue.
 
 Set the sliders the way you want them, pick a scope from **Save for:** – *Font*, *Master*, *Glyph*, or *Layer*, plus *Group (font)* and *Group (master)* when the active glyph belongs to a [group](groups) – and press **Save**. The status line above the picker always tells you which scope is currently in effect (“Using *Glyph* parameters”, say) and warns when you have edited the sliders without saving. The picker opens **pre-selected to that same scope** – if the glyph is currently using *Glyph* parameters, *Glyph* is already chosen, so Save writes back to where the values came from; with nothing saved anywhere it defaults to *Font*.
 
-When the filter runs, it resolves each of the four parameters independently through a **cascade**, from most specific to least:
+When the filter runs, it resolves each of the parameters independently through a **cascade**, from most specific to least:
 
 ```
 layer → glyph → group → master → font → app-wide defaults
@@ -73,14 +92,14 @@ You can keep your sources upright and let Italify run when instances are generat
 Add a `Filter` custom parameter to an instance (Font Info → Exports) with a value like:
 
 ```
-Italify;angle:9.5;curveCorrection:0.8;diagonalCorrection:0.9;stemCompensation:1;keepTerminals:0;diagonalStemsOnly:1;keepExtremes:0
+Italify;angle:9.5;curveCorrection:0.8;diagonalCorrection:0.9;stemCompensation:1;keepTerminalAngle:1;keepTerminalPosition:1;diagonalStemsOnly:1;keepExtremes:0
 ```
 
-You don’t need to type this: open the filter dialogue, set the parameters the way you want them, and choose *Copy Filter Parameter* from the dialogue’s gear menu – filter parameter lands on your clipboard ready to paste into the instance. All arguments are optional and named, so partial parameters like `Italify;angle:10` work and fall back to the defaults above.
+You don’t need to type this: open the filter dialogue, set the parameters the way you want them, and choose *Copy Filter Parameter* from the dialogue’s gear menu – filter parameter lands on your clipboard ready to paste into the instance. All arguments are optional and named, so partial parameters like `Italify;angle:10` work and fall back to the defaults above. The older single `keepTerminals:` argument is still read – as `keepTerminalAngle`, which is what it was.
 
 Two arguments are **switches** rather than values: **`keepExtremes`** and **`diagonalStemsOnly`**. Write them as `1` or `0` (`true`/`false` and `yes`/`no` are accepted too). `keepExtremes:1` turns [Keep nodes on extremes](#parameters) on for the export; leave the argument out and it stays off, matching the checkbox’s default. `diagonalStemsOnly` mirrors the [hidden setting](#hidden-settings) of the same name and is on unless you set it to `0`.
 
-Neither switch takes part in the [saved-parameter cascade](#saving-parameters) – only the four numeric parameters can be saved to a layer, glyph, group, master or font. At export the two switches are therefore read from the `Filter` parameter alone and apply to every glyph the filter runs on.
+Neither switch takes part in the [saved-parameter cascade](#saving-parameters) – only the numeric parameters (the sliders) can be saved to a layer, glyph, group, master or font. At export the two switches are therefore read from the `Filter` parameter alone and apply to every glyph the filter runs on.
 
 Like many Glyphs export filters, Italify also accepts an **`include`** or **`exclude`** argument to scope which glyphs it runs on – comma-separated glyph names, with `*` wildcards allowed:
 

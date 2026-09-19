@@ -25,19 +25,19 @@ Get in touch for custom licensing options.
 <div class="size-picker" id="size-picker" role="radiogroup" aria-label="Organisation size">
 	<button type="button" class="size-option" data-size="solo" role="radio" aria-checked="true">
 		<span class="size-name">Solo</span>
-		<span class="size-desc">1 person.</span>
+		<span class="size-desc">1 employee.</span>
 	</button>
 	<button type="button" class="size-option" data-size="team" role="radio" aria-checked="false">
 		<span class="size-name">Team</span>
-		<span class="size-desc">2–3 people.</span>
+		<span class="size-desc">2–3 employees.</span>
 	</button>
 	<button type="button" class="size-option" data-size="studio" role="radio" aria-checked="false">
 		<span class="size-name">Studio</span>
-		<span class="size-desc">4–7 people.</span>
+		<span class="size-desc">4–7 employees.</span>
 	</button>
 	<button type="button" class="size-option" data-size="foundry" role="radio" aria-checked="false">
 		<span class="size-name">Foundry</span>
-		<span class="size-desc">8+ people.</span>
+		<span class="size-desc">8+ employees.</span>
 	</button>
 	<p class="size-compare-row">
 		<button type="button" class="size-compare" id="size-compare" role="switch" aria-checked="false">

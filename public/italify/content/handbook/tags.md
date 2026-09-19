@@ -19,6 +19,10 @@ Occasionally a curve can’t be meaningfully extended by default – no usable e
 
 When the non-extreme node is the connection between two curves, the value is shared between the curves. A node with a partial setting is marked with a **teal circle** – select it to bring the control back. To return to the default, drag the point back to the round tick or select Remove Custom Extension [[⌫]].
 
+A segment tagged [No Curve Correction](#no-curve-correction) offers no control: it isn’t corrected, so there is nothing to extend. A stored setting on such a node draws greyed and is ignored until the segment is corrected again.
+
+To reuse a setting elsewhere, select the node, copy it with [[⌘C]], select the target node and paste – see [Copy & Paste](copy-paste.md).
+
 ```screenshot
 img: ../images/curveExtension.png
 tag: Screenshot – curve-centre control
@@ -39,7 +43,7 @@ caption: Limit Curve pins a curve’s transformation to the node’s own tangent
 
 **No Curve Correction** takes a whole curve segment out of curve correction. The segment is then only slanted – its drawn shape is preserved exactly.
 
-The tag sits on **both** on-curve endpoints of the segment (any curve, cubic or quadratic, with at least one off-curve between them). Select those two nodes and press [[N]], or right-click and choose *Toggle No Curve Correction*; press [[N]] again to remove it. The segment draws with a yellow overlay along its length.
+The tag sits on **both** on-curve endpoints of the segment (any curve, cubic or quadratic, with at least one off-curve between them). Select those two nodes and press [[N]], or right-click and choose *Toggle No Curve Correction*; press [[N]] again to remove it. The segment draws with a yellow overlay along its length. It takes precedence over a [Curve Extension](#curve-extension) on its nodes, and an adjoining [Inktrap](#inktrap) still meets it – on the untouched curve’s own extension where it has to.
 
 ```screenshot
 img: ../images/noCurveCorrection.png
@@ -80,13 +84,22 @@ caption: Y-Snap keeps a node at its original height, on a metric or not.
 
 ## Terminal {#terminal}
 
-A **terminal** is a straight segment that caps a stroke – the flat cut of a *c*, *e* or *s*. The [Keep Terminals](filter#parameters) parameter holds a terminal’s cut in place through the italicisation: at 100% the angle it makes with its two adjoining segments after the slant matches the upright. The filter finds the obvious terminals automatically (a line between two curves heading the same way), and draws every one it will keep in **green**.
+A **terminal** is a straight segment that caps a stroke – the flat cut of a *c*, *e* or *s*. The [Keep terminals](filter#parameters) sliders hold a terminal’s cut in place through the italicisation: *Angle* keeps the angle it makes with its two adjoining segments after the slant, *Position* decides whether it stays where a plain slant puts it or rides along those segments with the curve correction. The filter finds the obvious terminals automatically (a line between two curves heading the same way), and draws every one it will keep in **green**.
 
 **Terminal** lets you take that decision by hand. Tag any straight two-node segment whose end connections are **unsmooth** – it can be a line between two stems, not just between two curves – and the filter keeps it too. Tagging a segment the tool already detects instead **opts it out**.
 
 Select the two on-curve nodes at the ends of the segment and press [[C]] (think of *C*ap), or right-click and choose *Toggle Terminal*. There is no restriction on the two neighbours – a straight cut holds its cleanest when they are roughly parallel, but the choice is yours; the filter keeps whatever you tag. The segment draws in green. To hand a segment back to the automatic detection, clear its tag.
 
 This works even when the terminal’s visible corners are **open corners** or when the outline carries a **duplicate node** at a corner: the tool looks past the short connector to the real curve or line on the other side, and the kept angle is measured at the visible intersection – which is also where the green highlight is drawn. The open corners themselves survive the correction: only the tagged line rotates, and the overlap structure stays intact.
+
+### A terminal’s own angle and position {#terminal-settings}
+
+The filter’s two *Keep terminals* sliders apply to every terminal alike. If you want to use custom settings for a terminal, you can adjust the values directly in the interface, with those values overriding the filter’s values.
+
+- **Position** adjusts how far the terminal follows the original correction’s position, versus a purely slanted position (no vertical change).
+- **Angle** adjusts, you guessed it, the terminal’s angle.
+
+A terminal with its own settings shows a small **reset button**: a circled [[↺]]. Click it to remove the custom settings. With the terminal selected, [[⌫]] does the same, as does *Remove Custom Terminal Settings* in the right-click menu. Hold [[⌥]] to do it in all compatible masters. The values copy, paste and propagate with the other tags.
 
 One related behaviour: an [anchor](anchor-links) linked to a node that sits on a terminal follows that node **fully, in both x and y** – a terminal is a moving cut, so an anchor on it rides along completely rather than tracking only its horizontal shift.
 

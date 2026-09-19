@@ -34,6 +34,6 @@ For an anchor sitting essentially **on** the curve the two rings coincide, so th
 
 **Auto-Link Anchors** (last item in the right-click *Anchors* section, and in the [Glyph → Italify menu](glyph-menu)) links every unlinked anchor in one go: an anchor sitting **on a curve** (within 4‰ of the UPM, e.g. 4 units in a 1000 UPM font) gets an x/y-intersection link onto that curve – the axis is chosen across the curve’s direction – and every other anchor links to its **nearest on-curve node**.
 
-With **anchors selected** the item reads *Auto-Link Selected Anchors* and runs on just those. Anchors that already have a link are never touched, so you can auto-link first and refine by hand after. There is no “in all masters” variant – propagate the links afterwards instead.
+With **anchors selected** the item reads *Auto-Link Selected Anchors* and runs on just those. Anchors that already have a link are never touched, so you can auto-link first and refine by hand after. There is no “in all masters” variant – propagate the links afterwards instead. Scripts can pick anchors by name, with `*` wildcards, using [`auto_link_anchors`](../python-api#bulk).
 
 Copy / Paste / Propagate / Clear for anchor links live in the right-click *Anchors* section (see [Copy, paste & propagate](copy-paste)) and the [Glyph → Italify menu](glyph-menu).

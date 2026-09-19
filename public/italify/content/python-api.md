@@ -186,21 +186,9 @@ The anchors a node belongs to.
 
 - `list[str]` – the anchor names linked to it
 
-**`has_limit_curve(node)`**
-
-Whether a node effectively limits its curve – a [Curve Extension](handbook/tags#curve-extension) of `0` (the [Limit Curve](handbook/tags#limit-curve) point), via either the ratio key or the legacy boolean tag.
-
-*Parameters:*
-
-- `node` (`GSNode`) – the node to query (this verb takes no `layer`)
-
-*Returns:*
-
-- `bool` – `True` when the effective curve extension is `0`
-
 **`curve_extension(node)`**
 
-The node’s effective [Curve Extension](handbook/tags#curve-extension) ratio: an explicit stored value, `0.0` for the legacy Limit Curve tag, `1.0` when untagged (the default full extension).
+The node’s effective [Curve Extension](handbook/tags#curve-extension) ratio: an explicit stored value, or `1.0` when untagged (the default full extension). [Limit Curve](handbook/tags#limit-curve) has no verb of its own – it is a curve extension of `0`, so `curve_extension(node) == 0` is the test for it (a legacy Limit Curve tag in an older file reads as `0.0` too).
 
 *Parameters:*
 
@@ -257,6 +245,18 @@ The [Terminal](handbook/tags#terminal) override for the segment `node` bounds. T
 *Returns:*
 
 - `bool | None` – `True` (force-terminal), `False` (opt out), or `None` (no override – auto detection decides)
+
+**`terminal_angle(node)`** · **`terminal_position(node)`**
+
+A terminal’s [own angle / position](handbook/tags#terminal-settings) – the value that replaces the filter’s *Keep terminals → Angle* / *Position* for the one terminal `node` bounds. Like the Terminal tag, each sits on both endpoints, so either identifies the terminal.
+
+*Parameters:*
+
+- `node` (`GSNode`) – the node to query (these verbs take no `layer`)
+
+*Returns:*
+
+- `float | None` – the stored value (angle `0 … 1`; position `−1 … 2`, where `0` is where the curve correction carries the cut and `1` where a plain slant puts it), or `None` when the terminal follows the filter
 
 ## Stems {#stems}
 
@@ -486,28 +486,13 @@ An `ItalifyStem` is a thin wrapper, so it refuses exactly as the free functions 
 
 **`set_curve_extension(layer, node, ratio, all_masters=False)`**
 
-Store a [Curve Extension](handbook/tags#curve-extension) ratio on an on-curve node – the same value the tagger’s curve-centre control writes. `0` is the [Limit Curve](handbook/tags#limit-curve) point (no extension); `1` removes the override, restoring the default full extension. Any legacy Limit Curve flag on the node is migrated away by the write.
+Store a [Curve Extension](handbook/tags#curve-extension) ratio on an on-curve node – the same value the tagger’s curve-centre control writes. `0` is [Limit Curve](handbook/tags#limit-curve) (no extension) – this is how a script limits a curve; `1` removes the override, restoring the default full extension. Any legacy Limit Curve flag on the node is migrated away by the write.
 
 *Parameters:*
 
 - `layer` (`GSLayer`)
 - `node` (`GSNode`) – the on-curve node to tag
 - `ratio` (`float`) – the extension amount, `0 … 1`
-- `all_masters` (`bool`) – also apply it on every compatible master
-
-*Returns:*
-
-- `ItalifyResult`
-
-**`set_limit_curve(layer, node, on, all_masters=False)`**
-
-Legacy spelling of the above: `on=True` writes a curve extension of `0` ([Limit Curve](handbook/tags#limit-curve)), `on=False` removes the override.
-
-*Parameters:*
-
-- `layer` (`GSLayer`)
-- `node` (`GSNode`) – the on-curve node to tag
-- `on` (`bool`) – `True` = curve extension `0`, `False` = default full extension
 - `all_masters` (`bool`) – also apply it on every compatible master
 
 *Returns:*
@@ -577,6 +562,31 @@ Set the [Terminal](handbook/tags#terminal) override on the segment between `node
 
 - `ItalifyResult` – refuses with [`notTerminalSegment`](#refusals) unless `node_a` and `node_b` are the on-curve endpoints of a directly-connected straight segment
 
+**`set_terminal_angle(layer, node_a, node_b, value, all_masters=False)`** · **`set_terminal_position(layer, node_a, node_b, value, all_masters=False)`**
+
+Give one terminal [its own angle / position](handbook/tags#terminal-settings) – what dragging the tagger’s diamond / round knob writes. The value replaces the filter’s *Keep terminals → Angle* / *Position* for this terminal only, whatever scope that comes from, whatever the filter’s own amount. The two are independent: set one and the other keeps following the filter.
+
+*Parameters:*
+
+- `layer` (`GSLayer`)
+- `node_a` (`GSNode`) – one on-curve endpoint of the terminal
+- `node_b` (`GSNode`) – the other on-curve endpoint of the terminal
+- `value` (`float | None`) – angle: `0 … 1`. Position: `0` is where the curve correction carries the cut, `1` where a plain slant puts it, and anything in `−1 … 2` overshoots along the adjoining segments. Stored as a whole percentage; out-of-range values are clamped. `None` removes the override
+- `all_masters` (`bool`) – also apply on every compatible master
+
+*Returns:*
+
+- `ItalifyResult` – refuses with [`notTerminalSegment`](#refusals) unless `node_a` and `node_b` are the on-curve endpoints of a directly-connected straight segment. The value is only *read* on a segment the filter treats as a terminal (detected automatically, or forced with `set_terminal`)
+
+```python
+import italify
+
+# Keep the c’s apertures exactly as drawn, whatever the filter is set to.
+layer = Glyphs.font.glyphs["c"].layers[0]
+a, b = layer.selection[0], layer.selection[1]   # the terminal’s two nodes
+italify.set_terminal_position(layer, a, b, 1.0, all_masters=True)
+```
+
 ## Anchor links {#anchor-links}
 
 **`link_anchor(layer, anchor_name, node, all_masters=False)`**
@@ -624,6 +634,29 @@ Run the stem [auto-tagger](handbook/stems#creating-stems) on the layer (active l
 *Returns:*
 
 - `ItalifyResult` – `.count` is how many stems were added
+
+**`auto_link_anchors(layer, anchor_names=None, exclude=None, all_masters=False)`**
+
+Run the [anchor auto-linker](handbook/anchor-links#auto-link) on the layer: an anchor sitting on a curve gets an x/y-intersection link onto it, every other anchor links to its nearest on-curve node. Anchors that already have a link are never touched. Unlike the menu, the anchors can be chosen by name – list the ones to link, or the ones to leave alone. Names are **patterns**: `*` matches any run of characters, so `*top*` covers `top`, `_top`, `topright` and `_topright`; a name without `*` must match exactly. Patterns are resolved against each layer’s own anchors.
+
+*Parameters:*
+
+- `layer` (`GSLayer`)
+- `anchor_names` (sequence of `str`, optional) – only auto-link anchors matching these patterns; `None` links every anchor
+- `exclude` (sequence of `str`, optional) – leave anchors matching these patterns alone (removed from `anchor_names`, or from all anchors when that is `None`)
+- `all_masters` (`bool`) – also auto-link every compatible master, each on its own geometry (this is not a propagate)
+
+*Returns:*
+
+- `ItalifyResult` – `.count` is how many anchors were linked
+
+```python
+# Auto-link every top/bottom attachment anchor on the selected layers,
+# leaving the cursive entry/exit anchors and any *_alt anchor alone.
+import italify
+for layer in Glyphs.font.selectedLayers:
+    italify.auto_link_anchors(layer, anchor_names=["*top*", "*bottom*"], exclude=["*_alt"])
+```
 
 **`resolve_corrupted(layer, all_masters=False)`**
 
@@ -784,9 +817,9 @@ for g in src.glyphs:
 
 ## Correction {#correction}
 
-Everything above authors metadata. `correct` is the one verb that moves geometry: it runs the filter’s actual correction pass – the same code the dialog’s Apply button and instance export run – on an **upright** layer, with the parameters given explicitly.
+Everything above authors metadata. `correct` is the one verb that moves geometry: it runs the filter’s actual correction pass – the same code the dialog’s Apply button and instance export run – on an **upright** layer, with the parameters given explicitly. Its companion `resolved_parameters` reads the parameters saved for a layer, so the two together correct a layer the way the filter would.
 
-**`correct(layer, angle, curve_correction=1.0, diagonal_correction=1.0, stem_compensation=0.0, keep_terminals=0.0, diagonal_correction_stems_only=True)`**
+**`correct(layer, angle, curve_correction=1.0, diagonal_correction=1.0, stem_compensation=0.0, keep_terminal_angle=0.0, keep_terminal_position=1.0, diagonal_correction_stems_only=True)`**
 
 Shear-aware outline correction driven by the layer’s stem tags, then the slant itself. The whole pass is one undo step.
 
@@ -797,12 +830,13 @@ Shear-aware outline correction driven by the layer’s stem tags, then the slant
 - `curve_correction` (`float`, 0.0–1.0) – curve correction strength
 - `diagonal_correction` (`float`, 0.0–1.0) – diagonal correction strength
 - `stem_compensation` (`float`, 0.0–1.0) – stem compensation strength
-- `keep_terminals` (`float`, 0.0–1.0) – how strongly terminals keep their upright shape
+- `keep_terminal_angle` (`float`, 0.0–1.0) – [Keep terminals → Angle](handbook/filter#parameters): how much of a terminal’s upright cut angle survives
+- `keep_terminal_position` (`float`, 0.0–1.0) – Keep terminals → Position: `1.0` (the default) keeps the cut where a plain slant puts it, `0.0` lets it ride along its adjoining curves with the curve correction. (The single `keep_terminals` argument of earlier versions is gone: it was the angle, so pass its value as `keep_terminal_angle`.) A terminal with [its own angle or position](#tags) ignores the respective amount
 - `diagonal_correction_stems_only` (`bool`) – restrict diagonal correction to tagged stems
 
 *Returns:*
 
-- `ItalifyResult` – refuses with [`masterNotActivated`](#refusals) on a licence-enforced build when the layer’s master hasn’t been activated with a credit
+- `ItalifyResult` – refuses with [`masterNotActivated`](#refusals) when the layer’s master hasn’t been activated with a credit or no time pass is active.
 
 ```python
 import italify
@@ -810,6 +844,29 @@ import italify
 for layer in Glyphs.font.selectedLayers:
     italify.correct(layer, angle=10, curve_correction=0.6,
                     diagonal_correction=0.85, stem_compensation=0)
+```
+
+**`resolved_parameters(layer, fallback=None)`**
+
+The filter parameters in effect for a layer. Each parameter resolves independently through the scopes the filter dialog’s *Save for:* popup writes – layer → glyph → group → master → font – exactly as the filter itself resolves it. A read: it writes nothing and is never refused.
+
+*Parameters:*
+
+- `layer` (`GSLayer`) – the layer to resolve for
+- `fallback` (`dict`, optional) – values for the parameters no scope sets, keyed like the result; any parameter missing from it falls back to the filter dialog’s current app-wide value
+
+*Returns:*
+
+- `dict` – `curve_correction`, `diagonal_correction`, `stem_compensation`, `keep_terminal_angle` and `keep_terminal_position` (each a `float`, 0.0–1.0) – the same names `correct` takes as keyword arguments. A scope saved before Keep terminals was split resolves its single value as the angle
+
+The result splats straight into `correct`, which runs each layer with the parameters saved for it:
+
+```python
+import italify
+
+for layer in Glyphs.font.selectedLayers:
+    italify.correct(layer, angle=layer.italicAngle,
+                    **italify.resolved_parameters(layer))
 ```
 
 ## Refusal reasons {#refusals}
