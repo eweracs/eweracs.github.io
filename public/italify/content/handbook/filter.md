@@ -8,15 +8,15 @@ Choose *Filter → Italify* with one or more glyphs open in Edit View. You can a
 ```annotated
 img: ../images/window.png
 alt: The Italify filter dialogue with the angle field and the correction sliders.
-note 14.5%: **Angle** – the slant to apply. [[↺]] reads the current master’s italic angle.
-note 19%: **Generate from** – rebuild this layer from another master’s outlines each time the filter runs.
-note 24%: **Saved parameters** – Use the same parameters for the whole font, single masters, glyphs, layers or groups.
-note 39.5%: **Curve correction** – rebalances curves against the shear’s distortion.
-note 49.5%: **Keep terminals** – preserves the cut of stroke endings: its *Angle* and its *Position* along the stroke.
-note 65.5%: **Diagonal correction** – corrects tagged diagonal stems’ width and angle.
-note 77%: **Stem compensation** – how much of a stem’s width change is restored.
-note 89%: **Keep nodes on extremes** – Attempts to keep nodes on orthogonal extremes.
-note 97%: The gear menu holds *Copy Filter Parameter* for [export](#export).
+note 11.5%: **Angle** – the slant to apply.
+note 19%: **Generate from** – select another master as the outline source.
+note 30%: **Saved parameters** – Use the same parameters for the whole font, single masters, glyphs, layers or groups.
+note 42%: **Curve correction** – rebalances curves against the shear’s distortion.
+note 54%: **Keep terminals** – preserves the cut of stroke endings: its *Angle* and its *Position* along the stroke.
+note 67.5%: **Diagonal correction** – corrects tagged diagonal stems’ width and angle.
+note 78%: **Stem compensation** – how much of a stem’s width change is restored.
+note 91%: **Keep nodes on extremes** – Attempts to keep nodes on orthogonal extremes.
+note 99%: The gear menu holds *Copy Filter Parameter* for [export](#export).
 ```
 
 ## Parameters {#parameters}

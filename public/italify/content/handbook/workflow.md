@@ -66,7 +66,7 @@ Run *Glyph → Italify → [Auto-Link Anchors](glyph-menu)* over the selected gl
 Open *Filter → Italify*, press [[↺]] to adopt the master’s angle, and judge the four sliders against the live preview – or hold [[Space]]+[[Shift]] in the [tagger](tagger#preview) to flip between the working outline and the corrected result without applying anything. The [parameters](filter#parameters) chapter explains what each slider does; the defaults (everything at 100%, terminals at 0%) are the right starting point for most designs.
 
 ```screenshot
-img: ../images/filterPreview.png
+img: ../images/preview.png
 desc: The filter dialogue beside an Edit View glyph showing the live preview,
   mid-adjustment: one slider being dragged, the outline visibly responding.
 caption: Judge every parameter against the live preview before applying anything.
