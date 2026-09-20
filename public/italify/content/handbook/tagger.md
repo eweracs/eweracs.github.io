@@ -21,7 +21,7 @@ Marks travel: see [Copy, paste & propagate](copy-paste) for moving them between 
 
 ## Navigation & live preview {#preview}
 
-Hold [[Space]] to pan, as everywhere in Glyphs – while held, the tool shows the clean filled outline with all chrome hidden. Add [[Shift]] and the filled preview becomes a **live Italify preview:** the glyph rendered with the current filter parameters (your outline is untouched), with a small floating panel listing the parameters in effect. Change a value in the filter dialogue, hold [[Space]]+[[Shift]] again, and the preview reflects it – a fast way to judge the correction without applying anything. Useful for previewing different tagging results directly.
+Hold [[Space]] to pan, as everywhere in Glyphs – while held, the tool shows the clean filled outline with all chrome hidden. Add [[Shift]] and the filled preview becomes a **live Italify preview:** the glyph rendered with the current filter parameters (your outline is untouched), with a small floating panel listing the parameters in effect. Change a value in the filter dialogue, hold [[Space]]+[[Shift]] again, and the preview reflects it – a fast way to judge the correction without applying anything. With the dialogue’s angle lock on, the preview slants each layer by its own italic angle, and the panel shows that angle next to a padlock. Useful for previewing different tagging results directly.
 
 ```screenshot
 img: ../images/preview.png

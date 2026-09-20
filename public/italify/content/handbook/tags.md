@@ -15,9 +15,11 @@ Select the curve end that is *not* on an extreme and you get a teal **control po
 
 Hold [[⌥]] when releasing to mirror the value onto every compatible master. The setting interpolates between masters.
 
+For exact values, click the control point to select it: it shows its percentage, and [[↑]] and [[↓]] change it by 1 % – by 10 % with [[⇧]]. Click anywhere else to deselect it.
+
 Occasionally a curve can’t be meaningfully extended by default – no usable extreme exists anywhere near it, so Italify takes the curve as-is. The control still appears at such corners, resting at the square tick: drag it to add as much extension as the geometry supports (the track simply ends where the result would stop being useful).
 
-When the non-extreme node is the connection between two curves, the value is shared between the curves. A node with a partial setting is marked with a **teal circle** – select it to bring the control back. To return to the default, drag the point back to the round tick or select Remove Custom Extension [[⌫]].
+When the non-extreme node is the connection between two curves, the value is shared between the curves. A **doubled node** at the corner behaves like a single one: click either of the two and the control appears. A node with a partial setting is marked with a **teal circle** – select it to bring the control back. To return to the default, drag the point back to the round tick or select Remove Custom Extension [[⌫]].
 
 A segment tagged [No Curve Correction](#no-curve-correction) offers no control: it isn’t corrected, so there is nothing to extend. A stored setting on such a node draws greyed and is ignored until the segment is corrected again.
 
@@ -90,7 +92,7 @@ A **terminal** is a straight segment that caps a stroke – the flat cut of a *c
 
 Select the two on-curve nodes at the ends of the segment and press [[C]] (think of *C*ap), or right-click and choose *Toggle Terminal*. There is no restriction on the two neighbours – a straight cut holds its cleanest when they are roughly parallel, but the choice is yours; the filter keeps whatever you tag. The segment draws in green. To hand a segment back to the automatic detection, clear its tag.
 
-This works even when the terminal’s visible corners are **open corners** or when the outline carries a **duplicate node** at a corner: the tool looks past the short connector to the real curve or line on the other side, and the kept angle is measured at the visible intersection – which is also where the green highlight is drawn. The open corners themselves survive the correction: only the tagged line rotates, and the overlap structure stays intact.
+This works even when the terminal’s visible corners are **open corners** or when the outline carries a **duplicate node** at a corner: the tool looks past the short connector to the real curve or line on the other side, and the kept angle is measured at the visible intersection – which is also where the green highlight is drawn. The open corners themselves survive the correction: only the tagged line moves, and the overlap structure stays intact. Angle and position both apply to the visible cut – the part of the line between the two intersections.
 
 ### A terminal’s own angle and position {#terminal-settings}
 
@@ -98,6 +100,10 @@ The filter’s two *Keep terminals* sliders apply to every terminal alike. If yo
 
 - **Position** adjusts how far the terminal follows the original correction’s position, versus a purely slanted position (no vertical change).
 - **Angle** adjusts, you guessed it, the terminal’s angle.
+
+Drag a control, or click it to select it and step its value with [[↑]] and [[↓]] – 1 % at a time, 10 % with [[⇧]].
+
+The controls sit on the corrected terminal, so they need a slant to work with. In an **upright master** with the filter’s angle locked to the layer there is none – but that master may well be the source another one is [generated from](filter#generate-from), and then its terminals are the ones to set. There, the same two controls appear as short horizontal sliders next to the selected terminal, and work the same way.
 
 A terminal with its own settings shows a small **reset button**: a circled [[↺]]. Click it to remove the custom settings. With the terminal selected, [[⌫]] does the same, as does *Remove Custom Terminal Settings* in the right-click menu. Hold [[⌥]] to do it in all compatible masters. The values copy, paste and propagate with the other tags.
 
