@@ -13,7 +13,7 @@ Select the curve end that is *not* on an extreme and you get a teal **control po
 - The **round tick** fully extends the curve – the default.
 - The **square tick** is the same as [Limit Curve](#limit-curve), where the curve is taken as-is.
 
-Hold [[⌥]] when releasing to mirror the value onto every compatible master. The setting interpolates between masters.
+Hold [[⌥]] when releasing to mirror the value onto every compatible master. Each master keeps its own value, and when Italify runs [at export](filter#export) an instance between masters gets a value in between – halfway between a master at 20 % and one at 80 %, the curve is extended by 50 %. A master without a setting counts as the default, 100 %.
 
 For exact values, click the control point to select it: it shows its percentage, and [[↑]] and [[↓]] change it by 1 % – by 10 % with [[⇧]]. Click anywhere else to deselect it.
 
@@ -105,7 +105,7 @@ Drag a control, or click it to select it and step its value with [[↑]] and [[�
 
 The controls sit on the corrected terminal, so they need a slant to work with. In an **upright master** with the filter’s angle locked to the layer there is none – but that master may well be the source another one is [generated from](filter#generate-from), and then its terminals are the ones to set. There, the same two controls appear as short horizontal sliders next to the selected terminal, and work the same way.
 
-A terminal with its own settings shows a small **reset button**: a circled [[↺]]. Click it to remove the custom settings. With the terminal selected, [[⌫]] does the same, as does *Remove Custom Terminal Settings* in the right-click menu. Hold [[⌥]] to do it in all compatible masters. The values copy, paste and propagate with the other tags.
+A terminal with its own settings shows a small **reset button**: a circled [[↺]]. Click it to remove the custom settings. With the terminal selected, [[⌫]] does the same, as does *Remove Custom Terminal Settings* in the right-click menu. Hold [[⌥]] to do it in all compatible masters. The values copy, paste and propagate with the other tags. Like the curve extension, they are interpolated when an instance between masters is [exported](filter#export); a master where the terminal has no settings of its own contributes the filter’s values for that master.
 
 One related behaviour: an [anchor](anchor-links) linked to a node that sits on a terminal follows that node **fully, in both x and y** – a terminal is a moving cut, so an anchor on it rides along completely rather than tracking only its horizontal shift.
 

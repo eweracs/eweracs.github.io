@@ -107,6 +107,10 @@ Italify;angle:10;exclude:A,B,*-ar
 
 `include` means “run *only* on these glyphs”; `exclude` means “run on everything *except* these”. The two can’t be combined – if both are given, `include` wins. A scoped-out glyph is left completely untouched.
 
+Saved parameters apply at export too. For an instance between masters, anything saved per master – a *Master* scope, a *Group (master)* slot, a *Layer* – is interpolated along with the outlines: halfway between a Regular saved at 40 % curve correction and a Bold at 100 %, the instance gets 70 %. An instance beyond the outermost master takes that master’s value. The same goes for the amounts stored on nodes – a [curve extension](tags#curve-extension) and a [terminal’s own angle and position](tags#terminal-settings). Stems and the other tags are not amounts and cannot be interpolated: the instance takes them from the first master it is made from, so keep them in step across masters (hold [[⌥]] when tagging).
+
+If you work with **master credits**, the filter runs on an instance when every master that instance is interpolated from is [activated](settings#licences): an instance sitting on a master needs that master, an instance between Regular and Bold needs both. An instance with a master that isn’t activated is exported upright, as if the parameter weren’t there. With a time pass, every instance is covered.
+
 At export the angle is also written into each generated instance’s metadata: Glyphs derives `post.italicAngle`, the `hhea` caret slope and related fields from it, so the exported italics carry the correct angle without you ever editing the upright source’s *Font Info*.
 
 ```screenshot
