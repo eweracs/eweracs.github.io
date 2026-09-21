@@ -6,11 +6,11 @@
 
 The *Italify Tagger* (toolbar icon, shortcut [[C]]) is where you can describe glyph features to the filter – diagonals to correct, how anchors should move, specific corrections. It is a metadata editor: it never moves points itself. Everything you tag is stored on the nodes in the file and drawn on the canvas, so what you see with the tool active is exactly what the filter will read.
 
-It works with two kinds of marks – **stems** and **tags** – and additionally lets you link Glyphs *anchors* to nodes. Each has its own chapter:
+It works with two kinds of marks – **diagonals** and **tags** – and additionally lets you link Glyphs *anchors* to nodes. Each has its own chapter:
 
 ```cards
-## [Stems](stems)
-Groups of nodes the filter corrects together as one rigid unit, with their own set of options.
+## [Diagonals](diagonals)
+Diagonal strokes the filter corrects as one rigid unit, with their own set of options.
 ## [Tags](tags)
 Per-node marks that change how the filter treats a single spot.
 ## [Anchor links](anchor-links)

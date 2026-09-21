@@ -14,14 +14,14 @@ The advised order of steps for italicising a project – from clean upright draw
 Named sets of glyphs that share parameters – tune “all the rounds” together.
 ## [The tagger](tagger)
 The Edit View tool that describes your glyphs to the filter, plus [navigation and the live preview](tagger#preview).
-## [Stems](stems)
-Groups of nodes corrected as one rigid unit: [creating them](stems#creating-stems), [anchored edges](stems#anchor-edges), [hinge corners](stems#hinge-corners), [extras](stems#extras), and [repair](stems#corruption).
+## [Diagonals](diagonals)
+Diagonal strokes corrected as one rigid unit: [creating them](diagonals#creating-diagonals), [anchored edges](diagonals#anchor-edges), [hinge corners](diagonals#hinge-corners), [extras](diagonals#extras), and [repair](diagonals#corruption).
 ## [Tags](tags)
 Per-node marks: [Curve Extension](tags#curve-extension) (with [Limit Curve](tags#limit-curve)), [No Curve Correction](tags#no-curve-correction), [Inktrap](tags#inktrap), [Y-Snap](tags#snap-y), and [Terminal](tags#terminal).
 ## [Anchor links](anchor-links)
 Tie Glyphs anchors to outline nodes so they ride along through the correction.
 ## [Copy, paste & propagate](copy-paste)
-Move stems, tags and anchor links between layers – and [across masters](copy-paste#masters).
+Move diagonals, tags and anchor links between layers – and [across masters](copy-paste#masters).
 ## [The Glyph → Italify menu](glyph-menu)
 Batch verbs that run across every selected glyph and layer at once.
 ## [Settings and licences](settings)

@@ -31,7 +31,7 @@ So far, the most popular approaches, limited to curve correction, have been:
 5. Another stem-based [algorithm](https://github.com/googlefonts/roboto-2/blob/main/scripts/lib/fontbuild/italics.py) used to generate [Roboto](https://fonts.google.com/specimen/Roboto)’s obliques. The resulting obliques have the same problems as Inter.
 6. Various other combinations (as demonstrated by [Jeremy Tribby](https://vimeo.com/1059825184)).
 
-Italify, in stark contrast, actually produces usable results. It is a stem-agnostic, purely geometrical algorithm. It guarantees master compatibility, as it doesn’t add or remove any nodes, and all horizontal extremes stay perfectly on their height coordinates. Notably, Italify also corrects diagonal stems, not only curves.
+Italify, in stark contrast, actually produces usable results. It is a stem-agnostic, purely geometrical algorithm. It guarantees master compatibility, as it doesn’t add or remove any nodes, and all horizontal extremes stay perfectly on their height coordinates. Notably, Italify also corrects diagonals, not only curves.
 
 ## What designers say {#voices}
 

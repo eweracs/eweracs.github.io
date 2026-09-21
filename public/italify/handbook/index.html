@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Italify Handbook</title>
-<meta name="description" content="The Italify handbook: one chapter per topic, from installation and the typical workflow to the filter, the tagger, stems, tags and anchor links.">
+<meta name="description" content="The Italify handbook: one chapter per topic, from installation and the typical workflow to the filter, the tagger, diagonals, tags and anchor links.">
 <link rel="icon" href="/icon.svg" type="image/svg+xml" sizes="any">
 <!-- Set the theme before first paint to avoid a flash of the wrong mode:
      stored choice wins, otherwise follow the OS preference. -->
@@ -20,9 +20,11 @@
 </script>
 <script>
 (function () {
-	var map = { "installation": "installation", "workflow": "workflow", "filter": "filter", "parameters": "filter", "saving-parameters": "filter", "export": "filter", "hidden-settings": "filter", "groups": "groups", "tagger": "tagger", "preview": "tagger", "stem-marks": "stems", "stems": "stems", "creating-stems": "stems", "anchor-edges": "stems", "hinge-corners": "stems", "flip-axis": "stems", "extras": "stems", "corner-swap": "stems", "corruption": "stems", "node-flags": "tags", "curve-extension": "tags", "limit-curve": "tags", "no-curve-correction": "tags", "inktrap": "tags", "snap-y": "tags", "terminal": "tags", "anchor-links": "anchor-links", "copy-paste": "copy-paste", "masters": "copy-paste", "glyph-menu": "glyph-menu", "tips": "tips", "shortcuts": "shortcuts" };
+	var map = { "installation": "installation", "workflow": "workflow", "filter": "filter", "parameters": "filter", "saving-parameters": "filter", "export": "filter", "hidden-settings": "filter", "groups": "groups", "tagger": "tagger", "preview": "tagger", "stem-marks": "diagonals#diagonal-marks", "stems": "diagonals#diagonals", "creating-stems": "diagonals#creating-diagonals", "diagonal-marks": "diagonals", "diagonals": "diagonals", "creating-diagonals": "diagonals", "anchor-edges": "diagonals", "hinge-corners": "diagonals", "flip-axis": "diagonals", "extras": "diagonals", "corner-swap": "diagonals", "corruption": "diagonals", "node-flags": "tags", "curve-extension": "tags", "limit-curve": "tags", "no-curve-correction": "tags", "inktrap": "tags", "snap-y": "tags", "terminal": "tags", "anchor-links": "anchor-links", "copy-paste": "copy-paste", "masters": "copy-paste", "glyph-menu": "glyph-menu", "tips": "tips", "shortcuts": "shortcuts" };
 	var hash = location.hash.slice(1);
-	if (hash && map[hash]) location.replace(map[hash] + "#" + hash);
+	// A value carrying its own #anchor renames the anchor on the way
+	// (the Stems chapter became Diagonals, anchors included).
+	if (hash && map[hash]) location.replace(map[hash].indexOf("#") >= 0 ? map[hash] : map[hash] + "#" + hash);
 })();
 </script>
 <link rel="stylesheet" href="../styles.css?v=25">
@@ -56,6 +58,6 @@
 </footer>
 
 <script src="../vendor/marked.min.js"></script>
-<script src="../main.js?v=17"></script>
+<script src="../main.js?v=18"></script>
 </body>
 </html>

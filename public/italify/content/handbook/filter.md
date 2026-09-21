@@ -13,8 +13,8 @@ note 19%: **Generate from** – select another master as the outline source.
 note 30%: **Saved parameters** – Use the same parameters for the whole font, single masters, glyphs, layers or groups.
 note 42%: **Curve correction** – rebalances curves against the shear’s distortion.
 note 54%: **Keep terminals** – preserves the cut of stroke endings: its *Angle* and its *Position* along the stroke.
-note 67.5%: **Diagonal correction** – corrects tagged diagonal stems’ width and angle.
-note 78%: **Stem compensation** – how much of a stem’s width change is restored.
+note 67.5%: **Diagonal correction** – corrects tagged diagonals’ width and angle.
+note 78%: **Stem compensation** – widens the whole outline to restore the weight vertical stems lose.
 note 91%: **Keep nodes on extremes** – Attempts to keep nodes on orthogonal extremes.
 note 99%: The gear menu holds *Copy Filter Parameter* for [export](#export) and *Settings and Licences…*.
 ```
@@ -31,11 +31,11 @@ How strongly curved segments are corrected against the distortion the shear intr
 
 #### Diagonal correction | 0–100% | default 100%
 
-The equivalent control for straight diagonal segments. Out of the box this applies **only to tagged stems** – untagged diagonals are simply slanted – so the correction never second-guesses geometry you haven’t described. (An [advanced setting](#hidden-settings) extends it to all diagonals.)
+The equivalent control for straight diagonal segments. Out of the box this applies **only to [tagged diagonals](diagonals)** – untagged diagonal segments are simply slanted – so the correction never second-guesses geometry you haven’t described. (An [advanced setting](#hidden-settings) extends it to every diagonal segment.)
 
 #### Stem compensation | 0–100% | default 100%
 
-Controls how much of the width change that slanting causes in stems is compensated. At 100%, a tagged stem comes out of the filter measuring what it did upright; at 0%, it keeps whatever width the shear left it with.
+Slanting thins every vertical stem: measured across the stroke, a sheared stem is narrower than it was upright. Stem compensation makes up for that by scaling the **whole outline horizontally** – every glyph by the same factor, tagged or not. At 100%, a vertical stem comes out of the filter measuring what it did upright; at 0%, it keeps whatever width the shear left it with. It is independent of [tagged diagonals](diagonals), which are *Diagonal correction*’s business.
 
 The **advance width grows with it**. Because compensation widens the outline horizontally about the glyph centre, the layer’s advance is widened by the same factor and the outline is shifted by half the difference, so the growth is split equally between the two sidebearings – the outline never eats into a fixed advance. At 0 % (or 0° angle) the advance is left untouched.
 
@@ -54,7 +54,7 @@ Normally, the filter runs directly on the selected layer’s outline. You can, h
 
 A few things worth knowing:
 
-- Stems, tags and anchor links travel with the outlines, so they only need to exist on the **source** layer. Anything drawn or tagged by hand on the generated layer is replaced on the next run – switch *Generate from* off before retouching a layer you want to keep.
+- Diagonals, tags and anchor links travel with the outlines, so they only need to exist on the **source** layer. Anything drawn or tagged by hand on the generated layer is replaced on the next run – switch *Generate from* off before retouching a layer you want to keep.
 - The generated layer still uses **its own** [saved parameters](#saving-parameters).
 - With several glyphs open, the checkbox and popup apply to all of them at once. A special layer exists in one glyph only, so choosing one affects just the glyphs that have it. The checkbox shows a dash when the open layers differ.
 - The setting only concerns the source file. It plays no part [at export](#export), where the filter runs on interpolated instances.
@@ -90,12 +90,12 @@ You can keep your sources upright and let Italify run when instances are generat
 Add a `Filter` custom parameter to an instance (Font Info → Exports) with a value like:
 
 ```
-Italify;angle:9.5;curveCorrection:0.8;diagonalCorrection:0.9;stemCompensation:1;keepTerminalAngle:1;keepTerminalPosition:1;diagonalStemsOnly:1;keepExtremes:0
+Italify;angle:9.5;curveCorrection:0.8;diagonalCorrection:0.9;stemCompensation:1;keepTerminalAngle:1;keepTerminalPosition:1;taggedDiagonalsOnly:1;keepExtremes:0
 ```
 
 You don’t need to type this: open the filter dialogue, set the parameters the way you want them, and choose *Copy Filter Parameter* from the dialogue’s gear menu – filter parameter lands on your clipboard ready to paste into the instance. All arguments are optional and named, so partial parameters like `Italify;angle:10` work and fall back to the defaults above. The older single `keepTerminals:` argument is still read – as `keepTerminalAngle`, which is what it was.
 
-Two arguments are **switches** rather than values: **`keepExtremes`** and **`diagonalStemsOnly`**. Write them as `1` or `0` (`true`/`false` and `yes`/`no` are accepted too). `keepExtremes:1` turns [Keep nodes on extremes](#parameters) on for the export; leave the argument out and it stays off, matching the checkbox’s default. `diagonalStemsOnly` mirrors the [advanced setting](#hidden-settings) *Correct tagged stems only* and is on unless you set it to `0`.
+Two arguments are **switches** rather than values: **`keepExtremes`** and **`taggedDiagonalsOnly`**. Write them as `1` or `0` (`true`/`false` and `yes`/`no` are accepted too). `keepExtremes:1` turns [Keep nodes on extremes](#parameters) on for the export; leave the argument out and it stays off, matching the checkbox’s default. `taggedDiagonalsOnly` mirrors the [advanced setting](#hidden-settings) *Correct tagged diagonals only* and is on unless you set it to `0`. (Parameters written by earlier versions call it `diagonalStemsOnly`; that spelling is still understood.)
 
 Neither switch takes part in the [saved-parameter cascade](#saving-parameters) – only the numeric parameters (the sliders) can be saved to a layer, glyph, group, master or font. At export the two switches are therefore read from the `Filter` parameter alone and apply to every glyph the filter runs on.
 
@@ -107,7 +107,7 @@ Italify;angle:10;exclude:A,B,*-ar
 
 `include` means “run *only* on these glyphs”; `exclude` means “run on everything *except* these”. The two can’t be combined – if both are given, `include` wins. A scoped-out glyph is left completely untouched.
 
-Saved parameters apply at export too. For an instance between masters, anything saved per master – a *Master* scope, a *Group (master)* slot, a *Layer* – is interpolated along with the outlines: halfway between a Regular saved at 40 % curve correction and a Bold at 100 %, the instance gets 70 %. An instance beyond the outermost master takes that master’s value. The same goes for the amounts stored on nodes – a [curve extension](tags#curve-extension) and a [terminal’s own angle and position](tags#terminal-settings). Stems and the other tags are not amounts and cannot be interpolated: the instance takes them from the first master it is made from, so keep them in step across masters (hold [[⌥]] when tagging).
+Saved parameters apply at export too. For an instance between masters, anything saved per master – a *Master* scope, a *Group (master)* slot, a *Layer* – is interpolated along with the outlines: halfway between a Regular saved at 40 % curve correction and a Bold at 100 %, the instance gets 70 %. An instance beyond the outermost master takes that master’s value. The same goes for the amounts stored on nodes – a [curve extension](tags#curve-extension) and a [terminal’s own angle and position](tags#terminal-settings). Diagonals and the other tags are not amounts and cannot be interpolated: the instance takes them from the first master it is made from, so keep them in step across masters (hold [[⌥]] when tagging).
 
 If you work with **master credits**, the filter runs on an instance when every master that instance is interpolated from is [activated](settings#licences): an instance sitting on a master needs that master, an instance between Regular and Bold needs both. An instance with a master that isn’t activated is exported upright, as if the parameter weren’t there. With a time pass, every instance is covered.
 
@@ -127,10 +127,10 @@ A few behaviours have no control in the dialogue. They live in [*Settings and Li
 |---|---|---|
 | *Flatten intersections* | on | When the correction pushes an outline past an adjacent short line (typical at tight junctions), Italify collapses the junction into a clean, master-compatible doubled node – the way you would draw it by hand. Switch it off to keep the uncollapsed geometry. |
 | *Keep line-to-curve corners on metrics* | on | An **unsmooth line-to-curve** node – where a straight segment meets a curve – whose height sits exactly on a metric (baseline, x-height, …) is held to that metric through the correction, so such corners don’t drift off it. Smooth nodes, line-to-line corners and curve-to-curve corners are left free. The tagger marks every node this affects with a violet pin. Switch it off to disable the snap entirely. |
-| *Correct tagged stems only* | on | Diagonal correction and stem compensation apply only to tagged stems. Switch it off to correct every diagonal segment, tagged or not. For untagged stems, the transformation origin will be (half layer width, half x-height). Experimental use only, results will be unexpected. |
+| *Correct tagged diagonals only* | on | Diagonal correction applies only to tagged diagonals. Switch it off to correct every diagonal segment, tagged or not. For untagged segments, the transformation origin will be (half layer width, half x-height). Experimental use only, results will be unexpected. |
 | *Keep nodes on extremes – tolerance* | 1 unit | With [Keep nodes on extremes](#parameters) on, a node is only moved onto the extreme when the corrected shape can be re-drawn within this distance; otherwise it stays where the correction put it. |
 
-Scripts can still set them as `Glyphs.defaults` – the keys are `flattenIntersections`, `autoSnapToMetrics`, `diagonalCorrectionStemsOnly` and `keepExtremesTolerance`, each prefixed with `com.eweracs.italify.`:
+Scripts can still set them as `Glyphs.defaults` – the keys are `flattenIntersections`, `autoSnapToMetrics`, `taggedDiagonalsOnly` and `keepExtremesTolerance`, each prefixed with `com.eweracs.italify.`:
 
 ```
 Glyphs.defaults["com.eweracs.italify.flattenIntersections"] = False

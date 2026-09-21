@@ -392,7 +392,7 @@
 		{ slug: "filter", title: "The filter" },
 		{ slug: "groups", title: "Glyph groups" },
 		{ slug: "tagger", title: "The tagger" },
-		{ slug: "stems", title: "Stems" },
+		{ slug: "diagonals", title: "Diagonals" },
 		{ slug: "tags", title: "Tags" },
 		{ slug: "anchor-links", title: "Anchor links" },
 		{ slug: "copy-paste", title: "Copy, paste & propagate" },

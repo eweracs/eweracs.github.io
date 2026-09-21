@@ -1,6 +1,6 @@
 # Italify Python API
 
-@lede Author stems, tags and anchor links from Macro-panel scripts and batch jobs – the same metadata the tagger writes, scripted.
+@lede Author diagonals, tags and anchor links from Macro-panel scripts and batch jobs – the same metadata the tagger writes, scripted.
 
 ```toc
 1. [Overview](#overview)
@@ -8,10 +8,10 @@
 3. [Results & strict mode](#results)
 4. [Quick start](#quick-start)
 5. [Reading tags](#reads)
-6. [Stems](#stems)
+6. [Diagonals](#diagonals)
 7. [Corner roles](#corner-roles)
 8. [Extras](#extras)
-9. [Stem objects](#stem-objects)
+9. [Diagonal objects](#diagonal-objects)
 10. [Tags](#tags)
 11. [Anchor links](#anchor-links)
 12. [Bulk operations](#bulk)
@@ -23,6 +23,8 @@
 ## Overview {#overview}
 
 The `italify` module exposes the [Tagger](handbook/tagger#tagger)’s authoring verbs to Python. It accesses the same methods the items in the [Glyph → Italify menu](handbook/glyph-menu#glyph-menu) use. A script therefore writes the exact `userData` the filter reads – and, like the tool, it only writes metadata, with one exception: the [`correct`](#correction) verb runs the filter’s actual correction pass, so a script can drive the whole tag-then-correct workflow headless.
+
+**A note on names:** the API speaks of **[diagonals](handbook/diagonals)**, like the tagger and the handbook. Up to v0.29 they were called *stems*: `add_stem`, `stem_id`, `ItalifyStem` and the `stems=` keywords are now `add_diagonal`, `diagonal_id`, `ItalifyDiagonal` and `diagonals=`, and `diagonal_correction_stems_only` is `tagged_diagonals_only`. There are no aliases for the old names. The `userData` keys were renamed with them (`italify.stemId` → `italify.diagonalId`, and so on): a font opened in Glyphs is migrated as it opens, and `correct` migrates the layer it is given – but a script that reads the raw keys of a font it loaded itself should expect either spelling until that font has been saved by the current version. `stem_compensation` is unrelated – it is the filter’s *Stem compensation* parameter, about vertical stems – and keeps its name.
 
 ## Installation {#installation}
 
@@ -36,9 +38,9 @@ import italify
 
 Every **mutating** call returns an `ItalifyResult`:
 
-- it is **truthy on success**, falsy on refusal – so `if italify.add_stem(…):` reads naturally;
-- `.stem_id` is the new stem’s UUID string (for `add_stem` / `add_stem_explicit`), otherwise `None`;
-- `.count` is how many things the call touched – masters mirrored to, stems repaired, segments tagged;
+- it is **truthy on success**, falsy on refusal – so `if italify.add_diagonal(…):` reads naturally;
+- `.diagonal_id` is the new diagonal’s UUID string (for `add_diagonal` / `add_diagonal_explicit`), otherwise `None`;
+- `.count` is how many things the call touched – masters mirrored to, diagonals repaired, segments tagged;
 - on refusal, `.reason` is a [machine code](#refusals) and `.message` a human-readable sentence.
 
 Refusals are **returned, not raised**, by default. Set `italify.strict = True` (module-wide) or pass `strict=True` to a single call to make a refusal raise `ItalifyError` (carrying the same `.reason` / `.message`) instead. Read calls return plain values – lists, tuples, or booleans.
@@ -52,28 +54,28 @@ import italify
 
 layer = Glyphs.font.selectedLayers[0]
 
-# Tag a stem from the current node selection.
-r = italify.add_stem(layer, layer.selection)
+# Tag a diagonal from the current node selection.
+r = italify.add_diagonal(layer, layer.selection)
 if r:
-    print("tagged stem", r.stem_id)
+    print("tagged diagonal", r.diagonal_id)
     # Pin one edge of it.
     a, b = layer.selection[0], layer.selection[1]
-    italify.set_anchored_edge(layer, r.stem_id, a, b)
+    italify.set_anchored_edge(layer, r.diagonal_id, a, b)
 else:
     print("refused:", r.reason, "–", r.message)
 
 # Or let the auto-tagger do the whole layer, then mirror to all masters.
 italify.auto_tag(layer)
-italify.propagate_stems(layer)
+italify.propagate_diagonals(layer)
 ```
 
 ## Reading tags {#reads}
 
 Read calls never refuse; they return plain values.
 
-**`stem_ids(layer)`**
+**`diagonal_ids(layer)`**
 
-Every stem tagged on the layer.
+Every diagonal tagged on the layer.
 
 *Parameters:*
 
@@ -81,81 +83,81 @@ Every stem tagged on the layer.
 
 *Returns:*
 
-- `list[str]` – the stem-id (UUID) strings, sorted
+- `list[str]` – the diagonal-id (UUID) strings, sorted
 
-**`corners(layer, stem_id)`**
+**`corners(layer, diagonal_id)`**
 
-A stem’s corner nodes.
+A diagonal’s corner nodes.
 
 *Parameters:*
 
 - `layer` (`GSLayer`)
-- `stem_id` (`str`) – the stem’s UUID
+- `diagonal_id` (`str`) – the diagonal’s UUID
 
 *Returns:*
 
 - `list[GSNode]` – the (up to four) corner nodes
 
-**`extras(layer, stem_id)`**
+**`extras(layer, diagonal_id)`**
 
-A stem’s non-corner member nodes.
+A diagonal’s non-corner member nodes.
 
 *Parameters:*
 
 - `layer` (`GSLayer`)
-- `stem_id` (`str`) – the stem’s UUID
+- `diagonal_id` (`str`) – the diagonal’s UUID
 
 *Returns:*
 
 - `list[GSNode]` – the member nodes that aren’t corners (on- and off-curve)
 
-**`is_corrupted(layer, stem_id)`**
+**`is_corrupted(layer, diagonal_id)`**
 
-Whether a stem’s tags still form a valid frame.
+Whether a diagonal’s tags still form a valid frame.
 
 *Parameters:*
 
 - `layer` (`GSLayer`)
-- `stem_id` (`str`) – the stem’s UUID
+- `diagonal_id` (`str`) – the diagonal’s UUID
 
 *Returns:*
 
 - `bool` – `True` when the tags no longer form a valid frame
 
-**`is_flipped(layer, stem_id)`**
+**`is_flipped(layer, diagonal_id)`**
 
-Whether a stem’s axis is flipped.
+Whether a diagonal’s axis is flipped.
 
 *Parameters:*
 
 - `layer` (`GSLayer`)
-- `stem_id` (`str`) – the stem’s UUID
+- `diagonal_id` (`str`) – the diagonal’s UUID
 
 *Returns:*
 
 - `bool` – `True` when the axis is flipped
 
-**`anchored_edge(layer, stem_id)`**
+**`anchored_edge(layer, diagonal_id)`**
 
-A stem’s anchored edge, if any.
+A diagonal’s anchored edge, if any.
 
 *Parameters:*
 
 - `layer` (`GSLayer`)
-- `stem_id` (`str`) – the stem’s UUID
+- `diagonal_id` (`str`) – the diagonal’s UUID
 
 *Returns:*
 
 - `tuple[GSNode, GSNode] | None` – the edge’s two corner nodes, or `None` if unset
 
-**`hinge_corners(layer, stem_id)`**
+**`hinge_corners(layer, diagonal_id)`**
 
-A stem’s hinge pair, if any.
+A diagonal’s hinge pair, if any.
 
 *Parameters:*
 
 - `layer` (`GSLayer`)
-- `stem_id` (`str`) – the stem’s UUID
+- `diagonal_id` (`str`) – the diagonal’s UUID
 
 *Returns:*
 
@@ -258,11 +260,11 @@ A terminal’s [own angle / position](handbook/tags#terminal-settings) – the v
 
 - `float | None` – the stored value (angle `0 … 1`; position `−1 … 2`, where `0` is where the curve correction carries the cut and `1` where a plain slant puts it), or `None` when the terminal follows the filter
 
-## Stems {#stems}
+## Diagonals {#diagonals}
 
-**`add_stem(layer, nodes, all_masters=False)`**
+**`add_diagonal(layer, nodes, all_masters=False)`**
 
-Tag a stem from ≥ 4 on-curve nodes; corners are auto-picked, the rest become extras.
+Tag a diagonal from ≥ 4 on-curve nodes; corners are auto-picked, the rest become extras.
 
 *Parameters:*
 
@@ -272,11 +274,11 @@ Tag a stem from ≥ 4 on-curve nodes; corners are auto-picked, the rest become e
 
 *Returns:*
 
-- `ItalifyResult` – `.stem_id` carries the new stem’s UUID
+- `ItalifyResult` – `.diagonal_id` carries the new diagonal’s UUID
 
-**`add_stem_explicit(layer, corners, extras=None, all_masters=False)`**
+**`add_diagonal_explicit(layer, corners, extras=None, all_masters=False)`**
 
-Tag a stem from an explicit four-corner set plus optional extras.
+Tag a diagonal from an explicit four-corner set plus optional extras.
 
 *Parameters:*
 
@@ -287,30 +289,30 @@ Tag a stem from an explicit four-corner set plus optional extras.
 
 *Returns:*
 
-- `ItalifyResult` – `.stem_id` carries the new stem’s UUID
+- `ItalifyResult` – `.diagonal_id` carries the new diagonal’s UUID
 
-**`delete_stem(layer, stem_id, all_masters=False)`**
+**`delete_diagonal(layer, diagonal_id, all_masters=False)`**
 
-Remove a stem’s tags.
+Remove a diagonal’s tags.
 
 *Parameters:*
 
 - `layer` (`GSLayer`)
-- `stem_id` (`str`) – the stem’s UUID
+- `diagonal_id` (`str`) – the diagonal’s UUID
 - `all_masters` (`bool`) – also clear it from every compatible master
 
 *Returns:*
 
 - `ItalifyResult`
 
-**`set_flipped(layer, stem_id, flipped, all_masters=False)`**
+**`set_flipped(layer, diagonal_id, flipped, all_masters=False)`**
 
-Set the stem’s [flip-axis](handbook/stems#flip-axis) state.
+Set the diagonal’s [flip-axis](handbook/diagonals#flip-axis) state.
 
 *Parameters:*
 
 - `layer` (`GSLayer`)
-- `stem_id` (`str`) – the stem’s UUID
+- `diagonal_id` (`str`) – the diagonal’s UUID
 - `flipped` (`bool`) – the state’s new value
 - `all_masters` (`bool`) – also set it on every compatible master
 
@@ -320,16 +322,16 @@ Set the stem’s [flip-axis](handbook/stems#flip-axis) state.
 
 ## Corner roles {#corner-roles}
 
-A stem has at most one pin – setting an anchored edge clears any hinge and vice versa.
+A diagonal has at most one pin – setting an anchored edge clears any hinge and vice versa.
 
-**`set_anchored_edge(layer, stem_id, node_a, node_b, on=True, all_masters=False)`**
+**`set_anchored_edge(layer, diagonal_id, node_a, node_b, on=True, all_masters=False)`**
 
-Pin (or, with `on=False`, clear) the [anchored edge](handbook/stems#anchor-edges) formed by two adjacent corners.
+Pin (or, with `on=False`, clear) the [anchored edge](handbook/diagonals#anchor-edges) formed by two adjacent corners.
 
 *Parameters:*
 
 - `layer` (`GSLayer`)
-- `stem_id` (`str`) – the stem’s UUID
+- `diagonal_id` (`str`) – the diagonal’s UUID
 - `node_a` (`GSNode`) – one corner of the edge
 - `node_b` (`GSNode`) – the adjacent corner forming the edge
 - `on` (`bool`) – pin when `True`, clear when `False`
@@ -339,14 +341,14 @@ Pin (or, with `on=False`, clear) the [anchored edge](handbook/stems#anchor-edges
 
 - `ItalifyResult`
 
-**`set_hinge_corners(layer, stem_id, node_a, node_b, on=True, all_masters=False)`**
+**`set_hinge_corners(layer, diagonal_id, node_a, node_b, on=True, all_masters=False)`**
 
-Pin (or clear) two diagonally-opposed corners as a [hinge](handbook/stems#hinge-corners).
+Pin (or clear) two opposite corners as a [hinge](handbook/diagonals#hinge-corners).
 
 *Parameters:*
 
 - `layer` (`GSLayer`)
-- `stem_id` (`str`) – the stem’s UUID
+- `diagonal_id` (`str`) – the diagonal’s UUID
 - `node_a` (`GSNode`) – one corner
 - `node_b` (`GSNode`) – the diagonally-opposed corner
 - `on` (`bool`) – pin when `True`, clear when `False`
@@ -358,14 +360,14 @@ Pin (or clear) two diagonally-opposed corners as a [hinge](handbook/stems#hinge-
 
 ## Extras {#extras}
 
-**`add_extras(layer, stem_id, nodes, all_masters=False)`**
+**`add_extras(layer, diagonal_id, nodes, all_masters=False)`**
 
-Add nodes as [extras](handbook/stems#extras) of a stem.
+Add nodes as [extras](handbook/diagonals#extras) of a diagonal.
 
 *Parameters:*
 
 - `layer` (`GSLayer`)
-- `stem_id` (`str`) – the owning stem’s UUID
+- `diagonal_id` (`str`) – the owning diagonal’s UUID
 - `nodes` (sequence of `GSNode`) – the nodes to add, on- or off-curve
 - `all_masters` (`bool`) – also add them on every compatible master
 
@@ -375,71 +377,71 @@ Add nodes as [extras](handbook/stems#extras) of a stem.
 
 **`remove_extras(layer, nodes, all_masters=False)`**
 
-Remove nodes from whichever stem owns them.
+Remove nodes from whichever diagonal owns them.
 
 *Parameters:*
 
 - `layer` (`GSLayer`)
-- `nodes` (sequence of `GSNode`) – the extra nodes to detach; the owning stem is found automatically
+- `nodes` (sequence of `GSNode`) – the extra nodes to detach; the owning diagonal is found automatically
 - `all_masters` (`bool`) – also remove them on every compatible master
 
 *Returns:*
 
 - `ItalifyResult`
 
-Handles whose curve has **both** on-curve ends in the stem are locked in as extras; removing one is refused with `lockedHandle` until you take an end out of the stem.
+Handles whose curve has **both** on-curve ends in the diagonal are locked in as extras; removing one is refused with `lockedHandle` until you take an end out of the diagonal.
 
-## Stem objects {#stem-objects}
+## Diagonal objects {#diagonal-objects}
 
-An `ItalifyStem` reference lets you read and drive a stem directly instead of using methods to define and read it.
+An `ItalifyDiagonal` reference lets you read and drive a diagonal directly instead of using methods to define and read it.
 
-A reference stores only `(layer, stem_id)` and **reads through to the engine on every access** – it never caches. A stem deleted out from under it reports empty `corners` and `exists == False` rather than going stale.
+A reference stores only `(layer, diagonal_id)` and **reads through to the engine on every access** – it never caches. A diagonal deleted out from under it reports empty `corners` and `exists == False` rather than going stale.
 
 Get one three ways:
 
-**`stems(layer)`**
+**`diagonals(layer)`**
 
-Every tagged stem on the layer, as a list of `ItalifyStem` references.
-
-*Parameters:*
-
-- `layer` (`GSLayer`)
-
-*Returns:*
-
-- `list[ItalifyStem]` – one reference per tagged stem
-
-**`stem(layer, stem_id)`**
-
-A reference to a single stem id. The stem need not exist yet – check `.exists`.
+Every tagged diagonal on the layer, as a list of `ItalifyDiagonal` references.
 
 *Parameters:*
 
 - `layer` (`GSLayer`)
-- `stem_id` (`str`) – the stem’s UUID (need not exist yet)
 
 *Returns:*
 
-- `ItalifyStem` – a reference bound to that id
+- `list[ItalifyDiagonal]` – one reference per tagged diagonal
 
-**`result.stem`**
+**`diagonal(layer, diagonal_id)`**
 
-On a successful [`add_stem`](#stems) / `add_stem_explicit` result, the freshly-tagged stem as a reference.
+A reference to a single diagonal id. The diagonal need not exist yet – check `.exists`.
+
+*Parameters:*
+
+- `layer` (`GSLayer`)
+- `diagonal_id` (`str`) – the diagonal’s UUID (need not exist yet)
 
 *Returns:*
 
-- `ItalifyStem | None` – a reference to the new stem, or `None` on any other call
+- `ItalifyDiagonal` – a reference bound to that id
+
+**`result.diagonal`**
+
+On a successful [`add_diagonal`](#diagonals) / `add_diagonal_explicit` result, the freshly-tagged diagonal as a reference.
+
+*Returns:*
+
+- `ItalifyDiagonal | None` – a reference to the new diagonal, or `None` on any other call
 
 ### Reads – properties
 
 | Property | Value |
 |---|---|
-| `.id` | the stem’s UUID string |
-| `.exists` | `True` while the stem is still tagged on the layer |
+| `.id` | the diagonal’s UUID string |
+| `.exists` | `True` while the diagonal is still tagged on the layer |
 | `.corners` | the (up to four) corner `GSNode`s |
 | `.extras` | the non-corner member nodes (on- and off-curve) |
 | `.is_corrupted` | `True` if the tags no longer form a valid frame |
-| `.is_flipped` | `True` if the stem’s axis is flipped |
+| `.is_flipped` | `True` if the diagonal’s axis is flipped |
 | `.anchored_edge` | the [anchored edge](#corner-roles)’s two corners as a tuple, or `None` |
 | `.hinge_corners` | the hinge pair’s two corners as a tuple, or `None` |
 
@@ -449,29 +451,29 @@ Each returns an [`ItalifyResult`](#results) and keeps the underlying verb’s `a
 
 | Method | Does |
 |---|---|
-| `.set_flipped(flipped, all_masters=False)` | set the [flip-axis](handbook/stems#flip-axis) state |
-| `.set_anchored_edge(a, b, on=True, all_masters=False)` | pin (or clear) the [anchored edge](handbook/stems#anchor-edges) of two adjacent corners |
-| `.set_hinge_corners(a, b, on=True, all_masters=False)` | pin (or clear) two diagonally-opposed [hinge](handbook/stems#hinge-corners) corners |
-| `.add_extras(nodes, all_masters=False)` | add nodes as [extras](handbook/stems#extras) |
-| `.remove_extras(nodes, all_masters=False)` | remove nodes from whichever stem owns them |
-| `.propagate()` | mirror this stem to the glyph’s compatible masters (see [`propagate_stems`](#bulk); no `all_masters` – inherently all-masters) |
-| `.delete(all_masters=False)` | remove the stem’s tags |
+| `.set_flipped(flipped, all_masters=False)` | set the [flip-axis](handbook/diagonals#flip-axis) state |
+| `.set_anchored_edge(a, b, on=True, all_masters=False)` | pin (or clear) the [anchored edge](handbook/diagonals#anchor-edges) of two adjacent corners |
+| `.set_hinge_corners(a, b, on=True, all_masters=False)` | pin (or clear) two opposite [hinge](handbook/diagonals#hinge-corners) corners |
+| `.add_extras(nodes, all_masters=False)` | add nodes as [extras](handbook/diagonals#extras) |
+| `.remove_extras(nodes, all_masters=False)` | remove nodes from whichever diagonal owns them |
+| `.propagate()` | mirror this diagonal to the glyph’s compatible masters (see [`propagate_diagonals`](#bulk); no `all_masters` – inherently all-masters) |
+| `.delete(all_masters=False)` | remove the diagonal’s tags |
 
 ```python
 import italify
 
 layer = Glyphs.font.selectedLayers[0]
 
-# Tag a stem from the selection, then drive it as an object.
-r = italify.add_stem(layer, layer.selection)
+# Tag a diagonal from the selection, then drive it as an object.
+r = italify.add_diagonal(layer, layer.selection)
 if r:
-    s = r.stem  # the new ItalifyStem
+    s = r.diagonal  # the new ItalifyDiagonal
     a, b = s.corners[:2]  # two adjacent corners
     s.set_anchored_edge(a, b, all_masters=True)  # pin, mirrored to all masters
     print(s.id, "flipped?", s.is_flipped)
 
-# Sweep the layer: pin the first edge of every healthy, un-pinned stem.
-for s in italify.stems(layer):
+# Sweep the layer: pin the first edge of every healthy, un-pinned diagonal.
+for s in italify.diagonals(layer):
     if s.is_corrupted or s.anchored_edge:
         continue
     a, b = s.corners[:2]
@@ -480,7 +482,7 @@ for s in italify.stems(layer):
         print("skipped", s.id, "–", res.message)
 ```
 
-An `ItalifyStem` is a thin wrapper, so it refuses exactly as the free functions do: a write returns a falsy result carrying a [reason](#refusals); set `strict=True` (per call or module-wide) to raise [`ItalifyError`](#results) instead.
+An `ItalifyDiagonal` is a thin wrapper, so it refuses exactly as the free functions do: a write returns a falsy result carrying a [reason](#refusals); set `strict=True` (per call or module-wide) to raise [`ItalifyError`](#results) instead.
 
 ## Tags {#tags}
 
@@ -625,7 +627,7 @@ These mirror the [Glyph → Italify menu](handbook/glyph-menu#glyph-menu) verbs.
 
 **`auto_tag(layer)`**
 
-Run the stem [auto-tagger](handbook/stems#creating-stems) on the layer (active layer only; additive).
+Run the diagonal [auto-tagger](handbook/diagonals#creating-diagonals) on the layer (active layer only; additive).
 
 *Parameters:*
 
@@ -633,7 +635,7 @@ Run the stem [auto-tagger](handbook/stems#creating-stems) on the layer (active l
 
 *Returns:*
 
-- `ItalifyResult` – `.count` is how many stems were added
+- `ItalifyResult` – `.count` is how many diagonals were added
 
 **`auto_link_anchors(layer, anchor_names=None, exclude=None, all_masters=False)`**
 
@@ -660,7 +662,7 @@ for layer in Glyphs.font.selectedLayers:
 
 **`resolve_corrupted(layer, all_masters=False)`**
 
-[Repair or strip](handbook/stems#corruption) corrupted stems.
+[Repair or strip](handbook/diagonals#corruption) corrupted diagonals.
 
 *Parameters:*
 
@@ -669,11 +671,11 @@ for layer in Glyphs.font.selectedLayers:
 
 *Returns:*
 
-- `ItalifyResult` – `.count` is how many stems were acted on
+- `ItalifyResult` – `.count` is how many diagonals were acted on
 
-**`clear_stems(layer, all_masters=False)`**
+**`clear_diagonals(layer, all_masters=False)`**
 
-Remove every stem.
+Remove every diagonal.
 
 *Parameters:*
 
@@ -710,14 +712,14 @@ Remove every anchor link.
 
 - `ItalifyResult` – `.count` is how many layers were touched
 
-**`clear(layer, stems=True, tags=True, anchor_links=True, all_masters=False)`**
+**`clear(layer, diagonals=True, tags=True, anchor_links=True, all_masters=False)`**
 
 Clear a chosen mix of kinds in one undo group.
 
 *Parameters:*
 
 - `layer` (`GSLayer`)
-- `stems` (`bool`) – remove stems
+- `diagonals` (`bool`) – remove diagonals
 - `tags` (`bool`) – remove per-node tags
 - `anchor_links` (`bool`) – remove anchor links
 - `all_masters` (`bool`) – also clear every compatible master
@@ -726,18 +728,18 @@ Clear a chosen mix of kinds in one undo group.
 
 - `ItalifyResult` – `.count` is how many layers were touched
 
-**`propagate_stems(layer, stem_ids=None)`**
+**`propagate_diagonals(layer, diagonal_ids=None)`**
 
-Mirror stems to compatible masters.
+Mirror diagonals to compatible masters.
 
 *Parameters:*
 
 - `layer` (`GSLayer`)
-- `stem_ids` (sequence of `str`, optional) – the stem UUIDs to mirror; `None` mirrors all
+- `diagonal_ids` (sequence of `str`, optional) – the diagonal UUIDs to mirror; `None` mirrors all
 
 *Returns:*
 
-- `ItalifyResult` – `.count` is how many stems were mirrored
+- `ItalifyResult` – `.count` is how many diagonals were mirrored
 
 **`propagate_tags(layer, nodes=None)`**
 
@@ -765,14 +767,14 @@ Mirror anchor links to compatible masters.
 
 - `ItalifyResult` – `.count` is how many links were mirrored
 
-**`propagate(layer, stems=True, tags=True, anchor_links=True)`**
+**`propagate(layer, diagonals=True, tags=True, anchor_links=True)`**
 
 Mirror a chosen mix of kinds in one undo group.
 
 *Parameters:*
 
 - `layer` (`GSLayer`)
-- `stems` (`bool`) – mirror stems
+- `diagonals` (`bool`) – mirror diagonals
 - `tags` (`bool`) – mirror per-node tags
 - `anchor_links` (`bool`) – mirror anchor links
 
@@ -784,17 +786,17 @@ Mirror a chosen mix of kinds in one undo group.
 
 `propagate_*` only reaches compatible masters of the *same* glyph. To copy metadata **between two fonts**, use `transfer` – it takes an explicit target layer, so source and target may belong to different fonts.
 
-**`transfer(source_layer, target_layer, stems=True, tags=True, anchor_links=True, replace=True)`**
+**`transfer(source_layer, target_layer, diagonals=True, tags=True, anchor_links=True, replace=True)`**
 
 Copy a chosen mix of kinds from one layer onto another, in one undo group.
 
-The two layers must *index-map* – the same path and node counts, and the same on-/off-curve at every index (the same structural match `propagate_*` requires of compatible masters). The copy maps purely by `(path, node)` index, so stem ids, corner roles, anchored edges, hinges, the flip state, per-node tags and anchor links all carry over verbatim.
+The two layers must *index-map* – the same path and node counts, and the same on-/off-curve at every index (the same structural match `propagate_*` requires of compatible masters). The copy maps purely by `(path, node)` index, so diagonal ids, corner roles, anchored edges, hinges, the flip state, per-node tags and anchor links all carry over verbatim.
 
 *Parameters:*
 
 - `source_layer` (`GSLayer`) – the layer to read from
 - `target_layer` (`GSLayer`) – the layer to write to (may be in another font)
-- `stems` (`bool`) – copy stems
+- `diagonals` (`bool`) – copy diagonals
 - `tags` (`bool`) – copy per-node tags
 - `anchor_links` (`bool`) – copy anchor links
 - `replace` (`bool`) – `True` mirrors the source exactly (clears whatever the source doesn’t carry); `False` is additive (the target keeps marks the source lacks)
@@ -819,9 +821,9 @@ for g in src.glyphs:
 
 Everything above authors metadata. `correct` is the one verb that moves geometry: it runs the filter’s actual correction pass – the same code the dialog’s Apply button and instance export run – on an **upright** layer, with the parameters given explicitly. Its companion `resolved_parameters` reads the parameters saved for a layer, so the two together correct a layer the way the filter would.
 
-**`correct(layer, angle, curve_correction=1.0, diagonal_correction=1.0, stem_compensation=0.0, keep_terminal_angle=0.0, keep_terminal_position=1.0, diagonal_correction_stems_only=True)`**
+**`correct(layer, angle, curve_correction=1.0, diagonal_correction=1.0, stem_compensation=0.0, keep_terminal_angle=0.0, keep_terminal_position=1.0, tagged_diagonals_only=True)`**
 
-Shear-aware outline correction driven by the layer’s stem tags, then the slant itself. The whole pass is one undo step.
+Shear-aware outline correction driven by the layer’s diagonal tags, then the slant itself. The whole pass is one undo step.
 
 *Parameters:*
 
@@ -832,7 +834,7 @@ Shear-aware outline correction driven by the layer’s stem tags, then the slant
 - `stem_compensation` (`float`, 0.0–1.0) – stem compensation strength
 - `keep_terminal_angle` (`float`, 0.0–1.0) – [Keep terminals → Angle](handbook/filter#parameters): how much of a terminal’s upright cut angle survives
 - `keep_terminal_position` (`float`, 0.0–1.0) – Keep terminals → Position: `1.0` (the default) keeps the cut where a plain slant puts it, `0.0` lets it ride along its adjoining curves with the curve correction. (The single `keep_terminals` argument of earlier versions is gone: it was the angle, so pass its value as `keep_terminal_angle`.) A terminal with [its own angle or position](#tags) ignores the respective amount
-- `diagonal_correction_stems_only` (`bool`) – restrict diagonal correction to tagged stems
+- `tagged_diagonals_only` (`bool`) – restrict diagonal correction to tagged diagonals
 
 *Returns:*
 
@@ -876,15 +878,15 @@ When a write is refused, `result.reason` is one of these machine codes (`result.
 | Code | Meaning |
 |---|---|
 | `tooFewNodes` | Select at least 4 on-curve nodes. |
-| `incoherentShape` | The selection isn’t a coherent stem shape (one of the four corner regions is empty). |
-| `outsideBlack` | The stem area must be inside black shapes. |
-| `extraExclusivity` | Extras belong to one stem only; a target is already part of another. |
-| `cornerOverlap` | Two stems can share at most two nodes; this would overlap an existing stem. |
+| `incoherentShape` | The selection isn’t a coherent diagonal shape (one of the four corner regions is empty). |
+| `outsideBlack` | The diagonal area must be inside black shapes. |
+| `extraExclusivity` | Extras belong to one diagonal only; a target is already part of another. |
+| `cornerOverlap` | Two diagonals can share at most two nodes; this would overlap an existing diagonal. |
 | `noCompatibleMasters` | No compatible layers with matching nodes were found. |
 | `notLineAdjacent` | The two nodes must be corners forming a line segment (anchored edge). |
 | `cornersNotDiagonal` | The two corners must be diagonally opposed (hinge). |
-| `lockedHandle` | Those handles stay extras while both ends of their curve belong to the stem. |
-| `notFound` | No matching stem, anchor, or node was found on the layer. |
+| `lockedHandle` | Those handles stay extras while both ends of their curve belong to the diagonal. |
+| `notFound` | No matching diagonal, anchor, or node was found on the layer. |
 | `trialBlocked` | The action requires a licensed copy of Italify. |
 | `masterNotActivated` | The layer’s master hasn’t been activated with a licence credit. |
 | `notCurveSegment` | The two nodes must be on-curve endpoints of the same curve segment, with at least one off-curve between them. |

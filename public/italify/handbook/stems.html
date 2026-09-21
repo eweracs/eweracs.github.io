@@ -2,53 +2,18 @@
 <html lang="en">
 <head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Italify Handbook – Stems</title>
-<meta name="description" content="Italify stems: groups of nodes corrected as one rigid unit – creating them, anchored edges, hinge corners, extras, and repair.">
-<link rel="icon" href="/icon.svg" type="image/svg+xml" sizes="any">
-<!-- Set the theme before first paint to avoid a flash of the wrong mode:
-     stored choice wins, otherwise follow the OS preference. -->
+<title>Italify Handbook – Diagonals</title>
+<link rel="canonical" href="diagonals">
+<!-- The "Stems" chapter was renamed "Diagonals" (the tagger’s stems are now
+     called diagonals). The JS redirect carries the #anchor over, renaming
+     the three that said “stem”; the meta refresh is the no-JS fallback. -->
 <script>
 (function () {
-	try {
-		var stored = localStorage.getItem("italify-theme");
-		var theme = stored || (window.matchMedia &&
-			window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light");
-		document.documentElement.setAttribute("data-theme", theme);
-	} catch (e) {}
+	var renamed = { "#stem-marks": "#diagonal-marks", "#stems": "#diagonals", "#creating-stems": "#creating-diagonals" };
+	location.replace("diagonals" + (renamed[location.hash] || location.hash));
 })();
 </script>
-<link rel="stylesheet" href="../styles.css?v=25">
+<meta http-equiv="refresh" content="0; url=diagonals">
 </head>
-<body>
-
-<header class="site">
-	<div class="column">
-		<a class="wordmark" href="../"><img class="wordmark-logo" src="../images/italify.svg" alt="Italify"></a>
-		<nav class="site-nav">
-			<a href="../">Overview</a>
-			<a href="../buy">Buy</a>
-			<a href="./" aria-current="page">Handbook</a>
-			<a href="../python-api">Python API</a>
-			<a class="site-home" href="/?section=projects">sebastiancarewe.com</a>
-		</nav>
-	</div>
-	<button id="theme-toggle" class="theme-toggle" type="button" aria-label="Switch to dark mode" title="Switch to dark mode" aria-pressed="false">
-		<svg class="theme-icon" viewBox="0 0 500 500" fill="currentColor" aria-hidden="true"><path d="M250 0C388 0 500 111 500 250C500 388 388 500 250 500C112 500 0 388 0 250C0 111 112 0 250 0ZM114 114C39 189 39 310 114 386C189 461 311 461 386 386L114 114Z"/></svg>
-	</button>
-</header>
-
-<!-- Page content lives in content/handbook/stems.md – edit that file, not this one.
-     Authoring conventions are documented in AUTHORING.md. -->
-<main class="column" data-source="../content/handbook/stems.md"></main>
-
-<footer>
-	<div class="column">
-		<p>Italify – a plugin for <a href="https://glyphsapp.com">Glyphs</a>. <a href="./">Handbook</a> · <a href="../">Overview</a></p>
-	</div>
-</footer>
-
-<script src="../vendor/marked.min.js"></script>
-<script src="../main.js?v=17"></script>
-</body>
+<body><p>This chapter moved to <a href="diagonals">Diagonals</a>.</p></body>
 </html>
