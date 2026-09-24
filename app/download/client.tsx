@@ -11,6 +11,7 @@ export function DownloadClient() {
   const searchParams = useSearchParams();
   const [fileName, setFileName] = useState('Download File');
   const [fileId, setFileId] = useState<string | null>(null);
+  const [shortId, setShortId] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [isResolving, setIsResolving] = useState(false);
   const [hasStartedDownload, setHasStartedDownload] = useState(false);
@@ -63,6 +64,7 @@ export function DownloadClient() {
 
     if (!id) {
       if (short || bareKey) {
+        setShortId((short || bareKey) as string);
         void resolveShortId((short || bareKey) as string);
       } else {
         setError('No file ID provided.');
@@ -87,8 +89,10 @@ export function DownloadClient() {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         keepalive: true,
+        // shortId lets the type office hub count downloads per link.
         body: JSON.stringify({
           fileName,
+          shortId,
         }),
       });
     } catch (err) {
