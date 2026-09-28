@@ -86,7 +86,7 @@ caption: Y-Snap keeps a node at its original height, on a metric or not.
 
 ## Terminal {#terminal}
 
-A **terminal** is a straight segment that caps a stroke – the flat cut of a *c*, *e* or *s*. The [Keep terminals](filter#parameters) sliders hold a terminal’s cut in place through the italicisation: *Angle* keeps the angle it makes with its two adjoining segments after the slant, *Position* decides whether it stays where a plain slant puts it or rides along those segments with the curve correction. The filter finds the obvious terminals automatically (a line between two curves heading the same way), and draws every one it will keep in **green**.
+A **terminal** is a straight segment that caps a stroke – the flat cut of a *c*, *e* or *s*. The [Keep terminals](filter#parameters) sliders hold a terminal’s cut in place through the italicisation: *Angle* keeps the angle it makes with its two adjoining segments after the slant, *Position* decides whether it stays where a plain slant puts it or rides along those segments with the curve correction. The filter finds the obvious terminals automatically (a line between two curves heading the same way), and draws every one it will keep in **green**. The [advanced settings](filter#hidden-settings) can switch that detection off, or limit it to terminals cut at an angle (leaving out horizontal and vertical cuts). The terminals you tag are kept either way.
 
 **Terminal** lets you take that decision by hand. Tag any straight two-node segment whose end connections are **unsmooth** – it can be a line between two stems, not just between two curves – and the filter keeps it too. Tagging a segment the tool already detects instead **opts it out**.
 

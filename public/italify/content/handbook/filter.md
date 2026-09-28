@@ -90,14 +90,14 @@ You can keep your sources upright and let Italify run when instances are generat
 Add a `Filter` custom parameter to an instance (Font Info → Exports) with a value like:
 
 ```
-Italify;angle:9.5;curveCorrection:0.8;diagonalCorrection:0.9;stemCompensation:1;keepTerminalAngle:1;keepTerminalPosition:1;taggedDiagonalsOnly:1;keepExtremes:0
+Italify;angle:9.5;curveCorrection:0.8;diagonalCorrection:0.9;stemCompensation:1;keepTerminalAngle:1;keepTerminalPosition:1;taggedDiagonalsOnly:1;keepExtremes:0;autoDetectTerminals:1;nonOrthogonalTerminalsOnly:0
 ```
 
 You don’t need to type this: open the filter dialogue, set the parameters the way you want them, and choose *Copy Filter Parameter* from the dialogue’s gear menu – filter parameter lands on your clipboard ready to paste into the instance. All arguments are optional and named, so partial parameters like `Italify;angle:10` work and fall back to the defaults above. The older single `keepTerminals:` argument is still read – as `keepTerminalAngle`, which is what it was.
 
-Two arguments are **switches** rather than values: **`keepExtremes`** and **`taggedDiagonalsOnly`**. Write them as `1` or `0` (`true`/`false` and `yes`/`no` are accepted too). `keepExtremes:1` turns [Keep nodes on extremes](#parameters) on for the export; leave the argument out and it stays off, matching the checkbox’s default. `taggedDiagonalsOnly` mirrors the [advanced setting](#hidden-settings) *Correct tagged diagonals only* and is on unless you set it to `0`. (Parameters written by earlier versions call it `diagonalStemsOnly`; that spelling is still understood.)
+Four arguments are **switches** rather than values: **`keepExtremes`**, **`taggedDiagonalsOnly`**, **`autoDetectTerminals`** and **`nonOrthogonalTerminalsOnly`**. Write them as `1` or `0` (`true`/`false` and `yes`/`no` are accepted too). `keepExtremes:1` turns [Keep nodes on extremes](#parameters) on for the export; leave the argument out and it stays off, matching the checkbox’s default. `taggedDiagonalsOnly` mirrors the [advanced setting](#hidden-settings) *Correct tagged diagonals only* and is on unless you set it to `0`. (Parameters written by earlier versions call it `diagonalStemsOnly`; that spelling is still understood.) `autoDetectTerminals` and `nonOrthogonalTerminalsOnly` mirror the advanced settings *Auto-detect terminals* and *Only detect non-orthogonal terminals*: left out, every terminal is detected, as in earlier versions.
 
-Neither switch takes part in the [saved-parameter cascade](#saving-parameters) – only the numeric parameters (the sliders) can be saved to a layer, glyph, group, master or font. At export the two switches are therefore read from the `Filter` parameter alone and apply to every glyph the filter runs on.
+None of the switches takes part in the [saved-parameter cascade](#saving-parameters) – only the numeric parameters (the sliders) can be saved to a layer, glyph, group, master or font. At export the switches are therefore read from the `Filter` parameter alone and apply to every glyph the filter runs on. Your *Settings* only come into it through *Copy Filter Parameter*, which writes them into the string.
 
 Like many Glyphs export filters, Italify also accepts an **`include`** or **`exclude`** argument to scope which glyphs it runs on – comma-separated glyph names, with `*` wildcards allowed:
 
@@ -128,9 +128,11 @@ A few behaviours have no control in the dialogue. They live in [*Settings and Li
 | *Flatten intersections* | on | When the correction pushes an outline past an adjacent short line (typical at tight junctions), Italify collapses the junction into a clean, master-compatible doubled node – the way you would draw it by hand. Switch it off to keep the uncollapsed geometry. |
 | *Keep line-to-curve corners on metrics* | on | An **unsmooth line-to-curve** node – where a straight segment meets a curve – whose height sits exactly on a metric (baseline, x-height, …) is held to that metric through the correction, so such corners don’t drift off it. Smooth nodes, line-to-line corners and curve-to-curve corners are left free. The tagger marks every node this affects with a violet pin. Switch it off to disable the snap entirely. |
 | *Correct tagged diagonals only* | on | Diagonal correction applies only to tagged diagonals. Switch it off to correct every diagonal segment, tagged or not. For untagged segments, the transformation origin will be (half layer width, half x-height). Experimental use only, results will be unexpected. |
+| *Auto-detect terminals* | on | The filter finds the obvious [terminals](tags#terminal) by itself – a straight cut between two curves heading the same way – and the *Keep terminals* sliders apply to them. Switch it off to keep only the terminals you tag. |
+| *Only detect non-orthogonal terminals* | off | Under *Auto-detect terminals*: detect only terminals cut at an angle. A terminal cut horizontally or vertically (within about half a degree) is then only kept when you tag it. |
 | *Keep nodes on extremes – tolerance* | 1 unit | With [Keep nodes on extremes](#parameters) on, a node is only moved onto the extreme when the corrected shape can be re-drawn within this distance; otherwise it stays where the correction put it. |
 
-Scripts can still set them as `Glyphs.defaults` – the keys are `flattenIntersections`, `autoSnapToMetrics`, `taggedDiagonalsOnly` and `keepExtremesTolerance`, each prefixed with `com.eweracs.italify.`:
+Scripts can still set them as `Glyphs.defaults` – the keys are `flattenIntersections`, `autoSnapToMetrics`, `taggedDiagonalsOnly`, `autoDetectTerminals`, `nonOrthogonalTerminalsOnly` and `keepExtremesTolerance`, each prefixed with `com.eweracs.italify.`:
 
 ```
 Glyphs.defaults["com.eweracs.italify.flattenIntersections"] = False

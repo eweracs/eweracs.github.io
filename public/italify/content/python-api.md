@@ -836,6 +836,8 @@ Shear-aware outline correction driven by the layer’s diagonal tags, then the s
 - `keep_terminal_position` (`float`, 0.0–1.0) – Keep terminals → Position: `1.0` (the default) keeps the cut where a plain slant puts it, `0.0` lets it ride along its adjoining curves with the curve correction. (The single `keep_terminals` argument of earlier versions is gone: it was the angle, so pass its value as `keep_terminal_angle`.) A terminal with [its own angle or position](#tags) ignores the respective amount
 - `tagged_diagonals_only` (`bool`) – restrict diagonal correction to tagged diagonals
 
+The remaining [advanced settings](handbook/filter#hidden-settings) – among them *Auto-detect terminals* and *Only detect non-orthogonal terminals* – are not parameters: `correct` follows the app’s settings, like the dialogue does.
+
 *Returns:*
 
 - `ItalifyResult` – refuses with [`masterNotActivated`](#refusals) when the layer’s master hasn’t been activated with a credit or no time pass is active.

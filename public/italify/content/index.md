@@ -59,19 +59,23 @@ Italify can also correct diagonals, otherwise too thick or thin after a pure sla
 Curves with multiple intermediate points between extremes are transformed without a problem – useful where a pure extreme-to-extreme construction doesn’t allow for the desired curve shape. The result is exactly the same as if the extra nodes were omitted.
 ## Inflections | inflect
 Italify handles inflecting curves, without the need to insert explicit inflection points. This way, your outlines stay as smooth as possible.
+## Any script | sinhala
+The geometry of Italify works for any outline and any script, no extra setup required.
 ## Retalics | retal
 Whatever name you choose for your backslanted style, Italify has got you covered. Font in use: [Mae Soft](https://lettermin.com/fonts/mae-soft) (made with Italify).
 ## High-contrast designs | contrast
 Theoretically, any curve can be treated with Italify. Whether it actually makes sense for your design is your decision.
 ## Implicit extremes | implicit
 If you want to leave off your horizontal or vertical extreme nodes for curve segments, no problem.
+## Vertical extremes | extremes
+Keep your vertical extremes, if you prefer.
 ```
 
 ## Get Italify {#get-italify}
 
 Head over to the [Buy](buy) page to license Italify.
 
-Or see for yourself first – the free trial gives you full access for 48 hours.
+**Are you a student or working on a minority script?** Get in touch directly for free masters credits covering your complete project.
 
 ```buttons
 [Try free for 48 hours](trial) primary

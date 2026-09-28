@@ -2,12 +2,6 @@
 
 @lede Italify can be licensed in two ways. Either per master (unlimited duration), or for a time period (unlimited masters).
 
-If you activate a master, you can use Italify on it forever. Add glyphs, change outlines, change metadata – Italify is yours on this master, forever.
-
-A time pass gives you unlimited masters, for a limited duration. Recommended if you are familiar with setting up Italify and have many masters to process.
-
-One licence, one seat. One seat includes three devices.
-
 ```buttons
 [Try free for 48 hours](trial) primary
 ```
@@ -16,27 +10,27 @@ One licence, one seat. One seat includes three devices.
 
 Are you freelancing for a foundry? Working on a custom font? Then your client’s organisation size is what counts.
 
-Get in touch for custom licensing options.
+One licence, one seat. One seat includes three devices. Get in touch for custom licensing options.
 
 <!-- The size picker is wired up in buy: choosing a size filters both
      pricing tables below and the package list in the order form, and the
      switch turns the full grid back on. Keep the names in sync with the
      table headings below, which is what the script matches on. -->
 <div class="size-picker" id="size-picker" role="radiogroup" aria-label="Organisation size">
-	<button type="button" class="size-option" data-size="solo" role="radio" aria-checked="true">
-		<span class="size-name">Solo</span>
+	<button type="button" class="size-option" data-size="thin" role="radio" aria-checked="true">
+		<span class="size-name">Thin</span>
 		<span class="size-desc">1 employee.</span>
 	</button>
-	<button type="button" class="size-option" data-size="team" role="radio" aria-checked="false">
-		<span class="size-name">Team</span>
+	<button type="button" class="size-option" data-size="light" role="radio" aria-checked="false">
+		<span class="size-name">Light</span>
 		<span class="size-desc">2–3 employees.</span>
 	</button>
-	<button type="button" class="size-option" data-size="studio" role="radio" aria-checked="false">
-		<span class="size-name">Studio</span>
+	<button type="button" class="size-option" data-size="medium" role="radio" aria-checked="false">
+		<span class="size-name">Medium</span>
 		<span class="size-desc">4–7 employees.</span>
 	</button>
-	<button type="button" class="size-option" data-size="foundry" role="radio" aria-checked="false">
-		<span class="size-name">Foundry</span>
+	<button type="button" class="size-option" data-size="bold" role="radio" aria-checked="false">
+		<span class="size-name">Bold</span>
 		<span class="size-desc">8+ employees.</span>
 	</button>
 	<p class="size-compare-row">
@@ -49,20 +43,27 @@ Get in touch for custom licensing options.
 
 ## Time passes {#time}
 
+A time pass gives you unlimited masters, for a limited duration. Recommended if you are familiar with setting up Italify and have many masters to process. A one-year pass costs the same as six months.
+
+**Automatic renewal.** Month and year passes can renew automatically: tick *Renew automatically* when you order. The pass then runs from the day you pay and renews at the end of each month or year until you cancel. You enter your licence code once – every renewal reaches Italify by itself. Without automatic renewal, a pass starts when you enter your code, and simply ends.
+
 Prices shown for one seat. Each additional seat is 80% off.
 
-| Pass | Solo | Team | Studio | Foundry |
-|------|------|------|--------|---------|
+| Pass | Thin | Light | Medium | Bold |
+|------|------|-------|--------|------|
 | One week | – | – | – | 300 € |
 | Two weeks | – | – | 300 € | 500 € |
 | One month | 100 € | 200 € | 400 € | 600 € |
+| One year | 600 € | 1 200 € | 2 400 € | 3 600 € |
 
 ## Master credits {#credits}
 
+If you activate a master, you can use Italify on it forever. Add glyphs, change outlines, change metadata – Italify is yours on this master, forever.
+
 Prices shown for one seat. Each additional seat is 80% off.
 
-| Credits | Solo | Team | Studio | Foundry |
-|---------|------|------|--------|---------|
+| Credits | Thin | Light | Medium | Bold |
+|---------|------|-------|--------|------|
 | 1 | 50 € | 70 € | 100 € | 150 € |
 | 2 | 80 € | 120 € | 170 € | 250 € |
 | 3 | 110 € | 160 € | 220 € | 350 € |
@@ -81,10 +82,10 @@ Prices exclude VAT. Your licence code arrives by email within minutes of the pay
 	<div>
 		<label for="order-size">Size</label>
 		<select id="order-size" required>
-			<option value="solo">Solo</option>
-			<option value="team">Team</option>
-			<option value="studio">Studio</option>
-			<option value="foundry">Foundry</option>
+			<option value="thin">Thin</option>
+			<option value="light">Light</option>
+			<option value="medium">Medium</option>
+			<option value="bold">Bold</option>
 		</select>
 	</div>
 	<div>
@@ -110,6 +111,13 @@ Prices exclude VAT. Your licence code arrives by email within minutes of the pay
 		     that seat count. -->
 		<label for="order-package">Package</label>
 		<select id="order-package" required></select>
+		<!-- Month and year passes only – buy shows it for those. Ticked,
+		     the pass is a subscription at the pass's price (package
+		     `<size>-monthly` / `<size>-yearly` in the Worker). -->
+		<label class="demo-toggle renew-toggle" id="order-renew-row" hidden>
+			<input type="checkbox" id="order-renew">
+			<span>Renew automatically</span>
+		</label>
 	</div>
 	<div>
 		<label for="order-company">Company / foundry (optional)</label>
@@ -189,6 +197,9 @@ Prices exclude VAT. Your licence code arrives by email within minutes of the pay
 	<p class="order-status span-2" id="order-status" hidden></p>
 </form>
 
+## Free credits
+Are you a student, or working on a minority script? Get in touch directly for free masters credits covering your complete project.
+
 ## FAQ {#faq}
 
 #### Is a credit tied to a single file or project?
@@ -218,6 +229,22 @@ No. An activation belongs to the master it was granted to, so a copy needs a cre
 #### What if my font has more masters than I have credits?
 
 Italify runs on the masters you have activated. The others stay locked until you activate them too. If you need a custom amount the packs don’t cover, just get in touch and we’ll work something out.
+
+#### How does automatic renewal work?
+
+An automatically renewing pass is a subscription: at the end of each month or year it renews by card, at the price you signed up at. You enter your licence code once – Italify checks in with the licence server once a day and picks up every renewal by itself.
+
+#### Can I use an automatically renewing pass offline?
+
+Yes, for up to a month at a time. Italify needs to reach the licence server at least once a month to confirm the renewal. If your Mac has been offline for longer, Italify pauses until it can check in again. A pass without automatic renewal needs no such check.
+
+#### How do I cancel automatic renewal?
+
+In Glyphs, choose *Glyph → Italify → Settings and Licences…*, then *Manage Renewal…*, or use the link in your licence email. You keep full access until the end of the period you have paid for.
+
+#### What if a renewal payment fails?
+
+The payment is retried over the following days, and Italify keeps working for a week past the paid period in the meantime. As soon as the payment goes through, Italify picks it up by itself.
 
 #### How do I add more credits?
 

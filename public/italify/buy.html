@@ -248,6 +248,27 @@
 	}
 	.order-form button { font-family: inherit; cursor: pointer; }
 	.order-total { font-size: 19px; }
+	/* The shared round checkbox (styles.css), undoing what the form's
+	   own label and input rules would make of it. */
+	.order-form .renew-toggle {
+		display: inline-flex;
+		margin: var(--space-xs) 0 0;
+		font-size: 17px;
+		line-height: 26px;
+		letter-spacing: normal;
+		text-transform: none;
+		font-feature-settings: normal;
+		color: var(--color-primary);
+	}
+	.order-form .renew-toggle[hidden] { display: none; }
+	.order-form .renew-toggle input {
+		width: 20px;
+		padding: 0;
+		border: 1px solid var(--color-secondary);
+		border-radius: var(--rounded-full);
+		background: var(--color-muted);
+	}
+	.order-form .renew-toggle input:hover { border-color: var(--color-primary); }
 	.order-status { font-size: 17px; line-height: 26px; color: var(--color-secondary); }
 	.order-status.error { color: var(--color-error); }
 	/* FAQ: the answers are reference rather than reading, so the page
@@ -474,15 +495,18 @@ document.addEventListener("italify:rendered", function () {
 
 // The organisation sizes, matched against the pricing tables' column
 // headings. A key is also the first half of the package key the Worker
-// validates: `solo-4`, `foundry-month`.
-var SIZES = ["solo", "team", "studio", "foundry"];
+// validates: `thin-4`, `bold-month`.
+var SIZES = ["thin", "light", "medium", "bold"];
 
 // The time-pass rows, keyed by their label in the pricing table; the slug
-// completes the package key.
+// completes the package key. A pass with `renews` can renew
+// automatically: ticked, the order goes to the Worker as
+// `<size>-<renews>` (a subscription at the same price, charged `per`).
 var PASSES = {
 	"one week": { slug: "week", label: "One week" },
 	"two weeks": { slug: "2weeks", label: "Two weeks" },
-	"one month": { slug: "month", label: "One month" },
+	"one month": { slug: "month", label: "One month", renews: "monthly", per: "month" },
+	"one year": { slug: "year", label: "One year", renews: "yearly", per: "year" },
 };
 
 // "1 000 €" – space as the thousands separator, as everywhere on the page.
@@ -507,6 +531,8 @@ document.addEventListener("italify:rendered", function () {
 	var seatsSelect = document.getElementById("order-seats");
 	var total = document.getElementById("order-total");
 	var submit = document.getElementById("order-submit");
+	var renewRow = document.getElementById("order-renew-row");
+	var renewBox = document.getElementById("order-renew");
 	var status = document.getElementById("order-status");
 
 	var size = SIZES[0];
@@ -518,7 +544,8 @@ document.addEventListener("italify:rendered", function () {
 	}
 	var creditTable = tableIn("credits");
 	var passTable = tableIn("time");
-	[creditTable, passTable].forEach(function (table) {
+	var priceTables = [creditTable, passTable];
+	priceTables.forEach(function (table) {
 		if (!table) return;
 		table.classList.add("price-grid");
 		// Own scroll box, so a comparison too wide for a phone scrolls
@@ -583,6 +610,8 @@ document.addEventListener("italify:rendered", function () {
 					group: "Time passes",
 					label: pass.label + " pass",
 					price: price,
+					renews: pass.renews ? key + "-" + pass.renews : null,
+					per: pass.per || null,
 				});
 			});
 		});
@@ -625,7 +654,7 @@ document.addEventListener("italify:rendered", function () {
 			});
 		});
 	}
-	[creditTable, passTable].forEach(markUnavailable);
+	priceTables.forEach(markUnavailable);
 
 	// Seats: the first at the package price, every further one at 20 %
 	// of it. The Worker recomputes the same figure from the package key
@@ -641,16 +670,29 @@ document.addEventListener("italify:rendered", function () {
 		return Math.round(item.price * (1 + EXTRA_SEAT_FACTOR * (seats - 1)));
 	}
 
-	function syncTotal() {
+	function chosenItem() {
 		var chosen = null;
 		catalog[size].forEach(function (item) {
 			if (item.value === packageSelect.value) chosen = item;
 		});
+		return chosen;
+	}
+
+	// Renewing: a month or year pass with the box ticked. The box only
+	// shows for those, and keeps its state across package changes.
+	function renewing(item) {
+		return !!(item && item.renews && renewBox && renewBox.checked);
+	}
+
+	function syncTotal() {
+		var chosen = chosenItem();
+		if (renewRow) renewRow.hidden = !(chosen && chosen.renews);
 		// The amount alone: what VAT is added to it is settled on the
 		// invoice, and the page says so above the form.
 		var seats = seatsChosen();
 		total.textContent = chosen
 			? "Total: " + euros(priceFor(chosen, seats))
+				+ (renewing(chosen) ? " per " + chosen.per : "")
 				+ (seats > 1 ? " for " + seats + " seats" : "")
 			: "";
 	}
@@ -672,7 +714,7 @@ document.addEventListener("italify:rendered", function () {
 		});
 		// Changing size keeps the equivalent package where the new size has
 		// one – 4 credits stays 4 credits – and otherwise falls back to the
-		// first entry (a one-week pass has no Designer counterpart).
+		// first entry (a one-week pass has no Thin counterpart).
 		var equivalent = previous.replace(/^[a-z]+-/, size + "-");
 		if (previous && packageSelect.querySelector('option[value="' + equivalent + '"]')) {
 			packageSelect.value = equivalent;
@@ -749,7 +791,7 @@ document.addEventListener("italify:rendered", function () {
 	}
 
 	function renderGrid() {
-		[creditTable, passTable].forEach(function (table) {
+		priceTables.forEach(function (table) {
 			if (!table) return;
 			var columns = columnsOf(table);
 			Array.prototype.forEach.call(table.querySelectorAll("tr"), function (row) {
@@ -772,7 +814,7 @@ document.addEventListener("italify:rendered", function () {
 		// After renderRates, which is what settles how many columns there
 		// are to pin.
 		renderRates();
-		[creditTable, passTable].forEach(function (table) {
+		priceTables.forEach(function (table) {
 			if (table) pinColumns(table);
 		});
 	}
@@ -825,6 +867,7 @@ document.addEventListener("italify:rendered", function () {
 	if (narrow.addEventListener) narrow.addEventListener("change", renderGrid);
 	sizeSelect.addEventListener("change", function () { setSize(sizeSelect.value); });
 	packageSelect.addEventListener("change", syncTotal);
+	if (renewBox) renewBox.addEventListener("change", syncTotal);
 	// A seat change reprices every package on show, not just the total.
 	if (seatsSelect) seatsSelect.addEventListener("change", fillPackages);
 	// Adopt whatever the size select holds rather than forcing the default:
@@ -855,7 +898,8 @@ document.addEventListener("italify:rendered", function () {
 			method: "POST",
 			headers: { "Content-Type": "application/json" },
 			body: JSON.stringify({
-				package: packageSelect.value,
+				// A renewing pass is its own package – a subscription.
+				package: renewing(chosenItem()) ? chosenItem().renews : packageSelect.value,
 				seats: seatsChosen(),
 				company: document.getElementById("order-company").value,
 				country: country.value,
