@@ -25,7 +25,7 @@ Move diagonals, tags and anchor links between layers – and [across masters](co
 ## [The Glyph → Italify menu](glyph-menu)
 Batch verbs that run across every selected glyph and layer at once.
 ## [Settings and licences](settings)
-One window for [licence codes](settings#licences), [custom shortcuts](settings#custom-shortcuts), the [advanced options](settings#advanced) and the release notes.
+One window for [your licence](settings#licences), [custom shortcuts](settings#custom-shortcuts), the [advanced options](settings#advanced) and the release notes.
 ## [Tips](tips)
 Path-drawing advice that makes the correction behave.
 ## [Keyboard reference](shortcuts)

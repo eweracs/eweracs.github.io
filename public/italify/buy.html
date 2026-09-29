@@ -269,6 +269,11 @@
 		background: var(--color-muted);
 	}
 	.order-form .renew-toggle input:hover { border-color: var(--color-primary); }
+	/* The licence key of a top-up: a code, so lining figures and a little
+	   air between the characters. */
+	#order-licence { font-feature-settings: "lnum"; letter-spacing: 0.04em; }
+	.order-licence-note { margin: 4px 0 0; font-size: 15px; line-height: 22px; color: var(--color-secondary); }
+	.order-licence-note.error { color: var(--color-error); }
 	.order-status { font-size: 17px; line-height: 26px; color: var(--color-secondary); }
 	.order-status.error { color: var(--color-error); }
 	/* FAQ: the answers are reference rather than reading, so the page
@@ -534,6 +539,12 @@ document.addEventListener("italify:rendered", function () {
 	var renewRow = document.getElementById("order-renew-row");
 	var renewBox = document.getElementById("order-renew");
 	var status = document.getElementById("order-status");
+	var licenceInput = document.getElementById("order-licence");
+	var licenceNote = document.getElementById("order-licence-note");
+	var licenceNoteText = licenceNote ? licenceNote.textContent : "";
+	// The licence a top-up is for, as the Worker described it
+	// (/licence/lookup): { key, seats, renews }. Null for a new licence.
+	var topUp = null;
 
 	var size = SIZES[0];
 	var compare = false;
@@ -661,7 +672,10 @@ document.addEventListener("italify:rendered", function () {
 	// and the seat count, so this is display only.
 	var EXTRA_SEAT_FACTOR = 0.2;
 
+	// A top-up is priced for its licence's seats, whatever the dropdown
+	// says – the Worker does the same.
 	function seatsChosen() {
+		if (topUp) return topUp.seats;
 		var n = seatsSelect ? parseInt(seatsSelect.value, 10) : 1;
 		return n > 0 ? n : 1;
 	}
@@ -680,13 +694,14 @@ document.addEventListener("italify:rendered", function () {
 
 	// Renewing: a month or year pass with the box ticked. The box only
 	// shows for those, and keeps its state across package changes.
+	// Never for a top-up: automatic renewal is a licence of its own.
 	function renewing(item) {
-		return !!(item && item.renews && renewBox && renewBox.checked);
+		return !topUp && !!(item && item.renews && renewBox && renewBox.checked);
 	}
 
 	function syncTotal() {
 		var chosen = chosenItem();
-		if (renewRow) renewRow.hidden = !(chosen && chosen.renews);
+		if (renewRow) renewRow.hidden = !(chosen && chosen.renews) || !!topUp;
 		// The amount alone: what VAT is added to it is settled on the
 		// invoice, and the page says so above the form.
 		var seats = seatsChosen();
@@ -702,6 +717,8 @@ document.addEventListener("italify:rendered", function () {
 		packageSelect.textContent = "";
 		var groups = {};
 		catalog[size].forEach(function (item) {
+			// A licence that renews automatically already has its time.
+			if (topUp && topUp.renews && item.group === "Time passes") return;
 			if (!groups[item.group]) {
 				groups[item.group] = document.createElement("optgroup");
 				groups[item.group].label = item.group;
@@ -882,6 +899,84 @@ document.addEventListener("italify:rendered", function () {
 		status.hidden = false;
 	}
 
+	// A top-up: once the buyer has entered a key (or a long code), ask the
+	// Worker which licence it is. Its seats then price the order and take
+	// over from the seats dropdown; a renewing licence is offered credits
+	// only. Asked when the field settles, not on every keystroke – key
+	// lookups are rate-limited.
+	function setLicenceNote(text, isError) {
+		if (!licenceNote) return;
+		licenceNote.textContent = text;
+		licenceNote.classList.toggle("error", !!isError);
+	}
+
+	function applyTopUp(next) {
+		topUp = next;
+		if (seatsSelect) {
+			seatsSelect.disabled = !!topUp;
+			if (topUp && !seatsSelect.querySelector('option[value="' + topUp.seats + '"]')) {
+				var option = document.createElement("option");
+				option.value = String(topUp.seats);
+				option.textContent = topUp.seats + " seats";
+				seatsSelect.appendChild(option);
+			}
+			if (topUp) seatsSelect.value = String(topUp.seats);
+		}
+		fillPackages();
+	}
+
+	var lookedUp = "";
+	var lookupTimer = null;
+	function lookUpLicence() {
+		var text = licenceInput ? licenceInput.value.trim() : "";
+		if (text === lookedUp) return;
+		lookedUp = text;
+		if (!text) {
+			applyTopUp(null);
+			setLicenceNote(licenceNoteText, false);
+			return;
+		}
+		setLicenceNote("Looking up your licence…", false);
+		fetch(WORKER_URL + "/licence/lookup", {
+			method: "POST",
+			headers: { "Content-Type": "application/json" },
+			body: JSON.stringify({ licence: text }),
+		}).then(function (response) {
+			return response.json().then(function (data) {
+				// A later edit has moved on; this answer is stale.
+				if (text !== lookedUp) return;
+				if (!response.ok || !data.ok) {
+					// Leave the text free to be asked about again – after a
+					// wait, or once the buyer has corrected it.
+					lookedUp = "";
+					applyTopUp(null);
+					setLicenceNote(data.message || "We couldn’t check that licence. Please try again.", true);
+					return;
+				}
+				applyTopUp({ key: data.key, seats: data.seats, renews: !!data.renews });
+				setLicenceNote("Adding to " + (data.key || "your licence") + " – "
+					+ data.seats + (data.seats === 1 ? " seat" : " seats")
+					+ (data.renews ? ". It renews automatically, so it takes master credits." : "."), false);
+			});
+		}).catch(function () {
+			if (text !== lookedUp) return;
+			lookedUp = "";
+			setLicenceNote("We couldn’t reach the licence server. Please try again.", true);
+		});
+	}
+	if (licenceInput) {
+		licenceInput.addEventListener("input", function () {
+			clearTimeout(lookupTimer);
+			lookupTimer = setTimeout(lookUpLicence, 600);
+		});
+		licenceInput.addEventListener("change", function () {
+			clearTimeout(lookupTimer);
+			lookUpLicence();
+		});
+		// A value the browser restored on a reload or a step back.
+		if (licenceInput.value.trim()) lookUpLicence();
+	}
+
 	form.addEventListener("submit", function (event) {
 		event.preventDefault();
 		// Belt and braces on top of the select’s `required`: never submit
@@ -901,6 +996,8 @@ document.addEventListener("italify:rendered", function () {
 				// A renewing pass is its own package – a subscription.
 				package: renewing(chosenItem()) ? chosenItem().renews : packageSelect.value,
 				seats: seatsChosen(),
+				// The Worker resolves the licence again and prices it itself.
+				licence: licenceInput ? licenceInput.value.trim() : "",
 				company: document.getElementById("order-company").value,
 				country: country.value,
 				vatId: document.getElementById("order-vat").value,
@@ -909,7 +1006,7 @@ document.addEventListener("italify:rendered", function () {
 			return response.json().then(function (data) {
 				if (!response.ok || !data.url) throw new Error(data.error || "Something went wrong.");
 				// Stripe collects email, name, billing address and the
-				// payment itself; the licence code goes out from the
+				// payment itself; the licence key goes out from the
 				// Worker the moment the payment lands.
 				window.location.href = data.url;
 			});

@@ -45,7 +45,7 @@ One licence, one seat. One seat includes three devices. Get in touch for custom 
 
 A time pass gives you unlimited masters, for a limited duration. Recommended if you are familiar with setting up Italify and have many masters to process. A one-year pass costs the same as six months.
 
-**Automatic renewal.** Month and year passes can renew automatically: tick *Renew automatically* when you order. The pass then runs from the day you pay and renews at the end of each month or year until you cancel. You enter your licence code once – every renewal reaches Italify by itself. Without automatic renewal, a pass starts when you enter your code, and simply ends.
+**Automatic renewal.** Month and year passes can renew automatically: tick *Renew automatically* when you order. The pass then runs from the day you pay and renews at the end of each month or year until you cancel. You enter your licence key once – every renewal reaches Italify by itself. Without automatic renewal, a pass starts when you start it in Italify, and simply ends.
 
 Prices shown for one seat. Each additional seat is 80% off.
 
@@ -76,7 +76,9 @@ Prices shown for one seat. Each additional seat is 80% off.
 
 ## Place your order {#order}
 
-Prices exclude VAT. Your licence code arrives by email within minutes of the payment. By purchasing you accept the [licence terms](eula).
+Prices exclude VAT. Your licence key arrives by email within minutes of the payment. By purchasing you accept the [licence terms](eula).
+
+**Topping up an existing licence?** If you have an `ITFY-XXXX-XXXX` licence code, you can add it in the field below and your licensed plugin will pick up your order automatically. No new code entry required.
 
 <form class="order-form" id="order-form">
 	<div>
@@ -190,6 +192,15 @@ Prices exclude VAT. Your licence code arrives by email within minutes of the pay
 		<label for="order-vat">VAT ID (EU businesses, optional)</label>
 		<input id="order-vat" type="text" placeholder="e.g. DE123456789">
 	</div>
+	<div class="span-2">
+		<!-- A top-up: the key of an existing licence (or one of its long
+		     codes). buy asks the Worker about it (/licence/lookup) –
+		     the licence's seats then price the order – and the Worker adds
+		     the purchase to that licence. -->
+		<label for="order-licence">Add to an existing licence (optional)</label>
+		<input id="order-licence" type="text" placeholder="ITFY-XXXX-XXXX" autocomplete="off" spellcheck="false" autocapitalize="characters">
+		<p class="order-licence-note" id="order-licence-note">Your licence key, from your licence email or Italify’s settings. Leave it empty for a new licence.</p>
+	</div>
 	<div class="span-2 order-actions">
 		<button type="submit" class="button-primary" id="order-submit">Pay by card</button>
 		<span class="order-total" id="order-total"></span>
@@ -216,11 +227,11 @@ In Glyphs, special layers are always attached to a master layer. If that master 
 
 #### When is a master credit spent?
 
-Only when you explicitly say so. Entering a licence code adds credits and nothing else. If you run the filter on a master that isn’t activated yet, Italify is locked. If you activate that master, the credit is spent and the master is activated forever.
+Only when you explicitly say so. Entering a licence key adds credits and nothing else. If you run the filter on a master that isn’t activated yet, Italify is locked. If you activate that master, the credit is spent and the master is activated forever.
 
 #### What if I have existing master credits, but add a time pass?
 
-If you add a **time pass** code, it is activated immediately. A time pass is always preferred over master credits, so there is no danger of accidentally spending existing master credits when you have an active time pass.
+A **time pass** starts when you start it: Italify asks as soon as the pass arrives, and you can also start it later with *Start Pass…* in Italify’s settings. A running time pass is always preferred over master credits, so there is no danger of accidentally spending existing master credits while it runs.
 
 #### Does a duplicated master stay activated?
 
@@ -232,7 +243,7 @@ Italify runs on the masters you have activated. The others stay locked until you
 
 #### How does automatic renewal work?
 
-An automatically renewing pass is a subscription: at the end of each month or year it renews by card, at the price you signed up at. You enter your licence code once – Italify checks in with the licence server once a day and picks up every renewal by itself.
+An automatically renewing pass is a subscription: at the end of each month or year it renews by card, at the price you signed up at. You enter your licence key once – Italify checks in with the licence server once a day and picks up every renewal by itself.
 
 #### Can I use an automatically renewing pass offline?
 
@@ -246,6 +257,14 @@ In Glyphs, choose *Glyph → Italify → Settings and Licences…*, then *Manage
 
 The payment is retried over the following days, and Italify keeps working for a week past the paid period in the meantime. As soon as the payment goes through, Italify picks it up by itself.
 
+#### What is a licence key?
+
+A short code like `ITFY-7K3Q-M9XD` that stands for your licence. You enter it in Italify’s settings on each of your Macs (*Glyph → Italify → Settings and Licences…*), and everything on the licence – credits, passes, renewals – reaches them by itself. Keep it somewhere safe; if it ever gets out, reply to your licence email and we’ll replace it.
+
 #### How do I add more credits?
 
-Just add a new licence code. This will add the new credits from the code. Your existing credits stay untouched.
+Enter your licence key in the order form (*Add to an existing licence*). The new credits are added to your licence and reach every Mac on it by itself – there is nothing new to enter. Your existing credits stay untouched.
+
+#### What if I buy a pass while one is still running?
+
+Add it to your licence with your licence key, as above. It waits in Italify until you start it (*Start Pass…*), and if a pass is still running then, the new one starts when that one ends – you don’t lose a day.

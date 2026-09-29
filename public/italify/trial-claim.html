@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Italify – Your trial code</title>
+<title>Italify – Your trial key</title>
 <meta name="robots" content="noindex">
 <link rel="icon" href="/icon.svg" type="image/svg+xml" sizes="any">
 <!-- Set the theme before first paint to avoid a flash of the wrong mode:
@@ -20,11 +20,21 @@
 </script>
 <link rel="stylesheet" href="styles.css?v=25">
 <style>
-	/* Page-local: the code block reuses the docs' .code-block/.copy-btn
-	   pattern; the code itself wraps (licence codes are long). */
+	/* Page-local: the key block reuses the docs' .code-block/.copy-btn
+	   pattern; the key is short and set large, the long code (for older
+	   Italify versions) wraps. */
 	#code-block pre code {
 		white-space: pre-wrap;
 		overflow-wrap: anywhere;
+	}
+	#code-block.is-key pre code {
+		font-size: 22px;
+		letter-spacing: 0.06em;
+	}
+	#older-code code {
+		white-space: pre-wrap;
+		overflow-wrap: anywhere;
+		font-size: 13px;
 	}
 	.claim-status { color: var(--color-secondary); }
 	.claim-status.error { color: var(--color-error); }
@@ -50,17 +60,17 @@
 
 <main class="column">
 <section>
-	<h1 id="claim-title">Fetching your trial code…</h1>
+	<h1 id="claim-title">Fetching your trial key…</h1>
 	<p class="claim-status" id="claim-status" hidden></p>
 
 	<div id="claim-result" hidden>
-		<p class="lede">This is your personal Italify licence code. It runs
+		<p class="lede">This is your personal Italify <span id="claim-noun">licence key</span>. It runs
 		for <strong id="claim-duration"></strong> from the moment you enter
 		it in Glyphs – there’s no rush.</p>
 
 		<div class="code-block" id="code-block">
 			<pre><code id="claim-code"></code></pre>
-			<button class="copy-btn" id="copy-code" type="button" aria-label="Copy code" title="Copy code">
+			<button class="copy-btn" id="copy-code" type="button" aria-label="Copy" title="Copy">
 				<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><rect x="9" y="9" width="12" height="12" rx="2"/><path d="M5 15V5a2 2 0 0 1 2-2h10"/></svg>
 			</button>
 		</div>
@@ -70,13 +80,18 @@
 			<li><strong>Install Italify</strong> (skip if you have it): open
 				<em>Window → Plugin Manager</em> in Glyphs, search for
 				“Italify”, click <em>Install</em>, relaunch Glyphs.</li>
-			<li><strong>Copy the code</strong> above and open
-				<em>Filter → Italify</em> in Glyphs.</li>
-			<li><strong>Paste the code</strong> into the licence field and
+			<li><strong>Copy the <span class="claim-noun">key</span></strong> above and open
+				<em>Glyph → Italify → Settings and Licences…</em> in Glyphs.</li>
+			<li><strong>Paste the <span class="claim-noun">key</span></strong> into the licence field and
 				click <em>Add</em>. That’s it – full access on every master,
 				and your 48 hours start right there.</li>
 		</ol>
-		<p>Keep this page’s link: re-opening it always shows the same code.
+		<details id="older-code" hidden>
+			<summary>Using an older version of Italify?</summary>
+			<p>Older versions take the long licence code instead of the key – paste this one:</p>
+			<pre><code id="claim-long-code"></code></pre>
+		</details>
+		<p>Keep this page’s link: re-opening it always shows the same <span class="claim-noun">key</span>.
 		Questions? The <a href="handbook/">handbook</a> is a good place to
 		start.</p>
 	</div>
@@ -122,11 +137,25 @@ var WORKER_URL = "https://italify-trial.file-manager-bot.workers.dev";
 				fail("This link has expired",
 					'Trial links are valid for one hour. '
 					+ '<a href="trial">Request a fresh one</a> – you will '
-					+ "get the same code again.");
+					+ "get the same key again.");
 				return;
 			}
-			title.textContent = r.data.reused ? "Here is your trial code again" : "Your trial code is ready";
-			document.getElementById("claim-code").textContent = r.data.code;
+			// The key leads; the long code is only for Italify versions from
+			// before keys. (A Worker from before keys answers with the code
+			// alone – then the page reads as it always did.)
+			var key = r.data.key;
+			var noun = key ? "key" : "code";
+			title.textContent = r.data.reused ? "Here is your trial " + noun + " again" : "Your trial " + noun + " is ready";
+			document.getElementById("claim-code").textContent = key || r.data.code;
+			document.getElementById("code-block").classList.toggle("is-key", !!key);
+			document.getElementById("claim-noun").textContent = key ? "licence key" : "licence code";
+			Array.prototype.forEach.call(document.querySelectorAll(".claim-noun"), function (el) {
+				el.textContent = noun;
+			});
+			if (key) {
+				document.getElementById("claim-long-code").textContent = r.data.code;
+				document.getElementById("older-code").hidden = false;
+			}
 			document.getElementById("claim-duration").textContent =
 				(r.data.durationHours || 48) + " hours";
 			result.hidden = false;
