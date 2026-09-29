@@ -954,9 +954,14 @@ document.addEventListener("italify:rendered", function () {
 					return;
 				}
 				applyTopUp({ key: data.key, seats: data.seats, renews: !!data.renews });
-				setLicenceNote("Adding to " + (data.key || "your licence") + " – "
-					+ data.seats + (data.seats === 1 ? " seat" : " seats")
-					+ (data.renews ? ". It renews automatically, so it takes master credits." : "."), false);
+				// A top-up is for all the licence's seats; fewer seats are a
+				// licence of their own.
+				setLicenceNote("Adding to " + (data.key || "your licence") + ". "
+					+ "The given licence is for " + data.seats + (data.seats === 1 ? " seat." : " seats.")
+					+ (data.renews ? " The time pass renews automatically. You can only add master credits to it." :	"")
+					+ (data.seats > 1 ? " Need more/fewer seats?" : " Need more seats?")
+					+ " Leave the field empty to receive a separate licence.",
+						false);
 			});
 		}).catch(function () {
 			if (text !== lookedUp) return;
