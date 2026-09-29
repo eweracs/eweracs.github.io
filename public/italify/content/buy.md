@@ -78,7 +78,7 @@ Prices shown for one seat. Each additional seat is 80% off.
 
 Prices exclude VAT. Your licence key arrives by email within minutes of the payment. By purchasing you accept the [licence terms](eula).
 
-**Topping up an existing licence?** If you have an `ITFY-XXXX-XXXX` licence code, you can add it in the field below and your licensed plugin will pick up your order automatically. No new code entry required.
+**Topping up an existing licence?** If you have an `ITFY-XXXX-XXXX` licence code, you can add it in the field below and **all devices registered to that licence** will pick up your order automatically.
 
 <form class="order-form" id="order-form">
 	<div>
