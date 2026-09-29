@@ -2,7 +2,7 @@
 
 @lede The End User Licence Agreement for Italify. It is short on purpose: what you may do, what you may not, and what the plugin sends home.
 
-Copyright © 2026 Sebastian Carewe. All rights reserved. Last updated 28 September 2026.
+Copyright © 2026 Sebastian Carewe. All rights reserved. Last updated 29 September 2026.
 
 Italify (the “Software”, comprising the Glyphs plugin bundle and its documentation) is commercial, proprietary software. It is licensed, not sold. By downloading, installing or using the Software, or by purchasing a licence, you agree to these terms.
 
