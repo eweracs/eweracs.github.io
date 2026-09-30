@@ -1,7 +1,6 @@
 # Italify Handbook
 
-@lede Everything the plugin does, in one place. New to Italify? Start with the [overview](../), then follow the 
-[typical workflow](workflow).
+@lede Everything the plugin does, in one place. New to Italify? Start with the [overview](../), then follow the [typical workflow](workflow).
 
 ```steps plain
 ## [Installation](installation)
