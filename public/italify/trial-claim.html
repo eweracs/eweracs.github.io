@@ -66,7 +66,8 @@
 	<div id="claim-result" hidden>
 		<p class="lede">This is your personal Italify <span id="claim-noun">licence key</span>. It runs
 		for <strong id="claim-duration"></strong> from the moment you enter
-		it in Glyphs – there’s no rush.</p>
+		it in Glyphs.</p>
+		<p id="claim-promo-note" hidden>This email address has already claimed a trial code.</p>
 
 		<div class="code-block" id="code-block">
 			<pre><code id="claim-code"></code></pre>
@@ -77,23 +78,15 @@
 
 		<h3>Activate Italify</h3>
 		<ol class="steps">
-			<li><strong>Install Italify</strong> (skip if you have it): open
+			<li><strong>Install Italify:</strong> Open
 				<em>Window → Plugin Manager</em> in Glyphs, search for
 				“Italify”, click <em>Install</em>, relaunch Glyphs.</li>
 			<li><strong>Copy the <span class="claim-noun">key</span></strong> above and open
 				<em>Glyph → Italify → Settings and Licences…</em> in Glyphs.</li>
 			<li><strong>Paste the <span class="claim-noun">key</span></strong> into the licence field and
-				click <em>Add</em>. That’s it – full access on every master,
-				and your 48 hours start right there.</li>
+				click <em>Add</em>.</li>
 		</ol>
-		<details id="older-code" hidden>
-			<summary>Using an older version of Italify?</summary>
-			<p>Older versions take the long licence code instead of the key – paste this one:</p>
-			<pre><code id="claim-long-code"></code></pre>
-		</details>
-		<p>Keep this page’s link: re-opening it always shows the same <span class="claim-noun">key</span>.
-		Questions? The <a href="handbook/">handbook</a> is a good place to
-		start.</p>
+		<p>Questions? The <a href="handbook/">handbook</a> is a good place to start.</p>
 	</div>
 </section>
 </main>
@@ -105,8 +98,11 @@
 </footer>
 
 <script>
-// The trial Worker's URL (from `wrangler deploy` in Scripts/TrialWorker/).
-var WORKER_URL = "https://italify-trial.file-manager-bot.workers.dev";
+// The trial Worker's URL (from `wrangler deploy` in Scripts/TrialWorker/);
+// a local preview talks to the staging Worker, as the Buy page does.
+var WORKER_URL = /^(localhost|127\.0\.0\.1)$/.test(location.hostname)
+	? "https://italify-trial-staging.file-manager-bot.workers.dev"
+	: "https://italify-trial.file-manager-bot.workers.dev";
 
 (function () {
 	var title = document.getElementById("claim-title");
@@ -118,6 +114,14 @@ var WORKER_URL = "https://italify-trial.file-manager-bot.workers.dev";
 		status.innerHTML = message;
 		status.classList.add("error");
 		status.hidden = false;
+	}
+
+	// A trial's length in words – the Worker's trialSpan (trial-codes.mjs).
+	function span(hours) {
+		if (hours === 168) return "one week";
+		if (hours === 336) return "two weeks";
+		if (hours % 24 === 0 && hours > 48) return hours / 24 + " days";
+		return hours + " hours";
 	}
 
 	var token = new URLSearchParams(window.location.search).get("token");
@@ -156,8 +160,8 @@ var WORKER_URL = "https://italify-trial.file-manager-bot.workers.dev";
 				document.getElementById("claim-long-code").textContent = r.data.code;
 				document.getElementById("older-code").hidden = false;
 			}
-			document.getElementById("claim-duration").textContent =
-				(r.data.durationHours || 48) + " hours";
+			document.getElementById("claim-duration").textContent = span(r.data.durationHours || 48);
+			document.getElementById("claim-promo-note").hidden = !r.data.promoIgnored;
 			result.hidden = false;
 
 			var copy = document.getElementById("copy-code");

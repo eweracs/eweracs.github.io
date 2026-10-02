@@ -50,6 +50,16 @@
 	}
 	.trial-status { color: var(--color-secondary); }
 	.trial-status.error { color: var(--color-error); }
+	/* A promotion code: folded away unless a link brings one. */
+	.trial-promo { flex-basis: 100%; }
+	.trial-promo summary { cursor: pointer; color: var(--color-secondary); }
+	.trial-form .trial-promo input {
+		display: block;
+		width: 100%;
+		max-width: 320px;
+		margin-top: var(--space-sm);
+		text-transform: uppercase;
+	}
 </style>
 </head>
 <body>
@@ -72,7 +82,7 @@
 
 <main class="column">
 <section>
-	<h1>Try Italify for 48 hours</h1>
+	<h1>Try Italify for <span class="trial-span">48 hours</span></h1>
 	<p class="lede">Enter your email address and you’ll receive a link to
 	your personal trial key.</p>
 
@@ -80,19 +90,26 @@
 		<input type="email" id="trial-email" placeholder="you@example.com"
 			autocomplete="email" required aria-label="Email address">
 		<button type="submit" class="button-primary" id="trial-submit">Get trial link</button>
+		<!-- A trial code makes the trial run longer (the Worker's
+		     trial-codes.mjs); a link can bring one: trial?code=… -->
+		<details class="trial-promo" id="trial-promo">
+			<summary>Have a promotion code?</summary>
+			<input type="text" id="trial-code" placeholder="Promotion code" autocomplete="off"
+				spellcheck="false" autocapitalize="characters" aria-label="Promotion code">
+		</details>
 	</form>
 	<p class="trial-status" id="trial-status" hidden></p>
 
 	<h3>How it works</h3>
 	<ol class="steps">
 		<li><strong>Get your link.</strong> You receive a link by email, valid
-			for one hour. Follow it to get your 48-hour trial key.</li>
+			for one hour. Follow it to get your <span class="trial-adjective">48-hour</span> trial key.</li>
 		<li><strong>Copy the key.</strong> The link opens a page with your
 			personal licence key.</li>
 		<li><strong>Enter it in Glyphs.</strong> Open
 			<em>Glyph → Italify → Settings and Licences…</em> and enter the
 			key in the licence field. Full access to all features, and your
-			48 hours start then.</li>
+			trial starts then.</li>
 	</ol>
 	<p>Don’t have the plugin yet? Italify is available directly from the
 	Plugin Manager in Glyphs – open <em>Window → Plugin Manager</em>,
@@ -112,20 +129,56 @@
 </footer>
 
 <script>
-// The trial Worker's URL (from `wrangler deploy` in Scripts/TrialWorker/).
-var WORKER_URL = "https://italify-trial.file-manager-bot.workers.dev";
+// The trial Worker's URL (from `wrangler deploy` in Scripts/TrialWorker/);
+// a local preview talks to the staging Worker, as the Buy page does.
+var WORKER_URL = /^(localhost|127\.0\.0\.1)$/.test(location.hostname)
+	? "https://italify-trial-staging.file-manager-bot.workers.dev"
+	: "https://italify-trial.file-manager-bot.workers.dev";
 
 (function () {
 	var form = document.getElementById("trial-form");
 	var email = document.getElementById("trial-email");
 	var submit = document.getElementById("trial-submit");
 	var status = document.getElementById("trial-status");
+	var promo = document.getElementById("trial-promo");
+	var codeInput = document.getElementById("trial-code");
 
 	function show(message, isError) {
 		status.textContent = message;
 		status.classList.toggle("error", !!isError);
 		status.hidden = false;
 	}
+
+	// The page speaks of the trial's length: 48 hours, or what a code
+	// makes it ("one week" / "one-week").
+	function setLength(span, adjective) {
+		Array.prototype.forEach.call(document.querySelectorAll(".trial-span"), function (el) { el.textContent = span; });
+		Array.prototype.forEach.call(document.querySelectorAll(".trial-adjective"), function (el) { el.textContent = adjective; });
+		document.title = "Italify – Free " + adjective + " trial";
+	}
+
+	function lookUp(code) {
+		if (!code) { setLength("48 hours", "48-hour"); status.hidden = true; return; }
+		fetch(WORKER_URL + "/trial-code", {
+			method: "POST",
+			headers: { "Content-Type": "application/json" },
+			body: JSON.stringify({ code: code }),
+		}).then(function (response) {
+			return response.json().then(function (data) {
+				if (!response.ok) { setLength("48 hours", "48-hour"); show(data.error || "This promotion code isn’t valid.", true); return; }
+				setLength(data.span, data.adjective);
+				status.hidden = true;
+			});
+		}).catch(function () {});
+	}
+
+	var fromLink = new URLSearchParams(window.location.search).get("code");
+	if (fromLink) {
+		promo.open = true;
+		codeInput.value = fromLink;
+		lookUp(fromLink.trim());
+	}
+	codeInput.addEventListener("change", function () { lookUp(codeInput.value.trim()); });
 
 	form.addEventListener("submit", function (event) {
 		event.preventDefault();
@@ -134,7 +187,7 @@ var WORKER_URL = "https://italify-trial.file-manager-bot.workers.dev";
 		fetch(WORKER_URL + "/signup", {
 			method: "POST",
 			headers: { "Content-Type": "application/json" },
-			body: JSON.stringify({ email: email.value }),
+			body: JSON.stringify({ email: email.value, code: codeInput.value.trim() || undefined }),
 		}).then(function (response) {
 			return response.json().then(function (data) {
 				if (!response.ok) throw new Error(data.error || "Something went wrong.");
