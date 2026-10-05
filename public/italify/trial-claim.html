@@ -31,11 +31,6 @@
 		font-size: 22px;
 		letter-spacing: 0.06em;
 	}
-	#older-code code {
-		white-space: pre-wrap;
-		overflow-wrap: anywhere;
-		font-size: 13px;
-	}
 	.claim-status { color: var(--color-secondary); }
 	.claim-status.error { color: var(--color-error); }
 </style>
@@ -144,9 +139,8 @@ var WORKER_URL = /^(localhost|127\.0\.0\.1)$/.test(location.hostname)
 					+ "get the same key again.");
 				return;
 			}
-			// The key leads; the long code is only for Italify versions from
-			// before keys. (A Worker from before keys answers with the code
-			// alone – then the page reads as it always did.)
+			// The key is what the page shows; the long code only if a Worker
+			// from before keys answers with the code alone.
 			var key = r.data.key;
 			var noun = key ? "key" : "code";
 			title.textContent = r.data.reused ? "Here is your trial " + noun + " again" : "Your trial " + noun + " is ready";
@@ -156,10 +150,6 @@ var WORKER_URL = /^(localhost|127\.0\.0\.1)$/.test(location.hostname)
 			Array.prototype.forEach.call(document.querySelectorAll(".claim-noun"), function (el) {
 				el.textContent = noun;
 			});
-			if (key) {
-				document.getElementById("claim-long-code").textContent = r.data.code;
-				document.getElementById("older-code").hidden = false;
-			}
 			document.getElementById("claim-duration").textContent = span(r.data.durationHours || 48);
 			document.getElementById("claim-promo-note").hidden = !r.data.promoIgnored;
 			result.hidden = false;
