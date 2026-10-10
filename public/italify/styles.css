@@ -1261,8 +1261,8 @@ main.landing figure.shot img {
 	border-radius: var(--rounded-lg);
 }
 
-/* #overview: two columns – the heading left (riding along while the
-   text scrolls past), the text right, the screenshot full width below. */
+/* #overview: two columns – the heading left, the text right, the
+   screenshot full width below. */
 main.landing > section[data-section="overview"] {
 	display: grid;
 	grid-template-columns: minmax(0, 0.9fr) minmax(0, 1.1fr);
@@ -1273,8 +1273,6 @@ main.landing > section[data-section="overview"] {
 main.landing > section[data-section="overview"] > h2 {
 	grid-column: 1;
 	margin: 0;
-	position: sticky;
-	top: calc(var(--header-height) + 32px);
 }
 
 main.landing > section[data-section="overview"] > .section-body {
@@ -1294,7 +1292,6 @@ main.landing > section[data-section="overview"] > .section-wide {
 	}
 
 	main.landing > section[data-section="overview"] > h2 {
-		position: static;
 		margin-bottom: 24px;
 	}
 
