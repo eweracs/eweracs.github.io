@@ -1,8 +1,8 @@
 # Tags {#node-flags}
 
-@lede Five per-node marks outside the diagonal model – each changes how the filter treats one spot.
+@lede Five per-node marks outside the diagonal model. Each changes how the filter treats certain aspects.
 
-Five **Tags** live outside the diagonal model – each marks an individual node or segment and changes how the filter treats that one spot. Every Tag has a canvas marker and an entry in the right-click *Tags* section, most have a keyboard shortcut, and each is removed the same way it was added. Hold [[⌥]] on any of them to mirror the change across every compatible master.
+Every Tag has a canvas marker and an entry in the right-click *Tags* section (or use the keyboard shortcuts). As always, hold [[⌥]] while toggling any of them to mirror the change across every compatible master.
 
 ## Curve Extension {#curve-extension}
 

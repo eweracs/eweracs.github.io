@@ -18,300 +18,440 @@
 	} catch (e) {}
 })();
 </script>
-<link rel="stylesheet" href="styles.css?v=25">
+<link rel="stylesheet" href="styles.css?v=36">
 <style>
-	/* Page-local styling for the size picker and the order form; both
-	   markup blocks live in content/buy.md (raw HTML) so the surrounding
-	   text stays editable as Markdown. */
-	.size-picker {
-		display: grid;
-		grid-template-columns: repeat(4, 1fr);
-		gap: var(--space-sm);
-		margin: var(--space-md) 0;
+	/* The Buy page, in the landing page's wide layout (styles.css,
+	   "Landing page"): a short grid-paper intro, then the order as steps
+	   on the left with the order summary pinned on the right, then free
+	   credits and the FAQ. All markup blocks live in content/buy.md (raw
+	   HTML); the script below arranges them and wires them up. */
+
+	/* ---- Intro: one short band of the landing page's grid paper ---- */
+	.page-buy main.landing > section.buy-intro {
+		position: relative;
+		isolation: isolate;
+		max-width: none;
+		margin-top: calc(-1 * var(--header-height));
+		padding: calc(var(--header-height) + 96px) max(var(--gutter), calc((100% - var(--wide)) / 2)) 96px;
 	}
-	.size-option {
+	.buy-intro::before {
+		content: "";
+		position: absolute;
+		inset: 0;
+		z-index: -1;
+		background-color: var(--color-muted);
+		background-image:
+			linear-gradient(var(--color-grid) 1px, transparent 1px),
+			linear-gradient(90deg, var(--color-grid) 1px, transparent 1px);
+		background-size: 48px 48px;
+		background-position: center -1px;
+		-webkit-mask-image: linear-gradient(to bottom, #000 calc(100% - 96px), transparent);
+		mask-image: linear-gradient(to bottom, #000 calc(100% - 96px), transparent);
+	}
+	.page-buy .buy-intro > .section-body {
+		max-width: none;
 		display: flex;
 		flex-direction: column;
-		gap: 2px;
-		text-align: left;
-		padding: 12px 14px;
-		border: 1px solid var(--color-border);
-		border-radius: var(--rounded-md);
-		background: var(--color-surface);
-		color: var(--color-primary);
-		font: inherit;
-		cursor: pointer;
-		transition: background-color 0.15s ease, border-color 0.15s ease;
+		align-items: flex-start;
+		gap: 28px;
 	}
-	.size-option:hover { border-color: var(--color-secondary); }
-	.size-option[aria-checked="true"] {
+	.buy-intro .section-body > * { margin: 0; }
+	.buy-intro h1 {
+		font-size: clamp(34px, 4.2vw, 60px);
+		line-height: 1.02;
+		font-weight: 650;
+		letter-spacing: -0.5px;
+	}
+	.buy-intro p.lede {
+		max-width: 38rem;
+		font-size: clamp(19px, 1.6vw, 23px);
+		line-height: 1.45;
+	}
+
+	/* ---- The shop: steps left, order summary right ---- */
+	.shop {
+		display: grid;
+		grid-template-columns: minmax(0, 1fr) 380px;
+		gap: clamp(40px, 5vw, 80px);
+		align-items: start;
+		max-width: calc(var(--wide) + 2 * var(--gutter));
+		margin: 24px auto 0;
+		padding: 0 var(--gutter);
+	}
+	.shop-steps {
+		display: flex;
+		flex-direction: column;
+		gap: 88px;
+	}
+	.page-buy main.landing .shop-steps > section {
+		max-width: none;
+		margin: 0;
+		padding: 0;
+	}
+	.page-buy .shop-steps > section[hidden] { display: none; }
+	.page-buy main.landing .shop-steps > section > h2 {
+		margin: 0 0 8px;
+		font-size: clamp(28px, 2.6vw, 36px);
+		line-height: 1.15;
+	}
+	.page-buy .shop-steps > section > .section-body { max-width: none; }
+	/* The one line under each step's heading. */
+	.page-buy .shop-steps .section-body > p:first-child {
+		margin: 0 0 24px;
+		font-size: 17px;
+		line-height: 26px;
+		color: var(--color-secondary);
+	}
+	@media (max-width: 1000px) {
+		.shop { grid-template-columns: minmax(0, 1fr); }
+	}
+
+	/* ---- Selectable cards: size, licence, time passes ---- */
+	.choice-grid {
+		display: grid;
+		grid-template-columns: repeat(4, minmax(0, 1fr));
+		gap: 14px;
+	}
+	.kind-picker { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+	.choice-card {
+		position: relative;
+		display: flex;
+		flex-direction: column;
+		align-items: flex-start;
+		gap: 4px;
+		padding: 20px 22px;
+		text-align: left;
+		font: inherit;
+		color: var(--color-primary);
+		background: var(--color-surface);
+		border: 1px solid var(--color-border);
+		border-radius: 10px;
+		cursor: pointer;
+		transition: border-color 0.15s, box-shadow 0.15s;
+	}
+	.choice-card:hover:not(:disabled) { border-color: var(--color-secondary); }
+	.choice-card[aria-checked="true"] {
 		border-color: var(--color-primary);
+		box-shadow: 0 0 0 1px var(--color-primary), 0 1px 2px rgba(0, 0, 0, 0.06), 0 4px 10px rgba(0, 0, 0, 0.06);
+	}
+	.choice-card:disabled {
+		cursor: default;
+		color: var(--color-secondary);
 		background: var(--color-muted);
 	}
-	.size-name { font-size: 19px; line-height: 28px; }
-	.size-desc { font-size: 15px; line-height: 22px; color: var(--color-secondary); }
-	.size-compare-row { grid-column: 1 / -1; margin: 4px 0 0; }
-	/* A switch rather than a link: it is a state of the page, not a place
-	   to go, so the label stays put and the control carries the state. */
-	.size-compare {
+	.choice-card:focus-visible { outline: 2px solid var(--color-link); outline-offset: 2px; }
+	/* A filled tick in the corner of the chosen card. */
+	.choice-card[aria-checked="true"]::after {
+		content: "";
+		position: absolute;
+		top: 16px;
+		right: 16px;
+		width: 22px;
+		height: 22px;
+		border-radius: var(--rounded-full);
+		background: var(--color-primary) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 12 12' fill='none' stroke='white' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M2.5 6.2 5 8.5l4.5-5'/%3E%3C/svg%3E") center / 12px no-repeat;
+	}
+	:root[data-theme="dark"] .choice-card[aria-checked="true"]::after {
+		background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 12 12' fill='none' stroke='%2314161a' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M2.5 6.2 5 8.5l4.5-5'/%3E%3C/svg%3E");
+	}
+	.choice-name { font-size: 22px; line-height: 28px; font-weight: 600; }
+	.choice-desc { font-size: 16px; line-height: 22px; color: var(--color-secondary); }
+	.choice-price {
+		margin-top: 10px;
+		font-size: 26px;
+		line-height: 30px;
+		font-weight: 600;
+		font-variant-numeric: tabular-nums;
+	}
+	.choice-card:disabled .choice-price { font-size: 16px; line-height: 22px; font-weight: 400; }
+	.kind-option { padding: 26px 28px; }
+	.kind-option .choice-name { font-size: 26px; line-height: 32px; }
+	.kind-option .choice-desc { font-size: 17px; line-height: 26px; max-width: 22rem; }
+	@media (max-width: 700px) {
+		.choice-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+		.kind-picker { grid-template-columns: minmax(0, 1fr); }
+	}
+
+	/* The price tables are the data (read by the script); the cards and
+	   the slider are what's on show. */
+	.page-buy .price-source { display: none; }
+
+	/* ---- Credit slider: 1–24, snapping to the pack sizes, which are
+	   marked (and clickable) below the track. The thumb is 24px wide, so a
+	   tick at fraction f sits at 12px + (100% − 24px) × f. ---- */
+	.credit-picker { padding-top: 8px; }
+	.credit-range {
+		--fill: 0%;
+		display: block;
+		width: 100%;
+		height: 24px;
+		margin: 0;
+		appearance: none;
+		-webkit-appearance: none;
+		background: transparent;
+		cursor: pointer;
+	}
+	.credit-range::-webkit-slider-runnable-track {
+		height: 4px;
+		border-radius: var(--rounded-full);
+		background: linear-gradient(to right, var(--color-primary) var(--fill), var(--color-border) var(--fill));
+	}
+	.credit-range::-moz-range-track {
+		height: 4px;
+		border-radius: var(--rounded-full);
+		background: linear-gradient(to right, var(--color-primary) var(--fill), var(--color-border) var(--fill));
+	}
+	.credit-range::-webkit-slider-thumb {
+		-webkit-appearance: none;
+		appearance: none;
+		width: 24px;
+		height: 24px;
+		margin-top: -10px;
+		border-radius: var(--rounded-full);
+		border: 1px solid var(--color-primary);
+		background: var(--color-surface);
+		box-shadow: 0 1px 3px rgba(0, 0, 0, 0.15);
+	}
+	.credit-range::-moz-range-thumb {
+		width: 22px;
+		height: 22px;
+		border-radius: var(--rounded-full);
+		border: 1px solid var(--color-primary);
+		background: var(--color-surface);
+	}
+	.credit-range:focus-visible { outline: 2px solid var(--color-link); outline-offset: 6px; border-radius: var(--rounded-sm); }
+	.credit-ticks { position: relative; height: 44px; margin-top: 4px; }
+	.credit-tick {
+		position: absolute;
+		top: 0;
+		transform: translateX(-50%);
+		min-width: 28px;
+		padding: 12px 2px 4px;
+		border: none;
+		background: none;
+		font: inherit;
+		font-size: 16px;
+		line-height: 20px;
+		color: var(--color-secondary);
+		font-variant-numeric: tabular-nums;
+		cursor: pointer;
+	}
+	.credit-tick::before {
+		content: "";
+		position: absolute;
+		top: 0;
+		left: 50%;
+		width: 1px;
+		height: 8px;
+		background: var(--color-secondary);
+		opacity: 0.5;
+	}
+	.credit-tick:hover { color: var(--color-primary); }
+	.credit-tick.is-on { color: var(--color-primary); font-weight: 650; }
+	.credit-tick.is-on::before { opacity: 1; background: var(--color-primary); }
+	.credit-readout {
+		display: flex;
+		justify-content: space-between;
+		align-items: flex-end;
+		gap: 24px;
+		margin-top: 28px;
+		padding: 24px 28px;
+		border-radius: var(--rounded-lg);
+		border: 1px solid var(--color-border);
+	}
+	.credit-readout p { margin: 0; }
+	.readout-name { font-size: 26px; line-height: 32px; font-weight: 600; }
+	.readout-sub { margin-top: 2px; font-size: 16px; line-height: 22px; color: var(--color-secondary); }
+	.readout-price { font-size: 36px; line-height: 40px; font-weight: 650; font-variant-numeric: tabular-nums; }
+
+	/* ---- Renewal switch (month and year passes) ---- */
+	.renew-block { margin-top: 28px; }
+	.renew-block[hidden] { display: none; }
+	/* The site's round checkbox (styles.css, .demo-toggle) – the same
+	   control as the overview's demo – at the page's text size. */
+	.renew-switch { font-size: 19px; }
+	.renew-switch:has(input:disabled) { cursor: default; color: var(--color-secondary); }
+	.renew-switch input:disabled { opacity: 0.45; cursor: default; }
+	.renew-note { margin: 6px 0 0; font-size: 16px; line-height: 24px; color: var(--color-secondary); }
+
+	/* ---- Seats ---- */
+	.seat-stepper {
 		display: inline-flex;
 		align-items: center;
-		gap: var(--space-sm);
-		padding: 0;
-		border: 0;
-		background: none;
-		color: var(--color-primary);
-		font: inherit;
-		font-size: 17px;
-		cursor: pointer;
-	}
-	.size-compare .switch {
-		position: relative;
-		flex: none;
-		width: 36px;
-		height: 20px;
 		border: 1px solid var(--color-border);
 		border-radius: var(--rounded-full);
-		transition: background-color 0.15s ease, border-color 0.15s ease;
-	}
-	.size-compare .switch-knob {
-		position: absolute;
-		top: 2px;
-		left: 2px;
-		width: 14px;
-		height: 14px;
-		border-radius: var(--rounded-full);
-		background: var(--color-secondary);
-		transition: transform 0.15s ease, background-color 0.15s ease;
-	}
-	.size-compare:hover .switch { border-color: var(--color-secondary); }
-	.size-compare[aria-checked="true"] .switch {
-		background: var(--color-primary);
-		border-color: var(--color-primary);
-	}
-	.size-compare[aria-checked="true"] .switch-knob {
 		background: var(--color-surface);
-		transform: translateX(16px);
 	}
-	.size-compare:focus-visible {
-		outline: 2px solid var(--color-link);
-		outline-offset: 2px;
-		border-radius: var(--rounded-sm);
-	}
-	/* Four cards need more room than three: two rows rather than one long
-	   column, which on a phone would push the pricing off the screen. */
-	@media (max-width: 760px) {
-		.size-picker { grid-template-columns: 1fr 1fr; }
-	}
-	@media (max-width: 340px) {
-		.size-picker { grid-template-columns: 1fr; }
-	}
-	/* Columns the picker filters out. Spelled out rather than left to the
-	   UA default, because `display` on table cells is easily overridden. */
-	main table th[hidden],
-	main table td[hidden] { display: none; }
-	/* The two pricing tables keep a fixed column grid (widths pinned in
-	   the script): with the automatic layout every size sized its own
-	   columns, so switching between them shunted the whole table about.
-	   Fixed, a size change only swaps what stands in the columns. */
-	main table.price-grid { table-layout: fixed; }
-	/* Every column but the label one is inset by the same amount, so the
-	   tint below reads as a band rather than as a ragged edge against the
-	   figures – and so nothing shifts when the tint moves. */
-	main table.price-grid th:not(:first-child),
-	main table.price-grid td:not(:first-child) { padding-left: 12px; }
-	/* Comparing all sizes: the one that was picked stays marked. */
-	main table.price-grid th.is-size,
-	main table.price-grid td.is-size { background: var(--color-muted); }
-	/* Filtered to one size, a pass it cannot buy says so in place of the
-	   price. The comparison shows the sizes that do offer it side by side,
-	   so there the bare dash is enough. */
-	main table.price-grid .pass-note {
-		color: var(--color-secondary);
-		font-size: 15px;
-		line-height: 22px;
-	}
-	main table.price-grid.is-compare .pass-note,
-	main table.price-grid:not(.is-compare) .pass-dash { display: none; }
-	/* Fixed columns leave the headings no room to spare on a phone, and
-	   the tracking is what costs the most of it. */
-	@media (max-width: 640px) {
-		main table.price-grid th { letter-spacing: 0.4px; }
-		main table.price-grid th:not(:first-child),
-		main table.price-grid td:not(:first-child) { padding-left: 6px; }
-		/* Four sizes side by side do not fit a phone, and squeezing them
-		   would collide the headings. The comparison scrolls instead – in
-		   its own box, so the page itself never does. A filtered view is
-		   at most three columns and still fits, so it never scrolls. */
-		main table.price-grid.is-compare { min-width: 460px; }
-	}
-	.price-scroll { overflow-x: auto; }
-
-	/* The two offerings are one choice, not two chapters. The sections
-	   stay ordinary Markdown in content/buy.md – the script folds them
-	   into this group – so the page shows one table at a time. */
-	.tab-group { margin-top: var(--space-xl); }
-	.tab-list {
-		display: flex;
-		gap: var(--space-lg);
-		border-bottom: 1px solid var(--color-border);
-	}
-	.tab {
-		margin-bottom: -1px;
-		padding: 0 0 10px;
-		border: 0;
-		border-bottom: 2px solid transparent;
-		background: none;
-		color: var(--color-secondary);
-		font: inherit;
-		font-size: 28px;
-		font-weight: 600;
-		line-height: 32px;
-		letter-spacing: 0.1px;
-		cursor: pointer;
-		transition: color 0.15s ease, border-color 0.15s ease;
-	}
-	.tab:hover { color: var(--color-primary); }
-	.tab[aria-selected="true"] {
+	.seat-stepper button {
+		width: 48px;
+		height: 48px;
+		border: none;
+		border-radius: var(--rounded-full);
+		background: transparent;
 		color: var(--color-primary);
-		border-bottom-color: var(--color-primary);
+		font: inherit;
+		font-size: 24px;
+		cursor: pointer;
 	}
-	.tab:focus-visible { outline: 2px solid var(--color-link); outline-offset: 2px; }
-	main .tab-group section.tab-panel { margin-top: var(--space-lg); }
-	/* The tab is the panel's heading; printing it again inside would say
-	   it twice. It stays in the document for its structure and for the
-	   deep links that point at it. */
-	.tab-panel > h2 {
+	.seat-stepper button:hover:not(:disabled) { background: var(--color-muted); }
+	.seat-stepper button:disabled { color: var(--color-border); cursor: default; }
+	.seat-stepper output { min-width: 4.5em; text-align: center; font-variant-numeric: tabular-nums; }
+
+	/* ---- Your details ---- */
+	.order-form {
+		display: grid;
+		grid-template-columns: repeat(2, minmax(0, 1fr));
+		gap: 20px;
+	}
+	.order-form .field { display: flex; flex-direction: column; gap: 6px; }
+	.order-form .field[hidden] { display: none; }
+	.order-form label { font-size: 16px; line-height: 22px; color: var(--color-secondary); }
+	.order-form input,
+	.order-form select {
+		width: 100%;
+		height: 48px;
+		padding: 0 14px;
+		font: inherit;
+		font-size: 18px;
+		color: var(--color-primary);
+		background: var(--color-surface);
+		border: 1px solid var(--color-border);
+		border-radius: 10px;
+	}
+	.order-form input:focus-visible,
+	.order-form select:focus-visible { outline: 2px solid var(--color-link); outline-offset: 0; border-color: transparent; }
+	/* Codes, not prose: lining figures, and a little air in the key. */
+	#order-vat { font-feature-settings: "lnum"; }
+	#order-licence { font-feature-settings: "lnum"; letter-spacing: 0.04em; }
+	.topup { grid-column: 1 / -1; margin-top: 4px; }
+	.topup summary { cursor: pointer; font-size: 18px; color: var(--color-link); list-style: none; }
+	.topup summary::-webkit-details-marker { display: none; }
+	.topup summary::before { content: "+ "; }
+	.topup[open] summary::before { content: "– "; }
+	.topup .field { margin-top: 16px; max-width: 24rem; }
+	.order-licence-note { margin: 8px 0 0; font-size: 16px; line-height: 24px; color: var(--color-secondary); }
+	.order-licence-note.error { color: var(--color-error); }
+	@media (max-width: 700px) {
+		.order-form { grid-template-columns: minmax(0, 1fr); }
+	}
+
+	/* ---- Order summary ---- */
+	.order-summary {
+		position: sticky;
+		top: calc(var(--header-height) + 32px);
+		padding: 32px;
+		border-radius: var(--rounded-xl);
+		background: var(--color-surface);
+		box-shadow: var(--shadow-card);
+	}
+	:root[data-theme="dark"] .order-summary { border: 1px solid var(--color-border); }
+	.order-summary h3 { margin: 0 0 20px; font-size: 22px; line-height: 28px; font-weight: 600; }
+	.summary-lines { display: flex; flex-direction: column; gap: 10px; margin: 0; }
+	.summary-lines > div { display: flex; justify-content: space-between; gap: 16px; font-size: 17px; line-height: 24px; }
+	.summary-lines > div[hidden] { display: none; }
+	.summary-lines dt { color: var(--color-secondary); }
+	.summary-lines dd { margin: 0; text-align: right; }
+	.summary-total {
+		display: flex;
+		justify-content: space-between;
+		align-items: baseline;
+		margin-top: 20px;
+		padding-top: 20px;
+		border-top: 1px solid var(--color-border);
+		font-size: 17px;
+		color: var(--color-secondary);
+	}
+	#order-total {
+		font-size: 40px;
+		line-height: 44px;
+		font-weight: 650;
+		color: var(--color-primary);
+		font-variant-numeric: tabular-nums;
+	}
+	.summary-vat { margin: 2px 0 0; text-align: right; font-size: 15px; line-height: 20px; color: var(--color-secondary); }
+	.order-summary .button-primary { width: 100%; height: 52px; margin-top: 24px; font-family: inherit; cursor: pointer; }
+	.order-summary .button-primary:disabled { opacity: 0.35; cursor: not-allowed; }
+	.order-status { margin: 12px 0 0; font-size: 15px; line-height: 22px; color: var(--color-secondary); }
+	.order-status.error { color: var(--color-error); }
+	.summary-fine { margin: 6px 0 0; font-size: 15px; line-height: 22px; color: var(--color-secondary); }
+	.summary-fine a { color: var(--color-secondary); text-decoration: underline; text-underline-offset: 3px; }
+	@media (max-width: 1000px) {
+		.order-summary { position: static; }
+	}
+
+	/* ---- Free credits: one quiet panel, as wide as the steps ----
+	   The section takes the shop's column grid, and the panel sits in
+	   its left column – so it lines up with the steps above rather than
+	   running under the order summary's column too. */
+	.page-buy main.landing > section[data-section="free"] {
+		display: grid;
+		grid-template-columns: minmax(0, 1fr) 380px;
+		column-gap: clamp(40px, 5vw, 80px);
+	}
+	.page-buy section[data-section="free"] > .section-body {
+		grid-column: 1;
+		max-width: none;
+		padding: 28px 32px;
+		border-radius: var(--rounded-xl);
+		background: var(--color-muted);
+		border: 1px solid var(--color-border);
+		font-size: 19px;
+		line-height: 28px;
+	}
+	/* The heading names the section for its anchor and the outline; the
+	   panel's own sentence already says it. */
+	.page-buy section[data-section="free"] > h2 {
 		position: absolute;
 		width: 1px;
 		height: 1px;
 		margin: -1px;
-		padding: 0;
 		overflow: hidden;
 		clip-path: inset(50%);
 		white-space: nowrap;
 	}
-	@media (max-width: 640px) {
-		.tab-list { gap: var(--space-md); }
-		.tab { font-size: 22px; line-height: 28px; }
+	@media (max-width: 1000px) {
+		.page-buy main.landing > section[data-section="free"] { grid-template-columns: minmax(0, 1fr); }
 	}
 
-	.order-form {
-		border: 1px solid var(--color-border);
-		border-radius: var(--rounded-md);
-		padding: var(--space-md);
+	/* ---- FAQ: the questions, each opening its answer ---- */
+	/* The same two columns as the shop: heading and questions in the
+	   left one, as wide as the steps. */
+	.page-buy main.landing > section[data-section="faq"] {
 		display: grid;
-		grid-template-columns: 1fr 1fr;
-		gap: var(--space-sm) var(--space-md);
-		margin: var(--space-md) 0;
+		grid-template-columns: minmax(0, 1fr) 380px;
+		column-gap: clamp(40px, 5vw, 80px);
 	}
-	.order-form .span-2 { grid-column: 1 / -1; }
-	@media (max-width: 640px) {
-		.order-form { grid-template-columns: 1fr; }
-		.order-form .span-2 { grid-column: auto; }
+	.page-buy section[data-section="faq"] > * { grid-column: 1; }
+	.page-buy section[data-section="faq"] > .section-body { max-width: none; }
+	@media (max-width: 1000px) {
+		.page-buy main.landing > section[data-section="faq"] { grid-template-columns: minmax(0, 1fr); }
 	}
-	.order-form label {
-		display: block;
-		font-size: 16px;
-		line-height: 21px;
-		letter-spacing: 1.1px;
-		text-transform: lowercase;
-		font-feature-settings: 'smcp';
-		color: var(--color-secondary);
-		margin-bottom: 2px;
-	}
-	.order-form input,
-	.order-form select {
-		width: 100%;
-		padding: 8px 10px;
-		border: 1px solid var(--color-border);
-		border-radius: var(--rounded-sm);
-		background: var(--color-surface);
-		color: var(--color-primary);
-		font: inherit;
-		font-size: 17px;
-		line-height: 24px;
-	}
-	/* VAT IDs are codes, not prose – lining figures sit better next to
-	   the uppercase country prefix. */
-	#order-vat { font-feature-settings: "lnum"; }
-	.order-form input:focus-visible,
-	.order-form select:focus-visible {
-		outline: 2px solid var(--color-link);
-		outline-offset: 1px;
-	}
-	.order-form .order-actions {
-		display: flex;
-		align-items: center;
-		gap: var(--space-md);
-		flex-wrap: wrap;
-	}
-	.order-form button { font-family: inherit; cursor: pointer; }
-	.order-total { font-size: 19px; }
-	/* The shared round checkbox (styles.css), undoing what the form's
-	   own label and input rules would make of it. */
-	.order-form .renew-toggle {
-		display: inline-flex;
-		margin: var(--space-xs) 0 0;
-		font-size: 17px;
-		line-height: 26px;
-		letter-spacing: normal;
-		text-transform: none;
-		font-feature-settings: normal;
-		color: var(--color-primary);
-	}
-	.order-form .renew-toggle[hidden] { display: none; }
-	.order-form .renew-toggle input {
-		width: 20px;
-		padding: 0;
-		border: 1px solid var(--color-secondary);
-		border-radius: var(--rounded-full);
-		background: var(--color-muted);
-	}
-	.order-form .renew-toggle input:hover { border-color: var(--color-primary); }
-	/* The licence key of a top-up: a code, so lining figures and a little
-	   air between the characters. */
-	#order-licence { font-feature-settings: "lnum"; letter-spacing: 0.04em; }
-	.order-licence-note { margin: 4px 0 0; font-size: 15px; line-height: 22px; color: var(--color-secondary); }
-	.order-licence-note.error { color: var(--color-error); }
-	.order-status { font-size: 17px; line-height: 26px; color: var(--color-secondary); }
-	.order-status.error { color: var(--color-error); }
-	/* FAQ: the answers are reference rather than reading, so the page
-	   shows the questions and opens one at a time. The markup stays plain
-	   `####` headings and paragraphs in content/buy.md – the script folds
-	   each question into a <details>, which brings the keyboard and
-	   find-in-page behaviour with it. */
+	.faq-list { border-top: 1px solid var(--color-border); }
 	.faq-item { border-bottom: 1px solid var(--color-border); }
-	.faq-item:first-of-type { border-top: 1px solid var(--color-border); }
 	.faq-question {
 		display: flex;
+		justify-content: space-between;
 		align-items: center;
-		gap: var(--space-md);
-		padding: 14px 0;
+		gap: 24px;
+		padding: 20px 0;
 		cursor: pointer;
 		list-style: none;
 	}
 	/* Safari still draws the disclosure triangle without this. */
 	.faq-question::-webkit-details-marker { display: none; }
-	.faq-question:hover { color: var(--color-secondary); }
-	.faq-question:focus-visible {
-		outline: 2px solid var(--color-link);
-		outline-offset: 2px;
-		border-radius: var(--rounded-sm);
-	}
+	.faq-question:focus-visible { outline: 2px solid var(--color-link); outline-offset: 2px; border-radius: var(--rounded-sm); }
 	.faq-question h3,
-	.faq-question h4 { margin: 0; flex: 1; }
-	.faq-mark {
+	.faq-question h4 { margin: 0; font-size: 20px; line-height: 28px; font-weight: 400; }
+	.faq-question::after {
+		content: "+";
 		flex: none;
-		width: 18px;
-		height: 18px;
+		font-size: 26px;
 		color: var(--color-secondary);
 		transition: transform 0.2s ease;
 	}
-	.faq-item[open] .faq-mark { transform: rotate(90deg); }
-	.faq-answer { padding-bottom: 4px; }
-	.faq-answer > :first-child { margin-top: 0; }
-	.faq-answer > :last-child { margin-bottom: var(--space-md); }
+	.faq-item[open] .faq-question::after { transform: rotate(45deg); }
+	.faq-answer { max-width: 44rem; padding-bottom: 6px; color: var(--color-secondary); font-size: 18px; line-height: 28px; }
+	.faq-answer > :last-child { margin-bottom: 16px; }
 	/* Where the browser can animate a disclosure, it should – the answer
 	   slides rather than snaps. Everywhere else it simply appears. */
 	@supports selector(details::details-content) {
@@ -325,7 +465,7 @@
 	}
 </style>
 </head>
-<body>
+<body class="page-landing page-buy">
 
 <header class="site">
 	<div class="column">
@@ -345,16 +485,16 @@
 
 <!-- Page content lives in content/buy.md – edit that file, not this one.
      Authoring conventions are documented in AUTHORING.md. -->
-<main class="column" data-source="content/buy.md"></main>
+<main class="landing" data-source="content/buy.md"></main>
 
 <footer>
-	<div class="column">
+	<div class="column wide">
 		<p>Italify – a plugin for <a href="https://glyphsapp.com">Glyphs</a>. <a href="handbook/">Handbook</a> · <a href="eula">Licence terms</a></p>
 	</div>
 </footer>
 
 <script src="vendor/marked.min.js"></script>
-<script src="main.js?v=18"></script>
+<script src="main.js?v=24"></script>
 <script>
 // FAQ: each question folds into a disclosure. The section stays ordinary
 // `####` headings and paragraphs in content/buy.md – this only refolds
@@ -362,20 +502,18 @@
 // Markdown.
 document.addEventListener("italify:rendered", function () {
 	var faq = document.querySelector('section[data-section="faq"]');
-	if (!faq) return;
-	var CHEVRON = '<svg class="faq-mark" viewBox="0 0 24 24" fill="none" '
-		+ 'stroke="currentColor" stroke-width="2" stroke-linecap="round" '
-		+ 'stroke-linejoin="round" aria-hidden="true"><polyline points="9 6 15 12 9 18"/></svg>';
+	var body = faq && faq.querySelector(".section-body");
+	if (!body) return;
+	body.classList.add("faq-list");
 	// Either heading level – the questions are `####` in the Markdown, and
 	// changing that should not silently unfold the section.
-	Array.prototype.forEach.call(faq.querySelectorAll("h3, h4"), function (heading) {
+	Array.prototype.forEach.call(body.querySelectorAll("h3, h4"), function (heading) {
 		var item = document.createElement("details");
 		item.className = "faq-item";
 		heading.parentNode.insertBefore(item, heading);
 		var summary = document.createElement("summary");
 		summary.className = "faq-question";
 		summary.appendChild(heading);
-		summary.insertAdjacentHTML("beforeend", CHEVRON);
 		item.appendChild(summary);
 		// Everything up to the next question is this question's answer.
 		var answer = document.createElement("div");
@@ -387,15 +525,16 @@ document.addEventListener("italify:rendered", function () {
 	});
 });
 
-// Size picker and order form. Both markup blocks arrive with the rendered
-// Markdown (content/buy.md), so hook up after main.js dispatches
+// The order. Every markup block arrives with the rendered Markdown
+// (content/buy.md), so all of this hooks up after main.js dispatches
 // italify:rendered.
 //
 // Prices are NOT duplicated here: the catalog is read out of the two
-// pricing tables in content/buy.md, which keeps the tables and the order
-// form from ever disagreeing. It is display-only regardless – the Worker
-// holds its own catalog and recomputes every price server-side, ignoring
-// whatever the client claims (Scripts/TrialWorker/src/index.mjs).
+// pricing tables in content/buy.md (kept in the page, hidden), which
+// keeps the tables and the order from ever disagreeing. It is
+// display-only regardless – the Worker holds its own catalog and
+// recomputes every price server-side, ignoring whatever the client
+// claims (Scripts/TrialWorker/src/index.mjs).
 // Local previews talk to the STAGING Worker (its own KV namespace and
 // the Stripe SANDBOX keys – see wrangler.toml [env.staging]), so the
 // whole flow can be exercised without touching live data. The published
@@ -403,100 +542,6 @@ document.addEventListener("italify:rendered", function () {
 var WORKER_URL = /^(localhost|127\.0\.0\.1)$/.test(location.hostname)
 	? "https://italify-trial-staging.file-manager-bot.workers.dev"
 	: "https://italify-trial.file-manager-bot.workers.dev";
-
-// Time passes and master credits are one choice between two ways of
-// paying, not two chapters to read in turn – so they are folded into a
-// tab group here, and the page never shows more than one of them. The
-// sections stay ordinary `##` sections in content/buy.md: this only
-// rearranges what main.js has already rendered, which keeps their
-// anchors (#time, #credits) working as link targets.
-document.addEventListener("italify:rendered", function () {
-	// In page order; the first is the one that opens. Each tab is named
-	// after its section's heading, so the Markdown stays the one place
-	// these are written.
-	var PANEL_IDS = ["time", "credits"];
-	var panels = PANEL_IDS.map(function (id) {
-		return document.querySelector('section[data-section="' + id + '"]');
-	});
-	if (panels.indexOf(null) !== -1) return;
-
-	var group = document.createElement("div");
-	group.className = "tab-group";
-	panels[0].parentNode.insertBefore(group, panels[0]);
-	var list = document.createElement("div");
-	list.className = "tab-list";
-	list.setAttribute("role", "tablist");
-	group.appendChild(list);
-
-	var tabs = PANEL_IDS.map(function (id, index) {
-		var heading = panels[index].querySelector("h2");
-		var tab = document.createElement("button");
-		tab.type = "button";
-		tab.className = "tab";
-		tab.id = "tab-" + id;
-		tab.setAttribute("role", "tab");
-		tab.setAttribute("aria-controls", "panel-" + id);
-		tab.textContent = heading ? heading.textContent.trim() : id;
-		list.appendChild(tab);
-
-		panels[index].id = "panel-" + id;
-		panels[index].className += " tab-panel";
-		panels[index].setAttribute("role", "tabpanel");
-		panels[index].setAttribute("aria-labelledby", tab.id);
-		group.appendChild(panels[index]);
-		return tab;
-	});
-
-	function select(index) {
-		tabs.forEach(function (tab, i) {
-			var current = i === index;
-			tab.setAttribute("aria-selected", current ? "true" : "false");
-			tab.tabIndex = current ? 0 : -1;
-			panels[i].hidden = !current;
-		});
-	}
-
-	tabs.forEach(function (tab, index) {
-		tab.addEventListener("click", function () { select(index); });
-	});
-	list.addEventListener("keydown", function (event) {
-		var back = event.key === "ArrowLeft" || event.key === "ArrowUp";
-		var forward = event.key === "ArrowRight" || event.key === "ArrowDown";
-		if (!back && !forward) return;
-		event.preventDefault();
-		var current = tabs.indexOf(document.activeElement);
-		if (current === -1) return;
-		var next = (current + (back ? -1 : 1) + tabs.length) % tabs.length;
-		select(next);
-		tabs[next].focus();
-	});
-
-	// A link to a heading inside a closed panel has to open it first –
-	// main.js scrolls to the hash right after this event, and the other
-	// pages link to #credits and #time.
-	function panelFor(hash) {
-		var target = hash ? document.getElementById(hash.replace(/^#/, "")) : null;
-		if (!target) return -1;
-		for (var i = 0; i < panels.length; i++) {
-			if (panels[i].contains(target)) return i;
-		}
-		return -1;
-	}
-	function openForHash() {
-		var index = panelFor(location.hash);
-		if (index === -1) return;
-		select(index);
-		// Both main.js on load and the browser on a hashchange scroll to
-		// the heading itself, which is hidden at the top of the panel –
-		// landing there would put the tabs just off screen and leave the
-		// table unexplained. Take the scroll back on the next frame.
-		requestAnimationFrame(function () { group.scrollIntoView(); });
-	}
-	window.addEventListener("hashchange", openForHash);
-
-	select(0);
-	openForHash();
-});
 
 // The organisation sizes, matched against the pricing tables' column
 // headings. A key is also the first half of the package key the Worker
@@ -513,418 +558,436 @@ var PASSES = {
 	"one month": { slug: "month", label: "One month", renews: "monthly", per: "month" },
 	"one year": { slug: "year", label: "One year", renews: "yearly", per: "year" },
 };
+// The pass the page falls back to when the chosen one isn't on offer for
+// the chosen size.
+var DEFAULT_PASS = "month";
+
+// Seats: the first at the package price, every further one at 20 % of
+// it. The Worker recomputes the same figure from the package key and the
+// seat count, so this is display only.
+var EXTRA_SEAT_FACTOR = 0.2;
+var MAX_SEATS = 10;
 
 // "1 000 €" – space as the thousands separator, as everywhere on the page.
 function euros(value) {
-	return String(value).replace(/\B(?=(\d{3})+(?!\d))/g, " ") + " €";
+	return String(Math.round(value)).replace(/\B(?=(\d{3})+(?!\d))/g, " ") + " €";
 }
 
-// The number in a table cell, or null if there isn't one (an em dash in
-// the pass table means that size cannot buy that pass).
+// The number in a table cell, or null if there isn't one (a dash in the
+// pass table means that size cannot buy that pass).
 function amount(text) {
 	var digits = String(text == null ? "" : text).replace(/[^\d]/g, "");
 	return digits ? Number(digits) : null;
 }
 
+// A row of role="radio" cards: click to choose, arrows move the choice
+// (skipping disabled cards), only the chosen card is a tab stop.
+function radioGroup(container, selector, onPick) {
+	function cards() {
+		return Array.prototype.filter.call(container.querySelectorAll(selector), function (card) {
+			return !card.disabled;
+		});
+	}
+	container.addEventListener("click", function (event) {
+		var card = event.target.closest(selector);
+		if (card && !card.disabled) onPick(card);
+	});
+	container.addEventListener("keydown", function (event) {
+		var card = event.target.closest(selector);
+		if (!card) return;
+		var back = event.key === "ArrowLeft" || event.key === "ArrowUp";
+		var forward = event.key === "ArrowRight" || event.key === "ArrowDown";
+		if (!back && !forward) return;
+		event.preventDefault();
+		var list = cards();
+		var next = list[(list.indexOf(card) + (back ? -1 : 1) + list.length) % list.length];
+		if (!next) return;
+		onPick(next);
+		next.focus();
+	});
+}
+
+function markChosen(container, selector, isChosen) {
+	Array.prototype.forEach.call(container.querySelectorAll(selector), function (card) {
+		var chosen = isChosen(card);
+		card.setAttribute("aria-checked", chosen ? "true" : "false");
+		card.tabIndex = chosen ? 0 : -1;
+	});
+}
+
 document.addEventListener("italify:rendered", function () {
+	var main = document.querySelector("main[data-source]");
 	var form = document.getElementById("order-form");
-	if (!form) return;
-	var picker = document.getElementById("size-picker");
-	var compareToggle = document.getElementById("size-compare");
-	var sizeSelect = document.getElementById("order-size");
-	var packageSelect = document.getElementById("order-package");
-	var seatsSelect = document.getElementById("order-seats");
-	var total = document.getElementById("order-total");
-	var submit = document.getElementById("order-submit");
+	if (!main || !form) return;
+	function section(id) {
+		return main.querySelector('section[data-section="' + id + '"]');
+	}
+
+	// ---- Layout ------------------------------------------------------
+	// The first section (title, lede, trial button) is the intro band;
+	// the order steps go into a two-column shop with the summary beside
+	// them. Everything stays in the order content/buy.md gives it.
+	var intro = main.querySelector("section:first-child");
+	if (intro && !intro.dataset.section) intro.classList.add("buy-intro");
+	var STEP_IDS = ["size", "licence", "credits", "time", "seats", "order"];
+	var steps = STEP_IDS.map(section);
+	var shop = document.createElement("div");
+	shop.className = "shop";
+	var stepColumn = document.createElement("div");
+	stepColumn.className = "shop-steps";
+	if (steps[0]) steps[0].parentNode.insertBefore(shop, steps[0]);
+	shop.appendChild(stepColumn);
+	steps.forEach(function (step) { if (step) stepColumn.appendChild(step); });
+	var summary = document.getElementById("order-summary");
+	if (summary) shop.appendChild(summary);
+
+	// ---- Elements -----------------------------------------------------
+	var sizePicker = document.getElementById("size-picker");
+	var kindPicker = document.getElementById("kind-picker");
 	var renewRow = document.getElementById("order-renew-row");
 	var renewBox = document.getElementById("order-renew");
-	var status = document.getElementById("order-status");
+	var renewUnit = document.getElementById("renew-unit");
+	var renewNote = document.getElementById("renew-note");
+	var renewUnavailable = document.getElementById("renew-unavailable");
+	var seatsDown = document.getElementById("seats-down");
+	var seatsUp = document.getElementById("seats-up");
+	var seatsValue = document.getElementById("seats-value");
+	var country = document.getElementById("order-country");
+	var vatRow = document.getElementById("order-vat-row");
+	var vatInput = document.getElementById("order-vat");
+	var topupBox = document.getElementById("order-topup");
 	var licenceInput = document.getElementById("order-licence");
 	var licenceNote = document.getElementById("order-licence-note");
 	var licenceNoteText = licenceNote ? licenceNote.textContent : "";
-	// The licence a top-up is for, as the Worker described it
-	// (/licence/lookup): { key, seats, renews }. Null for a new licence.
-	var topUp = null;
+	var total = document.getElementById("order-total");
+	var submit = document.getElementById("order-submit");
+	var status = document.getElementById("order-status");
+	var statusText = status ? status.textContent : "";
+	var sumSize = document.getElementById("sum-size");
+	var sumPackage = document.getElementById("sum-package");
+	var sumSeats = document.getElementById("sum-seats");
+	var sumRenewRow = document.getElementById("sum-renew-row");
+	var sumRenew = document.getElementById("sum-renew");
 
-	var size = SIZES[0];
-	var compare = false;
-
-	function tableIn(sectionId) {
-		var section = document.querySelector('section[data-section="' + sectionId + '"]');
-		return section ? section.querySelector("table") : null;
+	// ---- The catalog, read off the tables --------------------------------
+	function tableIn(id) {
+		var s = section(id);
+		var table = s ? s.querySelector("table") : null;
+		if (table) table.classList.add("price-source");
+		return table;
 	}
 	var creditTable = tableIn("credits");
 	var passTable = tableIn("time");
-	var priceTables = [creditTable, passTable];
-	priceTables.forEach(function (table) {
-		if (!table) return;
-		table.classList.add("price-grid");
-		// Own scroll box, so a comparison too wide for a phone scrolls
-		// itself rather than dragging the whole page sideways.
-		var scroll = document.createElement("div");
-		scroll.className = "price-scroll";
-		table.parentNode.insertBefore(scroll, table);
-		scroll.appendChild(table);
-	});
 
 	function bodyRows(table) {
 		return table ? Array.prototype.slice.call(table.querySelectorAll("tbody tr")) : [];
 	}
-
 	// Which column holds which size, read from the table's own headings.
 	function columnsOf(table) {
 		var map = {};
 		if (!table) return map;
 		Array.prototype.forEach.call(table.querySelectorAll("thead th"), function (th, index) {
 			var key = th.textContent.trim().toLowerCase();
-			if (SIZES.indexOf(key) !== -1) map[key] = index;
+			if (SIZES.indexOf(key) !== -1) map[key] = { index: index, name: th.textContent.trim() };
 		});
 		return map;
 	}
-
-	function priceIn(row, index) {
-		if (index === undefined) return null;
-		var cell = row.children[index];
+	function priceIn(row, column) {
+		if (!column) return null;
+		var cell = row.children[column.index];
 		return cell ? amount(cell.textContent) : null;
 	}
 
-	// Everything each size can buy, in the order the page presents it.
-	function readCatalog() {
-		var catalog = {};
-		SIZES.forEach(function (key) { catalog[key] = []; });
+	// Credit packs: [{ n, prices: { thin: 50, … } }], in table order.
+	var creditColumns = columnsOf(creditTable);
+	var packs = bodyRows(creditTable).map(function (row) {
+		var n = amount(row.children[0].textContent);
+		var prices = {};
+		SIZES.forEach(function (key) { prices[key] = priceIn(row, creditColumns[key]); });
+		return { n: n, prices: prices };
+	}).filter(function (pack) { return pack.n; });
 
-		var creditColumns = columnsOf(creditTable);
-		bodyRows(creditTable).forEach(function (row) {
-			var credits = amount(row.children[0].textContent);
-			if (!credits) return;
-			SIZES.forEach(function (key) {
-				var price = priceIn(row, creditColumns[key]);
-				if (price === null) return;
-				catalog[key].push({
-					value: key + "-" + credits,
-					group: "Master credits",
-					label: credits + (credits === 1 ? " master" : " masters"),
-					price: price,
-				});
-			});
-		});
+	// Passes: [{ slug, label, renews, per, prices, offeredBy }].
+	var passColumns = columnsOf(passTable);
+	var passes = bodyRows(passTable).map(function (row) {
+		var pass = PASSES[row.children[0].textContent.trim().toLowerCase()];
+		if (!pass) return null;
+		var prices = {};
+		SIZES.forEach(function (key) { prices[key] = priceIn(row, passColumns[key]); });
+		return {
+			slug: pass.slug, label: pass.label, renews: pass.renews || null, per: pass.per || null,
+			prices: prices,
+			// Where a size can't buy it, the card says where it can be had,
+			// naming the sizes as the table's headings do.
+			offeredBy: SIZES.filter(function (key) { return prices[key] !== null; })
+				.map(function (key) { return passColumns[key].name; }),
+		};
+	}).filter(Boolean);
 
-		var passColumns = columnsOf(passTable);
-		bodyRows(passTable).forEach(function (row) {
-			var pass = PASSES[row.children[0].textContent.trim().toLowerCase()];
-			if (!pass) return;
-			SIZES.forEach(function (key) {
-				var price = priceIn(row, passColumns[key]);
-				if (price === null) return;
-				catalog[key].push({
-					value: key + "-" + pass.slug,
-					group: "Time passes",
-					label: pass.label + " pass",
-					price: price,
-					renews: pass.renews ? key + "-" + pass.renews : null,
-					per: pass.per || null,
-				});
-			});
+	// ---- State ----------------------------------------------------------
+	var size = SIZES[0];
+	var kind = "credits"; // or "time" – the id of the section on show
+	var packIndex = 0;
+	var passSlug = DEFAULT_PASS;
+	var seats = 1;
+	// The licence a top-up is for, as the Worker described it
+	// (/licence/lookup): { key, seats, renews }. Null for a new licence.
+	var topUp = null;
+
+	// ---- Credit slider ------------------------------------------------------
+	var creditSection = section("credits");
+	var slider = null, ticks = [], readout = {};
+	if (creditSection && packs.length) {
+		var lo = packs[0].n, hi = packs[packs.length - 1].n;
+		function frac(n) { return hi === lo ? 0 : (n - lo) / (hi - lo); }
+		function position(n) { return "calc(12px + (100% - 24px) * " + frac(n).toFixed(4) + ")"; }
+		var picker = document.createElement("div");
+		picker.className = "credit-picker";
+		slider = document.createElement("input");
+		slider.type = "range";
+		slider.className = "credit-range";
+		slider.min = lo;
+		slider.max = hi;
+		slider.step = 1;
+		slider.setAttribute("aria-label", "Number of master credits");
+		picker.appendChild(slider);
+		var tickRow = document.createElement("div");
+		tickRow.className = "credit-ticks";
+		ticks = packs.map(function (pack, index) {
+			var tick = document.createElement("button");
+			tick.type = "button";
+			tick.className = "credit-tick";
+			tick.textContent = pack.n;
+			tick.style.left = position(pack.n);
+			tick.tabIndex = -1; // the slider is the keyboard control
+			tick.addEventListener("click", function () { packIndex = index; update(); });
+			tickRow.appendChild(tick);
+			return tick;
 		});
-		return catalog;
+		picker.appendChild(tickRow);
+		var box = document.createElement("div");
+		box.className = "credit-readout";
+		box.innerHTML = '<div><p class="readout-name"></p><p class="readout-sub"></p></div><p class="readout-price"></p>';
+		readout = {
+			name: box.querySelector(".readout-name"),
+			sub: box.querySelector(".readout-sub"),
+			price: box.querySelector(".readout-price"),
+		};
+		picker.appendChild(box);
+		// After the step's one-line hint.
+		var hint = creditSection.querySelector(".section-body > p");
+		if (hint) hint.parentNode.insertBefore(picker, hint.nextSibling);
+		else creditSection.appendChild(picker);
+		slider.position = position;
+		// Any slider value snaps to the nearest pack.
+		slider.addEventListener("input", function () {
+			var value = Number(slider.value);
+			var best = 0;
+			packs.forEach(function (pack, index) {
+				if (Math.abs(pack.n - value) < Math.abs(packs[best].n - value)) best = index;
+			});
+			packIndex = best;
+			update();
+		});
 	}
-	var catalog = readCatalog();
 
-	// Where a size cannot buy something, the cell says where it can be had
-	// instead of standing empty. Both readings are built once, here: the
-	// bare dash belongs to the comparison, where the sizes that do offer
-	// it are on show anyway, and the notice to the filtered view, where
-	// they are not. Reading the names off the headings keeps them the
-	// table's business.
-	function markUnavailable(table) {
-		if (!table) return;
-		var columns = columnsOf(table);
-		var headings = table.querySelectorAll("thead th");
-		bodyRows(table).forEach(function (row) {
-			var offered = SIZES.filter(function (key) {
-				return priceIn(row, columns[key]) !== null;
-			});
-			// Nothing to point at, or nothing missing.
-			if (!offered.length || offered.length === SIZES.length) return;
-			var notice = "Only available to " + offered.map(function (key) {
-				return headings[columns[key]].textContent.trim();
-			}).join(" and ") + ".";
-			SIZES.forEach(function (key) {
-				if (offered.indexOf(key) !== -1) return;
-				var cell = row.children[columns[key]];
-				if (!cell) return;
-				var dash = document.createElement("span");
-				dash.className = "pass-dash";
-				dash.textContent = cell.textContent.trim();
-				var note = document.createElement("span");
-				note.className = "pass-note";
-				note.textContent = notice;
-				cell.textContent = "";
-				cell.appendChild(dash);
-				cell.appendChild(note);
-			});
+	// ---- Pass cards ------------------------------------------------------------
+	var timeSection = section("time");
+	var passGrid = null;
+	if (timeSection && passes.length) {
+		passGrid = document.createElement("div");
+		passGrid.className = "choice-grid pass-picker";
+		passGrid.setAttribute("role", "radiogroup");
+		passGrid.setAttribute("aria-label", "Time pass");
+		passes.forEach(function (pass) {
+			var card = document.createElement("button");
+			card.type = "button";
+			card.className = "choice-card pass-option";
+			card.dataset.pass = pass.slug;
+			card.setAttribute("role", "radio");
+			card.innerHTML = '<span class="choice-name"></span><span class="choice-price"></span>';
+			card.querySelector(".choice-name").textContent = pass.label;
+			passGrid.appendChild(card);
 		});
+		var passHint = timeSection.querySelector(".section-body > p");
+		if (passHint) passHint.parentNode.insertBefore(passGrid, passHint.nextSibling);
+		else timeSection.appendChild(passGrid);
+		radioGroup(passGrid, ".pass-option", function (card) { passSlug = card.dataset.pass; update(); });
 	}
-	priceTables.forEach(markUnavailable);
 
-	// Seats: the first at the package price, every further one at 20 %
-	// of it. The Worker recomputes the same figure from the package key
-	// and the seat count, so this is display only.
-	var EXTRA_SEAT_FACTOR = 0.2;
+	// ---- Pickers -----------------------------------------------------------------
+	if (sizePicker) radioGroup(sizePicker, ".size-option", function (card) { size = card.dataset.size; update(); });
+	if (kindPicker) radioGroup(kindPicker, ".kind-option", function (card) { kind = card.dataset.kind; update(); });
+	if (renewBox) renewBox.addEventListener("change", update);
+	if (seatsDown) seatsDown.addEventListener("click", function () { seats = Math.max(1, seats - 1); update(); });
+	if (seatsUp) seatsUp.addEventListener("click", function () { seats = Math.min(MAX_SEATS, seats + 1); update(); });
 
-	// A top-up is priced for its licence's seats, whatever the dropdown
-	// says – the Worker does the same.
+	// ---- Pricing -------------------------------------------------------------------
+	function passFor(slug) {
+		return passes.filter(function (pass) { return pass.slug === slug; })[0] || null;
+	}
+	// The pass actually on order: the chosen one, or – where the size
+	// can't buy it – the default.
+	function currentPass() {
+		var pass = passFor(passSlug);
+		if (pass && pass.prices[size] !== null) return pass;
+		return passFor(DEFAULT_PASS);
+	}
 	function seatsChosen() {
-		if (topUp) return topUp.seats;
-		var n = seatsSelect ? parseInt(seatsSelect.value, 10) : 1;
-		return n > 0 ? n : 1;
+		// A top-up is priced for its licence's seats – the Worker does the same.
+		return topUp ? topUp.seats : seats;
+	}
+	function priceFor(base) {
+		return Math.round(base * (1 + EXTRA_SEAT_FACTOR * (seatsChosen() - 1)));
+	}
+	// What goes to the Worker: { package, base, label, renewing, per }.
+	function chosen() {
+		if (kind === "credits") {
+			var pack = packs[packIndex];
+			if (!pack || pack.prices[size] === null) return null;
+			return {
+				package: size + "-" + pack.n,
+				base: pack.prices[size],
+				label: pack.n === 1 ? "1 master credit" : pack.n + " master credits",
+				renewing: false,
+			};
+		}
+		var pass = currentPass();
+		if (!pass) return null;
+		// Renewing: a month or year pass with the box ticked – never for a
+		// top-up, where automatic renewal would be a licence of its own.
+		var renewing = !topUp && !!pass.renews && !!(renewBox && renewBox.checked);
+		return {
+			package: renewing ? size + "-" + pass.renews : size + "-" + pass.slug,
+			base: pass.prices[size],
+			label: pass.label + " pass",
+			renewing: renewing,
+			per: pass.per,
+		};
 	}
 
-	function priceFor(item, seats) {
-		return Math.round(item.price * (1 + EXTRA_SEAT_FACTOR * (seats - 1)));
-	}
+	// ---- Rendering -------------------------------------------------------------------
+	function update() {
+		// A licence that renews automatically already has its time: only
+		// credits can be added to it.
+		var noPasses = !!(topUp && topUp.renews);
+		if (noPasses) kind = "credits";
+		if (sizePicker) markChosen(sizePicker, ".size-option", function (card) { return card.dataset.size === size; });
+		if (kindPicker) {
+			markChosen(kindPicker, ".kind-option", function (card) { return card.dataset.kind === kind; });
+			var timeCard = kindPicker.querySelector('[data-kind="time"]');
+			if (timeCard) timeCard.disabled = noPasses;
+		}
+		if (creditSection) creditSection.hidden = kind !== "credits";
+		if (timeSection) timeSection.hidden = kind !== "time";
 
-	function chosenItem() {
-		var chosen = null;
-		catalog[size].forEach(function (item) {
-			if (item.value === packageSelect.value) chosen = item;
-		});
-		return chosen;
-	}
+		// Credits.
+		if (slider) {
+			var pack = packs[packIndex];
+			slider.value = pack.n;
+			slider.style.setProperty("--fill", slider.position(pack.n));
+			var name = pack.n === 1 ? "1 master credit" : pack.n + " master credits";
+			slider.setAttribute("aria-valuetext", name);
+			ticks.forEach(function (tick, index) {
+				tick.classList.toggle("is-on", index === packIndex);
+				tick.setAttribute("aria-label", (packs[index].n === 1 ? "1 credit, " : packs[index].n + " credits, ")
+					+ euros(packs[index].prices[size]));
+			});
+			readout.name.textContent = name;
+			readout.sub.textContent = pack.n === 1 ? "One master, for good"
+				: euros(pack.prices[size] / pack.n) + " per master";
+			readout.price.textContent = euros(pack.prices[size]);
+		}
 
-	// Renewing: a month or year pass with the box ticked. The box only
-	// shows for those, and keeps its state across package changes.
-	// Never for a top-up: automatic renewal is a licence of its own.
-	function renewing(item) {
-		return !topUp && !!(item && item.renews && renewBox && renewBox.checked);
-	}
+		// Passes.
+		var pass = currentPass();
+		if (passGrid) {
+			Array.prototype.forEach.call(passGrid.querySelectorAll(".pass-option"), function (card) {
+				var p = passFor(card.dataset.pass);
+				var price = p.prices[size];
+				card.disabled = price === null;
+				card.querySelector(".choice-price").textContent = price === null
+					? p.offeredBy.join(" and ") + " only"
+					: euros(price);
+			});
+			markChosen(passGrid, ".pass-option", function (card) { return pass && card.dataset.pass === pass.slug; });
+		}
+		// The switch stays on show for every pass (never for a top-up);
+		// a pass that can't renew greys it out and says why.
+		var canRenew = !!(pass && pass.renews);
+		if (renewRow) renewRow.hidden = !!topUp;
+		if (renewBox) renewBox.disabled = !canRenew;
+		if (renewNote) renewNote.hidden = !canRenew;
+		if (renewUnavailable) renewUnavailable.hidden = canRenew;
+		if (renewUnit && pass && pass.per) renewUnit.textContent = pass.per;
 
-	function syncTotal() {
-		var chosen = chosenItem();
-		if (renewRow) renewRow.hidden = !(chosen && chosen.renews) || !!topUp;
+		// Seats.
+		var n = seatsChosen();
+		if (seatsValue) seatsValue.textContent = n === 1 ? "1 seat" : n + " seats";
+		if (seatsDown) seatsDown.disabled = !!topUp || n <= 1;
+		if (seatsUp) seatsUp.disabled = !!topUp || n >= MAX_SEATS;
+
+		// Summary.
+		var item = chosen();
+		if (sumSize && sizePicker) {
+			var sizeCard = sizePicker.querySelector('[data-size="' + size + '"] .choice-name');
+			sumSize.textContent = sizeCard ? sizeCard.textContent : size;
+		}
+		if (sumPackage) sumPackage.textContent = item ? item.label : "–";
+		if (sumSeats) sumSeats.textContent = n;
+		if (sumRenewRow) sumRenewRow.hidden = !(item && item.renewing);
+		if (sumRenew && item && item.per) sumRenew.textContent = item.per === "year" ? "Yearly" : "Monthly";
 		// The amount alone: what VAT is added to it is settled on the
-		// invoice, and the page says so above the form.
-		var seats = seatsChosen();
-		total.textContent = chosen
-			? "Total: " + euros(priceFor(chosen, seats))
-				+ (renewing(chosen) ? " per " + chosen.per : "")
-				+ (seats > 1 ? " for " + seats + " seats" : "")
-			: "";
+		// invoice.
+		if (total) total.textContent = item ? euros(priceFor(item.base)) + (item.renewing ? " / " + item.per : "") : "";
+		syncSubmit();
 	}
 
-	function fillPackages() {
-		var previous = packageSelect.value;
-		packageSelect.textContent = "";
-		var groups = {};
-		catalog[size].forEach(function (item) {
-			// A licence that renews automatically already has its time.
-			if (topUp && topUp.renews && item.group === "Time passes") return;
-			if (!groups[item.group]) {
-				groups[item.group] = document.createElement("optgroup");
-				groups[item.group].label = item.group;
-				packageSelect.appendChild(groups[item.group]);
-			}
-			var option = document.createElement("option");
-			option.value = item.value;
-			option.textContent = item.label + " – " + euros(priceFor(item, seatsChosen()));
-			groups[item.group].appendChild(option);
-		});
-		// Changing size keeps the equivalent package where the new size has
-		// one – 4 credits stays 4 credits – and otherwise falls back to the
-		// first entry (a one-week pass has no Thin counterpart).
-		var equivalent = previous.replace(/^[a-z]+-/, size + "-");
-		if (previous && packageSelect.querySelector('option[value="' + equivalent + '"]')) {
-			packageSelect.value = equivalent;
+	// ---- Details ----------------------------------------------------------------------
+	// The VAT ID only matters inside the EU – read off the country list's
+	// own "European Union" group, so the list stays the one place it's
+	// written.
+	function inEU() {
+		var option = country && country.selectedOptions[0];
+		return !!(option && option.parentNode && option.parentNode.label === "European Union");
+	}
+	function syncSubmit() {
+		if (!submit) return;
+		var ready = !!(country && country.value) && !!chosen();
+		submit.disabled = !ready || submitting;
+		if (!submitting && status && !status.classList.contains("error")) {
+			status.textContent = ready ? "" : statusText;
+			status.hidden = ready;
 		}
-		syncTotal();
 	}
-
-	// A phone fits the label column and two prices, no more – below that
-	// width the derived columns come off rather than squeeze the rest.
-	// The decision lives here and not in a media query so that the pinned
-	// column widths are always calculated over the columns that are
-	// actually there.
-	var narrow = window.matchMedia("(max-width: 640px)");
-
-	// Filtered down to one size, the credits table has room for what the
-	// three-column comparison cannot show: what a credit actually costs in
-	// each pack. Derived from the prices in the table, never a second copy.
-	function renderRates() {
-		if (!creditTable) return;
-		Array.prototype.forEach.call(creditTable.querySelectorAll(".rate-cell"), function (cell) {
-			cell.remove();
-		});
-		if (compare || narrow.matches) return;
-		var index = columnsOf(creditTable)[size];
-		if (index === undefined) return;
-
-		function rateCell(tag, text) {
-			var cell = document.createElement(tag);
-			cell.className = "rate-cell";
-			cell.textContent = text;
-			return cell;
-		}
-		var head = creditTable.querySelector("thead tr");
-		if (head) {
-			head.appendChild(rateCell("th", "Per credit"));
-			head.appendChild(rateCell("th", "Saving"));
-		}
-		var single = null;
-		bodyRows(creditTable).forEach(function (row) {
-			var credits = amount(row.children[0].textContent);
-			var price = priceIn(row, index);
-			if (!credits || price === null) return;
-			var rate = price / credits;
-			if (credits === 1) single = rate;
-			row.appendChild(rateCell("td", euros(Math.round(rate))));
-			row.appendChild(rateCell("td", single && credits > 1
-				? Math.round((1 - rate / single) * 100) + "%"
-				: "–"));
-		});
-	}
-
-	// The column grid, pinned so it survives every filtering combination:
-	// the label column, then equal columns for whatever prices are on
-	// show, and the last one takes the rest. Everything in these tables is
-	// left-aligned, so what has to stay put is each column's left edge –
-	// and with the widths fixed, swapping which size is shown cannot move
-	// any of them. The share is worked out from the number of columns
-	// actually on show, so the comparison's four sizes and a filtered
-	// view's two or three columns each come out evenly spaced.
-	var LABEL_WIDTH = 22;
-
-	function pinColumns(table) {
-		var head = table.querySelector("thead tr");
-		if (!head) return;
-		var shown = Array.prototype.filter.call(head.children, function (cell) {
-			return !cell.hidden;
-		});
-		var share = (100 - LABEL_WIDTH) / Math.max(1, shown.length - 1);
-		shown.forEach(function (cell, index) {
-			cell.style.width = index === shown.length - 1
-				? ""
-				: (index === 0 ? LABEL_WIDTH : share) + "%";
-		});
-	}
-
-	function renderGrid() {
-		priceTables.forEach(function (table) {
-			if (!table) return;
-			var columns = columnsOf(table);
-			Array.prototype.forEach.call(table.querySelectorAll("tr"), function (row) {
-				SIZES.forEach(function (key) {
-					var cell = row.children[columns[key]];
-					if (!cell) return;
-					cell.hidden = !compare && key !== size;
-					cell.classList.toggle("is-size", compare && key === size);
-				});
-			});
-			// A row this size cannot buy stays on show as long as it can say
-			// where it can be had; one that has nothing to say goes.
-			table.classList.toggle("is-compare", compare);
-			bodyRows(table).forEach(function (row) {
-				var cell = row.children[columns[size]];
-				row.hidden = !compare && (!cell
-					|| (priceIn(row, columns[size]) === null && !cell.querySelector(".pass-note")));
-			});
-		});
-		// After renderRates, which is what settles how many columns there
-		// are to pin.
-		renderRates();
-		priceTables.forEach(function (table) {
-			if (table) pinColumns(table);
-		});
-	}
-
-	function setSize(next) {
-		if (SIZES.indexOf(next) === -1) return;
-		size = next;
-		if (picker) {
-			Array.prototype.forEach.call(picker.querySelectorAll(".size-option"), function (button) {
-				var chosen = button.dataset.size === size;
-				button.setAttribute("aria-checked", chosen ? "true" : "false");
-				button.tabIndex = chosen ? 0 : -1;
-			});
-		}
-		if (sizeSelect.value !== size) sizeSelect.value = size;
-		renderGrid();
-		fillPackages();
-	}
-
-	if (picker) {
-		picker.addEventListener("click", function (event) {
-			var button = event.target.closest(".size-option");
-			if (button) setSize(button.dataset.size);
-		});
-		// role="radio" comes with keyboard expectations: the arrows move
-		// the choice, and only the chosen option is a tab stop. Only from
-		// an option, though – the compare switch sits inside the picker
-		// too, and arrowing away from it should scroll the page, not
-		// quietly change the size.
-		picker.addEventListener("keydown", function (event) {
-			if (!event.target.closest(".size-option")) return;
-			var back = event.key === "ArrowLeft" || event.key === "ArrowUp";
-			var forward = event.key === "ArrowRight" || event.key === "ArrowDown";
-			if (!back && !forward) return;
-			event.preventDefault();
-			var next = SIZES[(SIZES.indexOf(size) + (back ? -1 : 1) + SIZES.length) % SIZES.length];
-			setSize(next);
-			var button = picker.querySelector('.size-option[data-size="' + next + '"]');
-			if (button) button.focus();
-		});
-	}
-	if (compareToggle) {
-		compareToggle.addEventListener("click", function () {
-			compare = !compare;
-			compareToggle.setAttribute("aria-checked", compare ? "true" : "false");
-			renderGrid();
-		});
-	}
-	// Crossing the narrow breakpoint changes which columns exist.
-	if (narrow.addEventListener) narrow.addEventListener("change", renderGrid);
-	sizeSelect.addEventListener("change", function () { setSize(sizeSelect.value); });
-	packageSelect.addEventListener("change", syncTotal);
-	if (renewBox) renewBox.addEventListener("change", syncTotal);
-	// A seat change reprices every package on show, not just the total.
-	if (seatsSelect) seatsSelect.addEventListener("change", fillPackages);
-	// Adopt whatever the size select holds rather than forcing the default:
-	// on a reload or a step back the browser restores its value, and the
-	// picker and the pricing tables have to follow it, not contradict it.
-	setSize(sizeSelect.value || size);
-	window.addEventListener("pageshow", function () { setSize(sizeSelect.value || size); });
+	if (country) country.addEventListener("change", function () {
+		if (vatRow) vatRow.hidden = !inEU();
+		if (vatInput && !inEU()) vatInput.value = "";
+		if (status) status.classList.remove("error");
+		syncSubmit();
+	});
 
 	function show(message, isError) {
+		if (!status) return;
 		status.textContent = message;
 		status.classList.toggle("error", !!isError);
 		status.hidden = false;
 	}
 
-	// A top-up: once the buyer has entered a key (or a long code), ask the
-	// Worker which licence it is. Its seats then price the order and take
-	// over from the seats dropdown; a renewing licence is offered credits
-	// only. Asked when the field settles, not on every keystroke – key
-	// lookups are rate-limited.
+	// ---- Top-up -------------------------------------------------------------------------
+	// Once the buyer has entered a key (or a long code), ask the Worker
+	// which licence it is. Its seats then price the order; a renewing
+	// licence is offered credits only. Asked when the field settles, not
+	// on every keystroke – key lookups are rate-limited.
 	function setLicenceNote(text, isError) {
 		if (!licenceNote) return;
 		licenceNote.textContent = text;
 		licenceNote.classList.toggle("error", !!isError);
 	}
-
 	function applyTopUp(next) {
 		topUp = next;
-		if (seatsSelect) {
-			seatsSelect.disabled = !!topUp;
-			if (topUp && !seatsSelect.querySelector('option[value="' + topUp.seats + '"]')) {
-				var option = document.createElement("option");
-				option.value = String(topUp.seats);
-				option.textContent = topUp.seats + " seats";
-				seatsSelect.appendChild(option);
-			}
-			if (topUp) seatsSelect.value = String(topUp.seats);
-		}
-		fillPackages();
+		update();
 	}
-
 	var lookedUp = "";
 	var lookupTimer = null;
 	function lookUpLicence() {
@@ -956,12 +1019,11 @@ document.addEventListener("italify:rendered", function () {
 				applyTopUp({ key: data.key, seats: data.seats, renews: !!data.renews });
 				// A top-up is for all the licence's seats; fewer seats are a
 				// licence of their own.
-				setLicenceNote("Adding to " + (data.key || "your licence") + ". "
-					+ "The given licence is for " + data.seats + (data.seats === 1 ? " seat." : " seats.")
-					+ (data.renews ? " The time pass renews automatically. You can only add master credits to it." :	"")
-					+ (data.seats > 1 ? " Need more/fewer seats?" : " Need more seats?")
-					+ " Leave the field empty to receive a separate licence.",
-						false);
+				setLicenceNote("Adding to " + (data.key || "your licence") + ", "
+					+ data.seats + (data.seats === 1 ? " seat." : " seats.")
+					+ (data.renews ? " Its pass renews automatically, so only master credits can be added." : "")
+					+ " For a different number of seats, leave the field empty to get a separate licence.",
+					false);
 			});
 		}).catch(function () {
 			if (text !== lookedUp) return;
@@ -979,19 +1041,26 @@ document.addEventListener("italify:rendered", function () {
 			lookUpLicence();
 		});
 		// A value the browser restored on a reload or a step back.
-		if (licenceInput.value.trim()) lookUpLicence();
+		if (licenceInput.value.trim()) {
+			if (topupBox) topupBox.open = true;
+			lookUpLicence();
+		}
 	}
 
+	// ---- Checkout -----------------------------------------------------------------------
+	var submitting = false;
 	form.addEventListener("submit", function (event) {
 		event.preventDefault();
-		// Belt and braces on top of the select’s `required`: never submit
-		// without an explicit country – the VAT handling depends on it.
-		var country = document.getElementById("order-country");
+		// Never submit without an explicit country – the VAT handling
+		// depends on it.
 		if (!country.value) {
 			show("Please select your country.", true);
 			country.focus();
 			return;
 		}
+		var item = chosen();
+		if (!item) return;
+		submitting = true;
 		submit.disabled = true;
 		show("Taking you to the secure payment page…", false);
 		fetch(WORKER_URL + "/checkout", {
@@ -999,13 +1068,13 @@ document.addEventListener("italify:rendered", function () {
 			headers: { "Content-Type": "application/json" },
 			body: JSON.stringify({
 				// A renewing pass is its own package – a subscription.
-				package: renewing(chosenItem()) ? chosenItem().renews : packageSelect.value,
+				package: item.package,
 				seats: seatsChosen(),
 				// The Worker resolves the licence again and prices it itself.
 				licence: licenceInput ? licenceInput.value.trim() : "",
 				company: document.getElementById("order-company").value,
 				country: country.value,
-				vatId: document.getElementById("order-vat").value,
+				vatId: vatInput && inEU() ? vatInput.value : "",
 			}),
 		}).then(function (response) {
 			return response.json().then(function (data) {
@@ -1016,10 +1085,41 @@ document.addEventListener("italify:rendered", function () {
 				window.location.href = data.url;
 			});
 		}).catch(function (error) {
+			submitting = false;
 			show(error.message || "Something went wrong. Please try again.", true);
-			submit.disabled = false;
+			syncSubmit();
 		});
 	});
+	// Coming back from Stripe with the back button restores the page from
+	// the cache, mid-submit.
+	window.addEventListener("pageshow", function (event) {
+		if (!event.persisted) return;
+		submitting = false;
+		if (status) status.classList.remove("error");
+		update();
+	});
+
+	// ---- Links to #credits and #time open their option ----------------------------------
+	function openForHash() {
+		var id = location.hash.replace(/^#/, "");
+		if (id !== "credits" && id !== "time") return;
+		if (id === "time" && topUp && topUp.renews) return;
+		kind = id;
+		update();
+		// main.js (on load) and the browser (on a hashchange) scroll to the
+		// heading while its section may still have been hidden; take the
+		// scroll again now it's on show.
+		requestAnimationFrame(function () {
+			var target = document.getElementById(id);
+			if (target) target.scrollIntoView();
+		});
+	}
+	window.addEventListener("hashchange", openForHash);
+
+	// A country the browser restored on a reload or a step back.
+	if (vatRow) vatRow.hidden = !inEU();
+	update();
+	openForHash();
 });
 </script>
 </body>

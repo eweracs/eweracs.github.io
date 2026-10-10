@@ -97,13 +97,17 @@
 		},
 
 		// ```steps plain``` drops the numbered circles (used for the
-		// handbook’s chapter list, which is an index, not a sequence).
+		// handbook’s chapter list, which is an index, not a sequence) and
+		// makes the titles h2s (set in regular weight by styles.css), like
+		// the Glyphs handbook’s contents.
 		steps(body, modifier) {
+			const plain = modifier === "plain";
+			const tag = plain ? "h2" : "h4";
 			const items = splitTitledChunks(body).map(function (c) {
-				return "<li><h4>" + inline(c.title) + "</h4><p>" +
+				return "<li><" + tag + ">" + inline(c.title) + "</" + tag + "><p>" +
 					inline(c.body.join(" ")) + "</p></li>";
 			});
-			const cls = modifier === "plain" ? "steps steps-plain" : "steps";
+			const cls = plain ? "steps steps-plain" : "steps";
 			return '<ol class="' + cls + '">' + items.join("") + "</ol>";
 		},
 
@@ -115,42 +119,67 @@
 			return '<div class="toc">' + marked.parse(body) + "</div>";
 		},
 
-		// The interactive slant/correction hero (index page). Markup only –
+		// The landing hero (index page): the first screen, a grid-paper
+		// field holding icon, title, lede and buttons over the interactive
+		// slant/correction demo and its control bar. Markup only –
 		// behaviour and the outline data live in italify-demos.js, which
-		// boots on the `italify:rendered` event. Body: `caption: …`.
+		// boots on the `italify:rendered` event. Body: `key: value` lines
+		// (icon, eyebrow, title, lede, caption – all optional) plus button
+		// lines written exactly as in a ```buttons fence.
 		"italify-hero"(body) {
-			const data = parseKeyValues(body);
-			const caption = data.caption
-				? '<p class="hero-caption">' + inline(data.caption) + "</p>"
-				: "";
+			const lines = body.split("\n");
+			const isButton = function (line) { return /^\s*\[/.test(line); };
+			const data = parseKeyValues(lines.filter(function (l) { return !isButton(l); }).join("\n"));
+			const buttonLines = lines.filter(isButton);
 			function check(cls, label, checked) {
 				return '<label class="demo-toggle ' + cls + '"><input type="checkbox"' +
 					(checked ? " checked" : "") + "><span>" + escapeHtml(label) + "</span></label>";
 			}
-			return '<div class="italify-hero" data-italify-hero>' +
+			const intro =
+				(data.icon ? '<span class="hero-icon"><img src="' + escapeHtml(data.icon) + '" alt=""></span>' : "") +
+				(data.eyebrow ? '<p class="eyebrow">' + inline(data.eyebrow) + "</p>" : "") +
+				(data.title ? '<h1 class="hero-title">' + inline(data.title) + "</h1>" : "") +
+				(data.lede ? '<p class="hero-lede">' + inline(data.lede) + "</p>" : "") +
+				(buttonLines.length ? customFences.buttons(buttonLines.join("\n")) : "");
+			const caption = data.caption
+				? '<p class="hero-caption">' + inline(data.caption) + "</p>"
+				: "";
+			// Font metrics of the hero word, in its own (y-down) units:
+			// cap height 0, x-height 192 (the flat top of the w),
+			// baseline 702 – drawn as faint guides like Glyphs’ edit view.
+			const guides = [0, 192, 702].map(function (y) {
+				return '<line x1="-60" x2="3523" y1="' + y + '" y2="' + y + '"></line>';
+			}).join("");
+			return '<div class="italify-hero" data-italify-hero data-own-section>' +
+				'<div class="hero-inner">' +
+				'<div class="hero-intro">' + intro + "</div>" +
+				'<div class="hero-stage">' +
+				// The outline spans 0…3463 × 0…712; the viewBox margin keeps
+				// node circles and handles clear of the canvas edge.
+				'<div class="hero-canvas"><svg viewBox="-60 -30 3583 772" role="img" ' +
+				'aria-label="Interactive interpolation between the upright and the Italify-corrected oblique">' +
+				'<g class="hero-guides">' + guides + "</g>" +
+				'<path class="hero-outline demo-outline"></path></svg></div>' +
+				caption + "</div>" +
 				'<div class="hero-controls">' +
 				check("hero-slant", "Slant", false) +
 				'<label class="hero-correction"><span>Correction</span>' +
-				'<input class="hero-slider" type="range" min="0" max="100" value="0" disabled></label>' +
+				'<input class="hero-slider" type="range" min="0" max="100" value="0" disabled>' +
+				'<output class="hero-value">0%</output></label>' +
 				check("hero-nodes-toggle", "Show nodes", true) +
-				"</div>" +
-				// The outline spans 0…3463 × 0…712; the viewBox margin keeps
-				// node circles and handles clear of the stage’s scroll clip
-				// (generous left/right, matching the old standalone page).
-				'<div class="hero-stage"><svg viewBox="-60 -30 3583 772" role="img" ' +
-				'aria-label="Interactive interpolation between the upright and the Italify-corrected oblique">' +
-				'<path class="hero-outline demo-outline"></path></svg></div>' +
-				caption + "</div>";
+				"</div></div></div>";
 		},
 
-		// Horizontal carousel of animated outline demos. Chunk titles carry
-		// the demo id after a pipe – `## Overlap-agnostic | overlap` – and
-		// the body is the description (inline Markdown). The outline data,
-		// per-demo toggles and animation live in italify-demos.js.
+		// The capabilities list (index page): one full-width row per demo,
+		// animated outline card and text side by side, alternating sides.
+		// Chunk titles carry the demo id after a pipe –
+		// `## Overlap-agnostic | overlap` – and the body is the
+		// description (inline Markdown). The outline data, per-demo
+		// toggles and animation live in italify-demos.js.
 		demos(body) {
 			const TOGGLES = { overlap: "Remove overlap" };
 			const CHECKED = { overlap: false };
-			const cards = splitTitledChunks(body).map(function (c) {
+			const rows = splitTitledChunks(body).map(function (c) {
 				const m = c.title.match(/^(.*?)\s*\|\s*(\S+)\s*$/);
 				const title = m ? m[1] : c.title;
 				const id = m ? m[2] : "";
@@ -159,21 +188,16 @@
 						(CHECKED[id] ? " checked" : "") + "><span>" +
 						escapeHtml(TOGGLES[id]) + "</span></label>"
 					: "";
-				return '<article class="demo-card" data-demo="' + escapeHtml(id) +
+				return '<article class="demo-row" data-demo="' + escapeHtml(id) +
 					'" data-label="' + escapeHtml(title) + '">' +
-					'<div class="demo-figure"></div>' +
-					"<h4>" + inline(title) + "</h4>" +
+					'<div class="demo-text">' +
+					"<h3>" + inline(title) + "</h3>" +
 					"<p>" + inline(c.body.join(" ")) + "</p>" + toggle +
+					"</div>" +
+					'<div class="demo-figure"></div>' +
 					"</article>";
 			});
-			return '<div class="demo-carousel-wrap">' +
-				'<div class="demo-nav">' +
-				'<button type="button" class="demo-nav-prev" aria-label="Previous demo">←</button>' +
-				'<button type="button" class="demo-nav-next" aria-label="Next demo">→</button>' +
-				"</div>" +
-				'<div class="demo-carousel">' + cards.join("") + "</div>" +
-				'<div class="demo-dots" role="tablist"></div>' +
-				"</div>";
+			return '<div class="demo-list">' + rows.join("") + "</div>";
 		},
 
 		// Testimonials: `## Name | Affiliation | https://…` + quote body.
@@ -495,13 +519,27 @@
 	}
 
 	// Group top-level content into <section>s, splitting at every h2.
+	// An element marked data-own-section (the landing hero) gets a
+	// section to itself. On the landing page (<main class="landing">)
+	// each section is further split: the h2, then .section-body with the
+	// running text, then the wide blocks (figures, the demo list,
+	// testimonials) at full width – styles.css lays these out stacked, or
+	// in two columns for #overview.
+	var WIDE_BLOCKS = "figure.shot, .demo-list, .quote-row";
+
 	function wrapSections(main) {
+		const landing = main.classList.contains("landing");
 		const groups = [];
 		let current = [];
 		Array.from(main.children).forEach(function (el) {
-			if (el.tagName === "H2") {
+			const own = el.hasAttribute("data-own-section");
+			if (el.tagName === "H2" || own) {
 				if (current.length) groups.push(current);
 				current = [el];
+				if (own) {
+					groups.push(current);
+					current = [];
+				}
 			} else {
 				current.push(el);
 			}
@@ -514,9 +552,80 @@
 			if (heading && heading.id) {
 				section.dataset.section = heading.id;
 			}
-			group.forEach(function (el) { section.appendChild(el); });
+			if (group[0].hasAttribute("data-own-section")) {
+				section.className = "section-own";
+			}
+			if (landing && !section.className) {
+				const body = document.createElement("div");
+				body.className = "section-body";
+				const wide = [];
+				group.forEach(function (el) {
+					if (el.tagName === "H2") section.appendChild(el);
+					else if (el.matches(WIDE_BLOCKS)) {
+						el.classList.add("section-wide");
+						wide.push(el);
+					} else body.appendChild(el);
+				});
+				if (body.children.length) section.appendChild(body);
+				wide.forEach(function (el) { section.appendChild(el); });
+			} else {
+				group.forEach(function (el) { section.appendChild(el); });
+			}
 			main.appendChild(section);
 		});
+	}
+
+	// Documentation pages (<main class="doc">: the handbook, the Python
+	// API, the licence terms) get the landing page's wide layout: the
+	// title and lede move into a grid-paper intro band, and below it the
+	// page's table of contents (the generated handbook TOC or a
+	// hand-written ```toc``` box) is pinned in a left column beside the
+	// text. A page without a TOC gets the text column alone. Runs after
+	// wrapSections and addChapterNav, so it only rearranges finished
+	// sections – ids, anchors and section data stay as they are.
+	function layoutDoc(main) {
+		if (!main.classList.contains("doc")) return;
+		const first = main.querySelector("section");
+		const heading = document.createElement("div");
+		heading.className = "doc-heading";
+		if (first) {
+			Array.from(first.children).forEach(function (el) {
+				if (el.tagName === "H1" || (el.tagName === "P" && el.classList.contains("lede"))) {
+					heading.appendChild(el);
+				}
+			});
+		}
+		const toc = main.querySelector(".toc");
+
+		const intro = document.createElement("div");
+		intro.className = "doc-intro";
+		const introInner = document.createElement("div");
+		introInner.className = "doc-grid";
+		introInner.appendChild(heading);
+		intro.appendChild(introInner);
+
+		const layout = document.createElement("div");
+		layout.className = "doc-grid doc-layout";
+		const article = document.createElement("div");
+		article.className = "doc-article";
+		if (toc) {
+			const side = document.createElement("div");
+			side.className = "doc-side";
+			side.appendChild(toc);
+			layout.appendChild(side);
+		} else {
+			introInner.classList.add("no-side");
+			layout.classList.add("no-side");
+		}
+		Array.from(main.children).forEach(function (el) {
+			// The first section may be left empty by the moves above.
+			if (el === first && !el.children.length) return;
+			article.appendChild(el);
+		});
+		layout.appendChild(article);
+		main.textContent = "";
+		main.appendChild(intro);
+		main.appendChild(layout);
 	}
 
 	// Syntax-highlight fenced code with Prism, where it’s loaded (only the
@@ -630,6 +739,7 @@
 			buildHandbookToc(main);
 			wrapSections(main);
 			addChapterNav(main);
+			layoutDoc(main);
 			applyKbd(main);
 			highlightCode(main);
 			addCopyButtons(main);
@@ -651,13 +761,68 @@
 		}
 	}
 
-	if (document.readyState === "loading") {
-		document.addEventListener("DOMContentLoaded", function () {
-			initThemeToggle();
-			render();
+	// The grid-paper bands slide up under the sticky header by its
+	// height (--header-height in styles.css). The header grows when the
+	// nav wraps onto a second line on a phone, so measure it rather than
+	// trust the stylesheet's one-line figure.
+	// The room the header takes in the page: its height less the
+	// negative margin that hides the extra height of the taller bar at
+	// the top (styles.css, .is-top) – the same figure in both states.
+	function syncHeaderHeight() {
+		var header = document.querySelector("header.site");
+		if (!header) return;
+		function set() {
+			var room = header.getBoundingClientRect().height +
+				(parseFloat(getComputedStyle(header).marginBottom) || 0);
+			document.documentElement.style.setProperty("--header-height", Math.round(room) + "px");
+		}
+		set();
+		if ("ResizeObserver" in window) new ResizeObserver(set).observe(header);
+		else window.addEventListener("resize", set);
+	}
+
+	// Taller bar while the page sits at the very top, compact once it
+	// scrolls (styles.css, .is-top). Transitions switch on after the
+	// first frame, so the initial state doesn't animate in.
+	function initHeaderScroll() {
+		var header = document.querySelector("header.site");
+		if (!header || !document.body.classList.contains("page-landing")) return;
+		var ticking = false;
+		function sync() {
+			ticking = false;
+			header.classList.toggle("is-top", window.scrollY <= 4);
+		}
+		sync();
+		window.addEventListener("scroll", function () {
+			if (!ticking) {
+				ticking = true;
+				requestAnimationFrame(sync);
+			}
+		}, { passive: true });
+		requestAnimationFrame(function () {
+			requestAnimationFrame(function () { header.classList.add("is-ready"); });
 		});
-	} else {
+	}
+
+	// Hand-written documentation pages (<main class="doc"> without a
+	// data-source: the trial and purchase pages) get the same layout as
+	// the Markdown ones, straight away.
+	function layoutStaticDoc() {
+		var main = document.querySelector("main.doc:not([data-source])");
+		if (main) layoutDoc(main);
+	}
+
+	function boot() {
 		initThemeToggle();
+		initHeaderScroll();
+		syncHeaderHeight();
+		layoutStaticDoc();
 		render();
+	}
+
+	if (document.readyState === "loading") {
+		document.addEventListener("DOMContentLoaded", boot);
+	} else {
+		boot();
 	}
 })();

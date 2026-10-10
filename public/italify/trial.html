@@ -3,9 +3,9 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Italify – Free 48-hour trial</title>
+<title>Italify – Free one-week trial</title>
 <meta name="description"
-      content="Try Italify free for 48 hours. Enter your email to receive a trial link.">
+      content="Try Italify free for one week. Enter your email to receive a trial link.">
 <meta name="robots" content="noindex">
 <link rel="icon" href="/icon.svg" type="image/svg+xml" sizes="any">
 <!-- Set the theme before first paint to avoid a flash of the wrong mode:
@@ -20,7 +20,7 @@
 	} catch (e) {}
 })();
 </script>
-<link rel="stylesheet" href="styles.css?v=25">
+<link rel="stylesheet" href="styles.css?v=36">
 <style>
 	/* Page-local form styling; everything else comes from styles.css. */
 	.trial-form {
@@ -29,21 +29,24 @@
 		flex-wrap: wrap;
 		margin: var(--space-md) 0;
 	}
+	/* The same field as the Buy page's order form. */
 	.trial-form input {
 		flex: 1 1 240px;
-		height: 46px;
-		padding: 8px 14px;
+		height: 48px;
+		padding: 0 14px;
 		border: 1px solid var(--color-border);
-		border-radius: var(--rounded-sm);
+		border-radius: 10px;
 		background: var(--color-surface);
 		color: var(--color-primary);
 		font: inherit;
-		font-size: 19px;
+		font-size: 18px;
 	}
 	.trial-form input:focus-visible {
 		outline: 2px solid var(--color-link);
-		outline-offset: 1px;
+		outline-offset: 0;
+		border-color: transparent;
 	}
+	.trial-form .button-primary { height: 48px; }
 	.trial-form button {
 		font-family: inherit;
 		cursor: pointer;
@@ -52,7 +55,11 @@
 	.trial-status.error { color: var(--color-error); }
 	/* A promotion code: folded away unless a link brings one. */
 	.trial-promo { flex-basis: 100%; }
-	.trial-promo summary { cursor: pointer; color: var(--color-secondary); }
+	/* Disclosed like the Buy page's "Adding to an existing licence?". */
+	.trial-promo summary { cursor: pointer; color: var(--color-link); font-size: 18px; list-style: none; }
+	.trial-promo summary::-webkit-details-marker { display: none; }
+	.trial-promo summary::before { content: "+ "; }
+	.trial-promo[open] summary::before { content: "– "; }
 	.trial-form .trial-promo input {
 		display: block;
 		width: 100%;
@@ -62,7 +69,7 @@
 	}
 </style>
 </head>
-<body>
+<body class="page-landing page-doc">
 
 <header class="site">
 	<div class="column">
@@ -80,9 +87,9 @@
 	</button>
 </header>
 
-<main class="column">
+<main class="doc">
 <section>
-	<h1>Try Italify for <span class="trial-span">48 hours</span></h1>
+	<h1>Try Italify for <span class="trial-span">one week</span></h1>
 	<p class="lede">Enter your email address and you’ll receive a link to
 	your personal trial key.</p>
 
@@ -103,7 +110,7 @@
 	<h3>How it works</h3>
 	<ol class="steps">
 		<li><strong>Get your link.</strong> You receive a link by email, valid
-			for one hour. Follow it to get your <span class="trial-adjective">48-hour</span> trial key.</li>
+			for one hour. Follow it to get your <span class="trial-adjective">one-week</span> trial key.</li>
 		<li><strong>Copy the key.</strong> The link opens a page with your
 			personal licence key.</li>
 		<li><strong>Enter it in Glyphs.</strong> Open
@@ -123,7 +130,7 @@
 </main>
 
 <footer>
-	<div class="column">
+	<div class="column wide">
 		<p>Italify – a plugin for <a href="https://glyphsapp.com">Glyphs</a>. <a href="handbook/">Handbook</a></p>
 	</div>
 </footer>
@@ -149,8 +156,8 @@ var WORKER_URL = /^(localhost|127\.0\.0\.1)$/.test(location.hostname)
 		status.hidden = false;
 	}
 
-	// The page speaks of the trial's length: 48 hours, or what a code
-	// makes it ("one week" / "one-week").
+	// The page speaks of the trial's length: one week, or what a code
+	// makes it ("two weeks" / "two-week").
 	function setLength(span, adjective) {
 		Array.prototype.forEach.call(document.querySelectorAll(".trial-span"), function (el) { el.textContent = span; });
 		Array.prototype.forEach.call(document.querySelectorAll(".trial-adjective"), function (el) { el.textContent = adjective; });
@@ -158,14 +165,14 @@ var WORKER_URL = /^(localhost|127\.0\.0\.1)$/.test(location.hostname)
 	}
 
 	function lookUp(code) {
-		if (!code) { setLength("48 hours", "48-hour"); status.hidden = true; return; }
+		if (!code) { setLength("one week", "one-week"); status.hidden = true; return; }
 		fetch(WORKER_URL + "/trial-code", {
 			method: "POST",
 			headers: { "Content-Type": "application/json" },
 			body: JSON.stringify({ code: code }),
 		}).then(function (response) {
 			return response.json().then(function (data) {
-				if (!response.ok) { setLength("48 hours", "48-hour"); show(data.error || "This promotion code isn’t valid.", true); return; }
+				if (!response.ok) { setLength("one week", "one-week"); show(data.error || "This promotion code isn’t valid.", true); return; }
 				setLength(data.span, data.adjective);
 				status.hidden = true;
 			});
@@ -202,6 +209,6 @@ var WORKER_URL = /^(localhost|127\.0\.0\.1)$/.test(location.hostname)
 	});
 })();
 </script>
-<script src="main.js?v=18"></script>
+<script src="main.js?v=24"></script>
 </body>
 </html>

@@ -1,66 +1,61 @@
 # Buy Italify
 
-@lede Italify can be licensed in two ways. Either per master (unlimited duration), or for a time period (unlimited masters).
+@lede Pay per master and keep it forever, or get unlimited masters for a set time.
 
 ```buttons
-[Try free for 48 hours](trial) primary
+[Try free for 1 week](trial) primary
 ```
 
-## Your organisation size {#size}
+## Organisation size {#size}
 
 Are you freelancing for a foundry? Working on a custom font? Then your client’s organisation size is what counts.
 
-One licence, one seat. One seat includes three devices. Get in touch for custom licensing options.
-
-<!-- The size picker is wired up in buy: choosing a size filters both
-     pricing tables below and the package list in the order form, and the
-     switch turns the full grid back on. Keep the names in sync with the
+<!-- The size picker is wired up in buy: the chosen size prices
+     every option below and the order. Keep the names in sync with the
      table headings below, which is what the script matches on. -->
-<div class="size-picker" id="size-picker" role="radiogroup" aria-label="Organisation size">
-	<button type="button" class="size-option" data-size="thin" role="radio" aria-checked="true">
-		<span class="size-name">Thin</span>
-		<span class="size-desc">1 employee.</span>
+<div class="choice-grid size-picker" id="size-picker" role="radiogroup" aria-label="Organisation size">
+	<button type="button" class="choice-card size-option" data-size="thin" role="radio" aria-checked="true">
+		<span class="choice-name">Thin</span>
+		<span class="choice-desc">1 employee</span>
 	</button>
-	<button type="button" class="size-option" data-size="light" role="radio" aria-checked="false">
-		<span class="size-name">Light</span>
-		<span class="size-desc">2–3 employees.</span>
+	<button type="button" class="choice-card size-option" data-size="light" role="radio" aria-checked="false">
+		<span class="choice-name">Light</span>
+		<span class="choice-desc">2–3 employees</span>
 	</button>
-	<button type="button" class="size-option" data-size="medium" role="radio" aria-checked="false">
-		<span class="size-name">Medium</span>
-		<span class="size-desc">4–7 employees.</span>
+	<button type="button" class="choice-card size-option" data-size="medium" role="radio" aria-checked="false">
+		<span class="choice-name">Medium</span>
+		<span class="choice-desc">4–7 employees</span>
 	</button>
-	<button type="button" class="size-option" data-size="bold" role="radio" aria-checked="false">
-		<span class="size-name">Bold</span>
-		<span class="size-desc">8+ employees.</span>
+	<button type="button" class="choice-card size-option" data-size="bold" role="radio" aria-checked="false">
+		<span class="choice-name">Bold</span>
+		<span class="choice-desc">8+ employees</span>
 	</button>
-	<p class="size-compare-row">
-		<button type="button" class="size-compare" id="size-compare" role="switch" aria-checked="false">
-			<span class="switch" aria-hidden="true"><span class="switch-knob"></span></span>
-			<span>Compare all sizes</span>
-		</button>
-	</p>
 </div>
 
-## Time passes {#time}
+## Licence {#licence}
 
-A time pass gives you unlimited masters, for a limited duration. Recommended if you are familiar with setting up Italify and have many masters to process. A one-year pass costs the same as six months.
+Not sure? Credits suit a project; a pass suits a whole family.
 
-**Automatic renewal.** Month and year passes can renew automatically: tick *Renew automatically* when you order. The pass then runs from the day you pay and renews at the end of each month or year until you cancel. You enter your licence key once – every renewal reaches Italify by itself. Without automatic renewal, a pass starts when you start it in Italify, and simply ends.
+<!-- Picks which of the two sections below is on show: #credits or
+     #time (data-kind is the section id). -->
+<div class="choice-grid kind-picker" id="kind-picker" role="radiogroup" aria-label="Licence">
+	<button type="button" class="choice-card kind-option" data-kind="credits" role="radio" aria-checked="true">
+		<span class="choice-name">Master credits</span>
+		<span class="choice-desc">Activate a master once, use Italify on it forever.</span>
+	</button>
+	<button type="button" class="choice-card kind-option" data-kind="time" role="radio" aria-checked="false">
+		<span class="choice-name">Time pass</span>
+		<span class="choice-desc">Unlimited masters for a week, a month or a year.</span>
+	</button>
+</div>
 
-Prices shown for one seat. Each additional seat is 80% off.
+## How many masters? {#credits}
 
-| Pass | Thin | Light | Medium | Bold |
-|------|------|-------|--------|------|
-| One week | – | – | – | 300 € |
-| Two weeks | – | – | 300 € | 500 € |
-| One month | 100 € | 200 € | 400 € | 600 € |
-| One year | 600 € | 1 200 € | 2 400 € | 3 600 € |
+One credit activates one master, forever. Credits never expire.
 
-## Master credits {#credits}
-
-If you activate a master, you can use Italify on it forever. Add glyphs, change outlines, change metadata – Italify is yours on this master, forever.
-
-Prices shown for one seat. Each additional seat is 80% off.
+<!-- The table is the price list: buy reads it, builds the credit
+     slider from it and hides it. Scripts/TrialWorker/test.mjs checks
+     every cell against the Worker. -->
 
 | Credits | Thin | Light | Medium | Bold |
 |---------|------|-------|--------|------|
@@ -74,60 +69,50 @@ Prices shown for one seat. Each additional seat is 80% off.
 | 16 | 330 € | 440 € | 620 € | 850 € |
 | 24 | 400 € | 540 € | 740 € | 1 000 € |
 
-## Place your order {#order}
+## How long? {#time}
 
-Prices exclude VAT. Your licence key arrives by email within minutes of the payment. By purchasing you accept the [licence terms](eula).
+Unlimited masters while the pass runs. It starts when you start it in Italify.
 
-**Topping up an existing licence?** If you have an `ITFY-XXXX-XXXX` licence code, you can add it in the field below and **all devices registered to that licence** will pick up your order automatically.
+<!-- The table is the price list: buy reads it, builds the pass
+     cards from it and hides it. A dash: that size can’t buy that pass. -->
 
-<form class="order-form" id="order-form">
-	<div>
-		<label for="order-size">Size</label>
-		<select id="order-size" required>
-			<option value="thin">Thin</option>
-			<option value="light">Light</option>
-			<option value="medium">Medium</option>
-			<option value="bold">Bold</option>
-		</select>
-	</div>
-	<div>
-		<!-- Seats: the first at full price, each further one at 20 % –
-		     the same rule the Worker prices from, server-side. -->
-		<label for="order-seats">Seats</label>
-		<select id="order-seats">
-			<option value="1">1 seat</option>
-			<option value="2">2 seats</option>
-			<option value="3">3 seats</option>
-			<option value="4">4 seats</option>
-			<option value="5">5 seats</option>
-			<option value="6">6 seats</option>
-			<option value="7">7 seats</option>
-			<option value="8">8 seats</option>
-			<option value="9">9 seats</option>
-			<option value="10">10 seats</option>
-		</select>
-	</div>
-	<div>
-		<!-- Filled in by buy from the pricing tables above, for the
-		     size and seats selected on the left – each package priced at
-		     that seat count. -->
-		<label for="order-package">Package</label>
-		<select id="order-package" required></select>
-		<!-- Month and year passes only – buy shows it for those. Ticked,
-		     the pass is a subscription at the pass's price (package
-		     `<size>-monthly` / `<size>-yearly` in the Worker). -->
-		<label class="demo-toggle renew-toggle" id="order-renew-row" hidden>
-			<input type="checkbox" id="order-renew">
-			<span>Renew automatically</span>
-		</label>
-	</div>
-	<div>
-		<label for="order-company">Company / foundry (optional)</label>
-		<input id="order-company" type="text" autocomplete="organization">
-	</div>
-	<div>
+| Pass | Thin | Light | Medium | Bold |
+|------|------|-------|--------|------|
+| One week | – | – | – | 300 € |
+| Two weeks | – | – | 300 € | 500 € |
+| One month | 100 € | 200 € | 400 € | 600 € |
+| One year | 600 € | 1 200 € | 2 400 € | 3 600 € |
+
+<!-- Ticked, a month or year pass is a subscription at the pass's
+     price (package `<size>-monthly` / `<size>-yearly` in the Worker).
+     For the week passes buy greys the switch out and shows the
+     second note instead. -->
+<div class="renew-block" id="order-renew-row" hidden>
+	<label class="demo-toggle renew-switch"><input type="checkbox" id="order-renew"><span>Renew automatically</span></label>
+	<p class="renew-note" id="renew-note">Renews every <span id="renew-unit">month</span> until you cancel. Your licence key picks up each renewal by itself.</p>
+	<p class="renew-note" id="renew-unavailable" hidden>Automatic renewal is not available for weekly passes. A month pass is cheaper.</p>
+</div>
+
+## Seats {#seats}
+
+One seat is one person, on up to three Macs. Each extra seat is 80% off.
+
+<!-- Seats: the first at full price, each further one at 20 % – the
+     same rule the Worker prices from, server-side. -->
+<div class="seat-stepper" id="seat-stepper">
+	<button type="button" id="seats-down" aria-label="One seat fewer">−</button>
+	<output id="seats-value" aria-live="polite">1 seat</output>
+	<button type="button" id="seats-up" aria-label="One seat more">+</button>
+</div>
+
+## Your details {#order}
+
+For the invoice. Your licence key is sent to the email you enter during payment.
+
+<form class="order-form" id="order-form" novalidate>
+	<div class="field">
 		<label for="order-country">Country</label>
-			<select id="order-country" required>
+		<select id="order-country" required>
 				<option value="" disabled selected>Select your country…</option>
 				<optgroup label="European Union">
 					<option value="AT">Austria</option>
@@ -188,83 +173,92 @@ Prices exclude VAT. Your licence key arrives by email within minutes of the paym
 				</optgroup>
 			</select>
 	</div>
-	<div>
-		<label for="order-vat">VAT ID (EU businesses, optional)</label>
+	<div class="field">
+		<label for="order-company">Company or foundry (optional)</label>
+		<input id="order-company" type="text" autocomplete="organization">
+	</div>
+	<!-- Shown once an EU country is chosen. -->
+	<div class="field" id="order-vat-row" hidden>
+		<label for="order-vat">VAT ID (optional)</label>
 		<input id="order-vat" type="text" placeholder="e.g. DE123456789">
 	</div>
-	<div class="span-2">
-		<!-- A top-up: the key of an existing licence (or one of its long
-		     codes). buy asks the Worker about it (/licence/lookup) –
-		     the licence's seats then price the order – and the Worker adds
-		     the purchase to that licence. -->
-		<label for="order-licence">Add to an existing licence (optional)</label>
-		<input id="order-licence" type="text" placeholder="ITFY-XXXX-XXXX" autocomplete="off" spellcheck="false" autocapitalize="characters">
-		<p class="order-licence-note" id="order-licence-note">Your licence key, from your licence email or Italify’s settings. Leave it empty for a new licence.</p>
-	</div>
-	<div class="span-2 order-actions">
-		<button type="submit" class="button-primary" id="order-submit">Pay by card</button>
-		<span class="order-total" id="order-total"></span>
-	</div>
-	<p class="order-status span-2" id="order-status" hidden></p>
+	<!-- A top-up: the key of an existing licence (or one of its long
+	     codes). buy asks the Worker about it (/licence/lookup) – the
+	     licence's seats then price the order – and the Worker adds the
+	     purchase to that licence. -->
+	<details class="topup" id="order-topup">
+		<summary>Adding to an existing licence?</summary>
+		<div class="field">
+			<label for="order-licence">Licence key</label>
+			<input id="order-licence" type="text" placeholder="ITFY-XXXX-XXXX" autocomplete="off" spellcheck="false" autocapitalize="characters">
+		</div>
+		<p class="order-licence-note" id="order-licence-note">**Every Mac on that licence picks up the order by itself**. Leave it empty for a new licence.</p>
+	</details>
 </form>
 
-## Free credits
-Are you a student, or working on a minority script? Get in touch directly for free masters credits covering your complete project.
+<!-- The order summary: buy moves it beside the steps, where it
+     stays in view. Its button submits the form above. -->
+<aside class="order-summary" id="order-summary" aria-label="Your order">
+	<h3>Your order</h3>
+	<dl class="summary-lines">
+		<div><dt>Size</dt><dd id="sum-size"></dd></div>
+		<div><dt>Licence</dt><dd id="sum-package"></dd></div>
+		<div><dt>Seats</dt><dd id="sum-seats"></dd></div>
+		<div id="sum-renew-row" hidden><dt>Renews</dt><dd id="sum-renew"></dd></div>
+	</dl>
+	<div class="summary-total"><span>Total</span><span id="order-total"></span></div>
+	<p class="summary-vat">excl. VAT</p>
+	<button type="submit" form="order-form" class="button-primary" id="order-submit">Pay by card</button>
+	<p class="order-status" id="order-status">Choose your country to continue.</p>
+	<p class="summary-fine">Your licence key arrives by email within minutes. By purchasing you accept the <a href="eula">licence terms</a>.</p>
+</aside>
+
+## Free credits {#free}
+
+**Student, or working on a minority script?** Get in touch for free master credits for your whole project: sebastian.carewe<span class="email-protected"></span>
 
 ## FAQ {#faq}
 
 #### Is a credit tied to a single file or project?
 
-No. A credit activates one master, wherever it lives. You can spread them across many projects over many years. Credits never expire.
+No. A credit activates one master, wherever it lives, across any number of projects. Credits never expire.
 
-#### What is a master, exactly?
+#### What counts as a master?
 
-A master is what Glyphs defines as such (Font Info → Masters). It is not the same as a Glyphs file, which can contain multiple masters.
+What Glyphs calls a master (Font Info → Masters) – not a file, which can hold several.
 
-#### What about intermediate/alternate layers?
+### What about intermediate/alternate layers?
 
 In Glyphs, special layers are always attached to a master layer. If that master layer is activated, its special layers are activated too.
 
-#### When is a master credit spent?
+#### When is a credit spent?
 
-Only when you explicitly say so. Entering a licence key adds credits and nothing else. If you run the filter on a master that isn’t activated yet, Italify is locked. If you activate that master, the credit is spent and the master is activated forever.
-
-#### What if I have existing master credits, but add a time pass?
-
-A **time pass** starts when you start it: Italify asks as soon as the pass arrives, and you can also start it later with *Start Pass…* in Italify’s settings. A running time pass is always preferred over master credits, so there is no danger of accidentally spending existing master credits while it runs.
+Only when you activate a master. Entering a licence key just adds credits. A running time pass always comes first, so it never spends your credits.
 
 #### Does a duplicated master stay activated?
 
-No. An activation belongs to the master it was granted to, so a copy needs a credit of its own.
+No. An activation belongs to its master, so a copy needs a credit of its own.
 
-#### What if my font has more masters than I have credits?
+#### When does a time pass start?
 
-Italify runs on the masters you have activated. The others stay locked until you activate them too. If you need a custom amount the packs don’t cover, just get in touch and we’ll work something out.
+When you start it in Italify – right away, or later with *Start Pass…* in the settings. An automatically renewing pass starts on the day you pay.
 
 #### How does automatic renewal work?
 
-An automatically renewing pass is a subscription: at the end of each month or year it renews by card, at the price you signed up at. You enter your licence key once – Italify checks in with the licence server once a day and picks up every renewal by itself.
-
-#### Can I use an automatically renewing pass offline?
-
-Yes, for up to a month at a time. Italify needs to reach the licence server at least once a month to confirm the renewal. If your Mac has been offline for longer, Italify pauses until it can check in again. A pass without automatic renewal needs no such check.
+Month and year passes can renew by card at the end of each period, at the price you signed up at. Italify checks in once a day and picks up each renewal by itself; it works offline for up to a month at a time.
 
 #### How do I cancel automatic renewal?
 
-In Glyphs, choose *Glyph → Italify → Settings and Licences…*, then *Manage Renewal…*, or use the link in your licence email. You keep full access until the end of the period you have paid for.
+In Glyphs, *Glyph → Italify → Settings and Licences…* → *Manage Renewal…*, or via the link in your licence email. You keep access until the end of the paid period.
 
 #### What if a renewal payment fails?
 
-The payment is retried over the following days, and Italify keeps working for a week past the paid period in the meantime. As soon as the payment goes through, Italify picks it up by itself.
+It is retried over the following days, and Italify keeps working for a week past the paid period in the meantime.
 
 #### What is a licence key?
 
-A short code like `ITFY-7K3Q-M9XD` that stands for your licence. You enter it in Italify’s settings on each of your Macs (*Glyph → Italify → Settings and Licences…*), and everything on the licence – credits, passes, renewals – reaches them by itself. Keep it somewhere safe; if it ever gets out, reply to your licence email and we’ll replace it.
+A short code like `ITFY-XXXX-XXXX`. Enter it once on each Mac (*Glyph → Italify → Settings and Licences…*); credits, passes and renewals then arrive by themselves. If it ever gets out, reply to your licence email and I’ll replace it.
 
-#### How do I add more credits?
+#### How do I add credits or another pass?
 
-Enter your licence key in the order form (*Add to an existing licence*). The new credits are added to your licence and reach every Mac on it by itself – there is nothing new to enter. Your existing credits stay untouched.
-
-#### What if I buy a pass while one is still running?
-
-Add it to your licence with your licence key, as above. It waits in Italify until you start it (*Start Pass…*), and if a pass is still running then, the new one starts when that one ends – you don’t lose a day.
+Order with your licence key under *Adding to an existing licence?*. Credits are added to what you have; a new pass waits until you start it, and if one is still running it follows on without losing a day.

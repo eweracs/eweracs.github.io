@@ -1,23 +1,49 @@
-# A jump start for your italics
-
-@lede Italify is a geometry-based approach for *really good* synthetic obliques.
-
 ```italify-hero
+icon: images/italify-icon.svg
+title: A jump start for your italics
+lede: Italify is a geometry-based approach for *really good* synthetic obliques.
 caption: Font in use: [MNKY Wilson](https://mnkytype.com/wilson).
+[Get Italify](buy) primary
 ```
+
+## A corrected oblique in an instant {#overview}
 
 The Glyphs plugin is available directly from the Plugin Manager in Glyphs 3 and Glyphs 4, and is licensed per master or per time period. I am happy to give you a demo, in person or by video: sebastian.carewe<span class="email-protected"></span>
 
 ```buttons
-[Buy Italify](buy) primary
-[Read the handbook](handbook/)
+[Read the handbook](handbook/) primary
+[See the Python API](python-api)
 ```
 
 ```screenshot wide
 img: images/italifyFilter.png
-tag: Screenshot – Italify
-desc: Italify applied on a whole Latin alphabet.
-caption: Italify can make you a corrected oblique in an instant.
+alt: Italify applied to a whole Latin alphabet.
+caption: Italify can make  a corrected oblique in an instant.
+```
+
+## Tested on real fonts {#capabilities}
+
+Italify handles all sorts of cases and designs.
+
+```demos
+## Overlap-agnostic | overlap
+The algorithm works even when overlap is removed and curve intentions would seem more difficult to guess.
+## Diagonal correction | diagonal
+Italify can also correct diagonals, otherwise too thick or thin after a pure slant. Overlap-agnostic as usual.
+## Extra nodes | sweep
+Curves with multiple intermediate points between extremes are transformed without a problem – useful where a pure extreme-to-extreme construction doesn’t allow for the desired curve shape. The result is exactly the same as if the extra nodes were omitted.
+## Inflections | inflect
+Italify handles inflecting curves, without the need to insert explicit inflection points. This way, your outlines stay as smooth as possible.
+## Any script | sinhala
+The geometry of Italify works for any outline and any script, no extra setup required.
+## Retalics | retal
+Whatever name you choose for your backslanted style, Italify has got you covered. Font in use: [Mae Soft](https://lettermin.com/fonts/mae-soft) (made with Italify).
+## High-contrast designs | contrast
+Theoretically, any curve can be treated with Italify. Whether it actually makes sense for your design is your decision.
+## Implicit extremes | implicit
+If you want to leave off your horizontal or vertical extreme nodes for curve segments, no problem.
+## Vertical extremes | extremes
+Keep your vertical extremes, if you prefer.
 ```
 
 ## Why not one of the existing approaches? {#prior-art}
@@ -46,31 +72,6 @@ Having worked with Sebastian for years, Italify’s results were no surprise to 
 We used Italify on a custom project – with striking results. In general, it creates obliques remarkably close to what I’d draw by hand, and handles geometric designs in a way that fits my workflow.
 ```
 
-## Tested on real fonts {#capabilities}
-
-Italify handles all sorts of cases and designs.
-
-```demos
-## Overlap-agnostic | overlap
-The algorithm works even when overlap is removed and curve intentions would seem more difficult to guess.
-## Diagonal correction | diagonal
-Italify can also correct diagonals, otherwise too thick or thin after a pure slant. Overlap-agnostic as usual.
-## Extra nodes | sweep
-Curves with multiple intermediate points between extremes are transformed without a problem – useful where a pure extreme-to-extreme construction doesn’t allow for the desired curve shape. The result is exactly the same as if the extra nodes were omitted.
-## Inflections | inflect
-Italify handles inflecting curves, without the need to insert explicit inflection points. This way, your outlines stay as smooth as possible.
-## Any script | sinhala
-The geometry of Italify works for any outline and any script, no extra setup required.
-## Retalics | retal
-Whatever name you choose for your backslanted style, Italify has got you covered. Font in use: [Mae Soft](https://lettermin.com/fonts/mae-soft) (made with Italify).
-## High-contrast designs | contrast
-Theoretically, any curve can be treated with Italify. Whether it actually makes sense for your design is your decision.
-## Implicit extremes | implicit
-If you want to leave off your horizontal or vertical extreme nodes for curve segments, no problem.
-## Vertical extremes | extremes
-Keep your vertical extremes, if you prefer.
-```
-
 ## Get Italify {#get-italify}
 
 Head over to the [Buy](buy) page to license Italify.
@@ -78,8 +79,8 @@ Head over to the [Buy](buy) page to license Italify.
 **Are you a student or working on a minority script?** Get in touch directly for free masters credits covering your complete project.
 
 ```buttons
-[Try free for 48 hours](trial) primary
-[Read the handbook](handbook/)
+[Buy Italify](buy) primary
+[Try free for 1 week](trial)
 ```
 
 <small>Italify wordmark by [Morgane Vantorre](https://instagram.com/gagane_). Italify requires Glyphs 3.2 or later.</small>

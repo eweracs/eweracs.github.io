@@ -7,8 +7,8 @@
      builds one `d` string and moves pre-created node-overlay elements.
      (The old page re-parsed every path string 2–3× per frame, for all
      eight demos at once, through React state – hence the sluggishness.)
-   • Only demos actually on screen animate (IntersectionObserver), and
-     in the carousel that is at most one or two cards.
+   • Only demos actually on screen animate (IntersectionObserver), so
+     in the stacked capabilities list that is one or two rows at a time.
    • No third-party interpolator: every pair here is point-compatible
      by construction (same font, same structure), which is exactly what
      Italify guarantees. A structure mismatch logs and shows the target
@@ -19,8 +19,8 @@
      statically; the hero stays fully interactive (user-initiated).
 
    Markup contract (emitted by main.js’s `italify-hero` and `demos`
-   fences): [data-italify-hero] for the hero, [data-demo="<id>"] cards
-   inside .demo-carousel. Boots on the `italify:rendered` event. */
+   fences): [data-italify-hero] for the hero, .demo-row[data-demo="<id>"]
+   rows inside .demo-list. Boots on the `italify:rendered` event. */
 
 (function () {
 	"use strict";
@@ -192,11 +192,15 @@
 	}
 
 	/* ---- Node overlay --------------------------------------------------
-	   On-curve circles, off-curve crosses and their handle lines, created
+	   On-curve rings, off-curve dots and their handle lines, created
 	   ONCE per skeleton and repositioned per frame from the same lerped
 	   coordinate buffer the outline uses. Colours via CSS classes. */
 
-	function makeOverlay(svg, types) {
+	// `scale` enlarges node rings and dots (in outline units) for
+	// stages where the outline is drawn small relative to its units –
+	// the hero word is 3500 units wide, a demo glyph about 600.
+	function makeOverlay(svg, types, scale) {
+		scale = scale || 1;
 		var handleGroup = document.createElementNS(SVG_NS, "g");
 		var nodeGroup = document.createElementNS(SVG_NS, "g");
 		handleGroup.setAttribute("class", "demo-handles");
@@ -204,7 +208,7 @@
 		svg.appendChild(handleGroup);
 		svg.appendChild(nodeGroup);
 
-		var handles = [], crosses = [], circles = [];
+		var handles = [], dots = [], circles = [];
 
 		function line(parent, cls) {
 			var el = document.createElementNS(SVG_NS, "line");
@@ -212,9 +216,11 @@
 			parent.appendChild(el);
 			return el;
 		}
-		function circle(parent) {
+		// On-curve points: rings; off-curve points: small filled dots.
+		function circle(parent, r, cls) {
 			var el = document.createElementNS(SVG_NS, "circle");
-			el.setAttribute("r", "8");
+			el.setAttribute("r", String(r));
+			if (cls) el.setAttribute("class", cls);
 			parent.appendChild(el);
 			return el;
 		}
@@ -222,12 +228,12 @@
 		// The skeleton is constant, so element counts are too.
 		for (var i = 0; i < types.length; i++) {
 			if (types[i] === "M" || types[i] === "L") {
-				circles.push(circle(nodeGroup));
+				circles.push(circle(nodeGroup, 8 * scale));
 			} else if (types[i] === "C") {
 				handles.push(line(handleGroup), line(handleGroup));
-				crosses.push(line(nodeGroup, "demo-cross"), line(nodeGroup, "demo-cross"),
-					line(nodeGroup, "demo-cross"), line(nodeGroup, "demo-cross"));
-				circles.push(circle(nodeGroup));
+				dots.push(circle(nodeGroup, 4.8 * scale, "demo-offcurve"),
+					circle(nodeGroup, 4.8 * scale, "demo-offcurve"));
+				circles.push(circle(nodeGroup, 8 * scale));
 			}
 		}
 
@@ -235,10 +241,9 @@
 			el.setAttribute("x1", r2(x1)); el.setAttribute("y1", r2(y1));
 			el.setAttribute("x2", r2(x2)); el.setAttribute("y2", r2(y2));
 		}
-		function setCross(a, b, x, y) {
-			var s = 6;
-			setLine(a, x - s, y - s, x + s, y + s);
-			setLine(b, x - s, y + s, x + s, y - s);
+		function setDot(el, x, y) {
+			el.setAttribute("cx", r2(x));
+			el.setAttribute("cy", r2(y));
 		}
 
 		return {
@@ -265,9 +270,9 @@
 						var ex = coords[k + 4], ey = coords[k + 5];
 						setLine(handles[h++], curX, curY, c1x, c1y);
 						setLine(handles[h++], ex, ey, c2x, c2y);
-						setCross(crosses[c], crosses[c + 1], c1x, c1y);
-						setCross(crosses[c + 2], crosses[c + 3], c2x, c2y);
-						c += 4;
+						setDot(dots[c], c1x, c1y);
+						setDot(dots[c + 1], c2x, c2y);
+						c += 2;
 						circles[n].setAttribute("cx", r2(ex));
 						circles[n].setAttribute("cy", r2(ey));
 						n++;
@@ -285,22 +290,22 @@
 		};
 	}
 
-	/* ---- Demo registry ------------------------------------------------- */
+	/* ---- Demo registry -------------------------------------------------
+	   View boxes are derived from the outlines (fittedBox, below). */
 
 	var DEMOS = {
 		overlap: {
-			viewBox: "0 0 621 730",
 			variants: { off: [overlapAltA, overlapAltB], on: [overlapA, overlapB] },
 			toggle: { label: "Remove overlap", variantOn: "on", variantOff: "off" },
 		},
-		sweep: { viewBox: "0 0 526 510", pair: [sweepA, sweepB] },
-		inflect: { viewBox: "0 0 473 528", pair: [inflectA, inflectB] },
-		sinhala: { viewBox: "0 0 1000 1000", pair: [sinhalaA, sinhalaB]},
-		diagonal: { viewBox: "0 0 685 760", pair: [diagonalA, diagonalB] },
-		retal: { viewBox: "0 0 553 537", pair: [retalA, retalB] },
-		contrast: { viewBox: "0 0 618 642", pair: [contrastA, contrastB] },
-		implicit: { viewBox: "0 0 520 520", pair: [implicitA, implicitB] },
-		extremes: { viewBox: "0 0 400 560", pair: [extremesA, extremesB]}
+		sweep: { pair: [sweepA, sweepB] },
+		inflect: { pair: [inflectA, inflectB] },
+		sinhala: { pair: [sinhalaA, sinhalaB]},
+		diagonal: { pair: [diagonalA, diagonalB] },
+		retal: { pair: [retalA, retalB] },
+		contrast: { pair: [contrastA, contrastB] },
+		implicit: { pair: [implicitA, implicitB] },
+		extremes: { pair: [extremesA, extremesB]}
 	};
 
 	var reducedMotion = window.matchMedia &&
@@ -317,14 +322,45 @@
 		return easeInOutCubic(pingPong);
 	}
 
-	/* ---- One carousel card --------------------------------------------- */
+	/* ---- One demo row (capabilities list) ------------------------------ */
+
+	/* The view box of a demo, fitted to its outline rather than to the
+	   glyph cell its data came from: the bounds of every frame it can show
+	   (both ends of each morph, every variant), nodes and handles
+	   included, plus a small margin. Every glyph then fills its card to
+	   the same height, whatever its cell. Returns the box and its height
+	   (the node marks are scaled from it so they read the same size on
+	   screen in every card). */
+	function fittedBox(def) {
+		var pairs = def.variants
+			? Object.keys(def.variants).map(function (key) { return def.variants[key]; })
+			: [def.pair];
+		var x0 = Infinity, y0 = Infinity, x1 = -Infinity, y1 = -Infinity;
+		pairs.forEach(function (pair) {
+			pair.forEach(function (d) {
+				var c = parsePath(d).coords;
+				for (var i = 0; i < c.length; i += 2) {
+					if (c[i] < x0) x0 = c[i];
+					if (c[i] > x1) x1 = c[i];
+					if (c[i + 1] < y0) y0 = c[i + 1];
+					if (c[i + 1] > y1) y1 = c[i + 1];
+				}
+			});
+		});
+		var w = x1 - x0, h = y1 - y0, m = h * 0.04;
+		return {
+			viewBox: [x0 - m, y0 - m, w + 2 * m, h + 2 * m].map(r2).join(" "),
+			height: h,
+		};
+	}
 
 	function initDemo(card) {
 		var def = DEMOS[card.dataset.demo];
 		if (!def) return;
 
+		var box = fittedBox(def);
 		var svg = document.createElementNS(SVG_NS, "svg");
-		svg.setAttribute("viewBox", def.viewBox);
+		svg.setAttribute("viewBox", box.viewBox);
 		svg.setAttribute("role", "img");
 		svg.setAttribute("aria-label", card.dataset.label || "Italify outline demo");
 		var path = document.createElementNS(SVG_NS, "path");
@@ -353,7 +389,7 @@
 		// active one is shown.
 		var overlays = {};
 		function overlayFor(key, types) {
-			if (!overlays[key]) overlays[key] = makeOverlay(svg, types);
+			if (!overlays[key]) overlays[key] = makeOverlay(svg, types, box.height / 560);
 			return overlays[key];
 		}
 		function showOnly(activeKey) {
@@ -423,69 +459,6 @@
 		}
 	}
 
-	/* ---- Carousel chrome (arrows + dots) -------------------------------- */
-
-	function initCarousel(wrap) {
-		var track = wrap.querySelector(".demo-carousel");
-		var cards = Array.prototype.slice.call(track.querySelectorAll(".demo-card"));
-		var prev = wrap.querySelector(".demo-nav-prev");
-		var next = wrap.querySelector(".demo-nav-next");
-		var dots = wrap.querySelector(".demo-dots");
-
-		cards.forEach(function (card, index) {
-			initDemo(card);
-			if (dots) {
-				var dot = document.createElement("button");
-				dot.type = "button";
-				dot.className = "demo-dot";
-				dot.setAttribute("aria-label", "Go to demo " + (index + 1));
-				dot.addEventListener("click", function () {
-					track.scrollTo({ left: card.offsetLeft - track.offsetLeft, behavior: "smooth" });
-				});
-				dots.appendChild(dot);
-			}
-		});
-
-		function activeIndex() {
-			var mid = track.scrollLeft + track.clientWidth / 2;
-			var best = 0, bestDist = Infinity;
-			cards.forEach(function (card, index) {
-				var center = card.offsetLeft - track.offsetLeft + card.offsetWidth / 2;
-				var dist = Math.abs(center - mid);
-				if (dist < bestDist) { bestDist = dist; best = index; }
-			});
-			return best;
-		}
-
-		function sync() {
-			var active = activeIndex();
-			if (dots) {
-				Array.prototype.forEach.call(dots.children, function (dot, index) {
-					dot.classList.toggle("active", index === active);
-				});
-			}
-			if (prev) prev.disabled = active === 0;
-			if (next) next.disabled = active === cards.length - 1;
-		}
-
-		function step(direction) {
-			var target = Math.min(cards.length - 1, Math.max(0, activeIndex() + direction));
-			track.scrollTo({
-				left: cards[target].offsetLeft - track.offsetLeft,
-				behavior: "smooth",
-			});
-		}
-
-		if (prev) prev.addEventListener("click", function () { step(-1); });
-		if (next) next.addEventListener("click", function () { step(1); });
-		var scrollTimer;
-		track.addEventListener("scroll", function () {
-			clearTimeout(scrollTimer);
-			scrollTimer = setTimeout(sync, 80);
-		}, { passive: true });
-		sync();
-	}
-
 	/* ---- Hero ------------------------------------------------------------
 	   Slant toggle + correction slider + node toggle. No standing loop:
 	   renders on input, with one 450 ms coordinate-space transition when
@@ -498,6 +471,7 @@
 		var slantInput = root.querySelector(".hero-slant input");
 		var slider = root.querySelector(".hero-slider");
 		var nodesInput = root.querySelector(".hero-nodes-toggle input");
+		var valueOut = root.querySelector(".hero-value");
 		if (!svg || !path || !slantInput || !slider || !nodesInput) return;
 
 		var base = parsePath(heroBase);
@@ -506,7 +480,7 @@
 			console.warn("italify-demos: hero base incompatible with morph pair");
 		}
 
-		var overlay = makeOverlay(svg, morph.types);
+		var overlay = makeOverlay(svg, morph.types, 2);
 		var current = new Float64Array(base.coords); // what’s on screen now
 		var scratch = new Float64Array(base.coords.length);
 		var anim = 0;
@@ -531,7 +505,12 @@
 			if (showNodes) overlay.update(current);
 		}
 
+		function syncValue() {
+			if (valueOut) valueOut.textContent = slider.value + "%";
+		}
+
 		function jumpToTarget() {
+			syncValue();
 			targetCoords(current);
 			paint();
 		}
@@ -575,7 +554,7 @@
 
 	function init() {
 		document.querySelectorAll("[data-italify-hero]").forEach(initHero);
-		document.querySelectorAll(".demo-carousel-wrap").forEach(initCarousel);
+		document.querySelectorAll(".demo-row[data-demo]").forEach(initDemo);
 	}
 
 	if (window.__italifyContentRendered) init();
