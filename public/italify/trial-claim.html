@@ -62,7 +62,6 @@
 		<p class="lede">This is your personal Italify <span id="claim-noun">licence key</span>. It runs
 		for <strong id="claim-duration"></strong> from the moment you enter
 		it in Glyphs.</p>
-		<p id="claim-promo-note" hidden>This email address has already claimed a trial code.</p>
 
 		<div class="code-block" id="code-block">
 			<pre><code id="claim-code"></code></pre>
@@ -111,10 +110,10 @@ var WORKER_URL = /^(localhost|127\.0\.0\.1)$/.test(location.hostname)
 		status.hidden = false;
 	}
 
-	// A trial's length in words – the Worker's trialSpan (trial-codes.mjs).
+	// A trial's length in words: one week (trials.mjs), or the 48 hours of
+	// a trial from before October 2026.
 	function span(hours) {
 		if (hours === 168) return "one week";
-		if (hours === 336) return "two weeks";
 		if (hours % 24 === 0 && hours > 48) return hours / 24 + " days";
 		return hours + " hours";
 	}
@@ -151,7 +150,6 @@ var WORKER_URL = /^(localhost|127\.0\.0\.1)$/.test(location.hostname)
 				el.textContent = noun;
 			});
 			document.getElementById("claim-duration").textContent = span(r.data.durationHours || 168);
-			document.getElementById("claim-promo-note").hidden = !r.data.promoIgnored;
 			result.hidden = false;
 
 			var copy = document.getElementById("copy-code");
