@@ -1,7 +1,7 @@
 ```italify-hero
 icon: images/italify-icon.svg
 title: A jump start for your italics
-lede: Italify is a geometry-based approach for *really good* synthetic obliques.
+lede: Italify is a purely geometry-based approach for *really good* synthetic obliques. No AI, no funny stuff.
 caption: Font in use: [MNKY Wilson](https://mnkytype.com/wilson).
 [Get Italify](buy) primary
 ```
@@ -74,7 +74,7 @@ We used Italify on a custom project – with striking results. In general, it cr
 
 ## Get Italify {#get-italify}
 
-Head over to the [Buy](buy) page to license Italify.
+Italify can be licensed per master or per time period.
 
 **Are you a student or working on a minority script?** Get in touch directly for free masters credits covering your complete project.
 

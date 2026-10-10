@@ -237,7 +237,9 @@ Only when you activate a master. Entering a licence key just adds credits. A run
 
 #### Does a duplicated master stay activated?
 
-No. An activation belongs to its master, so a copy needs a credit of its own.
+No, if it happens *in the same file*. An activation belongs to its master, so a copy needs a credit of its own.
+
+A duplicated *file* keeps the activation in place.
 
 #### When does a time pass start?
 
