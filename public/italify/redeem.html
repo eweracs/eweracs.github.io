@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Italify – Redeem a code</title>
+<meta name="description"
+      content="Redeem an Italify code for a licence of your own.">
+<meta name="robots" content="noindex">
+<link rel="icon" href="/icon.svg" type="image/svg+xml" sizes="any">
+<!-- Set the theme before first paint to avoid a flash of the wrong mode:
+     stored choice wins, otherwise follow the OS preference. -->
+<script>
+(function () {
+	try {
+		var stored = localStorage.getItem("italify-theme");
+		var theme = stored || (window.matchMedia &&
+			window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light");
+		document.documentElement.setAttribute("data-theme", theme);
+	} catch (e) {}
+})();
+</script>
+<link rel="stylesheet" href="styles.css?v=36">
+<style>
+	/* Page-local form styling, as on the trial page; everything else comes
+	   from styles.css. */
+	.redeem-form {
+		display: flex;
+		gap: var(--space-sm);
+		flex-wrap: wrap;
+		margin: var(--space-md) 0;
+	}
+	.redeem-form input {
+		flex: 1 1 240px;
+		height: 48px;
+		padding: 0 14px;
+		border: 1px solid var(--color-border);
+		border-radius: 10px;
+		background: var(--color-surface);
+		color: var(--color-primary);
+		font: inherit;
+		font-size: 18px;
+	}
+	.redeem-form input:focus-visible {
+		outline: 2px solid var(--color-link);
+		outline-offset: 0;
+		border-color: transparent;
+	}
+	.redeem-form #redeem-code {
+		flex: 1 1 100%;
+		max-width: 320px;
+		text-transform: uppercase;
+	}
+	.redeem-form .button-primary { height: 48px; }
+	.redeem-form button {
+		font-family: inherit;
+		cursor: pointer;
+	}
+	.redeem-status { color: var(--color-secondary); }
+	.redeem-status.error { color: var(--color-error); }
+	/* What the code brings, once it is known – the docs' .card. */
+	.redeem-yield { margin: var(--space-md) 0; }
+	.redeem-yield h4 { margin-bottom: 8px; }
+	.redeem-yield ul { margin: 0 0 8px; padding-left: 1.2em; }
+	.redeem-yield li { margin: 4px 0; }
+</style>
+</head>
+<body class="page-landing page-doc">
+
+<header class="site">
+	<div class="column">
+		<a class="wordmark" href="/italify"><img class="wordmark-logo" src="images/italify.svg" alt="Italify"></a>
+		<nav class="site-nav">
+			<a href="/italify">Overview</a>
+			<a href="buy">Buy</a>
+			<a href="handbook/">Handbook</a>
+			<a href="python-api">Python API</a>
+			<a class="site-home" href="/?section=projects">sebastiancarewe.com</a>
+		</nav>
+	</div>
+	<button id="theme-toggle" class="theme-toggle" type="button" aria-label="Switch to dark mode" title="Switch to dark mode" aria-pressed="false">
+		<svg class="theme-icon" viewBox="0 0 500 500" fill="currentColor" aria-hidden="true"><path d="M250 0C388 0 500 111 500 250C500 388 388 500 250 500C112 500 0 388 0 250C0 111 112 0 250 0ZM114 114C39 189 39 310 114 386C189 461 311 461 386 386L114 114Z"/></svg>
+	</button>
+</header>
+
+<main class="doc">
+<section>
+	<h1>Redeem a code</h1>
+	<p class="lede">Enter your code, name and email address to get your
+	licence key.</p>
+
+	<!-- A promotion code (the Worker's promo-codes.mjs); a link can bring
+	     one: redeem?code=… -->
+	<form class="redeem-form" id="redeem-form">
+		<input type="text" id="redeem-code" placeholder="Code" autocomplete="off"
+			spellcheck="false" autocapitalize="characters" required aria-label="Code">
+		<input type="text" id="redeem-name" placeholder="Your name" autocomplete="name" required aria-label="Your name">
+		<input type="email" id="redeem-email" placeholder="you@example.com"
+			autocomplete="email" required aria-label="Email address">
+		<button type="submit" class="button-primary" id="redeem-submit">Get licence link</button>
+	</form>
+	<!-- What the code brings – master credits, a time pass, or both –
+	     filled in from the Worker once the code is entered. -->
+	<div class="card redeem-yield" id="redeem-yield" hidden>
+		<h4 id="redeem-yield-title"></h4>
+		<ul id="redeem-yield-list"></ul>
+		<p id="redeem-yield-until"></p>
+	</div>
+	<p class="redeem-status" id="redeem-status" hidden></p>
+
+	<h3>How it works</h3>
+	<ol class="steps">
+		<li><strong>Get your link</strong> by email, valid for one hour.</li>
+		<li><strong>Enter the key</strong> under
+			<em>Glyph → Italify → Settings and Licences…</em></li>
+		<!-- Worded by what the code brings; both until it is known. -->
+		<li id="redeem-use"><strong>Activate a master</strong> or <strong>Start your time pass</strong> when prompted.</li>
+	</ol>
+	<p>No Italify yet? Install it from <em>Window → Plugin Manager</em> in
+	Glyphs.</p>
+	<p>One licence per email address and per Mac. Need more?
+	<a href="buy">Buy a licence</a>.</p>
+</section>
+</main>
+
+<footer>
+	<div class="column wide">
+		<p>Italify – a plugin for <a href="https://glyphsapp.com">Glyphs</a>. <a href="handbook/">Handbook</a></p>
+	</div>
+</footer>
+
+<script>
+// The trial Worker's URL (from `wrangler deploy` in Scripts/TrialWorker/);
+// a local preview talks to the staging Worker, as the Buy page does.
+var WORKER_URL = /^(localhost|127\.0\.0\.1)$/.test(location.hostname)
+	? "https://italify-trial-staging.file-manager-bot.workers.dev"
+	: "https://italify-trial.file-manager-bot.workers.dev";
+
+(function () {
+	var form = document.getElementById("redeem-form");
+	var codeInput = document.getElementById("redeem-code");
+	var name = document.getElementById("redeem-name");
+	var email = document.getElementById("redeem-email");
+	var submit = document.getElementById("redeem-submit");
+	var status = document.getElementById("redeem-status");
+
+	function show(message, isError) {
+		status.textContent = message;
+		status.classList.toggle("error", !!isError);
+		status.hidden = false;
+	}
+
+	var yieldBox = document.getElementById("redeem-yield");
+
+	// The last step follows what the code brings: both until it is known.
+	function showSteps(credits, pass) {
+		document.getElementById("redeem-use").innerHTML =
+			[credits ? "<strong>Activate a master</strong>" : "", pass ? "<strong>Start your time pass</strong>" : ""]
+				.filter(Boolean).join(" or ") + " when prompted.";
+	}
+
+	function hideYield() {
+		yieldBox.hidden = true;
+		showSteps(true, true);
+	}
+
+	// What the code brings, one line per part, worded by the Worker
+	// (promo-codes.mjs, promoGrantLines).
+	function showYield(data) {
+		document.getElementById("redeem-yield-title").textContent = "Licence for " + data.code + ":";
+		var list = document.getElementById("redeem-yield-list");
+		list.textContent = "";
+		(data.lines || [data.brings]).forEach(function (line) {
+			var li = document.createElement("li");
+			li.textContent = line;
+			list.appendChild(li);
+		});
+		document.getElementById("redeem-yield-until").textContent = data.until
+			? "Redeemable until " + new Date(data.until * 1000).toLocaleDateString("en-GB",
+				{ day: "numeric", month: "long", year: "numeric", timeZone: "UTC" })
+			: "";
+		yieldBox.hidden = false;
+		showSteps(!!data.credits, !!data.days);
+	}
+
+	function lookUp(code) {
+		if (!code) { hideYield(); status.hidden = true; return; }
+		fetch(WORKER_URL + "/promo-code", {
+			method: "POST",
+			headers: { "Content-Type": "application/json" },
+			body: JSON.stringify({ code: code }),
+		}).then(function (response) {
+			return response.json().then(function (data) {
+				if (!response.ok) { hideYield(); show(data.error || "This code isn’t valid.", true); return; }
+				showYield(data);
+				status.hidden = true;
+			});
+		}).catch(function () {});
+	}
+
+	var fromLink = new URLSearchParams(window.location.search).get("code");
+	if (fromLink) {
+		codeInput.value = fromLink;
+		lookUp(fromLink.trim());
+	}
+	codeInput.addEventListener("change", function () { lookUp(codeInput.value.trim()); });
+
+	form.addEventListener("submit", function (event) {
+		event.preventDefault();
+		submit.disabled = true;
+		show("Sending…", false);
+		fetch(WORKER_URL + "/promo/signup", {
+			method: "POST",
+			headers: { "Content-Type": "application/json" },
+			body: JSON.stringify({ code: codeInput.value.trim(), name: name.value, email: email.value }),
+		}).then(function (response) {
+			return response.json().then(function (data) {
+				if (!response.ok) throw new Error(data.error || "Something went wrong.");
+				show(data.message, false);
+				name.value = "";
+				email.value = "";
+			});
+		}).catch(function (error) {
+			show(error.message || "Something went wrong. Please try again.", true);
+		}).finally(function () {
+			submit.disabled = false;
+		});
+	});
+})();
+</script>
+<script src="main.js?v=24"></script>
+</body>
+</html>

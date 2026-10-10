@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Italify – Your licence key</title>
+<meta name="robots" content="noindex">
+<link rel="icon" href="/icon.svg" type="image/svg+xml" sizes="any">
+<!-- Set the theme before first paint to avoid a flash of the wrong mode:
+     stored choice wins, otherwise follow the OS preference. -->
+<script>
+(function () {
+	try {
+		var stored = localStorage.getItem("italify-theme");
+		var theme = stored || (window.matchMedia &&
+			window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light");
+		document.documentElement.setAttribute("data-theme", theme);
+	} catch (e) {}
+})();
+</script>
+<link rel="stylesheet" href="styles.css?v=36">
+<style>
+	/* Page-local, as on the trial claim page: the key block reuses the
+	   docs' .code-block/.copy-btn pattern, set large. */
+	#code-block pre code {
+		white-space: pre-wrap;
+		overflow-wrap: anywhere;
+		font-size: 22px;
+		letter-spacing: 0.06em;
+	}
+	.claim-status { color: var(--color-secondary); }
+	.claim-status.error { color: var(--color-error); }
+</style>
+</head>
+<body class="page-landing page-doc">
+
+<header class="site">
+	<div class="column">
+		<a class="wordmark" href="/italify"><img class="wordmark-logo" src="images/italify.svg" alt="Italify"></a>
+		<nav class="site-nav">
+			<a href="/italify">Overview</a>
+			<a href="buy">Buy</a>
+			<a href="handbook/">Handbook</a>
+			<a href="python-api">Python API</a>
+			<a class="site-home" href="/?section=projects">sebastiancarewe.com</a>
+		</nav>
+	</div>
+	<button id="theme-toggle" class="theme-toggle" type="button" aria-label="Switch to dark mode" title="Switch to dark mode" aria-pressed="false">
+		<svg class="theme-icon" viewBox="0 0 500 500" fill="currentColor" aria-hidden="true"><path d="M250 0C388 0 500 111 500 250C500 388 388 500 250 500C112 500 0 388 0 250C0 111 112 0 250 0ZM114 114C39 189 39 310 114 386C189 461 311 461 386 386L114 114Z"/></svg>
+	</button>
+</header>
+
+<main class="doc">
+<section>
+	<h1 id="claim-title">Fetching your licence key…</h1>
+	<p class="claim-status" id="claim-status" hidden></p>
+
+	<div id="claim-result" hidden>
+		<p class="lede">This is your licence key for <strong id="claim-promo"></strong>:
+		<span id="claim-grant"></span>.</p>
+
+		<div class="code-block" id="code-block">
+			<pre><code id="claim-key"></code></pre>
+			<button class="copy-btn" id="copy-key" type="button" aria-label="Copy" title="Copy">
+				<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><rect x="9" y="9" width="12" height="12" rx="2"/><path d="M5 15V5a2 2 0 0 1 2-2h10"/></svg>
+			</button>
+		</div>
+
+		<h3>Activate Italify</h3>
+		<ol class="steps">
+			<li><strong>Install Italify</strong> from
+				<em>Window → Plugin Manager</em> in Glyphs.</li>
+			<li><strong>Enter the key</strong> under
+				<em>Glyph → Italify → Settings and Licences…</em></li>
+			<!-- Worded by what the licence brings. -->
+			<li id="claim-use"><strong>Activate a master</strong> or <strong>Start your time pass</strong> when prompted.</li>
+		</ol>
+		<p>Questions? See the <a href="handbook/">handbook</a>.</p>
+	</div>
+</section>
+</main>
+
+<footer>
+	<div class="column wide">
+		<p>Italify – a plugin for <a href="https://glyphsapp.com">Glyphs</a>. <a href="handbook/">Handbook</a></p>
+	</div>
+</footer>
+
+<script>
+// The trial Worker's URL (from `wrangler deploy` in Scripts/TrialWorker/);
+// a local preview talks to the staging Worker, as the Buy page does.
+var WORKER_URL = /^(localhost|127\.0\.0\.1)$/.test(location.hostname)
+	? "https://italify-trial-staging.file-manager-bot.workers.dev"
+	: "https://italify-trial.file-manager-bot.workers.dev";
+
+(function () {
+	var title = document.getElementById("claim-title");
+	var status = document.getElementById("claim-status");
+	var result = document.getElementById("claim-result");
+
+	function fail(heading, message) {
+		title.textContent = heading;
+		status.innerHTML = message;
+		status.classList.add("error");
+		status.hidden = false;
+	}
+
+	// The last step, by what the licence brings: credits, a pass, or both.
+	function useStep(credits, pass) {
+		return [credits ? "<strong>Activate a master</strong>" : "", pass ? "<strong>Start your time pass</strong>" : ""]
+			.filter(Boolean).join(" or ") + " when prompted.";
+	}
+
+	var token = new URLSearchParams(window.location.search).get("token");
+	if (!token) {
+		fail("Missing link token",
+			'This page only works when opened from a licence email. '
+			+ '<a href="redeem">Redeem a code</a>.');
+		return;
+	}
+
+	fetch(WORKER_URL + "/promo/claim?token=" + encodeURIComponent(token))
+		.then(function (response) {
+			return response.json().then(function (data) { return { response: response, data: data }; });
+		})
+		.then(function (r) {
+			if (r.response.status === 410) {
+				// The code ended or was fully redeemed after the signup.
+				fail("This promotion is over", r.data.message || "This promotion has ended.");
+				return;
+			}
+			if (!r.response.ok) {
+				fail("This link has expired",
+					'Links are valid for one hour. <a href="redeem">Request a new one</a> – '
+					+ "you’ll get the same key.");
+				return;
+			}
+			// What the licence brings, worded by the Worker (promo-codes.mjs,
+			// promoGrant): "Time pass (one week, 1 Mac)".
+			title.textContent = "Your licence key";
+			document.getElementById("claim-key").textContent = r.data.key;
+			document.getElementById("claim-promo").textContent = r.data.promo || "";
+			document.getElementById("claim-grant").textContent = r.data.brings || "";
+			document.getElementById("claim-use").innerHTML = useStep(r.data.credits, r.data.days);
+			result.hidden = false;
+
+			var copy = document.getElementById("copy-key");
+			copy.addEventListener("click", function () {
+				var key = document.getElementById("claim-key").textContent;
+				(navigator.clipboard
+					? navigator.clipboard.writeText(key)
+					: Promise.reject()
+				).catch(function () {
+					var ta = document.createElement("textarea");
+					ta.value = key;
+					document.body.appendChild(ta);
+					ta.select();
+					document.execCommand("copy");
+					ta.remove();
+				}).finally(function () {
+					copy.classList.add("copied");
+					setTimeout(function () { copy.classList.remove("copied"); }, 1200);
+				});
+			});
+		})
+		.catch(function () {
+			fail("Something went wrong",
+				'Please try again in a moment, or <a href="redeem">request a new link</a>.');
+		});
+})();
+</script>
+<script src="main.js?v=24"></script>
+</body>
+</html>

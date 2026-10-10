@@ -4,6 +4,7 @@
 
 ```buttons
 [Try free for 1 week](trial) primary
+[Redeem a code](redeem)
 ```
 
 ## Organisation size {#size}
