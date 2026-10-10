@@ -34,7 +34,7 @@ Are you freelancing for a foundry? Working on a custom font? Then your client’
 
 ## Licence {#licence}
 
-Not sure? Credits suit a project; a pass suits a whole family.
+Not sure? Master credits suit an in-development project with no fixed timeline. If you are familiar with Italify and have many masters or a set timeline, time passes are ideal.
 
 <!-- Picks which of the two sections below is on show: #credits or
      #time (data-kind is the section id). -->
@@ -89,7 +89,7 @@ Unlimited masters while the pass runs. It starts when you start it in Italify.
      second note instead. -->
 <div class="renew-block" id="order-renew-row" hidden>
 	<label class="demo-toggle renew-switch"><input type="checkbox" id="order-renew"><span>Renew automatically</span></label>
-	<p class="renew-note" id="renew-note">Renews every <span id="renew-unit">month</span> until you cancel. Your licence key picks up each renewal by itself.</p>
+	<p class="renew-note" id="renew-note">Renews every <span id="renew-unit">month</span> until you cancel.</p>
 	<p class="renew-note" id="renew-unavailable" hidden>Automatic renewal is not available for weekly passes. A month pass is cheaper.</p>
 </div>
 
