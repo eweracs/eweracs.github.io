@@ -658,7 +658,7 @@ document.addEventListener("italify:rendered", function () {
 	var topupBox = document.getElementById("order-topup");
 	var licenceInput = document.getElementById("order-licence");
 	var licenceNote = document.getElementById("order-licence-note");
-	var licenceNoteText = licenceNote ? licenceNote.textContent : "";
+	var licenceNoteHTML = licenceNote ? licenceNote.innerHTML : "";
 	var total = document.getElementById("order-total");
 	var submit = document.getElementById("order-submit");
 	var status = document.getElementById("order-status");
@@ -979,9 +979,12 @@ document.addEventListener("italify:rendered", function () {
 	// which licence it is. Its seats then price the order; a renewing
 	// licence is offered credits only. Asked when the field settles, not
 	// on every keystroke – key lookups are rate-limited.
+	// `null` puts the page's own note back, markup and all; any other
+	// text – the Worker's messages included – goes in as plain text.
 	function setLicenceNote(text, isError) {
 		if (!licenceNote) return;
-		licenceNote.textContent = text;
+		if (text === null) licenceNote.innerHTML = licenceNoteHTML;
+		else licenceNote.textContent = text;
 		licenceNote.classList.toggle("error", !!isError);
 	}
 	function applyTopUp(next) {
@@ -996,7 +999,7 @@ document.addEventListener("italify:rendered", function () {
 		lookedUp = text;
 		if (!text) {
 			applyTopUp(null);
-			setLicenceNote(licenceNoteText, false);
+			setLicenceNote(null, false);
 			return;
 		}
 		setLicenceNote("Looking up your licence…", false);
@@ -1010,8 +1013,9 @@ document.addEventListener("italify:rendered", function () {
 				if (text !== lookedUp) return;
 				if (!response.ok || !data.ok) {
 					// Leave the text free to be asked about again – after a
-					// wait, or once the buyer has corrected it.
-					lookedUp = "";
+					// wait, or once the buyer has corrected it (or emptied the
+					// field, which brings the note back).
+					lookedUp = null;
 					applyTopUp(null);
 					setLicenceNote(data.message || "We couldn’t check that licence. Please try again.", true);
 					return;
@@ -1027,7 +1031,7 @@ document.addEventListener("italify:rendered", function () {
 			});
 		}).catch(function () {
 			if (text !== lookedUp) return;
-			lookedUp = "";
+			lookedUp = null;
 			setLicenceNote("We couldn’t reach the licence server. Please try again.", true);
 		});
 	}

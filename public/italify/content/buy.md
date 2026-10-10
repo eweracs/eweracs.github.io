@@ -192,7 +192,7 @@ For the invoice. Your licence key is sent to the email you enter during payment.
 			<label for="order-licence">Licence key</label>
 			<input id="order-licence" type="text" placeholder="ITFY-XXXX-XXXX" autocomplete="off" spellcheck="false" autocapitalize="characters">
 		</div>
-		<p class="order-licence-note" id="order-licence-note">**Every Mac on that licence picks up the order by itself**. Leave it empty for a new licence.</p>
+		<p class="order-licence-note" id="order-licence-note"><strong>Every Mac on that licence picks up the order by itself.</strong> Leave it empty for a new licence.</p>
 	</details>
 </form>
 
