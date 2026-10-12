@@ -69,14 +69,9 @@ caption: An Inktrap segment preserves its size even after correction of the adjo
 
 ## Y-Snap {#snap-y}
 
-By default the filter automatically holds a node’s height in place in one common case: an **unsmooth line-to-curve** corner sitting exactly on a metric (baseline, x-height, …) is pinned to that metric through the correction, so it doesn’t drift off it. Every node this affects is marked with a violet pin. (This automatic behaviour is governed by the [advanced setting](filter#hidden-settings) *Keep line-to-curve corners on metrics*.)
+**Y-Snap** keeps a node at its original height: the correction may still move it sideways, but its y stays exactly where you drew it. It works on **any** on-curve node – a corner or a smooth node, on a metric or not.
 
-**Y-Snap** lets you take that decision by hand, node by node. It is a simple *retain the y position* – the metric is only how the automatic case is detected, so the override works on **any** on-curve node, on a metric or not:
-
-- Tag a node the automatic snap *misses* (a line-to-line or curve-to-curve corner, a smooth node, or a node at any height) and it will hold its y exactly.
-- Tag a node the automatic snap *catches* and it is released – free to move with the correction.
-
-Select the node (or several) and press [[Y]], or right-click and choose *Toggle Y-Snap*. The key flips each node’s current state: one that snaps is released, one that doesn’t is pinned. The marker is the same violet pin the automatic snap uses – a pinned node shows it, a released node shows nothing. To hand a node back to the automatic behaviour, clear its tag (right-click *Clear all Tags*, or [[⌫]]).
+Select the node (or several) and press [[Y]], or right-click and choose *Toggle Y-Snap*. The key flips each node: an untagged node is pinned, a pinned one is released. A pinned node carries a violet pin. To remove the tag you can also clear the node’s tags (right-click *Clear all Tags*, or [[⌫]]).
 
 ```screenshot
 img: ../images/snapY.png

@@ -47,7 +47,7 @@ With the diagonals in place, handle the local exceptions for curves with [Tags](
 - [Curve Extension](tags#curve-extension) where a small curve bends in unwanted ways – drag the control to 
   adjust how much Italify infers, or press [[L]] to jump straight to [Limit Curve](tags#limit-curve) (0%).
 - [Inktrap](tags#inktrap) ([[I]]) to hold an ink trap (a single line segment between two adjoining segments) at its original size.
-- [Y-Snap](tags#snap-y) ([[Y]]) to pin (or release) a node’s height by hand.
+- [Y-Snap](tags#snap-y) ([[Y]]) to pin a node’s height by hand.
 
 ## 5. Tune parameters with the live preview {#tune}
 

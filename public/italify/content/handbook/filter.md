@@ -120,13 +120,12 @@ A few behaviours have no control in the dialogue. They live in [*Settings and Li
 | Setting | Default | Effect |
 |---|---|---|
 | *Flatten intersections* | on | When the correction pushes an outline past an adjacent short line (typical at tight junctions), Italify collapses the junction into a clean, master-compatible doubled node – the way you would draw it by hand. Switch it off to keep the uncollapsed geometry. |
-| *Keep line-to-curve corners on metrics* | on | An **unsmooth line-to-curve** node – where a straight segment meets a curve – whose height sits exactly on a metric (baseline, x-height, …) is held to that metric through the correction, so such corners don’t drift off it. Smooth nodes, line-to-line corners and curve-to-curve corners are left free. The tagger marks every node this affects with a violet pin. Switch it off to disable the snap entirely. |
 | *Correct tagged diagonals only* | on | Diagonal correction applies only to tagged diagonals. Switch it off to correct every diagonal segment, tagged or not. For untagged segments, the transformation origin will be (half layer width, half x-height). Experimental use only, results will be unexpected. |
 | *Auto-detect terminals* | on | The filter finds the obvious [terminals](tags#terminal) by itself – a straight cut between two curves heading the same way – and the *Keep terminals* sliders apply to them. Switch it off to keep only the terminals you tag. |
 | *Only detect non-orthogonal terminals* | off | Under *Auto-detect terminals*: detect only terminals cut at an angle. A terminal cut horizontally or vertically (within about half a degree) is then only kept when you tag it. |
 | *Keep nodes on extremes – tolerance* | 1 unit | With [Keep nodes on extremes](#parameters) on, a node is only moved onto the extreme when the corrected shape can be re-drawn within this distance; otherwise it stays where the correction put it. |
 
-Scripts can still set them as `Glyphs.defaults`. the keys are `flattenIntersections`, `autoSnapToMetrics`, `taggedDiagonalsOnly`, `autoDetectTerminals`, `nonOrthogonalTerminalsOnly` and `keepExtremesTolerance`, each prefixed with `com.eweracs.italify.`:
+Scripts can still set them as `Glyphs.defaults`. the keys are `flattenIntersections`, `taggedDiagonalsOnly`, `autoDetectTerminals`, `nonOrthogonalTerminalsOnly` and `keepExtremesTolerance`, each prefixed with `com.eweracs.italify.`:
 
 ```
 Glyphs.defaults["com.eweracs.italify.flattenIntersections"] = False

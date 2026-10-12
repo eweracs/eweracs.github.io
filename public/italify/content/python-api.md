@@ -226,7 +226,7 @@ Whether a node carries the [Inktrap](handbook/tags#inktrap) tag. The tag sits on
 
 **`snap_y(node)`**
 
-The node’s [Y-Snap](handbook/tags#snap-y) override.
+Whether the node carries the [Y-Snap](handbook/tags#snap-y) tag.
 
 *Parameters:*
 
@@ -234,7 +234,7 @@ The node’s [Y-Snap](handbook/tags#snap-y) override.
 
 *Returns:*
 
-- `bool | None` – `True` (force-retain the node’s y), `False` (force-release it), or `None` (no override – the automatic metric-snap heuristic decides)
+- `bool` – `True` when the node retains its y through the correction
 
 **`terminal(node)`**
 
@@ -535,13 +535,13 @@ Toggle [Inktrap](handbook/tags#inktrap) on the straight segment between two node
 
 **`set_snap_y(layer, node, retain, all_masters=False)`**
 
-Set the [Y-Snap](handbook/tags#snap-y) override on a node – force it to retain its y, release it, or hand it back to the automatic heuristic.
+Set or remove the [Y-Snap](handbook/tags#snap-y) tag on a node.
 
 *Parameters:*
 
 - `layer` (`GSLayer`)
-- `node` (`GSNode`) – the on-curve node to override
-- `retain` (`bool | None`) – `True` keeps the node’s y, `False` releases it to the correction, `None` removes the override (back to auto)
+- `node` (`GSNode`) – the on-curve node to tag or untag
+- `retain` (`bool`) – `True` keeps the node’s y through the correction, `False` removes the tag
 - `all_masters` (`bool`) – also apply on every compatible master
 
 *Returns:*
@@ -881,8 +881,8 @@ When a write is refused, `result.reason` is one of these machine codes (`result.
 |---|---|
 | `tooFewNodes` | Select at least 4 on-curve nodes. |
 | `incoherentShape` | The selection isn’t a coherent diagonal shape (one of the four corner regions is empty). |
-| `outsideBlack` | The diagonal area must be inside black shapes. |
-| `extraExclusivity` | Extras belong to one diagonal only; a target is already part of another. |
+| `outsideBlack` | The diagonal area must be inside the filled outline. |
+| `extraExclusivity` | Extras belong to one diagonal only; a target is already part of another diagonal. |
 | `cornerOverlap` | Two diagonals can share at most two nodes; this would overlap an existing diagonal. |
 | `noCompatibleMasters` | No compatible layers with matching nodes were found. |
 | `notLineAdjacent` | The two nodes must be corners forming a line segment (anchored edge). |

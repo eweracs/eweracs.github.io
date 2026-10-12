@@ -17,7 +17,7 @@ The single-letter keys are the defaults: each of them – and the [[C]] that act
 | [[L]]               | Toggle **L**imit Curve on selected on-curve nodes                                                      |
 | [[N]]               | Toggle **N**o Curve Correction on selected curve segments                                              |
 | [[I]]               | Add / remove **I**nktrap on a selected straight segment between two unsmooth nodes                     |
-| [[Y]]               | Toggle **Y**-Snap on selected on-curve nodes (retain ↔ release their y)                                |
+| [[Y]]               | Toggle **Y**-Snap on selected on-curve nodes (retain their y ↔ let them follow the correction)         |
 | [[C]]               | Toggle Terminal (think **C**ap) on a selected straight segment between two unsmooth on-curve nodes     |
 | [[⌫]]               | Remove tag / diagonal / custom curve extension; with a corner clicked, delete that corner; with an anchor selected, clear its links |
 | [[↑]] / [[↓]]       | With a curve extension or terminal control clicked: raise / lower its value by 1 % ([[⇧]]: 10 %)       |
