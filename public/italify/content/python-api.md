@@ -28,7 +28,7 @@ The `italify` module exposes the [Tagger](handbook/tagger#tagger)’s authoring 
 
 ## Installation {#installation}
 
-Install the Italify plugin and relaunch Glyphs once. You will then be able to write the following:
+Install the Italify plugin from the Plugin Manager and relaunch Glyphs once.
 
 ```python
 import italify

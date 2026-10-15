@@ -29,6 +29,6 @@ The anchor follows the corrected outlines depending on their type: It will move 
 
 **Auto-Link Anchors** (also in the [Glyph → Italify menu](glyph-menu)) links every unlinked anchor in one go: an anchor sitting **on a curve** (within 4‰ of the UPM, e.g. 4 units in a 1000 UPM font) gets an x/y-intersection link onto that curve and every other anchor links to its **nearest on-curve node**.
 
-With **anchors selected** the item reads *Auto-Link Selected Anchors* and runs on just those. Anchors that already have a link are never touched, so you can auto-link first and refine by hand after. There is no “in all masters” variant. Verify the results first in one master and then propagate the links afterwards instead. Scripts can pick anchors by name, with `*` wildcards, using [`auto_link_anchors`](../python-api#bulk).
+With **anchors selected** the item reads *Auto-Link Selected Anchors* and runs on just those. Across many glyphs, *Glyph → Italify → Auto-Link Anchors → Define…* does the same by name: tick the anchors to link. Anchors that already have a link are never touched, so you can auto-link first and refine by hand after. There is no “in all masters” variant. Verify the results first in one master and then propagate the links afterwards instead. Scripts can pick anchors by name, with `*` wildcards, using [`auto_link_anchors`](../python-api#bulk).
 
 Copy / Paste / Propagate / Clear for anchor links live in the right-click *Anchors* section (see [Copy, paste & propagate](copy-paste)) and the [Glyph → Italify menu](glyph-menu).

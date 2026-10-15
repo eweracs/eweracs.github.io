@@ -28,7 +28,9 @@ To delete, select one or more diagonals and press [[⌫]] (or right-click → *D
 
 ## Anchored edges {#anchor-edges}
 
-By default, a diagonal corrects around its own centre. Often you instead want one edge to stay in place: the left and right edges of a “V”, for example. Select the two corners of that edge (or just click on the connecting line segment) and press [[A]] (*Toggle Anchored Edge*): the edge formed by those two corners is pinned, and the rest of the diagonal corrects relative to it. The anchored edge draws in pink.
+By default, a diagonal corrects around its own centre. Often you instead want one edge to stay in place: the left and right edges of a “V”, for example. Select the two corners of that edge – or simply click the edge itself – and press [[A]] (*Toggle Anchored Edge*): the edge formed by those two corners is pinned, and the rest of the diagonal corrects relative to it. The anchored edge draws in pink. To anchor the edges of several diagonals in one go, [[Shift]]-click an edge of each and press [[A]] once.
+
+A diagonal’s edges light up in their own colour as the pointer passes over them – blue, or pink once anchored – and a click on the edge, or just next to it, selects its two corners. A selected edge draws a little thicker than the others. [[Shift]]-click adds an edge to the selection (or removes it again), and a double-click selects every node of the contour. Inside the stroke the highlight only reaches a short way in, so clicking the middle of a diagonal still selects the diagonal.
 ```screenshot wide
 img: ../images/anchoredEdges.png
 alt: A glyph with anchored edges set up has its diagonals corrected to keep the anchored edges in place.
@@ -39,7 +41,7 @@ When you create a diagonal that sits on the outline’s outer silhouette, the ou
 
 ## Hinge corners {#hinge-corners}
 
-Sometimes the constraint isn’t an edge but two opposite *points* – for example, the outer junction corners of the diagonal of a “Z”, which must not move while the stroke between them keeps its width. Select one or both diagonally opposite corners and press [[H]] to *Toggle Hinge Corners*. Both hinge corners are pinned exactly where the slant puts them, and the diagonal’s **angle** absorbs the correction instead.
+Sometimes the constraint isn’t an edge but two opposite *points* – for example, the outer junction corners of the diagonal of a “Z”, which must not move while the stroke between them keeps its width. Select one or both diagonally opposite corners and press [[H]] to *Toggle Hinge Corners*. This works across diagonals, too: select corners of several diagonals – one or two opposite ones each – and a single [[H]] toggles all their hinges. Both hinge corners are pinned exactly where the slant puts them, and the diagonal’s **angle** absorbs the correction instead.
 
 Hinges and the anchored edge are mutually exclusive. [[⌫]] on a tagged corner untags it.
 
