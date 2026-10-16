@@ -1,5 +1,5 @@
 ```italify-hero
-icon: images/italify-icon.svg
+wordmark: images/italify.svg
 title: A jump start for your italics
 lede: Italify is a purely geometry-based approach for *really good* synthetic obliques. No AI, no funny stuff.
 caption: Font in use: [MNKY Wilson](https://mnkytype.com/wilson).

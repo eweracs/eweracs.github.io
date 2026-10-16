@@ -1176,6 +1176,26 @@ main.landing > section,
 	.page-landing header.site.is-top .wordmark-logo {
 		height: 30px;
 	}
+
+	/* The home page's small wordmark is hidden at the top (below), so it
+	   keeps its compact size and position there: this cancels the extra
+	   padding above it, and as both animate alike it stays put while the
+	   bar shrinks – it only ever fades. */
+	.page-home header.site.is-top .wordmark-logo {
+		height: 26px;
+		transform: translateY(calc(var(--header-grow) / -2));
+	}
+}
+
+/* The home page's hero shows the big wordmark, so the bar leaves its
+   small one out (hidden, so it keeps its room and the nav stays put)
+   until the big one has scrolled away under the bar – main.js toggles
+   .wordmark-shown. Visibility flips only after the fade-out, so the
+   faded link also drops out of the tab order. Every other page shows
+   it throughout. */
+.page-home header.site:not(.wordmark-shown) .wordmark {
+	opacity: 0;
+	visibility: hidden;
 }
 
 /* The page's own grid band also slides up under the bar (a negative
@@ -1195,10 +1215,21 @@ main.landing > section,
 		margin-bottom 0.3s cubic-bezier(0.4, 0, 0.2, 1),
 		padding 0.3s cubic-bezier(0.4, 0, 0.2, 1),
 		height 0.3s cubic-bezier(0.4, 0, 0.2, 1),
+		transform 0.3s cubic-bezier(0.4, 0, 0.2, 1),
 		background-color 0.3s ease,
 		border-color 0.3s ease;
 }
 
+.page-home header.site.is-ready .wordmark {
+	transition: opacity 0.3s ease, visibility 0s;
+}
+
+.page-home header.site.is-ready:not(.wordmark-shown) .wordmark {
+	transition: opacity 0.3s ease, visibility 0s 0.3s;
+}
+
+/* The bar snaps between its sizes; the home page's wordmark still
+   fades – a change of opacity, not motion. */
 @media (prefers-reduced-motion: reduce) {
 	.page-landing header.site.is-ready,
 	.page-landing header.site.is-ready .column,
@@ -1352,8 +1383,8 @@ main.landing > section.section-own {
 	padding-bottom: 48px;
 }
 
-/* Title block: one left-aligned column on an even 28px rhythm – icon,
-   title, lede, button. */
+/* Title block: one left-aligned column on an even 28px rhythm –
+   wordmark, title, lede, button. */
 .hero-intro {
 	display: flex;
 	flex-direction: column;
@@ -1365,31 +1396,14 @@ main.landing > section.section-own {
 	margin: 0;
 }
 
-.hero-icon {
-	display: flex;
-	align-items: center;
-	justify-content: center;
-	width: clamp(64px, 6vw, 88px);
-	aspect-ratio: 1;
-	border-radius: 24%;
-	background: var(--color-surface);
-	border: 1px solid var(--color-border);
-	box-shadow: var(--shadow-panel);
-}
-
-.hero-icon img {
+.hero-wordmark {
 	display: block;
-	width: 60%;
-	height: 60%;
-	object-fit: contain;
+	height: clamp(56px, 6vw, 84px);
+	width: auto;
 }
 
-:root[data-theme="dark"] .hero-icon {
-	background: var(--color-muted);
-}
-
-/* Same treatment as the wordmark: the SVG’s fixed fill goes white. */
-:root[data-theme="dark"] .hero-icon img {
+/* Same treatment as the header wordmark: the SVG’s fixed fill goes white. */
+:root[data-theme="dark"] .hero-wordmark {
 	filter: brightness(0) invert(1);
 }
 
@@ -1541,8 +1555,8 @@ main.landing > section.section-own {
 		min-height: 0;
 	}
 
-	.hero-icon {
-		width: 64px;
+	.hero-wordmark {
+		height: 48px;
 	}
 
 	/* The word stays legible: scroll it sideways inside the canvas. */

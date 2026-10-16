@@ -120,12 +120,12 @@
 		},
 
 		// The landing hero (index page): the first screen, a grid-paper
-		// field holding icon, title, lede and buttons over the interactive
-		// slant/correction demo and its control bar. Markup only –
-		// behaviour and the outline data live in italify-demos.js, which
-		// boots on the `italify:rendered` event. Body: `key: value` lines
-		// (icon, eyebrow, title, lede, caption – all optional) plus button
-		// lines written exactly as in a ```buttons fence.
+		// field holding wordmark, title, lede and buttons over the
+		// interactive slant/correction demo and its control bar. Markup
+		// only – behaviour and the outline data live in italify-demos.js,
+		// which boots on the `italify:rendered` event. Body: `key: value`
+		// lines (wordmark, eyebrow, title, lede, caption – all optional)
+		// plus button lines written exactly as in a ```buttons fence.
 		"italify-hero"(body) {
 			const lines = body.split("\n");
 			const isButton = function (line) { return /^\s*\[/.test(line); };
@@ -136,7 +136,7 @@
 					(checked ? " checked" : "") + "><span>" + escapeHtml(label) + "</span></label>";
 			}
 			const intro =
-				(data.icon ? '<span class="hero-icon"><img src="' + escapeHtml(data.icon) + '" alt=""></span>' : "") +
+				(data.wordmark ? '<img class="hero-wordmark" src="' + escapeHtml(data.wordmark) + '" alt="Italify">' : "") +
 				(data.eyebrow ? '<p class="eyebrow">' + inline(data.eyebrow) + "</p>" : "") +
 				(data.title ? '<h1 class="hero-title">' + inline(data.title) + "</h1>" : "") +
 				(data.lede ? '<p class="hero-lede">' + inline(data.lede) + "</p>" : "") +
@@ -782,23 +782,39 @@
 	}
 
 	// Taller bar while the page sits at the very top, compact once it
-	// scrolls (styles.css, .is-top). Transitions switch on after the
-	// first frame, so the initial state doesn't animate in.
+	// scrolls (styles.css, .is-top). On the home page the bar's small
+	// wordmark fades in only once the hero's big one has gone under the
+	// bar (.wordmark-shown) – or, without a hero wordmark, once the page
+	// leaves the top. Transitions switch on after the first frame, so the
+	// initial state doesn't animate in.
 	function initHeaderScroll() {
 		var header = document.querySelector("header.site");
 		if (!header || !document.body.classList.contains("page-landing")) return;
+		var home = document.body.classList.contains("page-home");
 		var ticking = false;
 		function sync() {
 			ticking = false;
-			header.classList.toggle("is-top", window.scrollY <= 4);
+			var atTop = window.scrollY <= 4;
+			header.classList.toggle("is-top", atTop);
+			if (!home) return;
+			var heroMark = document.querySelector(".hero-wordmark");
+			header.classList.toggle("wordmark-shown", heroMark
+				? heroMark.getBoundingClientRect().bottom <= header.getBoundingClientRect().bottom
+				: !atTop);
 		}
-		sync();
-		window.addEventListener("scroll", function () {
+		function schedule() {
 			if (!ticking) {
 				ticking = true;
 				requestAnimationFrame(sync);
 			}
-		}, { passive: true });
+		}
+		sync();
+		window.addEventListener("scroll", schedule, { passive: true });
+		if (home) {
+			window.addEventListener("resize", schedule);
+			// The hero is rendered from Markdown after boot.
+			document.addEventListener("italify:rendered", schedule);
+		}
 		requestAnimationFrame(function () {
 			requestAnimationFrame(function () { header.classList.add("is-ready"); });
 		});

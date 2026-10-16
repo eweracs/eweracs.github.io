@@ -24,11 +24,9 @@
 
 The `italify` module exposes the [Tagger](handbook/tagger#tagger)’s authoring verbs to Python. It accesses the same methods the items in the [Glyph → Italify menu](handbook/glyph-menu#glyph-menu) use. A script therefore writes the exact `userData` the filter reads – and, like the tool, it only writes metadata, with one exception: the [`correct`](#correction) verb runs the filter’s actual correction pass, so a script can drive the whole tag-then-correct workflow headless.
 
-**A note on names:** the API speaks of **[diagonals](handbook/diagonals)**, like the tagger and the handbook. Up to v0.29 they were called *stems*: `add_stem`, `stem_id`, `ItalifyStem` and the `stems=` keywords are now `add_diagonal`, `diagonal_id`, `ItalifyDiagonal` and `diagonals=`, and `diagonal_correction_stems_only` is `tagged_diagonals_only`. There are no aliases for the old names. The `userData` keys were renamed with them (`italify.stemId` → `italify.diagonalId`, and so on): a font opened in Glyphs is migrated as it opens, and `correct` migrates the layer it is given – but a script that reads the raw keys of a font it loaded itself should expect either spelling until that font has been saved by the current version. `stem_compensation` is unrelated – it is the filter’s *Stem compensation* parameter, about vertical stems – and keeps its name.
-
 ## Installation {#installation}
 
-Install the Italify plugin from the Plugin Manager and relaunch Glyphs once.
+Install the Italify plugin from the Plugin Manager and relaunch Glyphs once. You can then write:
 
 ```python
 import italify
