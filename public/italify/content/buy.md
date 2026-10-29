@@ -80,7 +80,6 @@ Unlimited masters while the pass runs. It starts when you start it in Italify.
 | Pass | Thin | Light | Medium | Bold |
 |------|------|-------|--------|------|
 | One week | – | – | – | 300 € |
-| Two weeks | – | – | 300 € | 500 € |
 | One month | 100 € | 200 € | 400 € | 600 € |
 | One year | 600 € | 1 200 € | 2 400 € | 3 600 € |
 
