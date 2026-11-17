@@ -1,5 +1,95 @@
 [
   {
+    "name": "Formagari",
+    "url": "https://www.formagari.com",
+    "logo": "assets/img/clients/formagari.svg",
+    "projects": [
+      {
+        "name": "Costumes",
+        "description": {
+          "EN": "Spacing, kerning and mastering for a large multi-width family.",
+          "FR": "Espacement, crénage et maîtrise d’une grande famille à multiples largeurs",
+          "DE": "Spationierung, Kerning und Finalisierung einer großen Schriftfamilie in vielen Breiten."
+        },
+        "year": "2026",
+        "type": {
+          "EN": [
+            "Spacing/Kerning",
+            "Mastering"
+          ],
+          "FR": [
+            "Espacement/Crénage",
+            "Maîtrise"
+          ],
+          "DE": [
+            "Spationierung/Kerning",
+            "Finalisierung"
+          ]
+        },
+        "url": "https://formagari.com/typefaces/costumes"
+      }
+    ]
+  },
+  {
+    "name": "East of Rome",
+    "url": "https://www.eastofrome.com",
+    "logo": "assets/img/clients/eastofrome.svg",
+    "projects": [
+      {
+        "name": "Umiak",
+        "description": {
+          "EN": "Spacing, kerning and review of a medieval-inspired serif family.",
+          "FR": "Espacement, crénage et revue pour une fonte serif ancrée au Moyen Âge.",
+          "DE": "Spationierung, Kerning und Beratung zu einer Serifenfamilie mit mittelalterlichen Wurzeln."
+        },
+        "year": "2026",
+        "type": {
+          "EN": [
+            "Spacing/Kerning"
+          ],
+          "FR": [
+            "Espacement/Crénage"
+          ],
+          "DE": [
+            "Spationierung/Kerning"
+          ]
+        },
+        "url": "https://www.eastofrome.com/fonts/umiak"
+      }
+    ]
+  },
+  {
+    "name": "Fred’s Fonts",
+    "url": "https://www.fredsfonts.com",
+    "logo": "assets/img/clients/fredsfonts.svg",
+    "projects": [
+      {
+        "name": "Scooch",
+        "description": {
+          "EN": "Spacing, kerning and mastering of Fred’s magnum opus.",
+          "FR": "Espacement, crénage et maîtrise du chef-d’œuvre de Fred.",
+          "DE": "Spationierung, Kerning und Mastering von Freds Meisterwerk."
+        },
+        "year": "2026",
+        "type": {
+          "EN": [
+            "Spacing/Kerning",
+            "Mastering"
+          ],
+          "FR": [
+            "Espacement/Crénage",
+            "Maîtrise"
+          ],
+          "DE": [
+            "Spationierung/Kerning",
+            "Finalisierung"
+          ]
+        },
+        "url": "https://www.eastofrome.com/fonts/scooch"
+      }
+    ]
+  },
+  {
     "name": "GitHub",
     "url": "https://www.github.com",
     "logo": "assets/img/clients/github.svg",
@@ -552,7 +642,7 @@
         "description": {
           "EN": "Remaster and design review of a large multiscript family.",
           "FR": "Remasterisation et revue de design d'une grande famille multi-écritures.",
-          "DE": "Remastering und Design-Review einer großen Multi-Script-Familie."
+          "DE": "Remastering und Gestaltungsberatung einer großen Multi-Script-Familie."
         },
         "year": "Since 2024",
         "type": {
