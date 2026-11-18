@@ -27,7 +27,9 @@ The anchor follows the corrected outlines depending on their type: It will move 
 
 ## Auto-linking {#auto-link}
 
-**Auto-Link Anchors** (also in the [Glyph → Italify menu](glyph-menu)) links every unlinked anchor in one go: an anchor sitting **on a curve** (within 4‰ of the UPM, e.g. 4 units in a 1000 UPM font) gets an x/y-intersection link onto that curve and every other anchor links to its **nearest on-curve node**.
+**Auto-Link Anchors** (also in the [Glyph → Italify menu](glyph-menu)) links every unlinked anchor in one go: an anchor sitting **on a path intersection** (within 4‰ of the UPM, e.g. 4 units in a 1000 UPM font) links to that intersection, an anchor sitting **on a curve** (same distance) gets an x/y-intersection link onto that curve, and every other anchor links to its **nearest on-curve node**.
+
+[*Settings and Licences… → Advanced*](settings#advanced) decides which of these Auto-Link may use: *Auto-link anchors to* has a checkbox each for **smooth curve nodes**, **corner nodes**, **path intersections** and the **closest curve intersection** (all on by default). With *Corner nodes* off, for example, an anchor away from any curve links to the nearest smooth node instead; an anchor none of the ticked kinds suits stays unlinked.
 
 With **anchors selected** the item reads *Auto-Link Selected Anchors* and runs on just those. Across many glyphs, *Glyph → Italify → Auto-Link Anchors → Define…* does the same by name: tick the anchors to link. Anchors that already have a link are never touched, so you can auto-link first and refine by hand after. There is no “in all masters” variant. Verify the results first in one master and then propagate the links afterwards instead. Scripts can pick anchors by name, with `*` wildcards, using [`auto_link_anchors`](../python-api#bulk).
 

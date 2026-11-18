@@ -31,7 +31,7 @@ Shortcuts with [[⌘]] – copy, cut, paste, select all – and [[Tab]], [[Esc]]
 
 ## Advanced {#advanced}
 
-Behaviours of the filter that have no control in its dialogue. All default to what most users want; they are described under [Advanced settings](filter#hidden-settings) in the filter chapter. In the tolerance field, [[↑]] and [[↓]] change the value by 1 unit, with [[⇧]] by 5. *Restore Defaults* resets the pane.
+Behaviours of the filter that have no control in its dialogue, and which kinds of outline points [Auto-Link Anchors](anchor-links#auto-link) may link to. All default to what most users want; they are described under [Advanced settings](filter#hidden-settings) in the filter chapter. In the tolerance field, [[↑]] and [[↓]] change the value by 1 unit, with [[⇧]] by 5. *Restore Defaults* resets the pane.
 
 *Write a log file* records what the filter does, which helps with bug reports; *Show in Finder* takes you to the file. Leave it off otherwise – the file grows with every run.
 

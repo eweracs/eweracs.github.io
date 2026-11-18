@@ -324,7 +324,7 @@ A diagonal has at most one pin – setting an anchored edge clears any hinge and
 
 **`set_anchored_edge(layer, diagonal_id, node_a, node_b, on=True, all_masters=False)`**
 
-Pin (or, with `on=False`, clear) the [anchored edge](handbook/diagonals#anchor-edges) formed by two adjacent corners.
+Pin (or, with `on=False`, clear) the [anchored edge](handbook/diagonals#anchor-edges) formed by two adjacent corners (joined by one line or curve segment).
 
 *Parameters:*
 
@@ -637,7 +637,7 @@ Run the diagonal [auto-tagger](handbook/diagonals#creating-diagonals) on the lay
 
 **`auto_link_anchors(layer, anchor_names=None, exclude=None, all_masters=False)`**
 
-Run the [anchor auto-linker](handbook/anchor-links#auto-link) on the layer: an anchor sitting on a curve gets an x/y-intersection link onto it, every other anchor links to its nearest on-curve node. Anchors that already have a link are never touched. Unlike the menu, the anchors can be chosen by name – list the ones to link, or the ones to leave alone. Names are **patterns**: `*` matches any run of characters, so `*top*` covers `top`, `_top`, `topright` and `_topright`; a name without `*` must match exactly. Patterns are resolved against each layer’s own anchors.
+Run the [anchor auto-linker](handbook/anchor-links#auto-link) on the layer: an anchor sitting on a path intersection links to it, an anchor sitting on a curve gets an x/y-intersection link onto it, every other anchor links to its nearest on-curve node – limited to the kinds ticked under *Auto-link anchors to* in the Advanced settings. Anchors that already have a link are never touched. Unlike the menu, the anchors can be chosen by name – list the ones to link, or the ones to leave alone. Names are **patterns**: `*` matches any run of characters, so `*top*` covers `top`, `_top`, `topright` and `_topright`; a name without `*` must match exactly. Patterns are resolved against each layer’s own anchors.
 
 *Parameters:*
 
@@ -883,7 +883,7 @@ When a write is refused, `result.reason` is one of these machine codes (`result.
 | `extraExclusivity` | Extras belong to one diagonal only; a target is already part of another diagonal. |
 | `cornerOverlap` | Two diagonals can share at most two nodes; this would overlap an existing diagonal. |
 | `noCompatibleMasters` | No compatible layers with matching nodes were found. |
-| `notLineAdjacent` | The two nodes must be corners forming a line segment (anchored edge). |
+| `notLineAdjacent` | The two nodes must be corners joined by one line or curve segment (anchored edge). |
 | `cornersNotDiagonal` | The two corners must be diagonally opposed (hinge). |
 | `lockedHandle` | Those handles stay extras while both ends of their curve belong to the diagonal. |
 | `notFound` | No matching diagonal, anchor, or node was found on the layer. |

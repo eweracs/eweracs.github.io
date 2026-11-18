@@ -123,9 +123,10 @@ A few behaviours have no control in the dialogue. They live in [*Settings and Li
 | *Correct tagged diagonals only* | on | Diagonal correction applies only to tagged diagonals. Switch it off to correct every diagonal segment, tagged or not. For untagged segments, the transformation origin will be (half layer width, half x-height). Experimental use only, results will be unexpected. |
 | *Auto-detect terminals* | on | The filter finds the obvious [terminals](tags#terminal) by itself – a straight cut between two curves heading the same way – and the *Keep terminals* sliders apply to them. Switch it off to keep only the terminals you tag. |
 | *Only detect non-orthogonal terminals* | off | Under *Auto-detect terminals*: detect only terminals cut at an angle. A terminal cut horizontally or vertically (within about half a degree) is then only kept when you tag it. |
+| *Auto-link anchors to* | all on | The kinds of outline points [Auto-Link Anchors](anchor-links#auto-link) may link an anchor to: *Smooth curve nodes*, *Corner nodes*, *Path intersections* and *Closest curve intersection*. An anchor that none of the ticked kinds suits is left unlinked. Affects the tagger only, not the filter’s output. |
 | *Keep nodes on extremes – tolerance* | 1 unit | With [Keep nodes on extremes](#parameters) on, a node is only moved onto the extreme when the corrected shape can be re-drawn within this distance; otherwise it stays where the correction put it. |
 
-Scripts can still set them as `Glyphs.defaults`. the keys are `flattenIntersections`, `taggedDiagonalsOnly`, `autoDetectTerminals`, `nonOrthogonalTerminalsOnly` and `keepExtremesTolerance`, each prefixed with `com.eweracs.italify.`:
+Scripts can still set them as `Glyphs.defaults`. the keys are `flattenIntersections`, `taggedDiagonalsOnly`, `autoDetectTerminals`, `nonOrthogonalTerminalsOnly`, `autoLinkSmoothNodes`, `autoLinkCornerNodes`, `autoLinkPathIntersections`, `autoLinkCurveIntersections` and `keepExtremesTolerance`, each prefixed with `com.eweracs.italify.`:
 
 ```
 Glyphs.defaults["com.eweracs.italify.flattenIntersections"] = False

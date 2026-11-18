@@ -1,6 +1,6 @@
 # Buy Italify
 
-@lede Pay per master and keep it forever, or get unlimited masters for a set time.
+@lede License per master and keep those forever, or get unlimited masters for a set time.
 
 ```buttons
 [Try free for 1 week](trial) primary
@@ -227,13 +227,13 @@ No. A credit activates one master, wherever it lives, across any number of proje
 
 What Glyphs calls a master (Font Info → Masters) – not a file, which can hold several.
 
-### What about intermediate/alternate layers?
+#### What about intermediate/alternate layers?
 
 In Glyphs, special layers are always attached to a master layer. If that master layer is activated, its special layers are activated too.
 
 #### When is a credit spent?
 
-Only when you activate a master. Entering a licence key just adds credits. A running time pass always comes first, so it never spends your credits.
+Only when you activate a master. Entering a licence key just adds credits. A running time pass always comes first, so you can never spend your credits by mistake.
 
 #### Does a duplicated master stay activated?
 
@@ -241,13 +241,16 @@ No, if it happens *in the same file*. An activation belongs to its master, so a 
 
 A duplicated *file* keeps the activation in place.
 
+#### Are activated masters remembered between seats?
+No. Details about activated masters *never leave your device* and are only stored locally. Thus, users on the same licence but multiple seats can activate different masters with the same credits.
+
 #### When does a time pass start?
 
 When you start it in Italify – right away, or later with *Start Pass…* in the settings. An automatically renewing pass starts on the day you pay.
 
 #### How does automatic renewal work?
 
-Month and year passes can renew by card at the end of each period, at the price you signed up at. Italify checks in once a day and picks up each renewal by itself; it works offline for up to a month at a time.
+Month and year passes can renew by card at the end of each period, at the price you signed up at. Italify checks in once a day and picks up each renewal by itself. It continues working offline for up to a month at a time.
 
 #### How do I cancel automatic renewal?
 
@@ -259,8 +262,8 @@ It is retried over the following days, and Italify keeps working for a week past
 
 #### What is a licence key?
 
-A short code like `ITFY-XXXX-XXXX`. Enter it once on each Mac (*Glyph → Italify → Settings and Licences…*); credits, passes and renewals then arrive by themselves. If it ever gets out, reply to your licence email and I’ll replace it.
+A short code like `ITFY-XXXX-XXXX`. Enter it once on each Mac (*Glyph → Italify → Settings and Licences…*). Credits, passes and renewals then get synchronised automatically. If your code ever gets out, reply to your licence email and I’ll replace it.
 
 #### How do I add credits or another pass?
 
-Order with your licence key under *Adding to an existing licence?*. Credits are added to what you have; a new pass waits until you start it, and if one is still running it follows on without losing a day.
+Order with your licence key under *Adding to an existing licence?*. Credits are added to what you have. A new time pass waits until you start it, and if another one is currently running, the new one is queued to start seamlessly.
