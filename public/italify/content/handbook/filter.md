@@ -39,7 +39,7 @@ Slanting thins every vertical stem: measured across the stroke, a sheared stem i
 
 The **advance width grows with it**. Because compensation widens the outline horizontally about the glyph centre, the layer’s advance is widened by the same factor and the outline is shifted by half the difference, so the growth is split equally between the two sidebearings – the outline never eats into a fixed advance. At 0 % (or 0° angle) the advance is left untouched.
 
-#### Keep terminals – Angle | 0–100% | default 0% · Position | 0–100% | default 100%
+#### Keep terminals | 0–100% | Angle default 0% | Position default 100%
 
 Governs the straight terminals at stroke ends – the cut of an *e*, *c* or *s*, for example. Two things can happen to a terminal when the curves either side of it are corrected, and each has its own slider:
 
