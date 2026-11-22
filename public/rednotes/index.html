@@ -196,10 +196,10 @@ textarea.note { resize: vertical; min-height: 64px; padding: 8px 10px; border: 1
 .subbar .opts { display: contents; }
 .subbar .opts:disabled > * { opacity: .4; }
 .subbar .opts:disabled * { cursor: default; }
-.subbar .seg button { padding: 0 8px; min-height: 28px; font-size: 12.5px; }
+.subbar .seg button { gap: 4px; padding: 0 6px; min-height: 28px; font-size: 12.5px; }
 .subbar .check { font-size: 12.5px; gap: 6px; }
 .subbar .btn { min-height: 34px; font-size: 12.5px; }
-.subbar .l { display: flex; flex-wrap: wrap; align-items: center; gap: 8px 10px; font-size: 13px; }
+.subbar .l { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; font-size: 13px; }
 .stagehead { display: flex; flex-wrap: wrap; align-items: flex-end; justify-content: space-between; gap: 12px 24px; padding: 18px 28px 14px; }
 .stagehead .k { font-size: 11px; font-weight: 600; letter-spacing: .06em; text-transform: uppercase; color: var(--muted); }
 .stagehead h1 { font-size: 22px; font-weight: 600; letter-spacing: -0.01em; }
@@ -230,6 +230,45 @@ kbd { font-family: var(--mono); font-feature-settings: var(--mono-features); fon
 .gcard .rows2 > span { display: flex; align-items: center; gap: 8px; }
 .gcard .rows2 .k { width: 42px; font-family: var(--sans); font-feature-settings: var(--sans-features); font-weight: 500; color: var(--muted); }
 .strbox { padding: 6px 12px 4px; border-radius: 10px; border: 1px solid var(--line2); overflow-x: auto; }
+
+/* shapes */
+.glyphbtn { position: absolute; padding: 0; border: 0; border-radius: 5px; background: transparent; }
+.glyphbtn:hover { background: rgba(24,24,27,.05); }
+.glyphbtn[aria-pressed="true"] { background: rgba(220,38,38,.07); box-shadow: inset 0 0 0 1.5px #dc2626; }
+.pin.glyph { border-radius: 6px; }
+.glyphsvg { display: block; width: 100%; overflow: hidden; }
+.glyphsvg.small { height: 240px; }
+.glyphsvg.big { height: clamp(260px, calc(100vh - 430px), 640px); }
+.glyphsvg.mini { width: 118px; height: 118px; }
+.glyphsvg.thumb { flex: 0 0 auto; width: 42px; height: 44px; }
+.glyphsvg.edit { cursor: crosshair; touch-action: none; user-select: none; -webkit-user-select: none; }
+.glyphsvg .halo, .glyphsvg .pen { vector-effect: non-scaling-stroke; stroke-linecap: round; stroke-linejoin: round; pointer-events: none; }
+.glyphsvg .halo { stroke-width: 16px; opacity: .45; }
+.glyphsvg .pen { stroke-width: 3px; }
+.glyphsvg.mini .pen { stroke-width: 2px; }
+.markpin { pointer-events: none; }
+.markpin text { font-family: var(--sans); font-feature-settings: var(--sans-features); font-size: 11px; font-weight: 700; }
+.pad { position: relative; min-width: 0; }
+.side .pad { border: 1px solid var(--line); border-radius: 10px; background: #fff; overflow: hidden; }
+.glyphhead { display: flex; align-items: center; gap: 8px; min-width: 0; }
+.glyphhead h2 { min-width: 0; overflow: hidden; text-overflow: ellipsis; font-size: 17px; font-weight: 600; }
+.glyphhead .spacer { flex-basis: 0; }
+.changebtn, .pill.delta { color: #7a4b00; background: #fdf0d3; }
+.changebtn { border: 0; border-radius: 999px; padding: 2px 9px; font-family: var(--mono); font-feature-settings: var(--mono-features); font-size: 12px; font-weight: 600; }
+.formfoot { display: flex; align-items: center; gap: 8px; }
+.tchip.since { color: #115e59; background: #dff5f1; }
+.list .head.kinds { padding: 10px 12px; }
+.list .kinds .seg button { padding: 0 8px; min-height: 28px; font-size: 12.5px; }
+.stage.shape { flex: 0 0 auto; min-height: 0; justify-content: flex-start; gap: 10px; padding: 16px 28px; }
+.sides { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 240px), 1fr)); gap: 16px; }
+.shapelegend { display: flex; flex-wrap: wrap; gap: 8px 20px; font-size: 12px; color: var(--ink2); }
+.shapelegend .item { display: inline-flex; align-items: center; gap: 6px; }
+.shapectx { display: flex; flex-wrap: wrap; gap: 4px 36px; padding: 14px 28px 18px; border-top: 1px solid var(--line2); background: var(--panel2); overflow-x: auto; }
+.pill-btn { min-height: 30px; padding: 0 12px; border-radius: 999px; font-size: 12px; }
+.pill-btn[aria-pressed="true"] { border-color: var(--ink); box-shadow: inset 0 0 0 1px var(--ink); }
+button.gchip { cursor: pointer; }
+.notefigs { display: flex; flex-wrap: wrap; gap: 12px; }
+.notefig { margin: 0; display: flex; flex-direction: column; gap: 4px; }
 
 /* notes */
 .ncard { display: flex; flex-wrap: wrap; gap: 14px 20px; padding: 16px 18px; border-radius: 12px; background: #fff; border: 1px solid var(--line); }
@@ -275,7 +314,7 @@ pre.export { margin: 0; max-height: 480px; overflow: auto; padding: 14px 16px; b
 }
 
 /* oldstyle figures sit off-centre in the numbered circles */
-.pin, .num { font-feature-settings: "lnum"; }
+.pin, .num, .markpin text { font-feature-settings: "lnum"; }
 </style>
 </head>
 <body>
@@ -302,9 +341,18 @@ pre.export { margin: 0; max-height: 480px; overflow: auto; padding: 14px 16px; b
     'collision': { label: 'Collision', fg: '#b42318', bg: '#fdecea', pin: '#b91c1c', sug: 10 },
     'question': { label: 'Question', fg: '#5b21b6', bg: '#efe9fc', pin: '#6d28d9', sug: 0 },
     'looks-good': { label: 'Looks good', fg: '#166534', bg: '#e6f4ea', pin: '#15803d', sug: 0 },
+    'too-heavy': { label: 'Too heavy', fg: '#78350f', bg: '#f5e9df', pin: '#78350f', sug: 0 },
+    'too-light': { label: 'Too light', fg: '#075985', bg: '#e0f2fe', pin: '#0369a1', sug: 0 },
+    'shape': { label: 'Shape', fg: '#9d174d', bg: '#fce7f3', pin: '#db2777', sug: 0 },
     'change-note': { label: 'Change note', fg: '#3f3f46', bg: '#ececE7', pin: '#52525b', sug: 0 }
   };
-  SD.TYPE_ORDER = ['collision', 'too-tight', 'too-loose', 'question', 'looks-good', 'change-note'];
+  // Sources/RednotesCore/Note.swift mirrors the order, labels and pin colours
+  SD.TYPE_ORDER = ['collision', 'too-tight', 'too-loose', 'too-heavy', 'too-light', 'shape', 'question', 'looks-good', 'change-note'];
+  SD.SHAPE_TYPES = ['too-heavy', 'too-light', 'shape'];
+  SD.GLYPH_TYPES = SD.SHAPE_TYPES.concat('question', 'looks-good');
+  SD.SHAPE_KINDS = [['drawn', 'Redrawn'], ['moved', 'Moved'], ['added', 'New'], ['removed', 'Removed']];
+  SD.shapeKind = function (r) { return r.added ? 'added' : r.removed ? 'removed' : r.moved ? 'moved' : 'drawn'; };
+  SD.units = function (v) { return v < 1 ? '<1' : String(Math.round(v)); };
 
   // ------------------------------------------------------------------ snapshot
 
@@ -493,6 +541,8 @@ pre.export { margin: 0; max-height: 480px; overflow: auto; padding: 14px 16px; b
    * Lay out one line.
    *  opts.metrics, opts.kern, opts.outline: Snapshot to take widths/sidebearings, kerning and outlines from
    *  opts.extra(prevName, name, index): extra font units added before glyph `index`
+   *  opts.fill: Snapshot for the widths of glyphs that opts.metrics doesn't have
+   *  opts.place(name, layer): where the outline starts in the advance, instead of at the LSB
    * Returns { glyphs: [{name, x, w, o, gap}], width }
    *   gap (for i>0 between two real glyphs): { L, R, k (kern result), index }
    */
@@ -502,7 +552,7 @@ pre.export { margin: 0; max-height: 480px; overflow: auto; padding: 14px 16px; b
     for (var i = 0; i < tokens.length; i++) {
       var t = tokens[i];
       var name = t.name;
-      var lay = name ? mS.layer(mid, name) : null;
+      var lay = name ? mS.layer(mid, name) || (opts.fill ? opts.fill.layer(mid, name) : null) : null;
       var lo = name ? oS.layer(mid, name) : null;
       var w, o = null, gap = null;
       if (!lay) {
@@ -510,10 +560,10 @@ pre.export { margin: 0; max-height: 480px; overflow: auto; padding: 14px 16px; b
         name = t.space ? name : null;
       } else {
         w = lay.w;
-        o = lo ? lo.o : lay.o;
+        o = lo ? lo.o : opts.fill ? null : lay.o; // with fill, a glyph the outlines don't have stays blank
       }
       // outlines are stored relative to their left sidebearing
-      var shift = lay && lay.l != null ? lay.l : 0;
+      var shift = lay && opts.place ? opts.place(name, lay) : lay && lay.l != null ? lay.l : 0;
       var add = 0;
       if (prev && prev.name && name && !t.space && !prev.space) {
         var k = kS.kern(mid, prev.name, name);
@@ -683,6 +733,255 @@ pre.export { margin: 0; max-height: 480px; overflow: auto; padding: 14px 16px; b
       else out.push(r);
     });
     return out;
+  };
+
+  // ------------------------------------------------------------------ shapes
+
+  /*
+   * Outlines are compared as drawn, not by their hash: a new start point, direction or
+   * contour order, or a node on a straight line, changes the hash but not the shape.
+   * Outlines are stored relative to their left sidebearing, so two versions are first
+   * lined up sideways where most of their segments still coincide. Up and down is never
+   * lined up, so a moved accent or a new overshoot is a change.
+   *
+   * Sources/RednotesCore/OutlineShape.swift does the same for the marks in Glyphs: keep
+   * the two in step (tests/make_fixtures.py writes what the Swift tests expect).
+   */
+  var SAME = 0.75; // units: just over what rounding to the grid can move a point (√2 / 2)
+
+  function tenth(v) { return Math.round(v * 10); }
+  // not Math.hypot: a square root comes out the same here and in Swift
+  function dist(x, y) { return Math.sqrt(x * x + y * y); }
+  function segKey(p, dx) {
+    var f = [], b = [];
+    for (var i = 0; i < p.length; i += 2) f.push(tenth(p[i] + dx), tenth(p[i + 1]));
+    for (var j = f.length - 2; j >= 0; j -= 2) b.push(f[j], f[j + 1]);
+    var a = f.join(' '), z = b.join(' ');
+    return a < z ? a : z; // the same in either direction
+  }
+  /** the segment as straight pieces, close enough to measure against */
+  function flatten(p) {
+    var n = 1, len = 0, out = [p[0], p[1]];
+    for (var i = 2; i < p.length; i += 2) len += dist(p[i] - p[i - 2], p[i + 1] - p[i - 1]);
+    if (p.length > 4) n = Math.max(6, Math.min(40, Math.ceil(Math.sqrt(len) * 1.2))); // within 0.15 units of the curve
+    for (var k = 1; k <= n; k++) {
+      var t = k / n, u = 1 - t;
+      for (var c = 0; c < 2; c++) {
+        out.push(p.length === 4 ? u * p[c] + t * p[2 + c]
+          : p.length === 6 ? u * u * p[c] + 2 * u * t * p[2 + c] + t * t * p[4 + c]
+          : u * u * u * p[c] + 3 * u * u * t * p[2 + c] + 3 * u * t * t * p[4 + c] + t * t * t * p[6 + c]);
+      }
+    }
+    return out;
+  }
+
+  function Shape(d) {
+    var tk = String(d || '').match(/[MLCQZ]|-?\d+(?:\.\d+)?/g) || [];
+    var segs = [], x = 0, y = 0, sx = 0, sy = 0, i = 0;
+    while (i < tk.length) {
+      var cmd = tk[i++], n = cmd === 'C' ? 6 : cmd === 'Q' ? 4 : cmd === 'M' || cmd === 'L' ? 2 : 0;
+      if (cmd === 'Z') {
+        if (x !== sx || y !== sy) segs.push({ p: [x, y, sx, sy] });
+        x = sx; y = sy;
+        continue;
+      }
+      if (!n || i + n > tk.length) continue;
+      var p = [x, y];
+      for (var k = 0; k < n; k++) p.push(+tk[i++]);
+      x = p[p.length - 2]; y = p[p.length - 1];
+      if (cmd === 'M') { sx = x; sy = y; }
+      else if (p.some(function (v, j) { return v !== p[j % 2]; })) segs.push({ p: p });
+    }
+    var box = [Infinity, Infinity, -Infinity, -Infinity], length = 0, area = 0;
+    segs.forEach(function (s) {
+      var q = s.pts = flatten(s.p), b = s.box = [Infinity, Infinity, -Infinity, -Infinity];
+      s.len = 0;
+      for (var j = 0; j < q.length; j += 2) {
+        b[0] = Math.min(b[0], q[j]); b[1] = Math.min(b[1], q[j + 1]);
+        b[2] = Math.max(b[2], q[j]); b[3] = Math.max(b[3], q[j + 1]);
+        if (j) { s.len += dist(q[j] - q[j - 2], q[j + 1] - q[j - 1]); area += q[j - 2] * q[j + 1] - q[j] * q[j - 1]; }
+      }
+      s.key = segKey(s.p, 0);
+      s.level = segKey(s.p, -Math.min(s.p[0], s.p[s.p.length - 2])); // wherever it is sideways
+      length += s.len;
+      box = [Math.min(box[0], b[0]), Math.min(box[1], b[1]), Math.max(box[2], b[2]), Math.max(box[3], b[3])];
+    });
+    this.segs = segs;
+    this.box = segs.length ? box : [0, 0, 0, 0];
+    this.length = length;
+    this.area = Math.abs(area) / 2;
+  }
+
+  /** how far x, y is from the shape's edge */
+  Shape.prototype.distance = function (x, y) {
+    if (!this.segs.length) return 0; // a lone node: only the area tells
+    var best = Infinity, count = this.segs.length, first = this._near || 0, near = first;
+    // the next point is usually nearest to the same segment, so start there
+    for (var i = 0; i < count; i++) {
+      var at = (first + i) % count, s = this.segs[at], b = s.box;
+      var ox = x < b[0] ? b[0] - x : x > b[2] ? x - b[2] : 0, oy = y < b[1] ? b[1] - y : y > b[3] ? y - b[3] : 0;
+      if (ox * ox + oy * oy >= best) continue;
+      var q = s.pts;
+      for (var j = 2; j < q.length; j += 2) {
+        var ax = q[j - 2], ay = q[j - 1], vx = q[j] - ax, vy = q[j + 1] - ay, l2 = vx * vx + vy * vy;
+        var t = l2 ? Math.max(0, Math.min(1, ((x - ax) * vx + (y - ay) * vy) / l2)) : 0;
+        var ex = x - ax - t * vx, ey = y - ay - t * vy, d = ex * ex + ey * ey;
+        if (d < best) { best = d; near = at; }
+      }
+    }
+    this._near = near;
+    return Math.sqrt(best);
+  };
+
+  /** how far right `from` moves to lie on `to`; `origin` is the move that lines up their origins */
+  function lineUp(from, to, origin) {
+    var byLevel = {}, keys = {}, votes = {};
+    to.segs.forEach(function (s) { (byLevel[s.level] = byLevel[s.level] || []).push(s); keys[s.key] = true; });
+    from.segs.forEach(function (s) {
+      (byLevel[s.level] || []).forEach(function (o) {
+        var dx = tenth(Math.min(o.p[0], o.p[o.p.length - 2]) - Math.min(s.p[0], s.p[s.p.length - 2]));
+        votes[dx] = (votes[dx] || 0) + s.len;
+      });
+    });
+    var tries = [0, tenth(origin)].concat(Object.keys(votes).map(Number).sort(function (a, b) {
+      return votes[b] - votes[a] || Math.abs(a) - Math.abs(b) || a - b; // ties go to the smaller move
+    }).slice(0, 4));
+    var kept = tries.map(function (dx) {
+      return from.segs.reduce(function (sum, s) { return keys[segKey(s.p, dx / 10)] ? sum + s.len : sum; }, 0);
+    });
+    var most = Math.max.apply(null, kept);
+    // near enough as good: the left edge stays put, which is easier to follow
+    if (most >= from.length * 0.1) return tries[kept[0] >= most * 0.85 ? 0 : kept.indexOf(most)] / 10;
+
+    // redrawn all over: whichever usual alignment leaves the edges closest
+    var right = to.box[2] - from.box[2], options = [(to.box[0] + to.box[2] - from.box[0] - from.box[2]) / 2, 0, origin, right];
+    var least = Infinity, pick = 0;
+    options.forEach(function (dx) {
+      var sum = 0;
+      from.segs.forEach(function (s) { sum += to.distance(s.p[0] + dx, s.p[1]); });
+      if (sum < least - 1e-6) { least = sum; pick = dx; }
+    });
+    return Math.round(pick * 10) / 10;
+  }
+
+  /** the stretches of `a`, moved right by dx, that are off b's edge */
+  function strayed(a, b, dx) {
+    var keys = {}, out = { max: 0, marks: [], segs: [] };
+    b.segs.forEach(function (s) { keys[s.key] = true; });
+    a.segs.forEach(function (s) {
+      if (keys[segKey(s.p, dx)]) return;
+      var q = s.pts, run = null, off = false, last = null;
+      for (var j = 2; j < q.length; j += 2) {
+        var n = Math.max(1, Math.ceil(dist(q[j] - q[j - 2], q[j + 1] - q[j - 1]) / 12));
+        for (var k = j === 2 ? 0 : 1; k <= n; k++) {
+          var x = q[j - 2] + (q[j] - q[j - 2]) * k / n + dx, y = q[j - 1] + (q[j + 1] - q[j - 1]) * k / n;
+          var d = b.distance(x, y);
+          if (d > out.max) out.max = d;
+          if (d > SAME) {
+            off = true;
+            if (!run) { run = last ? last.slice() : []; out.marks.push(run); }
+            run.push(x, y);
+          } else if (run) { run.push(x, y); run = null; }
+          last = [x, y];
+        }
+      }
+      if (off) out.segs.push(segKey(s.p, -Math.min(s.p[0], s.p[s.p.length - 2])).split(' ').map(Number));
+    });
+    return out;
+  }
+
+  Model.prototype.shape = function (hash) {
+    var all = this._shapes || (this._shapes = {});
+    return all[hash] || (all[hash] = new Shape(this.outlines[hash]));
+  };
+
+  /**
+   * The drawing `from` against the drawing `to`, both outline hashes.
+   * Returns { dx: what moves `from` onto `to`, same, max: units, ink: change of area in %,
+   *   was, now: the changed stretches as point lists in `to`'s coordinates }
+   */
+  Model.prototype.compareShapes = function (from, to, origin) {
+    origin = origin || 0;
+    if (from === to || !this.outlines[from] || !this.outlines[to]) return { dx: 0, same: from === to, max: 0, ink: 0, was: [], now: [], segs: [[], []] };
+    var all = this._compared || (this._compared = {}), key = from + '>' + to + '>' + origin;
+    if (all[key]) return all[key];
+    var a = this.shape(from), b = this.shape(to), dx = lineUp(a, b, origin);
+    var was = strayed(a, b, dx), now = strayed(b, a, -dx);
+    now.marks.forEach(function (m) { for (var i = 0; i < m.length; i += 2) m[i] += dx; });
+    var max = Math.max(was.max, now.max);
+    // the same edge can still fill differently: a counter whose direction flipped
+    var same = max <= SAME && Math.abs(b.area - a.area) <= 100 + max * a.length;
+    return (all[key] = { dx: dx, same: same, max: max, ink: a.area ? (b.area / a.area - 1) * 100 : 0,
+      was: was.marks, now: now.marks, segs: [was.segs, now.segs] });
+  };
+
+  /** one glyph in two snapshots; null where both have nothing drawn */
+  Model.prototype.compareGlyph = function (base, cur, mid, name) {
+    var b = base.layer(mid, name), c = cur.layer(mid, name);
+    var from = b && b.o, to = c && c.o;
+    if (!from && !to) return null;
+    if (!from || !to) return { name: name, from: from, to: to, added: !from, removed: !to, same: false, dx: 0, max: 0, ink: 0, was: [], now: [] };
+    return Object.assign({ name: name, from: from, to: to }, this.compareShapes(from, to, (b.l || 0) - (c.l || 0)));
+  };
+
+  /** From the drawing a glyph note was written on to `to`; null if they are one or it isn't known. */
+  Model.prototype.sinceWritten = function (anchor, to) {
+    var from = anchor && anchor.o;
+    // notes come from outside: only a drawing this proof carries
+    if (!to || typeof from !== 'string' || from === to || !Object.prototype.hasOwnProperty.call(this.outlines, from)) return null;
+    return this.compareShapes(from, to);
+  };
+
+  /** segments without their place, so a component matches its base wherever it sits */
+  function unplaced(list) {
+    return list.map(function (p) {
+      var low = Infinity;
+      for (var i = 1; i < p.length; i += 2) low = Math.min(low, p[i]);
+      return p.map(function (v, j) { return j % 2 ? v - low : v; }).join(' ');
+    });
+  }
+
+  /**
+   * Redrawn glyphs, largest first, then new and removed ones. A composite that changed
+   * only as its base glyph or a mark did is folded into it.
+   */
+  Model.prototype.diffShapes = function (base, cur, mid) {
+    var self = this, rows = [], other = [], byName = {}, marks = [];
+    cur.order.concat(base.order.filter(function (n) { return !cur.has(n); })).forEach(function (name) {
+      var b = base.layer(mid, name), c = cur.layer(mid, name);
+      if ((b && b.o) === (c && c.o)) return;
+      var r = self.compareGlyph(base, cur, mid, name);
+      if (!r || r.same) return;
+      r.composites = [];
+      if (r.added || r.removed) { other.push(r); return; }
+      var was = unplaced(r.segs[0]), now = unplaced(r.segs[1]);
+      // the same segments on both sides have only moved
+      r.redrawn = was.filter(function (k) { return now.indexOf(k) < 0; }).concat(now.filter(function (k) { return was.indexOf(k) < 0; }));
+      r.moved = !!was.length && was.slice().sort().join('|') === now.slice().sort().join('|');
+      rows.push(r);
+      byName[name] = r;
+      if (/^Mark/.test(cur.category(name))) marks.push(r);
+    });
+    var follows = {};
+    rows.forEach(function (r) {
+      if (r.moved || !r.redrawn.length) return;
+      var cb = (cur.glyphs[r.name] || {}).cb, parents = (cb && byName[cb] ? [byName[cb]] : []).concat(/^Mark/.test(cur.category(r.name)) ? [] : marks);
+      for (var i = 0; i < parents.length; i++) {
+        var p = parents[i];
+        if (p === r || !p.redrawn.length || r.max > p.max + 2) continue;
+        if (r.redrawn.every(function (k) { return p.redrawn.indexOf(k) >= 0; })) { follows[r.name] = p; return; }
+      }
+    });
+    var out = rows.filter(function (r) {
+      var top = r;
+      // a composite of a composite is listed with the glyph at the top
+      for (var i = 0; i < 16 && follows[top.name]; i++) top = follows[top.name];
+      if (top === r || follows[top.name]) return true;
+      top.composites.push(r.name);
+      return false;
+    });
+    out.sort(function (a, b) { return b.max - a.max; });
+    return out.concat(other.filter(function (r) { return r.added; }), other.filter(function (r) { return r.removed; }));
   };
 
   // ------------------------------------------------------------------ text helpers
@@ -865,8 +1164,16 @@ pre.export { margin: 0; max-height: 480px; overflow: auto; padding: 14px 16px; b
     return an.l === L && an.r === R ? 1 : 0;
   };
 
+  /** A glyph note's red-pen mark as a point list (one point is a pin), or null. Notes come from outside. */
+  SD.markOf = function (anchor) {
+    var m = anchor && (anchor.path || anchor.at);
+    if (!Array.isArray(m) || m.length < 2 || m.length % 2 || m.length > 256) return null;
+    return m.every(function (v) { return typeof v === 'number' && Math.abs(v) < 100000; }) ? m.slice() : null;
+  };
+
   SD.anchorText = function (model, a) {
     var an = a.anchor || {};
+    if (an.type === 'glyph') return String(an.glyph || '');
     if (an.type === 'side') return an.glyph + ' · ' + (an.side === 'both' ? 'both sides' : an.side + ' side');
     if (an.type === 'pair') return an.l + ' / ' + an.r;
     return 'Text';
@@ -1094,16 +1401,18 @@ pre.export { margin: 0; max-height: 480px; overflow: auto; padding: 14px 16px; b
     var hasChanges = M.earlier(M.cur).length > 0;
 
     var S = {
-      view: 'proof', // proof | notes | pairs | glyphs (the last two only while comparing)
+      view: 'proof', // proof | notes | pairs | glyphs | shapes (the last three only while comparing)
       mid: M.masters[0].id,
       compare: false,
       baseId: M.defaultBase ? M.defaultBase.id : (hasChanges ? M.earlier(M.cur).slice(-1)[0].id : null),
-      cmp: { view: 'overlay', measure: 'net', exag: false, deltas: true, showPrev: false, hold: false },
+      cmp: { view: 'overlay', measure: 'net', exag: false, deltas: true, highlight: true, showPrev: false, hold: false },
       proof: { preset: 'kern', text: SD.PRESETS[0].text, size: 96, values: false, pins: true, applyAll: false,
-        sel: null, target: 'gap', type: null, sug: 0, preview: true, scope: 'group', draft: '', page: 0 },
+        sel: null, glyph: null, target: 'gap', type: null, sug: 0, preview: true, scope: 'group', draft: '', page: 0 },
       notes: { filter: 'all', anchor: 'all', hideResolved: false },
       pairs: { filter: 'all', keyOnly: true, hideComp: true, thr: 0, sel: null, ctx: 0, type: 'question', draft: '', limit: 300 },
-      glyphs: { filter: 'all', showComp: false, sel: null, side: 'right', type: 'too-loose', sug: -6, preview: false, draft: '' }
+      glyphs: { filter: 'all', showComp: false, sel: null, side: 'right', type: 'too-loose', sug: -6, preview: false, draft: '' },
+      shapes: { filter: 'drawn', sel: null, zoom: false, limit: 150 },
+      form: { glyph: null, mid: null, type: null, draft: '', mark: null } // the glyph note being written
     };
     var prefs = SD.storage.get('rednotes:prefs:' + M.proofId) || {};
     if (prefs.size) S.proof.size = prefs.size;
@@ -1205,6 +1514,7 @@ pre.export { margin: 0; max-height: 480px; overflow: auto; padding: 14px 16px; b
      * Render one line of glyphs.
      * opts: tokens, size, mid, cur {metrics,kern,outline}, base {...}|null, ghost, showBase, ex, extra,
      *       pick(gap), selKey, focus(gap), pin(gap), label(glyph, i, prevGlyph), ink, padTop, padBottom, edges
+     *       pickGlyph(name), selGlyph, glyphPin(name), glyphLabel(glyph): the same for whole glyphs
      *   focus(gap): glyphs outside the gaps it accepts are drawn in CONTEXT_INK
      *   label() may return fade: true for a Δ label (see fadeLabels)
      */
@@ -1214,8 +1524,8 @@ pre.export { margin: 0; max-height: 480px; overflow: auto; padding: 14px 16px; b
     function renderRun(opts) {
       var s = opts.size / M.upm;
       var mid = opts.mid || S.mid;
-      var lc = M.layout(opts.tokens, mid, { metrics: opts.cur.metrics, kern: opts.cur.kern, outline: opts.cur.outline, extra: opts.extra });
-      var lb = opts.base ? M.layout(opts.tokens, mid, { metrics: opts.base.metrics, kern: opts.base.kern, outline: opts.base.outline }) : null;
+      var lc = M.layout(opts.tokens, mid, Object.assign({}, opts.cur, { extra: opts.extra }));
+      var lb = opts.base ? M.layout(opts.tokens, mid, opts.base) : null;
       var ex = opts.ex || 1;
       if (lb && ex !== 1) {
         lc.glyphs.forEach(function (g, i) { var b = lb.glyphs[i]; if (b) g.x = b.x + ex * (g.x - b.x); });
@@ -1255,14 +1565,33 @@ pre.export { margin: 0; max-height: 480px; overflow: auto; padding: 14px 16px; b
       if (opts.edges) opts.edges(svg, s, asc, H);
       wrap.appendChild(svg);
       var bw = Math.max(14, Math.min(22, opts.size * 0.16));
+      function left(g, i) { return (opts.showBase && lb ? lb.glyphs[i].x : g.x) * s; }
+      // under the gap buttons, so these go first
+      if (opts.pickGlyph) lc.glyphs.forEach(function (g, i) {
+        if (g.space || g.missing || !g.name || !g.w) return;
+        wrap.appendChild(h('button', {
+          type: 'button', class: 'glyphbtn', 'aria-label': 'Glyph ' + g.name, 'aria-pressed': String(g.name === opts.selGlyph),
+          style: 'left:' + left(g, i) + 'px;top:' + padTop + 'px;width:' + g.w * s + 'px;height:' + H + 'px',
+          onclick: function () { opts.pickGlyph(g.name); }
+        }));
+      });
+      lc.glyphs.forEach(function (g, i) {
+        var middle = left(g, i) + g.w * s / 2;
+        var gp = !g.space && g.name && opts.glyphPin ? opts.glyphPin(g.name) : null;
+        if (gp) wrap.appendChild(h('span', { class: 'pin glyph', style: 'left:' + middle + 'px;top:' + padTop + 'px;background:' + gp.color }, gp.n));
+        var gl = !g.space && g.name && opts.glyphLabel ? opts.glyphLabel(g) : null;
+        if (gl) wrap.appendChild(h('span', { class: 'lab fadeable', style: 'left:' + (g.x + g.w / 2) * s + 'px;top:' + (padTop + H + 2) + 'px;color:' + gl.fg + ';background:' + gl.bg }, gl.text));
+      });
       lc.glyphs.forEach(function (g, i) {
         var x = (opts.showBase && lb ? lb.glyphs[i].x : g.x) * s;
         var prev = i > 0 ? lc.glyphs[i - 1] : null;
         if (g.gap && opts.pick) {
           var key = g.gap.L + ' ' + g.gap.R;
+          // a narrow letter keeps half its width for clicking the letter itself
+          var gw = opts.pickGlyph ? Math.max(8, Math.min.apply(null, [bw, prev.w * s / 2, g.w * s / 2].filter(function (v) { return v > 0; }))) : bw;
           wrap.appendChild(h('button', {
             type: 'button', class: 'gapbtn', 'aria-label': 'Gap ' + g.gap.L + ' / ' + g.gap.R, 'aria-pressed': String(key === opts.selKey),
-            style: 'left:' + (x - bw / 2) + 'px;top:' + padTop + 'px;width:' + bw + 'px;height:' + H + 'px',
+            style: 'left:' + (x - gw / 2) + 'px;top:' + padTop + 'px;width:' + gw + 'px;height:' + H + 'px',
             onclick: (function (gap) { return function () { opts.pick(gap); }; })(g.gap)
           }));
         }
@@ -1303,7 +1632,21 @@ pre.export { margin: 0; max-height: 480px; overflow: auto; padding: 14px 16px; b
     function curSpecFor(base) {
       var m = S.cmp.measure, cur = M.cur;
       if (!base) return same(cur);
+      if (m === 'shape') return { metrics: base, kern: base, outline: cur, fill: cur, place: placeFor(base) };
       return m === 'kern' ? { metrics: base, kern: cur, outline: base } : m === 'space' ? { metrics: cur, kern: base, outline: cur } : same(cur);
+    }
+
+    /** Measure Outlines: each new drawing lies on the old one, and the text doesn't move */
+    function placeFor(base) {
+      return function (name) {
+        var b = base.layer(S.mid, name), c = M.cur.layer(S.mid, name);
+        if (!b || b.l == null) return c && c.l != null ? c.l : 0;
+        var d = M.compareGlyph(base, M.cur, S.mid, name);
+        return b.l - (d ? d.dx : 0);
+      };
+    }
+    function baseSpecFor(base) {
+      return S.cmp.measure === 'shape' ? { metrics: base, kern: base, outline: base, fill: M.cur } : same(base);
     }
 
     // ------------------------------------------------------------------ notes helpers
@@ -1317,7 +1660,9 @@ pre.export { margin: 0; max-height: 480px; overflow: auto; padding: 14px 16px; b
       list.sort(function (a, b) { return a.n - b.n; });
       return { n: list[0].n + (list.length > 1 ? '+' : ''), color: SD.TYPES[list[0].type].pin };
     }
-    function who(a) { return a.local ? 'You' : a.author === 'designer' ? 'Designer' : 'Client'; }
+    // the client knows the designer by name; the data keeps "designer"
+    function authorName(author) { return author === 'designer' ? 'Sebastian' : 'Client'; }
+    function who(a) { return a.local ? 'You' : authorName(a.author); }
     function threadItem(a) {
       var t = SD.TYPES[a.type] || SD.TYPES.question;
       return h('article', { class: 'thread' + (a.status === 'resolved' ? ' res' : '') },
@@ -1325,11 +1670,12 @@ pre.export { margin: 0; max-height: 480px; overflow: auto; padding: 14px 16px; b
           h('span', { class: 'num', style: 'background:' + t.pin }, a.n),
           h('span', { class: 'tchip', style: 'color:' + t.fg + ';background:' + t.bg }, t.label),
           resolvedChip(a),
+          sinceChip(a),
           a.suggest ? h('span', { class: 'sug' }, 'suggests ' + SD.fmt(a.suggest)) : null,
           h('span', { class: 'spacer' }),
           h('span', { class: 'xs muted' }, who(a) + ' · ' + fmtDate(a.date))),
         h('p', null, a.text),
-        (a.replies || []).map(function (r) { return h('div', { class: 'reply' }, h('b', null, r.author === 'designer' ? 'Designer: ' : 'Client: '), r.text); }),
+        (a.replies || []).map(function (r) { return h('div', { class: 'reply' }, h('b', null, authorName(r.author) + ': '), r.text); }),
         h('div', { class: 'meta' },
           h('span', { class: 'xs muted' }, SD.scopeText(M, a)),
           h('span', { class: 'spacer' }),
@@ -1338,6 +1684,10 @@ pre.export { margin: 0; max-height: 480px; overflow: auto; padding: 14px 16px; b
     }
     function resolvedChip(a) {
       return a.status === 'resolved' ? h('span', { class: 'tchip resolved' }, '\u2713 Resolved') : null;
+    }
+    /** a glyph note whose glyph was drawn differently after it was written */
+    function sinceChip(a) {
+      return redrawnSince(a) ? h('span', { class: 'tchip since' }, 'Redrawn since') : null;
     }
     function typeChips(current, onPick, list) {
       return h('div', { class: 'chips', role: 'group', 'aria-label': 'Annotation type' }, (list || ['too-tight', 'too-loose', 'collision', 'question', 'looks-good']).map(function (id) {
@@ -1414,7 +1764,7 @@ pre.export { margin: 0; max-height: 480px; overflow: auto; padding: 14px 16px; b
     function setCompare(on) {
       S.compare = on;
       S.cmp.hold = false;
-      if (!on && (S.view === 'pairs' || S.view === 'glyphs')) S.view = 'proof';
+      if (!on && comparisonOnly(S.view)) S.view = 'proof';
       render();
     }
 
@@ -1427,8 +1777,12 @@ pre.export { margin: 0; max-height: 480px; overflow: auto; padding: 14px 16px; b
       if (!hasChanges || S.view === 'notes') return null;
       var on = !!B(), base = picked(), C = S.cmp, cur = M.cur;
       var earlier = M.earlier(cur);
-      var showItems = [['proof', 'Text'], ['pairs', 'Changed pairs', pairsDiff().length], ['glyphs', 'Respaced glyphs', glyphsDiff().length]];
-      var switchable = S.view === 'proof' || S.view === 'pairs';
+      // comparing every outline takes a moment, so they are only counted while comparing
+      var showItems = [['proof', 'Text'], ['pairs', 'Pairs', pairsDiff().length, 'Changed pairs'], ['glyphs', 'Respaced', glyphsDiff().length, 'Respaced glyphs'],
+        ['shapes', 'Shapes', on ? shapesDiff().filter(function (r) { return !r.added && !r.removed; }).length : null, 'Changed shapes']];
+      var switchable = S.view === 'proof' || S.view === 'pairs' || S.view === 'shapes';
+      var measures = [['net', 'Net'], ['kern', 'Kerning'], ['space', 'Spacing']];
+      if (S.view === 'proof') measures.push(['shape', 'Outlines', null, 'Only what was redrawn: the text holds still']);
       var showing = on && (C.showPrev || C.hold);
       return h('div', { class: 'subbar' + (on ? ' on' : ''), role: 'region', 'aria-label': 'Compare' },
         h('div', { class: 'l' },
@@ -1441,10 +1795,11 @@ pre.export { margin: 0; max-height: 480px; overflow: auto; padding: 14px 16px; b
           h('span', { class: 'vsep', style: 'height:24px', 'aria-hidden': 'true' }),
           h('fieldset', { class: 'opts', disabled: !on, 'aria-label': 'Compare options' },
             labelled('Show', seg(showItems, S.view, function (v) { go(v); })),
-            switchable ? labelled('View', seg([['overlay', 'Overlay'], ['switch', 'Switch'], ['stacked', 'Stacked']], C.view, function (v) { C.view = v; C.showPrev = false; render(); })) : null,
-            S.view !== 'glyphs' ? labelled('Measure', seg([['net', 'Net'], ['kern', 'Kerning'], ['space', 'Spacing']], C.measure, function (v) { C.measure = v; render(); })) : null,
+            switchable ? labelled('View', seg([['overlay', 'Overlay'], ['switch', 'Switch'], ['stacked', S.view === 'shapes' ? 'Side by side' : 'Stacked']], C.view, function (v) { C.view = v; C.showPrev = false; render(); })) : null,
+            S.view === 'proof' || S.view === 'pairs' ? labelled('Measure', seg(measures, C.measure, function (v) { C.measure = v; render(); })) : null,
             S.view === 'proof' ? check('\u0394 labels', C.deltas, function (v) { C.deltas = v; render(); }) : null,
-            S.view === 'proof' ? check('Exaggerate \u00d74', C.exag, function (v) { C.exag = v; render(); }) : null,
+            S.view === 'proof' && C.measure !== 'shape' ? check('Exaggerate \u00d74', C.exag, function (v) { C.exag = v; render(); }) : null,
+            S.view === 'shapes' && C.view !== 'switch' && (S.shapes.filter === 'drawn' || S.shapes.filter === 'moved') ? check('Highlight', C.highlight, function (v) { C.highlight = v; render(); }) : null,
             switchable && C.view === 'switch' ? h('div', { class: 'chips' },
               h('button', { type: 'button', class: 'btn sm' + (!showing ? ' primary' : ''), 'aria-pressed': String(!showing), onclick: function () { C.showPrev = false; render(); } }, h('kbd', null, '1'), CURRENT),
               h('button', { type: 'button', class: 'btn sm' + (showing ? ' primary' : ''), 'aria-pressed': String(showing), onclick: function () { C.showPrev = true; render(); } }, h('kbd', null, '2'), base.label)) : null,
@@ -1453,8 +1808,11 @@ pre.export { margin: 0; max-height: 480px; overflow: auto; padding: 14px 16px; b
     /** a segmented control named for screen readers, without a visible label */
     function labelled(name, el) { el.setAttribute('aria-label', name); return el; }
 
+    function comparisonOnly(view) { return view === 'pairs' || view === 'glyphs' || view === 'shapes'; }
     function go(view) {
-      if ((view === 'pairs' || view === 'glyphs') && !B()) view = 'proof';
+      if (comparisonOnly(view) && !B()) view = 'proof';
+      // pairs have no outlines to measure
+      if (view === 'pairs' && S.cmp.measure === 'shape') S.cmp.measure = 'net';
       S.view = view;
       render();
       window.scrollTo(0, 0);
@@ -1478,6 +1836,7 @@ pre.export { margin: 0; max-height: 480px; overflow: auto; padding: 14px 16px; b
       else if (id.indexOf('font:') === 0) P.text = M.samples[parseInt(id.slice(5), 10)].text;
       else P.text = SD.PRESETS.filter(function (p) { return p.id === id; })[0].text;
       P.sel = null;
+      P.glyph = null;
     }
 
     function proofExtra(prev, name) {
@@ -1504,7 +1863,13 @@ pre.export { margin: 0; max-height: 480px; overflow: auto; padding: 14px 16px; b
     function pickGap(gap) {
       var P = S.proof;
       if (P.sel && P.sel.L === gap.L && P.sel.R === gap.R) P.sel = null;
-      else { P.sel = { L: gap.L, R: gap.R }; P.draft = ''; }
+      else { P.sel = { L: gap.L, R: gap.R }; P.glyph = null; P.draft = ''; }
+      render();
+    }
+    function pickGlyph(name) {
+      var P = S.proof;
+      P.glyph = P.glyph === name ? null : name;
+      P.sel = null;
       render();
     }
 
@@ -1512,6 +1877,8 @@ pre.export { margin: 0; max-height: 480px; overflow: auto; padding: 14px 16px; b
       var P = S.proof, base = B(), cur = M.cur, C = S.cmp;
       var lines = M.parse(P.text);
       if (P.sel && (!cur.has(P.sel.L) || !cur.has(P.sel.R))) P.sel = null;
+      var outlinesOnly = !!base && C.measure === 'shape';
+      var ex = base && C.exag && !outlinesOnly ? 4 : 1;
       var selKey = P.sel ? P.sel.L + ' ' + P.sel.R : null;
       var allTotal = P.preset === 'allpairs' ? M.allPairs(S.mid).length : 0;
       var showBase = base && (C.view === 'switch' ? (C.showPrev || C.hold) : C.view === 'overlay' && C.hold);
@@ -1550,32 +1917,40 @@ pre.export { margin: 0; max-height: 480px; overflow: auto; padding: 14px 16px; b
         }
         if (pv && !g.space) return { text: SD.fmt(pv), fg: '#1d4ed8', dashed: true };
         if (!g.gap) return null;
-        if (base && C.deltas) { var d = netDelta(base, cur, S.mid, g.gap.L, g.gap.R, C.measure); if (d) { var t = SD.tone(d); return { text: 'Δ' + SD.fmt(d), fg: t.fg, bg: t.bg, fade: true }; } }
+        if (base && C.deltas && !outlinesOnly) { var d = netDelta(base, cur, S.mid, g.gap.L, g.gap.R, C.measure); if (d) { var t = SD.tone(d); return { text: 'Δ' + SD.fmt(d), fg: t.fg, bg: t.bg, fade: true }; } }
         if (P.values && g.gap.k.v) return { text: SD.fmtv(g.gap.k.v), fg: '#55555c', bg: '#f3f3f0' };
         return null;
       }
 
+      function glyphLabel(g) {
+        var d = M.compareGlyph(base, cur, S.mid, g.name);
+        if (!d || d.same || d.removed) return null;
+        return { text: d.added ? 'new' : 'Δ' + units(d.max), fg: '#7a4b00', bg: '#fdf0d3' };
+      }
+
       var runs = [];
       lines.forEach(function (tokens) {
-        var common = { tokens: tokens, size: P.size, extra: proofExtra, selKey: selKey, pick: pickGap, pin: P.pins ? pinFor : null, label: label };
+        var common = { tokens: tokens, size: P.size, extra: proofExtra, selKey: selKey, pick: pickGap, pin: P.pins ? pinFor : null, label: label,
+          pickGlyph: pickGlyph, selGlyph: P.glyph, glyphPin: P.pins ? glyphPinFor : null, glyphLabel: outlinesOnly && C.deltas ? glyphLabel : null };
         if (base && C.view === 'stacked') {
           runs.push(h('div', { class: 'stack' },
             h('span', { class: 'stacklab' }, base.label),
-            renderRun({ tokens: tokens, size: P.size, cur: same(base), padTop: 4, padBottom: 4, ink: '#6b6b73' }),
+            renderRun({ tokens: tokens, size: P.size, cur: baseSpecFor(base), padTop: 4, padBottom: 4, ink: '#6b6b73' }),
             h('span', { class: 'stacklab' }, CURRENT),
-            renderRun(Object.assign({}, common, { cur: curSpecFor(base), base: same(base), ex: C.exag ? 4 : 1, padTop: 22 }))));
+            renderRun(Object.assign({}, common, { cur: curSpecFor(base), base: baseSpecFor(base), ex: ex, padTop: 22 }))));
         } else {
           runs.push(renderRun(Object.assign({}, common, {
-            cur: curSpecFor(base), base: base ? same(base) : null, ex: base && C.exag ? 4 : 1,
+            cur: curSpecFor(base), base: base ? baseSpecFor(base) : null, ex: ex,
             ghost: base && C.view === 'overlay', showBase: showBase
           })));
         }
       });
 
       var main = h('main', { class: 'main', onclick: function (e) {
-        if (!P.sel) return;
+        if (!P.sel && !P.glyph) return;
         if (e.target.closest && e.target.closest('button, textarea, input, select, a, label')) return;
         P.sel = null;
+        P.glyph = null;
         render();
       } },
         h('div', { class: 'textfield' },
@@ -1584,7 +1959,7 @@ pre.export { margin: 0; max-height: 480px; overflow: auto; padding: 14px 16px; b
         fadeLabels(h('div', { class: 'lines', 'data-sk': 'lines' }, runs), !!showBase, P),
         h('div', { class: 'legend' },
           h('b', null, 'Annotations'),
-          ['too-tight', 'too-loose', 'collision', 'question', 'looks-good'].map(function (id) {
+          ['too-tight', 'too-loose', 'collision', 'question', 'looks-good'].concat(shapeTypesUsed()).map(function (id) {
             return h('span', { class: 'item' }, h('span', { class: 'dot', style: 'background:' + SD.TYPES[id].pin }), SD.TYPES[id].label);
           }),
           base && C.view === 'overlay' ? [
@@ -1596,11 +1971,12 @@ pre.export { margin: 0; max-height: 480px; overflow: auto; padding: 14px 16px; b
 
     function Inspector() {
       var P = S.proof, cur = M.cur, mid = S.mid;
+      if (P.glyph && cur.has(P.glyph)) return GlyphInspector(P.glyph);
       if (!P.sel) {
         return h('aside', { class: 'side', 'aria-label': 'Gap inspector' },
           h('div', { class: 'emptystate' },
             h('b', null, 'Nothing selected'),
-            h('span', null, 'Click the space between two letters to see its kerning and add a note. Click it again, or anywhere outside the text, to deselect.')));
+            h('span', null, 'Click a letter, or the space between two letters.')));
       }
       var L = P.sel.L, R = P.sel.R;
       var gl = cur.groupL(L), gr = cur.groupR(R);
@@ -1669,7 +2045,8 @@ pre.export { margin: 0; max-height: 480px; overflow: auto; padding: 14px 16px; b
       } else if (an.type === 'side' && M.cur.has(an.glyph)) {
         tokens = M.parse(M.spacingStrings(an.glyph)[0] || M.tok(an.glyph))[0];
         extra = function (p, n) { return a.suggest * SD.noteHits(a, M.cur, p, n); };
-      } else return out;
+      } else if (an.type === 'glyph') return glyphNoteLines(a, mid);
+      else return out;
       out.push(h('div', { class: 'nline' }, h('span', { style: 'color:#5f5f66' }, a.suggest ? 'Now' : ''),
         renderRun({ tokens: tokens, size: 40, mid: mid, cur: same(M.cur), padTop: 2, padBottom: 2 })));
       if (a.suggest) out.push(h('div', { class: 'nline' }, h('span', { style: 'color:#1d4ed8' }, 'Suggested'),
@@ -1683,8 +2060,14 @@ pre.export { margin: 0; max-height: 480px; overflow: auto; padding: 14px 16px; b
       if (an.type === 'pair' && M.cur.has(an.l) && M.cur.has(an.r)) {
         S.proof.text = M.contexts(an.l, an.r).join('\n');
         S.proof.sel = { L: an.l, R: an.r };
+        S.proof.glyph = null;
         S.proof.target = 'gap';
+      } else if (an.type === 'glyph' && M.cur.has(an.glyph)) {
+        S.proof.text = glyphStrings(an.glyph).join('\n');
+        S.proof.sel = null;
+        S.proof.glyph = an.glyph;
       } else if (an.type === 'side' && M.cur.has(an.glyph)) {
+        S.proof.glyph = null;
         var strs = M.spacingStrings(an.glyph);
         S.proof.text = strs.join('\n');
         var t = M.parse(strs[0])[0], idx = t.findIndex(function (x) { return x.name === an.glyph; });
@@ -1702,10 +2085,12 @@ pre.export { margin: 0; max-height: 480px; overflow: auto; padding: 14px 16px; b
       var counts = function (f) { return all.filter(function (a) { return byAnchor(a) && (f === 'all' || a.type === f); }).length; };
       var shown = all.filter(function (a) { return byAnchor(a) && (Q.filter === 'all' || a.type === Q.filter) && !(Q.hideResolved && a.status === 'resolved'); });
       shown.sort(function (a, b) { return SD.TYPE_ORDER.indexOf(a.type) - SD.TYPE_ORDER.indexOf(b.type) || a.n - b.n; });
+      // the shape types get a filter once a note has one
+      var types = SD.TYPE_ORDER.filter(function (t) { return SD.SHAPE_TYPES.indexOf(t) < 0 || Q.filter === t || all.some(function (a) { return a.type === t; }); });
 
       var toolbar = h('div', { class: 'toolbar' },
-        seg([['all', 'All', counts('all')]].concat(SD.TYPE_ORDER.map(function (t) { return [t, t === 'change-note' ? 'Change notes' : SD.TYPES[t].label, counts(t)]; })), Q.filter, function (v) { Q.filter = v; render(); }),
-        seg([['all', 'All anchors'], ['pair', 'Pairs'], ['side', 'Glyph sides']], Q.anchor, function (v) { Q.anchor = v; render(); }),
+        seg([['all', 'All', counts('all')]].concat(types.map(function (t) { return [t, t === 'change-note' ? 'Change notes' : SD.TYPES[t].label, counts(t)]; })), Q.filter, function (v) { Q.filter = v; render(); }),
+        seg([['all', 'All anchors'], ['pair', 'Pairs'], ['side', 'Glyph sides'], ['glyph', 'Glyphs']], Q.anchor, function (v) { Q.anchor = v; render(); }),
         check('Hide resolved', Q.hideResolved, function (v) { Q.hideResolved = v; render(); }));
 
       var cards = shown.map(function (a) {
@@ -1718,12 +2103,13 @@ pre.export { margin: 0; max-height: 480px; overflow: auto; padding: 14px 16px; b
               h('span', { class: 'num', style: 'background:' + t.pin + ';min-width:22px;height:22px' }, a.n),
               h('span', { class: 'tchip', style: 'color:' + t.fg + ';background:' + t.bg }, t.label),
               resolvedChip(a),
+              sinceChip(a),
               h('b', { style: 'font-size:13px' }, SD.anchorText(M, a)),
               h('span', { class: 'small muted' }, SD.scopeText(M, a)),
               h('span', { class: 'spacer' }),
               h('span', { class: 'small muted' }, who(a) + ' · ' + fmtDate(a.date))),
             h('p', null, a.text),
-            (a.replies || []).map(function (r) { return h('div', { class: 'reply' }, h('b', null, r.author === 'designer' ? 'Designer: ' : 'Client: '), r.text); }),
+            (a.replies || []).map(function (r) { return h('div', { class: 'reply' }, h('b', null, authorName(r.author) + ': '), r.text); }),
             h('div', { class: 'chips', style: 'align-items:center' },
               a.suggest ? h('span', { class: 'sug' }, 'suggests ' + SD.fmt(a.suggest)) : null,
               isModel && a.suggest ? h('span', { class: 'tag kon', style: 'font-size:12px;padding:2px 8px;border-radius:999px' }, 'Kern On model: edit the model in Kern On') : null,
@@ -1736,7 +2122,7 @@ pre.export { margin: 0; max-height: 480px; overflow: auto; padding: 14px 16px; b
       return [toolbar, h('div', { class: 'body' },
         h('main', { class: 'main', style: 'background:transparent;padding:20px 24px 28px;gap:12px' },
           h('h1', { style: 'font-size:18px;font-weight:600;margin-bottom:4px' }, 'Annotations'),
-          cards.length ? cards : h('p', { class: 'empty' }, all.length ? 'No annotations match these filters.' : 'No annotations yet. Click a gap in Proof to add one.')))];
+          cards.length ? cards : h('p', { class: 'empty' }, all.length ? 'No annotations match these filters.' : 'No annotations yet. Click a letter or a gap in Proof to add one.')))];
     }
 
     // ------------------------------------------------------------------ sending notes
@@ -1859,6 +2245,11 @@ pre.export { margin: 0; max-height: 480px; overflow: auto; padding: 14px 16px; b
     function glyphsDiff() {
       var k = 'g|' + S.baseId + '|' + S.mid;
       return cache[k] || (cache[k] = SD.diffGlyphs(picked(), M.cur, S.mid));
+    }
+
+    function shapesDiff() {
+      var k = 's|' + S.baseId + '|' + S.mid;
+      return cache[k] || (cache[k] = M.diffShapes(picked(), M.cur, S.mid));
     }
 
     /**
@@ -2023,7 +2414,7 @@ pre.export { margin: 0; max-height: 480px; overflow: auto; padding: 14px 16px; b
               return h('button', { type: 'button', class: 'ctxbtn', 'aria-pressed': String(i === ctxIndex), onclick: function () { Q.ctx = i; render(); } },
                 renderRun({ tokens: M.parse(c)[0], size: 18, cur: same(cur), padTop: 0, padBottom: 0 }));
             }),
-            h('button', { type: 'button', class: 'btn', style: 'border-radius:999px', onclick: function () { S.proof.text = ctxs.join('\n'); S.proof.preset = 'custom'; S.proof.sel = { L: sel.L, R: sel.R }; S.proof.target = 'gap'; go('proof'); } }, 'Open in Proof'))),
+            h('button', { type: 'button', class: 'btn', style: 'border-radius:999px', onclick: function () { S.proof.text = ctxs.join('\n'); S.proof.preset = 'custom'; S.proof.sel = { L: sel.L, R: sel.R }; S.proof.glyph = null; S.proof.target = 'gap'; go('proof'); } }, 'Open in Proof'))),
         h('div', { class: 'stage' }, stage),
         h('div', { class: 'formula' },
           fcell('', sel.L + ' right sidebearing', 'spacing', sel.rsbP, sel.rsbC),
@@ -2082,7 +2473,11 @@ pre.export { margin: 0; max-height: 480px; overflow: auto; padding: 14px 16px; b
 
     function GlyphsChanges() {
       var Q = S.glyphs, base = B(), cur = M.cur, mid = S.mid;
-      var rows = glyphsDiff();
+      // "outline changed" means visibly, as in Changed shapes: not just another hash
+      var rows = glyphsDiff().map(function (r) {
+        var d = r.outline ? M.compareGlyph(base, cur, mid, r.name) : null;
+        return Object.assign({}, r, { outline: !!d && !d.same });
+      });
       var notesAll = N.all();
       var sideNotes = function (name, side) { return notesAll.filter(function (a) { return a.anchor && a.anchor.type === 'side' && a.anchor.glyph === name && (!side || a.anchor.side === side || a.anchor.side === 'both'); }); };
       var tests = { all: function () { return true; }, outline: function (r) { return r.outline; }, annotated: function (r) { return sideNotes(r.name).length > 0; } };
@@ -2185,11 +2580,381 @@ pre.export { margin: 0; max-height: 480px; overflow: auto; padding: 14px 16px; b
           thread.map(function (a) { return threadItem(a); })));
     }
 
+    // ------------------------------------------------------------------ glyphs: drawing and marking
+
+    var PEN = '#dc2626', HIGHLIGHT = '#f59e0b';
+
+    var units = SD.units;
+    function typeOf(a) { return SD.TYPES[a.type] || SD.TYPES.question; }
+    function glyphStrings(name) { var s = M.spacingStrings(name); return s.length ? s : [M.tok(name)]; }
+    function shapeTypesUsed() {
+      var all = N.all();
+      return SD.SHAPE_TYPES.filter(function (t) { return all.some(function (a) { return a.type === t; }); });
+    }
+    function glyphNotes(name) {
+      return N.all().filter(function (a) { return a.anchor && a.anchor.type === 'glyph' && a.anchor.glyph === name; });
+    }
+    function inMaster(a, mid) { return !a.master || a.master === mid; }
+    function glyphPinFor(name) {
+      var list = glyphNotes(name).filter(function (a) { return inMaster(a, S.mid); }).sort(function (a, b) { return a.n - b.n; });
+      return list.length ? { n: list[0].n + (list.length > 1 ? '+' : ''), color: typeOf(list[0]).pin } : null;
+    }
+    /** from the drawing a note was written on to the one in this proof */
+    function sinceNote(a, mid) {
+      var an = a.anchor || {}, now = M.cur.layer(mid, an.glyph);
+      return now ? M.sinceWritten(an, now.o) : null;
+    }
+    function redrawnSince(a) {
+      if (!a.anchor || a.anchor.type !== 'glyph') return false;
+      var d = sinceNote(a, a.master || S.mid);
+      return !!d && !d.same;
+    }
+
+    /** left and right edge of the advance, in the stored outline's coordinates */
+    function advance(lay, dx) {
+      if (!lay) return null;
+      var l = (dx || 0) - (lay.l || 0);
+      return [l, l + lay.w];
+    }
+    function around(boxes) {
+      var f = [0, M.descender, 0, M.ascender];
+      boxes.forEach(function (b) { f = [Math.min(f[0], b[0]), Math.min(f[1], b[1]), Math.max(f[2], b[2]), Math.max(f[3], b[3])]; });
+      var pad = M.upm * 0.04;
+      return [f[0] - pad, f[1] - pad, f[2] + pad, f[3] + pad];
+    }
+    function movedBox(hash, dx) {
+      var b = M.shape(hash).box;
+      return [b[0] + dx, b[1], b[2] + dx, b[3]];
+    }
+    function pathOf(m) {
+      var d = '';
+      for (var i = 0; i < m.length; i += 2) d += (i ? 'L' : 'M') + m[i].toFixed(1) + ' ' + m[i + 1].toFixed(1);
+      return d;
+    }
+
+    /**
+     * One glyph, in the coordinates of its current outline (y up).
+     * opts: frame [x0,y0,x1,y1], from, to, dx (moves from onto to), show 'cur' | 'base' | 'both',
+     *       edges {cur, base}, halos [points], marks [{pts, color, n, faded}], edit (S.form), cls, ink, label
+     */
+    function glyphSvg(opts) {
+      var f = opts.frame, both = opts.show === 'both', g = sv('g', { transform: 'scale(1 -1)' });
+      function line(x0, y0, x1, y1, color, dash) {
+        g.appendChild(sv('line', { x1: x0, y1: y0, x2: x1, y2: y1, stroke: color, 'stroke-width': 1, 'stroke-dasharray': dash, 'vector-effect': 'non-scaling-stroke' }));
+      }
+      if (opts.edges) {
+        var e = opts.edges, lo = M.descender, hi = M.ascender;
+        line(f[0], 0, f[2], 0, '#e2e2dc');
+        if (e.cur) e.cur.forEach(function (x) { line(x, lo, x, hi, '#b9b9b2'); });
+        if (e.base) e.base.forEach(function (x) { line(x, lo, x, hi, PREV, '4 3'); });
+      }
+      // under the fills, so the slivers that differ keep their colour
+      if (opts.halos && opts.halos.length) g.appendChild(sv('path', { class: 'halo', d: opts.halos.map(pathOf).join(''), fill: 'none', stroke: HIGHLIGHT }));
+      if ((both || opts.show === 'base') && opts.from && ensure(opts.from)) {
+        g.appendChild(sv('use', { href: '#o-' + opts.from, transform: 'translate(' + (opts.dx || 0) + ' 0)', fill: both ? PREV : opts.ink || '#18181b', opacity: both ? PREV_OPACITY : null }));
+      }
+      if (opts.show !== 'base' && opts.to && ensure(opts.to)) {
+        g.appendChild(sv('use', { href: '#o-' + opts.to, fill: opts.ink || '#18181b', opacity: both ? CUR_OPACITY : null }));
+      }
+      (opts.marks || []).forEach(function (m) {
+        var p = m.pts, top = 0, group = sv('g', { class: m.draft ? 'mark draft' : 'mark', opacity: m.faded ? 0.35 : null });
+        if (p.length > 2) group.appendChild(sv('path', { class: 'pen', d: pathOf(p), fill: 'none', stroke: m.color }));
+        for (var i = 2; i < p.length; i += 2) if (p[i + 1] > p[top + 1]) top = i;
+        if (p.length === 2 || m.n) {
+          // sized in screen pixels once it is on the page (fitMarks)
+          var pin = sv('g', { class: 'markpin', 'data-x': p[top], 'data-y': p[top + 1] }, sv('circle', { r: m.n ? 10 : 7, fill: m.color, stroke: '#fff', 'stroke-width': 2 }));
+          if (m.n) { var num = sv('text', { y: 4, 'text-anchor': 'middle', fill: '#fff' }); num.textContent = m.n; pin.appendChild(num); }
+          group.appendChild(pin);
+        }
+        g.appendChild(group);
+      });
+      var svg = sv('svg', { class: 'glyphsvg ' + (opts.cls || '') + (opts.edit ? ' edit' : ''), viewBox: [f[0], -f[3], f[2] - f[0], f[3] - f[1]].join(' '),
+        role: opts.label ? 'img' : null, 'aria-label': opts.label, 'aria-hidden': opts.label ? null : 'true' }, g);
+      if (opts.edit) redPen(svg, g, opts.edit);
+      return svg;
+    }
+
+    /** click for a pin, drag to circle or underline */
+    function redPen(svg, g, form) {
+      var pts = null, screen = null, live = null, pointer = null;
+      function at(e) {
+        var p = svg.createSVGPoint();
+        p.x = e.clientX; p.y = e.clientY;
+        var q = p.matrixTransform(g.getScreenCTM().inverse());
+        return [Math.round(q.x), Math.round(q.y)];
+      }
+      function stop() { pts = null; screen = null; pointer = null; if (live) live.remove(); live = null; }
+      svg.addEventListener('pointerdown', function (e) {
+        if (e.button || pointer !== null) return;
+        e.preventDefault(); // the comment keeps the focus
+        pointer = e.pointerId;
+        pts = at(e);
+        screen = [e.clientX, e.clientY];
+        try { svg.setPointerCapture(pointer); } catch (err) { /* the pointer is already up */ }
+      });
+      svg.addEventListener('pointermove', function (e) {
+        if (!pts || e.pointerId !== pointer || Math.hypot(e.clientX - screen[0], e.clientY - screen[1]) < 5) return;
+        screen = [e.clientX, e.clientY];
+        pts.push.apply(pts, at(e));
+        if (!live) {
+          var draft = g.querySelector('.mark.draft');
+          if (draft) draft.remove(); // the new stroke replaces it
+          live = sv('path', { class: 'pen', fill: 'none', stroke: PEN });
+          g.appendChild(live);
+        }
+        live.setAttribute('d', pathOf(pts));
+      });
+      svg.addEventListener('pointercancel', stop);
+      svg.addEventListener('pointerup', function (e) {
+        if (!pts || e.pointerId !== pointer) return;
+        var all = pts, kept = [];
+        stop();
+        // a note has to stay small: 64 points at most
+        var step = Math.ceil(all.length / 2 / 63);
+        for (var i = 0; i < all.length; i += 2) if (i / 2 % step === 0 || i === all.length - 2) kept.push(all[i], all[i + 1]);
+        form.mark = kept;
+        render();
+      });
+    }
+    function fitMarks() {
+      Array.prototype.forEach.call(root.querySelectorAll('.markpin'), function (pin) {
+        var m = pin.parentNode.parentNode.getScreenCTM();
+        if (m && m.a) pin.setAttribute('transform', 'translate(' + pin.getAttribute('data-x') + ' ' + pin.getAttribute('data-y') + ') scale(' + 1 / m.a + ' ' + -1 / m.a + ')');
+      });
+    }
+
+    function formFor(name) {
+      var F = S.form;
+      if (F.glyph !== name) { F.type = null; F.draft = ''; }
+      if (F.glyph !== name || F.mid !== S.mid) F.mark = null; // a mark is a place in one master's drawing
+      F.glyph = name;
+      F.mid = S.mid;
+      return F;
+    }
+    /** the notes' marks on the current drawing, and the one being made */
+    function marksOn(name, mid, form) {
+      var out = [];
+      glyphNotes(name).forEach(function (a) {
+        if (!inMaster(a, mid)) return;
+        var pts = SD.markOf(a.anchor);
+        if (!pts) return;
+        var d = sinceNote(a, mid);
+        if (d) for (var i = 0; i < pts.length; i += 2) pts[i] += d.dx;
+        out.push({ pts: pts, color: typeOf(a).pin, n: a.n, faded: a.status === 'resolved' });
+      });
+      if (form && form.mark) out.push({ pts: form.mark, draft: true, color: form.type ? SD.TYPES[form.type].pin : PEN });
+      return out;
+    }
+    /** one glyph's picture in both versions, with what is needed to draw either */
+    function figureFor(name, base) {
+      var cur = M.cur, mid = S.mid, c = cur.layer(mid, name), b = base ? base.layer(mid, name) : null;
+      var d = base ? M.compareGlyph(base, cur, mid, name) : null;
+      var dx = d ? d.dx : 0, to = c ? c.o : null, from = b ? b.o : null;
+      var edges = { cur: advance(c), base: b && d && !d.added ? advance(b, dx) : null }, boxes = [];
+      if (to) boxes.push(movedBox(to, 0));
+      if (from) boxes.push(movedBox(from, dx));
+      [edges.cur, edges.base].forEach(function (e) { if (e) boxes.push([e[0], 0, e[1], 0]); });
+      return { diff: d, from: from, to: to, dx: dx, edges: edges, frame: around(boxes) };
+    }
+
+    function GlyphForm(name) {
+      var F = formFor(name);
+      return h('section', { class: 'blk', style: 'gap:10px' },
+        h('h3', { class: 'cap' }, 'Annotate'),
+        typeChips(F.type, function (t) { F.type = t; render(); }, SD.GLYPH_TYPES),
+        h('label', { for: 'sd-glyph-note', class: 'small', style: 'font-weight:600' }, 'Comment'),
+        h('textarea', { id: 'sd-glyph-note', class: 'note', rows: 3, 'data-fk': 'glyph-note', value: F.draft, oninput: function (e) { F.draft = e.target.value; } }),
+        h('div', { class: 'formfoot' },
+          F.mark ? h('button', { type: 'button', class: 'linkbtn', onclick: function () { F.mark = null; render(); } }, 'Remove mark') : null,
+          h('span', { class: 'spacer' }),
+          h('button', { type: 'button', class: 'btn primary', onclick: addGlyphNote }, 'Add')));
+    }
+    function addGlyphNote() {
+      var F = S.form, text = (F.draft || '').trim(), lay = M.cur.layer(F.mid, F.glyph);
+      if (!F.type) { toast('Pick what kind of note this is first: too heavy, shape, …'); return; }
+      if (!text && !F.mark) { toast('Write a comment or mark the glyph first.'); return; }
+      var anchor = { type: 'glyph', glyph: F.glyph, o: lay ? lay.o : null };
+      if (F.mark) anchor[F.mark.length > 2 ? 'path' : 'at'] = F.mark;
+      N.add({ anchor: anchor, master: F.mid, type: F.type, suggest: null, text: text || '(no comment)' });
+      F.type = null; F.draft = ''; F.mark = null;
+      render();
+      toast('Annotation added.');
+    }
+    function GlyphThread(name) {
+      var list = glyphNotes(name);
+      return list.length ? h('section', { class: 'blk' }, h('h3', { class: 'cap' }, 'This glyph'), list.map(threadItem)) : null;
+    }
+
+    function GlyphInspector(name) {
+      var base = B(), C = S.cmp, F = formFor(name), fig = figureFor(name, base);
+      var changed = fig.diff && !fig.diff.same, show = 'cur';
+      if (changed && !fig.diff.added && C.view !== 'stacked') show = C.hold || (C.view === 'switch' && C.showPrev) ? 'base' : C.view === 'overlay' ? 'both' : 'cur';
+      return h('aside', { class: 'side', 'aria-label': 'Glyph inspector' },
+        h('div', { class: 'glyphhead' },
+          h('h2', null, name),
+          changed ? h('button', { type: 'button', class: 'changebtn', title: 'Show in Changed shapes', onclick: function () { openShape(name); } },
+            fig.diff.added ? 'New' : 'Δ' + units(fig.diff.max)) : null,
+          h('span', { class: 'spacer' }),
+          h('button', { type: 'button', class: 'iconbtn', 'aria-label': 'Deselect', title: 'Deselect', onclick: function () { S.proof.glyph = null; render(); } }, icon('M6 6l12 12M18 6L6 18'))),
+        fig.to ? h('div', { class: 'pad', title: 'Click or circle a spot' },
+          glyphSvg({ frame: fig.frame, from: fig.from, to: fig.to, dx: fig.dx, show: show, edges: { cur: fig.edges.cur }, marks: marksOn(name, S.mid, F), edit: F, cls: 'small', label: name })) : null,
+        GlyphForm(name),
+        GlyphThread(name));
+    }
+
+    /** in Notes: the drawing the note was written on, and today's if it was redrawn */
+    function glyphNoteLines(a, mid) {
+      var an = a.anchor, now = M.cur.layer(mid, an.glyph), to = now && now.o;
+      var d = sinceNote(a, mid), then = d && !d.same ? an.o : null, pts = SD.markOf(an);
+      if (!to) return [];
+      var dx = d ? d.dx : 0, boxes = [movedBox(to, 0)];
+      if (then) boxes.push(movedBox(then, dx));
+      var here = pts ? pts.map(function (v, i) { return i % 2 ? v : v + dx; }) : null;
+      var marks = here ? [{ pts: here, color: typeOf(a).pin }] : [], frame = around(boxes);
+      function fig(label, show) {
+        return h('figure', { class: 'notefig' },
+          label ? h('figcaption', { class: 'stacklab' }, label) : null,
+          glyphSvg({ frame: frame, from: then, to: to, dx: dx, show: show, marks: marks, cls: 'mini' }));
+      }
+      var written = a.snapshot && M.byId[a.snapshot];
+      return [h('div', { class: 'notefigs' },
+        then ? fig(written ? written.label : 'Before', 'base') : null,
+        fig(then ? CURRENT : '', 'cur'))];
+    }
+
+    // ------------------------------------------------------------------ compare: changed shapes
+
+    var SHAPE_KINDS = SD.SHAPE_KINDS, shapeKind = SD.shapeKind;
+
+    function openShape(name) {
+      var row = shapesDiff().filter(function (r) { return r.name === name || r.composites.indexOf(name) >= 0; })[0];
+      if (row) S.shapes.filter = shapeKind(row);
+      S.shapes.sel = name;
+      S.shapes.zoom = false;
+      if (row) {
+        var same = shapesDiff().filter(function (r) { return shapeKind(r) === shapeKind(row); });
+        S.shapes.limit = Math.max(S.shapes.limit, same.indexOf(row) + 1);
+      }
+      afterRender.push(function () {
+        var on = root.querySelector('.list .prow[aria-pressed="true"]');
+        if (on) on.parentNode.scrollTop += on.getBoundingClientRect().top - on.parentNode.getBoundingClientRect().top - on.parentNode.clientHeight / 2;
+      });
+      go('shapes');
+    }
+    /** the box around what changed, if that is a small part of the glyph */
+    function changeFrame(d, frame) {
+      var b = [Infinity, Infinity, -Infinity, -Infinity];
+      d.was.concat(d.now).forEach(function (m) {
+        for (var i = 0; i < m.length; i += 2) b = [Math.min(b[0], m[i]), Math.min(b[1], m[i + 1]), Math.max(b[2], m[i]), Math.max(b[3], m[i + 1])];
+      });
+      if (b[0] === Infinity) return null;
+      var size = Math.max(b[2] - b[0], b[3] - b[1], M.upm * 0.08) * 1.35;
+      if (size > (frame[3] - frame[1]) * 0.6) return null;
+      var x = (b[0] + b[2]) / 2, y = (b[1] + b[3]) / 2;
+      return [x - size / 2, y - size / 2, x + size / 2, y + size / 2];
+    }
+
+    function ShapesChanges() {
+      var Q = S.shapes, C = S.cmp, base = B(), cur = M.cur, mid = S.mid;
+      var all = shapesDiff(), kinds = [];
+      SHAPE_KINDS.forEach(function (k) {
+        var n = all.filter(function (r) { return shapeKind(r) === k[0]; }).length;
+        if (n) kinds.push([k[0], k[1], n]);
+      });
+      if (!kinds.length) return [h('div', { class: 'body' }, h('main', { class: 'main', style: 'padding:24px' }, h('p', { class: 'empty' }, 'No shape changed since ' + base.label + ' in this master.')))];
+      if (!kinds.some(function (k) { return k[0] === Q.filter; })) Q.filter = kinds[0][0];
+      var list = all.filter(function (r) { return shapeKind(r) === Q.filter; });
+      var row = list.filter(function (r) { return r.name === Q.sel || r.composites.indexOf(Q.sel) >= 0; })[0];
+      var name = row ? Q.sel : list[0].name;
+      row = row || list[0];
+      var fig = figureFor(name, base), d = fig.diff, kind = shapeKind(row);
+      var showing = C.view === 'switch' ? C.showPrev || C.hold : C.view === 'overlay' && C.hold;
+
+      var rows = list.slice(0, Q.limit).map(function (r) {
+        var pin = glyphPinFor(r.name), boxes = [];
+        if (r.from) boxes.push(movedBox(r.from, r.dx));
+        if (r.to) boxes.push(movedBox(r.to, 0));
+        return h('button', { type: 'button', class: 'prow', 'aria-pressed': String(r === row), onclick: function () { Q.sel = r.name; Q.zoom = false; render(); } },
+          glyphSvg({ frame: around(boxes), from: r.from, to: r.to, dx: r.dx, show: r.added ? 'cur' : r.removed ? 'base' : 'both', cls: 'thumb' }),
+          h('span', { class: 't' },
+            h('b', null, r.name),
+            r.composites.length ? h('span', null, '+' + r.composites.length + ' composite' + (r.composites.length === 1 ? '' : 's')) : null),
+          pin ? h('span', { class: 'num', style: 'background:' + pin.color }, pin.n) : null,
+          r.added || r.removed ? null : h('span', { class: 'pill delta', title: 'Furthest the outline moved, in units' }, units(r.max)));
+      });
+      var listEl = h('aside', { class: 'list', 'aria-label': 'Changed shapes' },
+        h('div', { class: 'head kinds' }, seg(kinds, Q.filter, function (v) { Q.filter = v; Q.sel = null; Q.zoom = false; Q.limit = 150; render(); })),
+        h('div', { class: 'rows', 'data-sk': 'shapes-' + Q.filter },
+          rows,
+          list.length > Q.limit ? h('button', { type: 'button', class: 'btn more', onclick: function () { Q.limit += 150; render(); } }, 'Show ' + Math.min(150, list.length - Q.limit) + ' more') : null));
+
+      var detail = d && !d.added && !d.removed ? changeFrame(d, fig.frame) : null;
+      var frame = Q.zoom && detail ? detail : fig.frame;
+      var editable = cur.has(name) && !!fig.to, F = editable ? formFor(name) : null, marks = marksOn(name, mid, F);
+      function pane(show, halos, edit) {
+        return h('div', { class: 'pad', title: edit ? 'Click or circle a spot' : null },
+          glyphSvg({ frame: frame, from: fig.from, to: fig.to, dx: fig.dx, show: show, halos: C.highlight && d ? halos : null,
+            edges: show === 'both' ? fig.edges : { cur: show === 'cur' ? fig.edges.cur : null, base: show === 'base' ? fig.edges.base : null },
+            marks: marks, edit: edit, cls: 'big', label: name }));
+      }
+      var stage;
+      if (C.view === 'stacked') {
+        stage = h('div', { class: 'sides' },
+          h('div', null, h('span', { class: 'stacklab' }, base.label), pane('base', d && d.was, null)),
+          h('div', null, h('span', { class: 'stacklab' }, CURRENT), pane('cur', d && d.now, F)));
+      } else if (C.view === 'switch') {
+        stage = [h('span', { class: 'stacklab' }, showing ? base.label : CURRENT), pane(showing ? 'base' : 'cur', null, F)];
+      } else {
+        stage = [pane(showing ? 'base' : d && d.added ? 'cur' : 'both', showing ? null : d && d.was.concat(d.now), F),
+          h('div', { class: 'shapelegend' },
+            h('span', { class: 'item' }, swatch('#18181b', CUR_OPACITY), CURRENT),
+            h('span', { class: 'item' }, swatch(PREV, PREV_OPACITY), base.label),
+            C.highlight && d && !d.added && !d.removed ? h('span', { class: 'item' }, swatch(HIGHLIGHT, 0.45), 'Changed') : null)];
+      }
+
+      // the glyph in words, with the text held still
+      var spec = { metrics: base, kern: base, outline: cur, fill: cur, place: placeFor(base) };
+      var strings = cur.has(name) ? glyphStrings(name) : [];
+      var context = strings.length ? h('div', { class: 'shapectx', 'data-sk': 'shapectx' }, strings.slice(0, 2).map(function (str) {
+        return renderRun({ tokens: M.parse(str)[0], size: 52, cur: spec, base: { metrics: base, kern: base, outline: base, fill: cur },
+          ghost: C.view === 'overlay', showBase: showing, padTop: 4, padBottom: 4 });
+      })) : null;
+
+      var u = ((cur.glyphs[name] || base.glyphs[name] || {}).u || [])[0];
+      var ink = d && !d.added && !d.removed && Math.abs(d.ink) >= 0.05 ? (d.ink > 0 ? '+' : '−') + Math.abs(d.ink).toFixed(1) + '%' : null;
+      var main = h('main', { class: 'main' },
+        h('div', { class: 'stagehead' },
+          h('div', { style: 'display:flex;flex-direction:column;gap:4px' },
+            h('span', { class: 'k' }, SHAPE_KINDS.filter(function (k) { return k[0] === kind; })[0][1] + ' · ' + M.masterName(mid)),
+            h('h1', null, name + ' ', u != null ? h('span', null, 'U+' + u.toString(16).toUpperCase().padStart(4, '0')) : null)),
+          h('div', { class: 'chips', style: 'align-items:center' },
+            d && !d.added && !d.removed ? h('span', { class: 'chip', title: 'Furthest the outline moved' }, 'Up to ' + units(d.max) + (Math.round(d.max) <= 1 ? ' unit' : ' units')) : null,
+            ink ? h('span', { class: 'chip', title: 'Change of the black area' }, 'Ink ' + ink) : null,
+            detail ? h('button', { type: 'button', class: 'btn pill-btn', 'aria-pressed': String(!!Q.zoom), onclick: function () { Q.zoom = !Q.zoom; render(); } }, 'Zoom to change') : null,
+            strings.length ? h('button', { type: 'button', class: 'btn pill-btn', onclick: function () {
+              S.proof.text = strings.join('\n'); S.proof.preset = 'custom'; S.proof.sel = null; S.proof.glyph = name;
+              C.measure = 'shape';
+              go('proof');
+            } }, 'Open in Proof') : null)),
+        h('div', { class: 'stage shape' }, stage),
+        context);
+
+      var comps = row.composites, side = h('aside', { class: 'side', 'aria-label': 'Shape details' },
+        editable ? GlyphForm(name) : null,
+        GlyphThread(name),
+        comps.length ? h('section', { class: 'blk' }, h('h3', { class: 'cap' }, 'Same change'),
+          h('div', { class: 'gchips' }, [row.name].concat(comps.slice(0, 60)).map(function (g) {
+            return h('button', { type: 'button', class: 'gchip' + (g === name ? ' key' : ''), title: g, 'aria-label': g, onclick: function () { Q.sel = g; Q.zoom = false; render(); } }, pic([g], 19));
+          }), comps.length > 60 ? h('span', { class: 'xs muted' }, '+' + (comps.length - 60)) : null)) : null);
+
+      return [h('div', { class: 'body' }, listEl, main, side)];
+    }
+
     // ------------------------------------------------------------------ app
 
     function App() {
-      if ((S.view === 'pairs' || S.view === 'glyphs') && !B()) S.view = 'proof';
-      var view = S.view === 'notes' ? NotesView() : S.view === 'pairs' ? PairsChanges() : S.view === 'glyphs' ? GlyphsChanges() : ProofView();
+      if (comparisonOnly(S.view) && !B()) S.view = 'proof';
+      var view = S.view === 'notes' ? NotesView() : S.view === 'pairs' ? PairsChanges() : S.view === 'glyphs' ? GlyphsChanges() : S.view === 'shapes' ? ShapesChanges() : ProofView();
       return h('div', { class: 'app' }, Header(), Nav(), CompareRow(), view);
     }
 
@@ -2204,7 +2969,7 @@ pre.export { margin: 0; max-height: 480px; overflow: auto; padding: 14px 16px; b
       var selStart = null, selEnd = null;
       if (fk && typeof ae.selectionStart === 'number') { selStart = ae.selectionStart; selEnd = ae.selectionEnd; }
       var scrolls = {};
-      Array.prototype.forEach.call(root.querySelectorAll('[data-sk]'), function (el) { scrolls[el.getAttribute('data-sk')] = el.scrollLeft; });
+      Array.prototype.forEach.call(root.querySelectorAll('[data-sk]'), function (el) { scrolls[el.getAttribute('data-sk')] = [el.scrollLeft, el.scrollTop]; });
       var y = window.scrollY;
       var next = App();
       var oldApp = root.firstChild;
@@ -2218,7 +2983,7 @@ pre.export { margin: 0; max-height: 480px; overflow: auto; padding: 14px 16px; b
       } else {
         root.replaceChildren(next);
       }
-      Array.prototype.forEach.call(root.querySelectorAll('[data-sk]'), function (el) { var k = el.getAttribute('data-sk'); if (scrolls[k]) el.scrollLeft = scrolls[k]; });
+      Array.prototype.forEach.call(root.querySelectorAll('[data-sk]'), function (el) { var k = el.getAttribute('data-sk'); if (scrolls[k]) { el.scrollLeft = scrolls[k][0]; el.scrollTop = scrolls[k][1]; } });
       if (fk) {
         var el = root.querySelector('[data-fk="' + fk + '"]');
         if (el) {
@@ -2228,6 +2993,7 @@ pre.export { margin: 0; max-height: 480px; overflow: auto; padding: 14px 16px; b
       }
       window.scrollTo(0, y);
       afterRender.splice(0).forEach(function (fn) { fn(); });
+      fitMarks();
     }
     var afterRender = [];
 
@@ -2235,13 +3001,14 @@ pre.export { margin: 0; max-height: 480px; overflow: auto; padding: 14px 16px; b
     var resizeTimer = null;
     window.addEventListener('resize', function () {
       clearTimeout(resizeTimer);
+      fitMarks();
       resizeTimer = setTimeout(function () { if (S.view === 'pairs') render(); }, 120);
     });
 
     // Option (Alt) on its own works like holding the Hold button, also while typing in the
     // text field; pressing another key with it (Option+u for ü) lets go again
     var keyHold = false;
-    function holdable() { return !!B() && (S.view === 'proof' || S.view === 'pairs') && S.cmp.view !== 'stacked'; }
+    function holdable() { return !!B() && (S.view === 'proof' || S.view === 'pairs' || S.view === 'shapes') && S.cmp.view !== 'stacked'; }
     function releaseKeyHold(later) {
       if (!keyHold) return;
       keyHold = false;
@@ -2264,8 +3031,12 @@ pre.export { margin: 0; max-height: 480px; overflow: auto; padding: 14px 16px; b
       releaseKeyHold(true);
       var t = e.target;
       if (t && (t.tagName === 'INPUT' || t.tagName === 'TEXTAREA' || t.tagName === 'SELECT')) return;
-      if (e.key === 'Escape' && S.view === 'proof' && S.proof.sel) { S.proof.sel = null; render(); return; }
-      if (!B() || S.cmp.view !== 'switch' || (S.view !== 'proof' && S.view !== 'pairs')) return;
+      if (e.key === 'Escape') {
+        // the mark first, then the selection
+        if (S.form.mark && ((S.view === 'proof' && S.proof.glyph) || S.view === 'shapes')) { S.form.mark = null; render(); return; }
+        if (S.view === 'proof' && (S.proof.sel || S.proof.glyph)) { S.proof.sel = null; S.proof.glyph = null; render(); return; }
+      }
+      if (!B() || S.cmp.view !== 'switch' || (S.view !== 'proof' && S.view !== 'pairs' && S.view !== 'shapes')) return;
       if (e.key === '1') { S.cmp.showPrev = false; render(); }
       if (e.key === '2') { S.cmp.showPrev = true; render(); }
     });
