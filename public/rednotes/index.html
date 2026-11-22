@@ -1796,12 +1796,13 @@ pre.export { margin: 0; max-height: 480px; overflow: auto; padding: 14px 16px; b
       }
       sending = true;
       render();
-      var sender = senderId();
+      // one message per browser and proof, so Proof 4's notes never replace Proof 3's
+      var sender = (senderId() + '-' + M.cur.id).slice(0, 64);
       SD.seal(SYNC.key, text, SYNC.proof + '|' + sender).then(function (box) {
         return fetch(SYNC.url.replace(/\/$/, '') + '/v1/notes', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + SYNC.token },
-          body: JSON.stringify({ proof: SYNC.proof, sender: sender, label: SYNC.label || '', count: payload.annotations.length, iv: box.iv, ct: box.ct, tag: box.tag })
+          body: JSON.stringify({ proof: SYNC.proof, sender: sender, count: payload.annotations.length, iv: box.iv, ct: box.ct, tag: box.tag })
         });
       }).then(function (res) {
         if (!res.ok) throw new Error('HTTP ' + res.status);

@@ -27,10 +27,13 @@ url=$(printf '%s' "$out" | grep -Eo 'https://rednotes-worker\.[A-Za-z0-9.-]+\.wo
 echo "4/5 Shared secret: Keychain item \"rednotes\" on this Mac, REDNOTES_SECRET on the Worker"
 if ! security find-generic-password -s rednotes -a secret -w >/dev/null 2>&1; then
   secret=$(openssl rand -base64 32 | tr '+/' '-_' | tr -d '=\n')
-  security add-generic-password -s rednotes -a secret -l rednotes -w "$secret"
-  unset secret
+  # through stdin, so the secret is not in the process list
+  printf 'add-generic-password -s rednotes -a secret -l rednotes -w %s\n' "$secret" | security -i
 fi
-security find-generic-password -s rednotes -a secret -w | tr -d '\n' | $W secret put REDNOTES_SECRET
+secret=$(security find-generic-password -s rednotes -a secret -w)
+[ -n "$secret" ] || { echo "The Keychain returned an empty secret."; exit 1; }
+printf '%s' "$secret" | $W secret put REDNOTES_SECRET
+unset secret
 
 echo "5/5 Settings for the Glyphs plug-in"
 mkdir -p "$HOME/Library/Application Support/rednotes"

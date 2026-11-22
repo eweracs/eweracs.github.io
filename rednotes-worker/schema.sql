@@ -1,8 +1,7 @@
--- One row per proof folder and browser: the latest encrypted notes that browser sent.
+-- One row per proof folder, browser and proof: the latest encrypted notes sent from there.
 create table if not exists notes (
   proof text not null,              -- proof folder id (the log's proofId)
-  sender text not null,             -- random id of the client's browser
-  label text,                       -- "Family Proof N", for the Telegram message
+  sender text not null,             -- random id of the client's browser + proof snapshot id
   count integer not null default 0, -- number of notes in the message
   iv text not null,                 -- AES-CBC IV, base64
   ct text not null,                 -- ciphertext, base64

@@ -11,7 +11,7 @@
 
 const MAX_BODY = 600_000;          // bytes
 const MAX_CT = 500_000;            // base64 characters of one encrypted message
-const MAX_SENDERS = 50;            // browsers per proof
+const MAX_SENDERS = 200;           // browser + proof combinations per proof folder
 const MIN_INTERVAL = 5;            // seconds between two sends from one browser
 const NOTIFY_INTERVAL = 60;        // seconds between two Telegram messages for one proof
 
@@ -100,7 +100,6 @@ async function receive(request, env, headers, ctx) {
   if (!PROOF.test(proof || '') || !SENDER.test(sender || '')) return json({ error: 'invalid proof or sender' }, 400, headers);
   if (!(await hasToken(request, env, `write:${proof}`))) return json({ error: 'unauthorized' }, 401, headers);
   if (!isB64(iv, 64) || !isB64(ct, MAX_CT) || !isB64(tag, 64)) return json({ error: 'invalid message' }, 400, headers);
-  const label = String(body.label || '').slice(0, 120);
   const count = Math.max(0, Math.min(100000, Number.parseInt(body.count, 10) || 0));
   const now = Math.floor(Date.now() / 1000);
 
@@ -111,17 +110,17 @@ async function receive(request, env, headers, ctx) {
     if (senders && senders.n >= MAX_SENDERS) return json({ error: 'too many senders' }, 429, headers);
   }
   await env.DB.prepare(
-    `insert into notes (proof, sender, label, count, iv, ct, tag, created, updated)
-     values (?1, ?2, ?3, ?4, ?5, ?6, ?7, ?8, ?8)
-     on conflict (proof, sender) do update set label = ?3, count = ?4, iv = ?5, ct = ?6, tag = ?7, updated = ?8`,
-  ).bind(proof, sender, label, count, iv, ct, tag, now).run();
+    `insert into notes (proof, sender, count, iv, ct, tag, created, updated)
+     values (?1, ?2, ?3, ?4, ?5, ?6, ?7, ?7)
+     on conflict (proof, sender) do update set count = ?3, iv = ?4, ct = ?5, tag = ?6, updated = ?7`,
+  ).bind(proof, sender, count, iv, ct, tag, now).run();
 
   const p = await env.DB.prepare('select notified from proofs where proof = ?').bind(proof).first();
   if (!p || now - p.notified >= NOTIFY_INTERVAL) {
     await env.DB.prepare('insert into proofs (proof, notified) values (?1, ?2) on conflict (proof) do update set notified = ?2').bind(proof, now).run();
     const added = prev ? count - prev.count : count;
     const delta = added > 0 ? ` (+${added})` : '';
-    const text = `🖍 ${label || 'A proof'}: ${count} ${count === 1 ? 'note' : 'notes'} sent${delta}`;
+    const text = `🖍 rednotes: ${count} ${count === 1 ? 'note' : 'notes'} received${delta} · proof ${proof.slice(0, 8)}`;
     ctx.waitUntil(notify(env, text));
   }
   return json({ ok: true }, 200, headers);
@@ -133,7 +132,7 @@ async function list(request, env, headers, url) {
   if (!proofs.length) return json({ error: 'missing proof' }, 400, headers);
   const marks = proofs.map(() => '?').join(',');
   const { results } = await env.DB.prepare(
-    `select proof, sender, label, count, iv, ct, tag, created, updated from notes where proof in (${marks}) order by updated`,
+    `select proof, sender, count, iv, ct, tag, created, updated from notes where proof in (${marks}) order by updated`,
   ).bind(...proofs).all();
   const notes = results.map((r) => ({ ...r, updated_at: new Date(r.updated * 1000).toISOString() }));
   return json({ notes }, 200, headers);

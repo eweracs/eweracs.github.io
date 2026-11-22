@@ -1,6 +1,8 @@
 name = "rednotes-worker"
 main = "src/index.js"
 compatibility_date = "2024-12-01"
+workers_dev = true
+preview_urls = false
 
 [vars]
 # "null" is a proof opened as a standalone HTML file (file://); every request still
@@ -13,7 +15,7 @@ ALLOWED_ORIGINS = "https://www.sebastiancarewe.com,https://sebastiancarewe.com,n
 [[d1_databases]]
 binding = "DB"
 database_name = "rednotes"
-database_id = "SET-BY-SETUP"
+database_id = "c2723594-656f-41ee-8504-b086efab375c"
 
 # Telegram messages go through the telegram-worker, which holds the bot token.
 [[services]]

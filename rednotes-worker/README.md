@@ -5,10 +5,10 @@ repo with `tools/build.py --site public/rednotes`) and keeps them for the Glyphs
 plug-in's *Sync Notes*.
 
 - Notes arrive **encrypted in the browser** with the proof's key. The Worker stores only
-  ciphertext, a count and a label ("Mona Sans Proof 3") for the Telegram message.
+  ciphertext, random ids and a note count. No font, proof or client names.
 - `POST /v1/notes` needs the proof's write token, `HMAC(REDNOTES_SECRET, "write:" + proofId)`,
-  which is in the proof file. There is one row per proof and browser, and a new send
-  replaces that browser's previous one. It is rate-limited and size-limited.
+  which is in the proof file. There is one row per proof folder, browser and proof, and a new send
+  replaces only that row. It is rate-limited and size-limited.
 - `GET /v1/notes?proof=<id>` needs the admin key, `HMAC(REDNOTES_SECRET, "admin")`, which
   only the designer's Mac derives (from the Keychain item "rednotes").
 - Telegram messages go through `telegram-worker`'s `Notifier` entrypoint (service
