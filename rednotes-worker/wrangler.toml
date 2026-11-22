@@ -1,0 +1,22 @@
+name = "rednotes-worker"
+main = "src/index.js"
+compatibility_date = "2024-12-01"
+
+[vars]
+# "null" is a proof opened as a standalone HTML file (file://); every request still
+# needs the proof's write token.
+ALLOWED_ORIGINS = "https://www.sebastiancarewe.com,https://sebastiancarewe.com,null,http://localhost:8765,http://127.0.0.1:8765"
+
+# REDNOTES_SECRET is a secret, not a var (setup.sh puts it there from the Keychain).
+# For local dev it comes from .dev.vars (gitignored).
+
+[[d1_databases]]
+binding = "DB"
+database_name = "rednotes"
+database_id = "SET-BY-SETUP"
+
+# Telegram messages go through the telegram-worker, which holds the bot token.
+[[services]]
+binding = "TELEGRAM"
+service = "telegram-worker"
+entrypoint = "Notifier"

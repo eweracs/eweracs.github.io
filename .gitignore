@@ -38,3 +38,5 @@ shortener-worker/.wrangler/
 # Wrangler (thesis comments)
 thesis-comments-worker/.wrangler/
 thesis-comments-worker/.dev.vars
+rednotes-worker/.dev.vars
+rednotes-worker/.wrangler/

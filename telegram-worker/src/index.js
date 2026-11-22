@@ -1,3 +1,5 @@
+import { WorkerEntrypoint } from 'cloudflare:workers';
+
 function jsonResponse(data, init = {}) {
   const headers = new Headers(init.headers || {});
   headers.set('Content-Type', 'application/json; charset=utf-8');
@@ -43,6 +45,28 @@ function getCorsHeaders(origin, allowedOrigins) {
   }
 
   return {};
+}
+
+// For other Workers on this account, through a service binding with entrypoint
+// "Notifier" (rednotes-worker uses it). It has no public URL; the default export below
+// keeps serving /notify and /config as before.
+export class Notifier extends WorkerEntrypoint {
+  async send(text) {
+    const botToken = this.env.TELEGRAM_BOT_TOKEN;
+    const chatId = this.env.TELEGRAM_CHAT_ID;
+    if (!botToken || !chatId) {
+      throw new Error('missing server configuration');
+    }
+    const res = await fetch(`https://api.telegram.org/bot${botToken}/sendMessage`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ chat_id: chatId, text: String(text).slice(0, 1000) }),
+    });
+    if (!res.ok) {
+      throw new Error(`telegram request failed (${res.status})`);
+    }
+    return true;
+  }
 }
 
 export default {

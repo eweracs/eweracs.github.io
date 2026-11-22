@@ -1,0 +1,2253 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'unsafe-inline'; style-src 'unsafe-inline'; img-src data: blob:; connect-src https: http://127.0.0.1:8787 http://localhost:8787; base-uri 'none'; form-action 'none'">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="generator" content="rednotes">
+<title>rednotes</title>
+<style>:root {
+  --bg: #f4f4f1; --panel: #ffffff; --panel2: #fafaf8; --line: #e2e2dc; --line2: #ececE7;
+  --ink: #18181b; --ink2: #3f3f46; --muted: #5f5f66; --faint: #6b6b73;
+  --seg: #ebebe6; --chip: #efefeb; --sel: #eaf0fd; --blue: #1d4ed8; --prev: #0d9488;
+  --sans: -apple-system, BlinkMacSystemFont, "SF Pro Text", "Segoe UI", Inter, Roboto, "Helvetica Neue", Arial, sans-serif;
+  --mono: ui-monospace, "SF Mono", Menlo, Consolas, "Liberation Mono", monospace;
+  color-scheme: light;
+}
+* { box-sizing: border-box; }
+body { margin: 0; background: var(--bg); color: var(--ink); font-family: var(--sans); font-size: 14px; line-height: 1.45; }
+button, select, textarea, input { font: inherit; color: inherit; }
+button { cursor: pointer; }
+a { color: var(--blue); }
+a:hover { color: #163a9e; }
+:focus-visible { outline: 2px solid var(--blue); outline-offset: 1px; }
+.mono { font-family: var(--mono); }
+.muted { color: var(--muted); }
+.small { font-size: 12px; }
+.xs { font-size: 11px; }
+.spacer { flex: 1 1 24px; }
+.hidden { display: none !important; }
+.sr { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+
+.app { min-height: 100vh; display: flex; flex-direction: column; }
+
+/* header */
+.top { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 12px 24px; padding: 12px 24px; background: var(--panel); border-bottom: 1px solid var(--line); }
+.top .left { display: flex; flex-wrap: wrap; align-items: center; gap: 12px 20px; }
+.brand { display: flex; align-items: center; gap: 10px; font-family: var(--mono); font-weight: 600; font-size: 15px; letter-spacing: -0.02em; }
+button.brand { border: 0; background: transparent; padding: 0; color: inherit; cursor: pointer; }
+.brand .mark { display: inline-flex; }
+.btn:disabled { opacity: .6; cursor: default; }
+
+/* website: open a proof */
+.landing { max-width: 520px; margin: 0 auto; padding: 72px 24px; display: flex; flex-direction: column; gap: 24px; }
+.dropzone { display: flex; align-items: center; justify-content: center; min-height: 180px; border: 1.5px dashed #c9c9c3; border-radius: 14px; background: var(--panel); }
+body.dragging .dropzone { border-color: #dc2626; background: #fef2f2; }
+.landing-msg { margin: 0; color: #b91c1c; font-size: 13px; }
+.recent { display: flex; flex-direction: column; gap: 6px; }
+.recent .cap { margin-bottom: 2px; }
+.recent-row { display: flex; align-items: center; gap: 6px; }
+.recent-open { flex: 1; display: flex; align-items: baseline; gap: 10px; min-height: 44px; padding: 0 14px; border: 1px solid var(--line); border-radius: 10px; background: var(--panel); text-align: left; color: var(--ink); }
+.recent-open:hover { border-color: #c9c9c3; }
+.recent-open span { color: var(--muted); font-size: 13px; }
+.vsep { width: 1px; height: 28px; background: var(--line); }
+.family { display: flex; flex-direction: column; }
+.family b { font-weight: 600; font-size: 15px; }
+.family span { font-size: 12px; color: var(--muted); }
+
+/* segmented controls */
+.seg { display: inline-flex; flex-wrap: wrap; gap: 2px; padding: 3px; background: var(--seg); border-radius: 8px; }
+.seg button { display: inline-flex; align-items: center; gap: 6px; border: 0; border-radius: 6px; padding: 0 10px; min-height: 32px; font-size: 13px; font-weight: 500; background: transparent; color: #55555c; }
+.seg button[aria-pressed="true"] { background: #fff; color: var(--ink); box-shadow: 0 1px 2px rgba(0,0,0,.14); }
+.seg button .n { font-family: var(--mono); font-size: 11px; color: var(--muted); }
+.seg.dark { background: var(--chip); }
+.seg.dark button { min-height: 34px; padding: 0 12px; color: var(--ink2); }
+.seg.dark button[aria-pressed="true"] { background: var(--ink); color: #fff; box-shadow: none; }
+.seg.full button { flex: 1 1 auto; font-size: 12px; font-weight: 600; min-height: 34px; }
+.select { min-height: 34px; padding: 0 8px; border: 1px solid #d6d6d0; border-radius: 6px; background: #fff; font-size: 13px; font-weight: 500; }
+
+/* nav */
+.modes { display: flex; flex-wrap: wrap; align-items: center; gap: 4px; padding: 8px 20px; background: var(--panel); border-bottom: 1px solid var(--line); }
+.tab { display: inline-flex; align-items: center; gap: 8px; min-height: 38px; padding: 0 12px; border-radius: 8px; color: var(--ink2); text-decoration: none; font-weight: 500; border: 0; background: transparent; font-size: 14px; }
+.tab:hover { background: var(--chip); color: var(--ink2); }
+.tab.on { background: var(--ink); color: #fff; }
+.badge { font-family: var(--mono); font-size: 12px; padding: 1px 7px; border-radius: 999px; background: var(--chip); color: var(--ink2); }
+.tab.on .badge { background: #3a3a40; color: #fff; }
+.comparebox { display: inline-flex; align-items: center; gap: 8px; min-height: 34px; padding: 0 10px 0 0; font-size: 14px; font-weight: 600; color: var(--ink); cursor: pointer; }
+.comparebox input { width: 16px; height: 16px; margin: 0; accent-color: var(--prev); }
+.modes .select, .subbar .select { min-height: 34px; }
+
+/* toolbars */
+.toolbar { display: flex; flex-wrap: wrap; align-items: center; gap: 10px 22px; padding: 10px 24px; background: var(--panel2); border-bottom: 1px solid var(--line); }
+.toolbar .lbl { font-size: 12px; font-weight: 600; color: var(--muted); }
+.field { display: inline-flex; align-items: center; gap: 8px; font-size: 12px; font-weight: 600; color: var(--muted); }
+.check { display: inline-flex; align-items: center; gap: 8px; min-height: 36px; font-size: 13px; }
+.check input { width: 16px; height: 16px; margin: 0; accent-color: var(--ink); }
+.btn { display: inline-flex; align-items: center; gap: 8px; min-height: 36px; padding: 0 14px; border-radius: 8px; border: 1px solid #d6d6d0; background: #fff; color: var(--ink); text-decoration: none; font-size: 13px; font-weight: 600; }
+.btn:hover { background: var(--chip); color: var(--ink); }
+.btn.primary { border: 0; background: var(--ink); color: #fff; }
+.btn.primary:hover { background: #2f2f35; color: #fff; }
+.btn.dashed { border-style: dashed; border-color: #b9b9b2; font-weight: 500; }
+.btn.sm { min-height: 32px; padding: 0 10px; font-size: 12px; }
+.pager { display: inline-flex; align-items: center; gap: 6px; font-size: 12px; color: var(--muted); }
+
+/* layout */
+.body { display: flex; flex-wrap: wrap; flex: 1; align-items: stretch; }
+.main { flex: 999 1 560px; min-width: 0; display: flex; flex-direction: column; background: var(--panel); }
+.side { flex: 1 1 300px; max-width: 100%; background: var(--panel2); border-left: 1px solid var(--line); padding: 18px 20px 24px; display: flex; flex-direction: column; gap: 20px; }
+.side.wide { flex-basis: 380px; background: var(--panel); }
+.list { flex: 1 1 290px; max-width: 100%; align-self: flex-start; background: var(--panel); border-right: 1px solid var(--line); border-bottom: 1px solid var(--line); display: flex; flex-direction: column; }
+/* sticky only while list, stage and side panel sit side by side; stacked, it would cover the panel */
+@media (min-width: 1180px) { .list { position: sticky; top: 0; } }
+.list .rows { max-height: calc(100vh - 210px); min-height: 240px; overflow-y: auto; }
+.list .head { display: flex; align-items: baseline; justify-content: space-between; gap: 8px; padding: 14px 16px 10px; border-bottom: 1px solid var(--line2); }
+.list .foot { margin-top: auto; padding: 12px 16px 16px; display: flex; flex-direction: column; gap: 6px; font-size: 12px; color: var(--muted); border-top: 1px solid var(--line2); }
+h1, h2, h3 { margin: 0; }
+h2.h { font-size: 13px; font-weight: 600; }
+h3.cap, h2.cap { font-size: 12px; font-weight: 600; letter-spacing: .05em; text-transform: uppercase; color: var(--muted); }
+section.blk { display: flex; flex-direction: column; gap: 8px; }
+
+/* text field */
+.textfield { padding: 16px 28px 0; display: flex; flex-direction: column; gap: 6px; }
+.textfield label { font-size: 12px; font-weight: 600; color: var(--ink2); }
+.textfield textarea { resize: vertical; width: 100%; padding: 8px 12px; border: 1px solid #d6d6d0; border-radius: 8px; font-size: 16px; line-height: 1.35; }
+.lines { flex: 1; display: flex; flex-direction: column; gap: 4px; padding: 18px 28px 20px; overflow-x: auto; }
+.legend { display: flex; flex-wrap: wrap; align-items: center; gap: 8px 18px; padding: 12px 28px 16px; border-top: 1px solid var(--line2); background: var(--panel2); font-size: 12px; color: var(--ink2); }
+.dot { display: inline-block; width: 12px; height: 12px; border-radius: 999px; }
+.legend .item { display: inline-flex; align-items: center; gap: 6px; }
+
+/* glyph runs */
+.run { position: relative; flex: 0 0 auto; align-self: flex-start; }
+.run svg { position: absolute; left: 0; overflow: visible; }
+.gapbtn { position: absolute; padding: 0; border: 0; border-radius: 5px; background: transparent; }
+.gapbtn:hover { background: rgba(24,24,27,.10); }
+.gapbtn[aria-pressed="true"] { background: rgba(29,78,216,.16); box-shadow: inset 0 0 0 1.5px var(--blue); }
+.pin { position: absolute; transform: translate(-50%, -55%); min-width: 22px; height: 22px; padding: 0 6px; border-radius: 999px; border: 2px solid #fff; color: #fff; font-size: 11px; font-weight: 700; line-height: 18px; text-align: center; pointer-events: none; white-space: nowrap; }
+.lab { position: absolute; transform: translateX(-50%); font-family: var(--mono); font-size: 11px; font-weight: 600; line-height: 1; padding: 3px 5px; border-radius: 4px; pointer-events: none; white-space: nowrap; border: 1px solid transparent; }
+.lab.dashed { border-style: dashed; background: #fff; }
+.lab.strong { font-size: 12px; padding: 4px 6px; }
+.lab.fadeable { transition: opacity .18s ease; }
+.lab.fadeable.out { opacity: 0; }
+.stack { display: flex; flex-direction: column; gap: 2px; align-self: flex-start; padding: 6px 0 10px; }
+.stacklab { font-size: 11px; font-weight: 600; letter-spacing: .05em; text-transform: uppercase; color: var(--muted); }
+.emptystate { display: flex; flex-direction: column; gap: 6px; padding: 16px; border: 1px dashed #d6d6d0; border-radius: 10px; font-size: 13px; color: var(--muted); }
+.emptystate b { color: var(--ink); font-weight: 600; }
+.iconbtn { flex: 0 0 auto; display: inline-flex; align-items: center; justify-content: center; width: 32px; height: 32px; border: 0; border-radius: 8px; background: transparent; color: var(--muted); }
+.iconbtn:hover { background: var(--chip); color: var(--ink); }
+
+/* inspector */
+.pairhead { display: flex; align-items: center; gap: 14px; }
+.pairpic { position: relative; display: grid; grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr); align-items: baseline; column-gap: 14px; padding-top: 6px; }
+.pairpic .run { align-self: baseline; font-size: 0; line-height: 0; }
+.pairpic .strut { display: inline-block; width: 0; vertical-align: baseline; }
+.pairpic .grp { min-width: 0; overflow: clip; text-overflow: ellipsis; white-space: nowrap; font-family: var(--mono); font-size: 13px; color: var(--muted); }
+.pairpic .grp.l { text-align: right; }
+.pairpic .iconbtn { position: absolute; top: -6px; right: -10px; }
+.pairhead h2 { font-size: 17px; font-weight: 600; }
+.cells { display: flex; flex-direction: column; border: 1px solid var(--line); border-radius: 10px; background: #fff; overflow: hidden; }
+.cell { display: flex; align-items: center; gap: 10px; min-height: 40px; padding: 6px 12px; border-bottom: 1px solid var(--line2); }
+.cell:last-child { border-bottom: 0; background: #f7f7f4; }
+.cell .op { width: 14px; font-family: var(--mono); color: var(--faint); }
+.cell .what { flex: 1; display: flex; flex-direction: column; font-size: 13px; }
+.cell .what small { font-size: 11px; color: var(--muted); }
+.cell .val { font-family: var(--mono); font-size: 15px; }
+.cell .was { font-family: var(--mono); font-size: 12px; color: var(--muted); text-decoration: line-through; }
+.sug { font-family: var(--mono); font-size: 12px; font-weight: 600; padding: 1px 6px; border-radius: 999px; border: 1px dashed var(--blue); color: var(--blue); white-space: nowrap; }
+.chips { display: flex; flex-wrap: wrap; gap: 6px; }
+.chip { display: inline-flex; align-items: center; gap: 6px; padding: 4px 9px; border-radius: 999px; background: #fff; border: 1px solid var(--line); font-size: 12px; font-weight: 500; }
+.chip .dot { width: 8px; height: 8px; }
+.typechip { display: inline-flex; align-items: center; gap: 6px; min-height: 34px; padding: 0 10px; border-radius: 999px; border: 1px solid #d6d6d0; background: #fff; color: var(--ink2); font-size: 12px; font-weight: 600; }
+.typechip .dot { width: 8px; height: 8px; }
+.box { display: flex; flex-wrap: wrap; align-items: center; gap: 8px 12px; padding: 10px 12px; border-radius: 10px; background: #fff; border: 1px solid var(--line); }
+.stepper { display: inline-flex; align-items: center; border: 1px solid #d6d6d0; border-radius: 8px; overflow: hidden; background: #fff; }
+.stepper button { width: 40px; min-height: 36px; border: 0; background: #fff; font-family: var(--mono); font-size: 15px; }
+.stepper button:hover { background: var(--chip); }
+.stepper input { width: 64px; min-height: 36px; padding: 0 4px; border: 0; border-left: 1px solid #e6e6e0; border-right: 1px solid #e6e6e0; text-align: center; font-family: var(--mono); font-size: 14px; font-weight: 600; background: #fff; }
+.stepper input:focus-visible { outline: 2px solid var(--blue); outline-offset: -2px; }
+textarea.note { resize: vertical; min-height: 64px; padding: 8px 10px; border: 1px solid #d6d6d0; border-radius: 6px; font-size: 13px; line-height: 1.4; width: 100%; }
+.thread { display: flex; flex-direction: column; gap: 6px; padding: 10px 12px; border-radius: 10px; background: #fff; border: 1px solid var(--line); }
+.thread .meta { display: flex; flex-wrap: wrap; align-items: center; gap: 6px 8px; }
+.thread p { margin: 0; font-size: 13px; }
+.num { display: inline-flex; align-items: center; justify-content: center; min-width: 20px; height: 20px; padding: 0 5px; border-radius: 999px; color: #fff; font-size: 11px; font-weight: 700; }
+.tchip { font-size: 12px; font-weight: 600; padding: 1px 8px; border-radius: 999px; }
+.reply { margin-left: 10px; padding-left: 10px; border-left: 2px solid var(--line); font-size: 12px; color: var(--ink2); }
+.reply b { font-weight: 600; }
+.linkbtn { border: 0; background: none; padding: 0; color: var(--muted); font-size: 11px; text-decoration: underline; }
+
+/* lists of pairs */
+.rows { display: flex; flex-direction: column; }
+.prow { display: flex; align-items: center; gap: 12px; width: 100%; min-height: 58px; padding: 8px 16px; border: 0; border-bottom: 1px solid var(--line2); background: #fff; text-align: left; }
+.prow:hover { filter: brightness(.975); }
+.prow[aria-pressed="true"] { background: var(--sel); }
+.prow .g { flex: 0 0 auto; min-width: 54px; }
+.prow .t { display: flex; flex-direction: column; flex: 1; min-width: 0; gap: 2px; }
+.prow .t b { font-size: 13px; font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.prow .t span { font-size: 12px; color: var(--muted); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.tags { display: flex; flex-wrap: wrap; gap: 4px; }
+.tag { font-size: 11px; font-weight: 600; padding: 0 6px; border-radius: 4px; color: var(--ink2); background: var(--chip); }
+.tag.kon { color: #9a3412; background: #fff1e3; }
+.tag.warn { color: #8a4b00; background: #fff1d6; }
+.pill { flex: 0 0 auto; font-family: var(--mono); font-size: 13px; font-weight: 600; padding: 3px 9px; border-radius: 999px; }
+.more { margin: 10px 16px; }
+
+/* changes */
+.subbar { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 10px 24px; padding: 8px 24px; background: var(--panel2); border-bottom: 1px solid var(--line); }
+.subbar.on { background: #effaf8; border-bottom-color: #cdebe6; }
+.subbar .opts { display: contents; }
+.subbar .opts:disabled > * { opacity: .4; }
+.subbar .opts:disabled * { cursor: default; }
+.subbar .seg button { padding: 0 8px; min-height: 28px; font-size: 12.5px; }
+.subbar .check { font-size: 12.5px; gap: 6px; }
+.subbar .btn { min-height: 34px; font-size: 12.5px; }
+.subbar .l { display: flex; flex-wrap: wrap; align-items: center; gap: 8px 10px; font-size: 13px; }
+.stagehead { display: flex; flex-wrap: wrap; align-items: flex-end; justify-content: space-between; gap: 12px 24px; padding: 18px 28px 14px; }
+.stagehead .k { font-size: 11px; font-weight: 600; letter-spacing: .06em; text-transform: uppercase; color: var(--muted); }
+.stagehead h1 { font-size: 22px; font-weight: 600; letter-spacing: -0.01em; }
+.stagehead h1 span { font-weight: 400; color: var(--muted); }
+.ctxbtn { min-height: 34px; padding: 0 12px; border-radius: 999px; border: 1px solid #d6d6d0; background: #fff; display: inline-flex; align-items: center; }
+/* runs default to the top (proof lines); centre them inside boxes */
+.ctxbtn .run, .btn .run, .gchip .run, .gcard .pic .run { align-self: center; }
+.ctxbtn[aria-pressed="true"] { border-color: var(--ink); box-shadow: inset 0 0 0 1px var(--ink); }
+.stage { flex: 1; min-height: 360px; display: flex; flex-direction: column; justify-content: center; gap: 18px; padding: 24px 28px 36px; overflow-x: auto; border-top: 1px solid var(--line2); }
+.formula { display: flex; flex-wrap: wrap; align-items: center; gap: 10px 0; padding: 16px 20px 20px; border-top: 1px solid var(--line2); background: var(--panel2); }
+.fcell { display: flex; flex-direction: column; gap: 2px; min-width: 150px; padding: 10px 14px; border-radius: 8px; border: 1px solid var(--line); background: #fff; }
+.fcell.strong { border-color: var(--ink); }
+.fop { padding: 0 10px; font-family: var(--mono); font-size: 18px; color: var(--faint); }
+.gchips { display: flex; flex-wrap: wrap; gap: 4px; }
+.gchip { min-width: 30px; height: 32px; padding: 0 4px; display: inline-flex; align-items: center; justify-content: center; border-radius: 6px; border: 1.5px solid #dcdcd6; background: #fff; }
+.gchip.key { border-color: var(--ink); }
+.gchip.exc { border-color: #e8a463; background: #fff4e6; }
+.warnbox { display: flex; gap: 10px; padding: 10px 12px; border-radius: 8px; background: #fff4e6; border: 1px solid #f0c595; font-size: 12px; color: #431407; }
+kbd { font-family: var(--mono); font-size: 12px; padding: 1px 6px; border-radius: 4px; border: 1px solid #c9c9c3; }
+
+/* glyph cards */
+.grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 12px; }
+.gcard { display: flex; flex-direction: column; gap: 8px; padding: 0 0 12px; border-radius: 12px; border: 1.5px solid var(--line); background: #fff; text-align: left; overflow: hidden; }
+.gcard[aria-pressed="true"] { border-color: var(--ink); }
+.gcard .pic { height: 150px; display: flex; align-items: center; justify-content: center; background: #fbfbf9; border-bottom: 1px solid var(--line2); }
+.gcard .nm { display: flex; align-items: baseline; justify-content: space-between; gap: 8px; padding: 0 14px; }
+.gcard .rows2 { display: flex; flex-direction: column; gap: 4px; padding: 0 14px; font-family: var(--mono); font-size: 12px; }
+.gcard .rows2 > span { display: flex; align-items: center; gap: 8px; }
+.gcard .rows2 .k { width: 42px; font-family: var(--sans); font-weight: 500; color: var(--muted); }
+.strbox { padding: 6px 12px 4px; border-radius: 10px; border: 1px solid var(--line2); overflow-x: auto; }
+
+/* notes */
+.ncard { display: flex; flex-wrap: wrap; gap: 14px 20px; padding: 16px 18px; border-radius: 12px; background: #fff; border: 1px solid var(--line); }
+.ncard.res, .thread.res { background: var(--panel2); }
+.ncard.res .lft { opacity: .5; }
+.ncard.res .rgt p, .thread.res p { color: var(--muted); }
+.tchip.resolved { color: #166534; background: #e7f6ec; }
+.ncard .lft { flex: 0 1 260px; min-width: 0; display: flex; flex-direction: column; gap: 4px; }
+.ncard .rgt { flex: 1 1 320px; min-width: 0; display: flex; flex-direction: column; gap: 8px; }
+.ncard .rgt p { margin: 0; font-size: 14px; }
+.nmeta { display: flex; flex-wrap: wrap; align-items: center; gap: 6px 8px; }
+.nline { display: flex; align-items: center; gap: 10px; }
+.nline > span { flex: 0 0 64px; font-size: 11px; font-weight: 600; }
+pre.export { margin: 0; max-height: 480px; overflow: auto; padding: 14px 16px; border-radius: 10px; background: var(--ink); color: var(--bg); font-family: var(--mono); font-size: 12px; line-height: 1.55; white-space: pre-wrap; word-break: break-word; }
+.empty { margin: 0; font-size: 13px; color: var(--muted); }
+.toast { position: fixed; left: 50%; bottom: 24px; transform: translateX(-50%); background: var(--ink); color: #fff; padding: 10px 16px; border-radius: 10px; font-size: 13px; box-shadow: 0 6px 24px rgba(0,0,0,.2); }
+
+@media print {
+  .top, .modes, .toolbar, .side, .btn, .linkbtn { display: none !important; }
+  body, .app, .main { background: #fff; }
+  .ncard { break-inside: avoid; }
+}
+</style>
+</head>
+<body>
+<div id="app"></div>
+<script id="rednotes-data" type="application/json">null</script>
+<script>/* rednotes engine: data model, text layout, kerning resolution, diffs and
+ * annotations. Shared by the client viewer and the New Proof dialog.
+ * No DOM access in here except localStorage. */
+(function (global) {
+  'use strict';
+
+  var SD = global.SD = global.SD || {};
+  var MINUS = '−';
+
+  SD.fmt = function (n) { return n > 0 ? '+' + n : n < 0 ? MINUS + Math.abs(n) : '±0'; };
+  SD.fmtv = function (n) { return n == null ? '—' : n < 0 ? MINUS + Math.abs(n) : String(n); };
+  SD.tone = function (n) {
+    return n < 0 ? { fg: '#1d4ed8', bg: '#e8eefc' } : n > 0 ? { fg: '#b4430b', bg: '#fdeee4' } : { fg: '#55555c', bg: '#ececE7' };
+  };
+
+  SD.TYPES = {
+    'too-tight': { label: 'Too tight', fg: '#9a3412', bg: '#fdeee4', pin: '#c2410c', sug: 10 },
+    'too-loose': { label: 'Too loose', fg: '#1e40af', bg: '#e8eefc', pin: '#1d4ed8', sug: -10 },
+    'collision': { label: 'Collision', fg: '#b42318', bg: '#fdecea', pin: '#b91c1c', sug: 10 },
+    'question': { label: 'Question', fg: '#5b21b6', bg: '#efe9fc', pin: '#6d28d9', sug: 0 },
+    'looks-good': { label: 'Looks good', fg: '#166534', bg: '#e6f4ea', pin: '#15803d', sug: 0 },
+    'change-note': { label: 'Change note', fg: '#3f3f46', bg: '#ececE7', pin: '#52525b', sug: 0 }
+  };
+  SD.TYPE_ORDER = ['collision', 'too-tight', 'too-loose', 'question', 'looks-good', 'change-note'];
+
+  // ------------------------------------------------------------------ snapshot
+
+  function Snapshot(raw) {
+    this.raw = raw;
+    this.id = raw.id;
+    this.label = raw.label;
+    this.date = raw.date;
+    this.kind = raw.kind || 'proof';
+    this.commit = raw.commit || null;
+    this.glyphs = raw.glyphs || {};
+    this.layers = raw.layers || {};
+    this.kerning = raw.kerning || {};
+    this.kernOnRaw = raw.kernOn || {};
+    this.order = raw.glyphOrder || Object.keys(this.glyphs);
+    this.masters = raw.masters || [];
+    this._members = {};
+    this._kernOn = {};
+    this._index = null;
+  }
+  SD.Snapshot = Snapshot;
+
+  Snapshot.prototype.has = function (name) { return !!this.glyphs[name]; };
+  Snapshot.prototype.index = function (name) {
+    if (!this._index) {
+      this._index = {};
+      for (var i = 0; i < this.order.length; i++) this._index[this.order[i]] = i;
+    }
+    return this._index[name] == null ? 1e9 : this._index[name];
+  };
+  Snapshot.prototype.layer = function (mid, name) {
+    var t = this.layers[mid];
+    var a = t && t[name];
+    return a ? { w: a[0], l: a[1], r: a[2], o: a[3] } : null;
+  };
+  /** group key used when `name` is the LEFT glyph of a pair */
+  Snapshot.prototype.groupL = function (name) {
+    var g = this.glyphs[name];
+    return g && g.kl ? '@' + g.kl : null;
+  };
+  /** group key used when `name` is the RIGHT glyph of a pair */
+  Snapshot.prototype.groupR = function (name) {
+    var g = this.glyphs[name];
+    return g && g.kr ? '@' + g.kr : null;
+  };
+  Snapshot.prototype.category = function (name) {
+    var g = this.glyphs[name];
+    return (g && g.c) || '';
+  };
+  Snapshot.prototype.kern = function (mid, L, R) {
+    var K = this.kerning[mid];
+    var gL = this.groupL(L), gR = this.groupR(R);
+    var none = { v: 0, level: null, lk: gL || L, rk: gR || R, exists: false };
+    if (!K) return none;
+    var row = K[L];
+    if (row) {
+      if (R in row) return { v: row[R], level: 'glyph-glyph', lk: L, rk: R, exists: true };
+      if (gR && gR in row) return { v: row[gR], level: 'glyph-group', lk: L, rk: gR, exists: true };
+    }
+    if (gL && (row = K[gL])) {
+      if (R in row) return { v: row[R], level: 'group-glyph', lk: gL, rk: R, exists: true };
+      if (gR && gR in row) return { v: row[gR], level: 'group-group', lk: gL, rk: gR, exists: true };
+    }
+    return none;
+  };
+  /** side 'L': glyphs whose left-of-pair group is `group`; 'R' likewise */
+  Snapshot.prototype.members = function (side, group) {
+    var key = side + group;
+    if (this._members[key]) return this._members[key];
+    var name = group.charAt(0) === '@' ? group.slice(1) : group;
+    var out = [];
+    for (var i = 0; i < this.order.length; i++) {
+      var g = this.glyphs[this.order[i]];
+      if (g && (side === 'L' ? g.kl : g.kr) === name) out.push(this.order[i]);
+    }
+    this._members[key] = out;
+    return out;
+  };
+  Snapshot.prototype.keyGlyph = function (side, key) {
+    if (key.charAt(0) !== '@') return this.has(key) ? key : null;
+    var name = key.slice(1);
+    var m = this.members(side, key);
+    if (m.indexOf(name) >= 0) return name;
+    return m[0] || null;
+  };
+  Snapshot.prototype.kernOn = function (mid) {
+    if (this._kernOn[mid]) return this._kernOn[mid];
+    var raw = this.kernOnRaw[mid] || {};
+    var models = {}, indep = {};
+    (raw.models || []).forEach(function (p) { models[p[0] + ' ' + p[1]] = true; });
+    (raw.independent || []).forEach(function (p) { indep[p[0] + ' ' + p[1]] = true; });
+    this._kernOn[mid] = { models: models, independent: indep, count: (raw.models || []).length };
+    return this._kernOn[mid];
+  };
+  Snapshot.prototype.kernOnStatus = function (mid, L, R) {
+    var k = this.kernOn(mid), key = L + ' ' + R;
+    if (k.models[key]) return 'model';
+    if (k.independent[key]) return 'independent';
+    return null;
+  };
+  Snapshot.prototype.hasKernOn = function (mid) {
+    var raw = this.kernOnRaw[mid];
+    return !!(raw && ((raw.models && raw.models.length) || (raw.independent && raw.independent.length)));
+  };
+
+  // ------------------------------------------------------------------ model
+
+  function Model(data) {
+    this.data = data;
+    this.family = data.family || 'Untitled';
+    this.upm = data.upm || 1000;
+    this.metrics = data.metrics || {};
+    this.outlines = data.outlines || {};
+    this.proofId = data.proofId || 'local';
+    this.snaps = (data.snapshots || []).map(function (s) { return new Snapshot(s); });
+    this.byId = {};
+    for (var i = 0; i < this.snaps.length; i++) this.byId[this.snaps[i].id] = this.snaps[i];
+    this.cur = this.byId[data.current] || this.snaps[this.snaps.length - 1];
+    this.defaultBase = data.baseline ? this.byId[data.baseline] || null : null;
+    this.masters = this.cur ? this.cur.masters : [];
+    this.samples = data.samples || [];
+    this.cmap = {};
+    this.charOf = {};
+    var cur = this.cur;
+    if (cur) {
+      for (var j = 0; j < cur.order.length; j++) {
+        var name = cur.order[j], g = cur.glyphs[name];
+        (g.u || []).forEach(function (u) {
+          var ch = String.fromCodePoint(u);
+          if (!(ch in this.cmap)) this.cmap[ch] = name;
+          if (!(name in this.charOf)) this.charOf[name] = ch;
+        }, this);
+      }
+    }
+    var asc = this.metrics.ascender || Math.round(this.upm * 0.8);
+    var desc = this.metrics.descender || -Math.round(this.upm * 0.2);
+    this.ascender = asc;
+    this.descender = desc;
+    this.spaceWidth = cur && cur.layer(this.masters[0] && this.masters[0].id, this.cmap[' ']) ? cur.layer(this.masters[0].id, this.cmap[' ']).w : Math.round(this.upm / 4);
+  }
+  SD.Model = Model;
+
+  /** snapshots that came before `snap` (for the baseline picker) */
+  Model.prototype.earlier = function (snap) {
+    var out = [];
+    for (var i = 0; i < this.snaps.length; i++) {
+      if (this.snaps[i] === snap) break;
+      out.push(this.snaps[i]);
+    }
+    return out;
+  };
+
+  /** Text → lines of tokens. `/name` addresses glyphs by name like in Glyphs. */
+  Model.prototype.parse = function (text) {
+    var lines = String(text || '').split('\n');
+    var self = this;
+    return lines.map(function (line) {
+      var out = [];
+      var chars = Array.from(line);
+      for (var i = 0; i < chars.length; i++) {
+        var ch = chars[i];
+        if (ch === '/' && i + 1 < chars.length && /[A-Za-z0-9_.\-]/.test(chars[i + 1])) {
+          var j = i + 1, name = '';
+          while (j < chars.length && /[A-Za-z0-9_.\-]/.test(chars[j])) { name += chars[j]; j++; }
+          if (j < chars.length && chars[j] === ' ') j++;
+          out.push({ name: self.cur.has(name) ? name : null, text: '/' + name, missing: !self.cur.has(name) });
+          i = j - 1;
+          continue;
+        }
+        if (ch === ' ' || ch === '\t') { out.push({ space: true, name: self.cmap[' '] || null, text: ' ' }); continue; }
+        var nm = self.cmap[ch] || null;
+        out.push({ name: nm, text: ch, missing: !nm });
+      }
+      return out;
+    });
+  };
+
+  /** A glyph name back to typeable text (`/name ` for unencoded glyphs). */
+  Model.prototype.tok = function (name) {
+    var ch = this.charOf[name];
+    if (ch && ch !== '/') return ch;
+    return '/' + name + ' ';
+  };
+
+  /**
+   * Lay out one line.
+   *  opts.metrics, opts.kern, opts.outline: Snapshot to take widths/sidebearings, kerning and outlines from
+   *  opts.extra(prevName, name, index): extra font units added before glyph `index`
+   * Returns { glyphs: [{name, x, w, o, gap}], width }
+   *   gap (for i>0 between two real glyphs): { L, R, k (kern result), index }
+   */
+  Model.prototype.layout = function (tokens, mid, opts) {
+    var mS = opts.metrics, kS = opts.kern || mS, oS = opts.outline || mS;
+    var x = 0, out = [], prev = null;
+    for (var i = 0; i < tokens.length; i++) {
+      var t = tokens[i];
+      var name = t.name;
+      var lay = name ? mS.layer(mid, name) : null;
+      var lo = name ? oS.layer(mid, name) : null;
+      var w, o = null, gap = null;
+      if (!lay) {
+        w = t.space ? this.spaceWidth : Math.round(this.upm * 0.5);
+        name = t.space ? name : null;
+      } else {
+        w = lay.w;
+        o = lo ? lo.o : lay.o;
+      }
+      // outlines are stored relative to their left sidebearing
+      var shift = lay && lay.l != null ? lay.l : 0;
+      var add = 0;
+      if (prev && prev.name && name && !t.space && !prev.space) {
+        var k = kS.kern(mid, prev.name, name);
+        gap = { L: prev.name, R: name, k: k, index: i };
+        add += k.v;
+      }
+      if (opts.extra) add += opts.extra(prev ? prev.name : null, t.space ? null : name, i) || 0;
+      x += add;
+      out.push({ name: name, x: x, w: w, o: o, shift: shift, gap: gap, missing: !lay && !t.space, space: !!t.space, text: t.text });
+      x += w;
+      prev = { name: lay ? name : null, space: t.space };
+    }
+    return { glyphs: out, width: x };
+  };
+
+  // ------------------------------------------------------------------ diff
+
+  function netOf(s, mid, L, R) {
+    var a = s.layer(mid, L), b = s.layer(mid, R);
+    var k = s.kern(mid, L, R);
+    return { k: k.v, level: k.level, rsb: a ? a.r : null, lsb: b ? b.l : null };
+  }
+
+  /**
+   * Changed kerning entries between `base` and `cur` for one master.
+   * Every entry is represented by its key glyph pair.
+   */
+  SD.diffPairs = function (base, cur, mid) {
+    var KB = base.kerning[mid] || {}, KC = cur.kerning[mid] || {};
+    var seen = {}, keys = [];
+    [KB, KC].forEach(function (K) {
+      Object.keys(K).forEach(function (lk) {
+        Object.keys(K[lk]).forEach(function (rk) {
+          var id = lk + '|' + rk;
+          if (!seen[id]) { seen[id] = true; keys.push([lk, rk]); }
+        });
+      });
+    });
+    var konB = base.kernOn(mid), konC = cur.kernOn(mid);
+    var out = [], byPair = {};
+    keys.forEach(function (key) {
+      var lk = key[0], rk = key[1];
+      var L = cur.keyGlyph('L', lk) || base.keyGlyph('L', lk);
+      var R = cur.keyGlyph('R', rk) || base.keyGlyph('R', rk);
+      if (!L || !R) return;
+      var inC = cur.has(L) && cur.has(R), inB = base.has(L) && base.has(R);
+      if (!inC && !inB) return;
+      var c = inC ? netOf(cur, mid, L, R) : null;
+      var b = inB ? netOf(base, mid, L, R) : null;
+      var kc = c ? c.k : 0, kp = b ? b.k : 0;
+      var dk = kc - kp;
+      var dsL = c && b && c.rsb != null && b.rsb != null ? c.rsb - b.rsb : 0;
+      var dsR = c && b && c.lsb != null && b.lsb != null ? c.lsb - b.lsb : 0;
+      var ds = dsL + dsR;
+      var rawB = KB[lk] && KB[lk][rk], rawC = KC[lk] && KC[lk][rk];
+      var isExc = lk.charAt(0) !== '@' || rk.charAt(0) !== '@';
+      var stale = false;
+      if (isExc && dk === 0) {
+        var gl = cur.groupL(L), gr = cur.groupR(R);
+        if (gl && gr) {
+          var gc = KC[gl] && KC[gl][gr], gb = KB[gl] && KB[gl][gr];
+          stale = (gc || 0) !== (gb || 0);
+        }
+      }
+      var pkey = L + ' ' + R;
+      var konP = konB.models[pkey] ? 'model' : konB.independent[pkey] ? 'independent' : null;
+      var konN = konC.models[pkey] ? 'model' : konC.independent[pkey] ? 'independent' : null;
+      if (dk === 0 && ds === 0 && !stale && konP === konN) return;
+      if (byPair[pkey]) return; // two entries resolving to the same key pair
+      var e = {
+        id: lk + '|' + rk, lk: lk, rk: rk, L: L, R: R,
+        level: lk.charAt(0) === '@' && rk.charAt(0) === '@' ? 'group-group' : lk.charAt(0) === '@' ? 'group-glyph' : rk.charAt(0) === '@' ? 'glyph-group' : 'glyph-glyph',
+        exception: isExc && (cur.groupL(L) || cur.groupR(R)) ? true : false,
+        kp: kp, kc: kc, dk: dk, dsL: dsL, dsR: dsR, ds: ds, net: dk + ds,
+        rsbP: b ? b.rsb : null, rsbC: c ? c.rsb : null, lsbP: b ? b.lsb : null, lsbC: c ? c.lsb : null,
+        newPair: rawB === undefined && rawC !== undefined, removed: rawC === undefined && rawB !== undefined,
+        stale: stale, konP: konP, konC: konN
+      };
+      byPair[pkey] = e;
+      out.push(e);
+    });
+    // Kern On model changes without a kerning change
+    function modelOnly(set, other, added) {
+      Object.keys(set).forEach(function (pk) {
+        if (other[pk] || byPair[pk]) return;
+        var p = pk.split(' ');
+        if (!cur.has(p[0]) || !cur.has(p[1])) return;
+        var c = netOf(cur, mid, p[0], p[1]);
+        var e = {
+          id: 'kon|' + pk, lk: p[0], rk: p[1], L: p[0], R: p[1], level: 'glyph-glyph', exception: false,
+          kp: c.k, kc: c.k, dk: 0, dsL: 0, dsR: 0, ds: 0, net: 0, rsbP: c.rsb, rsbC: c.rsb, lsbP: c.lsb, lsbC: c.lsb,
+          newPair: false, removed: false, stale: false, konP: added ? null : 'model', konC: added ? 'model' : null
+        };
+        byPair[pk] = e;
+        out.push(e);
+      });
+    }
+    modelOnly(konC.models, konB.models, true);
+    modelOnly(konB.models, konC.models, false);
+    return out;
+  };
+
+  SD.entryTags = function (e) {
+    var t = [];
+    if (e.newPair) t.push({ label: 'new pair', kind: 'plain' });
+    else if (e.removed) t.push({ label: 'pair removed', kind: 'plain' });
+    if (e.member) t.push({ label: 'member', kind: 'plain' });
+    else if (e.stale) t.push({ label: 'stale exception', kind: 'warn' });
+    else if (e.exception) t.push({ label: 'exception', kind: 'plain' });
+    if (!e.newPair && !e.removed && !e.stale && (e.dk !== 0 || e.ds !== 0)) {
+      if (e.net === 0) t.push({ label: 'compensated', kind: 'plain' });
+      else if (e.dk === 0 && e.ds !== 0) t.push({ label: 'spacing only', kind: 'plain' });
+    }
+    var kon = SD.konChange(e);
+    if (kon) t.push({ label: kon.short, kind: 'kon' });
+    return t;
+  };
+
+  /** Kern On is only mentioned for models (added, removed or changed). */
+  SD.konChange = function (e) {
+    if (e.konC === 'model' && e.konP !== 'model') return { short: 'model added', label: 'Kern On model added' };
+    if (e.konP === 'model' && e.konC !== 'model') return { short: 'model removed', label: 'Kern On model removed' };
+    if (e.konC === 'model' && e.dk !== 0) return { short: 'model changed', label: 'Kern On model · value changed' };
+    return null;
+  };
+
+  /** Members of a group entry whose net change differs from the key pair. */
+  SD.memberOutliers = function (base, cur, mid, e, limit) {
+    if (e.level !== 'group-group') return [];
+    var Ls = cur.members('L', e.lk), Rs = cur.members('R', e.rk), out = [];
+    for (var i = 0; i < Ls.length; i++) {
+      for (var j = 0; j < Rs.length; j++) {
+        var L = Ls[i], R = Rs[j];
+        if (L === e.L && R === e.R) continue;
+        if (!base.has(L) || !base.has(R)) continue;
+        var c = netOf(cur, mid, L, R), b = netOf(base, mid, L, R);
+        var dk = c.k - b.k;
+        var ds = (c.rsb != null && b.rsb != null ? c.rsb - b.rsb : 0) + (c.lsb != null && b.lsb != null ? c.lsb - b.lsb : 0);
+        if (dk + ds === e.net) continue;
+        out.push({
+          id: e.id + '|' + L + ' ' + R, lk: e.lk, rk: e.rk, L: L, R: R, level: c.level || 'group-group', member: true,
+          exception: c.level !== 'group-group', kp: b.k, kc: c.k, dk: dk, ds: ds, dsL: c.rsb - b.rsb || 0, dsR: c.lsb - b.lsb || 0, net: dk + ds,
+          rsbP: b.rsb, rsbC: c.rsb, lsbP: b.lsb, lsbC: c.lsb, konP: null, konC: null, parent: e.id
+        });
+        if (out.length >= (limit || 40)) return out;
+      }
+    }
+    return out;
+  };
+
+  /** Respaced glyphs; composites that moved exactly like their base are folded into it. */
+  SD.diffGlyphs = function (base, cur, mid) {
+    var rows = [], byName = {};
+    cur.order.forEach(function (name) {
+      var c = cur.layer(mid, name), b = base.layer(mid, name);
+      if (!c || !b || c.l == null || b.l == null) return;
+      var dl = c.l - b.l, dr = c.r - b.r;
+      if (dl === 0 && dr === 0) return;
+      var row = { name: name, dl: dl, dr: dr, l: c.l, r: c.r, w: c.w, outline: c.o !== b.o, composites: [], base: (cur.glyphs[name] || {}).cb || null };
+      rows.push(row);
+      byName[name] = row;
+    });
+    var out = [];
+    rows.forEach(function (r) {
+      var parent = r.base && byName[r.base];
+      if (parent && parent.dl === r.dl && parent.dr === r.dr) parent.composites.push(r.name);
+      else out.push(r);
+    });
+    return out;
+  };
+
+  // ------------------------------------------------------------------ text helpers
+
+  var WORDS = ('Today Tomorrow Type Tyre Tall Talk Tea Tone Tour Town Toast Tokyo Torque Vanilla Valve Vast Very Voyage Wave Water Way Yacht Yarn York Your Yonder Avenue Avatar Atlas Award Paris Party Pavlova Paper Fortune Folio Fox Kayak Layout Lyric Every Rhythm Office Offer Office ' +
+    'about above after again almost always another answer around away back became because before being below between both bring building ' +
+    'city coffee could country course down during early enough every example family father fact feel field figure follow food form found ' +
+    'friend from front give going great group hand have heavy help here high history hollow house however idea important inside interest ' +
+    'just keep kind know land large last later learn leave left letter life light line little live local long look love made make many ' +
+    'market might money month more morning most mother move much music must name nation near never next night nothing number often only ' +
+    'open order other over paper part party people perhaps place play point power present problem public quality question quick quite ' +
+    'rather really reason right river room round school second seven should show since small social something space stand start state ' +
+    'still story study style system table take than their there these thing think those though through time today together toward town ' +
+    'travel tree true turn type under until upon very voice wall want water week well what when where which while white whole window ' +
+    'with within without woman word work world would write wrong yacht year young zebra cafe arrow bookkeeper kayak lawyer flavor jewel ' +
+    'awkward eyewitness knowledge oxygen fjord quartz rhythm sync twelve vowel waltz yellow navy javelin pyjama avocado gravy wavy ' +
+    '2024 1990 1789 0123 456 789 11:30 $25.00 100%').split(/\s+/);
+
+  /** Up to three context strings that show the pair L R. */
+  Model.prototype.contexts = function (L, R) {
+    var cur = this.cur, self = this;
+    function ctl(name) {
+      var c = cur.category(name);
+      if (/Uppercase/.test(c)) return self.cmap.H ? 'H' : '';
+      if (/Lowercase/.test(c)) return self.cmap.n ? 'n' : '';
+      if (/Number/.test(c)) return self.cmap['0'] ? '0' : '';
+      return /Lowercase/.test(cur.category(name === L ? R : L)) ? (self.cmap.n ? 'n' : '') : (self.cmap.H ? 'H' : '');
+    }
+    function round(name) {
+      var c = cur.category(name);
+      if (/Uppercase/.test(c)) return self.cmap.O ? 'O' : '';
+      if (/Lowercase/.test(c)) return self.cmap.o ? 'o' : '';
+      return ctl(name);
+    }
+    var a = this.tok(L), b = this.tok(R), out = [];
+    var c1 = ctl(L), c2 = ctl(R);
+    out.push(c1 + c1 + a + b + c2 + c2);
+    var r1 = round(L), r2 = round(R);
+    if (r1 + r2 !== c1 + c2) out.push(r1 + r1 + a + b + r2 + r2);
+    var ca = this.charOf[L], cb = this.charOf[R];
+    if (ca && cb) {
+      var pair = ca + cb, found = null;
+      for (var i = 0; i < WORDS.length && !found; i++) {
+        var w = WORDS[i];
+        var variants = [w, w.toUpperCase(), w.charAt(0).toUpperCase() + w.slice(1)];
+        for (var j = 0; j < variants.length; j++) if (variants[j].indexOf(pair) >= 0 && this.canSet(variants[j])) { found = variants[j]; break; }
+      }
+      out.push(found || (a + b + a + b));
+    } else {
+      out.push(a + b + a + b);
+    }
+    return out;
+  };
+
+  Model.prototype.canSet = function (text) {
+    var chars = Array.from(text);
+    for (var i = 0; i < chars.length; i++) if (!(chars[i] in this.cmap)) return false;
+    return true;
+  };
+
+  /** Spacing strings for one glyph. */
+  Model.prototype.spacingStrings = function (name) {
+    var c = this.cur.category(name), t = this.tok(name), out;
+    if (/Uppercase/.test(c)) out = ['HH' + t + 'HH', 'OO' + t + 'OO', 'H' + t + 'O' + t + 'H'];
+    else if (/Number/.test(c)) out = ['00' + t + '00', '11' + t + '11', 'H' + t + 'H' + t + 'H'];
+    else if (/Lowercase/.test(c)) out = ['nn' + t + 'nn', 'oo' + t + 'oo', 'n' + t + 'o' + t + 'n'];
+    else out = ['nn' + t + 'nn', 'HH' + t + 'HH', 'oo' + t + 'oo'];
+    var self = this;
+    return out.filter(function (s) { return s.replace(/\/[^ ]+ /g, '').split('').every(function (ch) { return ch in self.cmap; }); });
+  };
+
+  /** Every kerning entry of a master as key-glyph pairs, largest values first. */
+  Model.prototype.allPairs = function (mid) {
+    var cur = this.cur, K = cur.kerning[mid] || {}, out = [];
+    Object.keys(K).forEach(function (lk) {
+      Object.keys(K[lk]).forEach(function (rk) {
+        var L = cur.keyGlyph('L', lk), R = cur.keyGlyph('R', rk);
+        if (L && R) out.push({ L: L, R: R, v: K[lk][rk] });
+      });
+    });
+    out.sort(function (a, b) { return Math.abs(b.v) - Math.abs(a.v); });
+    return out;
+  };
+
+  Model.prototype.allPairsText = function (mid, page, perPage) {
+    var pairs = this.allPairs(mid), self = this;
+    var slice = pairs.slice(page * perPage, (page + 1) * perPage);
+    var lines = [], line = [];
+    slice.forEach(function (p) {
+      var ctx = self.contexts(p.L, p.R)[0];
+      line.push(ctx.length > 2 ? ctx.slice(1, ctx.length - 1) : ctx);
+      if (line.length === 6) { lines.push(line.join(' ')); line = []; }
+    });
+    if (line.length) lines.push(line.join(' '));
+    return { text: lines.join('\n'), total: pairs.length };
+  };
+
+  SD.PRESETS = [
+    { id: 'kern', label: 'Kerning words', text: 'Tomorrow Today Type\nAVATAR WAVE PAVLOVA\n“Avenue” Fortune, Party.' },
+    { id: 'mixed', label: 'Mixed case', text: 'Your Yacht Awaits\nVanilla Tea at Fortuna\nLOVE “Atlas” Yonder' },
+    { id: 'lower', label: 'Lowercase', text: 'bookkeeper koto noon\nchef’s staff’s bar, arrow.' },
+    { id: 'spacing', label: 'Spacing strings', text: 'HHOHHOOHOO\nnnonnoonoo\n1101 0011' },
+    { id: 'figures', label: 'Figures & punctuation', text: '2011 1101 11:11\n1.1.1 101 (H) [n]' }
+  ];
+
+  // ------------------------------------------------------------------ annotations
+
+  /**
+   * Annotations come from the data file (designer change notes, client notes
+   * the designer imported, with replies) plus the ones written in this browser.
+   */
+  function Notes(model) {
+    this.model = model;
+    this.key = 'rednotes:' + model.proofId + ':' + (model.cur ? model.cur.id : '');
+    this.fromData = (model.data.notes || []).slice();
+    var stored = SD.storage.get(this.key) || {};
+    this.local = stored.local || [];
+    this.status = stored.status || {};
+    this.renumber();
+  }
+  SD.Notes = Notes;
+
+  Notes.prototype.save = function () {
+    SD.storage.set(this.key, { local: this.local, status: this.status });
+  };
+  Notes.prototype.renumber = function () {
+    var all = this.fromData.concat(this.local);
+    all.sort(function (a, b) { return (a.date || '') < (b.date || '') ? -1 : (a.date || '') > (b.date || '') ? 1 : 0; });
+    this.numbers = {};
+    for (var i = 0; i < all.length; i++) this.numbers[all[i].id] = i + 1;
+  };
+  Notes.prototype.all = function () {
+    var self = this;
+    return this.fromData.concat(this.local).map(function (n) {
+      var copy = Object.assign({}, n);
+      copy.n = self.numbers[n.id];
+      copy.local = self.local.indexOf(n) >= 0;
+      if (self.status[n.id]) copy.status = self.status[n.id];
+      if (!copy.status) copy.status = 'open';
+      // designer change notes are information, not issues: they are never resolved
+      if (copy.type === 'change-note') copy.status = 'open';
+      return copy;
+    });
+  };
+  Notes.prototype.add = function (note) {
+    note.id = note.id || 'a-' + Math.random().toString(16).slice(2, 10);
+    note.date = note.date || new Date().toISOString().slice(0, 10);
+    note.author = note.author || 'client';
+    note.snapshot = this.model.cur.id;
+    note.status = note.status || 'open';
+    note.replies = [];
+    this.local.push(note);
+    this.renumber();
+    this.save();
+    return note;
+  };
+  Notes.prototype.setStatus = function (id, status) {
+    this.status[id] = status;
+    this.save();
+  };
+  Notes.prototype.remove = function (id) {
+    this.local = this.local.filter(function (n) { return n.id !== id; });
+    this.renumber();
+    this.save();
+  };
+
+  /** Does annotation `a` sit on the gap L|R in snapshot `snap`? Returns how many sides match (0 = no). */
+  SD.noteHits = function (a, snap, L, R) {
+    var an = a.anchor || {};
+    if (an.type === 'side') {
+      var right = an.side === 'right' || an.side === 'both', left = an.side === 'left' || an.side === 'both';
+      return (L === an.glyph && right ? 1 : 0) + (R === an.glyph && left ? 1 : 0);
+    }
+    if (an.type !== 'pair') return 0;
+    if (an.scope === 'group') {
+      var okL = an.kl ? snap.groupL(L) === an.kl : L === an.l;
+      var okR = an.kr ? snap.groupR(R) === an.kr : R === an.r;
+      return okL && okR ? 1 : 0;
+    }
+    return an.l === L && an.r === R ? 1 : 0;
+  };
+
+  SD.anchorText = function (model, a) {
+    var an = a.anchor || {};
+    if (an.type === 'side') return an.glyph + ' · ' + (an.side === 'both' ? 'both sides' : an.side + ' side');
+    if (an.type === 'pair') return an.l + ' / ' + an.r;
+    return 'Text';
+  };
+  SD.scopeText = function (model, a) {
+    var an = a.anchor || {};
+    var master = model.masterName(a.master);
+    if (an.type === 'pair') {
+      var s = an.scope === 'group' ? 'whole group ' + (an.kl || an.l) + ' × ' + (an.kr || an.r) : 'this pair only';
+      return master ? s + ' · ' + master : s;
+    }
+    return master || 'all masters';
+  };
+  Model.prototype.masterName = function (id) {
+    for (var i = 0; i < this.masters.length; i++) if (this.masters[i].id === id) return this.masters[i].name;
+    return null;
+  };
+
+  // ------------------------------------------------------------------ storage
+
+  SD.storage = {
+    get: function (key) {
+      try { var v = global.localStorage.getItem(key); return v ? JSON.parse(v) : null; } catch (e) { return null; }
+    },
+    set: function (key, value) {
+      try { global.localStorage.setItem(key, JSON.stringify(value)); } catch (e) { /* private mode etc. */ }
+    }
+  };
+
+  // ------------------------------------------------------------------ sending notes
+
+  function b64ToBytes(s) {
+    s = String(s).replace(/-/g, '+').replace(/_/g, '/');
+    while (s.length % 4) s += '=';
+    var bin = global.atob(s), out = new Uint8Array(bin.length);
+    for (var i = 0; i < bin.length; i++) out[i] = bin.charCodeAt(i);
+    return out;
+  }
+  function bytesToB64(bytes) {
+    var bin = '';
+    for (var i = 0; i < bytes.length; i += 0x8000) bin += String.fromCharCode.apply(null, bytes.subarray(i, i + 0x8000));
+    return global.btoa(bin);
+  }
+  /** a short, stable fingerprint of a string (to tell whether notes changed since sending) */
+  SD.fingerprint = function (text) {
+    var h = 5381;
+    for (var i = 0; i < text.length; i++) h = ((h << 5) + h + text.charCodeAt(i)) | 0;
+    return (h >>> 0).toString(36) + ':' + text.length;
+  };
+
+  /**
+   * Encrypt the notes before they leave the browser, with the proof's key from the data
+   * file: AES-256-CBC, then HMAC-SHA256 over "rednotes-v1|<aad>|" + iv + ciphertext
+   * (encrypt-then-MAC). Both keys are derived from the proof key with HMAC. The plug-in
+   * (rednotes/sync.py) mirrors this; the Worker only ever stores the result.
+   */
+  SD.seal = function (keyB64, plaintext, aad) {
+    var subtle = global.crypto && global.crypto.subtle;
+    if (!subtle) return Promise.reject(new Error('This browser cannot encrypt.'));
+    var enc = new TextEncoder();
+    var iv = global.crypto.getRandomValues(new Uint8Array(16));
+    return subtle.importKey('raw', b64ToBytes(keyB64), { name: 'HMAC', hash: 'SHA-256' }, false, ['sign'])
+      .then(function (master) {
+        return Promise.all([subtle.sign('HMAC', master, enc.encode('rednotes enc')), subtle.sign('HMAC', master, enc.encode('rednotes mac'))]);
+      })
+      .then(function (keys) {
+        return Promise.all([
+          subtle.importKey('raw', keys[0], { name: 'AES-CBC' }, false, ['encrypt']),
+          subtle.importKey('raw', keys[1], { name: 'HMAC', hash: 'SHA-256' }, false, ['sign'])
+        ]);
+      })
+      .then(function (k) {
+        return subtle.encrypt({ name: 'AES-CBC', iv: iv }, k[0], enc.encode(plaintext)).then(function (ct) {
+          ct = new Uint8Array(ct);
+          var head = enc.encode('rednotes-v1|' + aad + '|');
+          var msg = new Uint8Array(head.length + iv.length + ct.length);
+          msg.set(head, 0); msg.set(iv, head.length); msg.set(ct, head.length + iv.length);
+          return subtle.sign('HMAC', k[1], msg).then(function (tag) {
+            return { iv: bytesToB64(iv), ct: bytesToB64(ct), tag: bytesToB64(new Uint8Array(tag)) };
+          });
+        });
+      });
+  };
+
+  // ------------------------------------------------------------------ recently opened proofs (hosted page)
+
+  /** Proof files opened on the website are kept in this browser (IndexedDB), so a reload or a later visit reopens them. */
+  function idb(mode, fn) {
+    return new Promise(function (resolve, reject) {
+      if (!global.indexedDB) { reject(new Error('no IndexedDB')); return; }
+      var open = global.indexedDB.open('rednotes', 1);
+      open.onupgradeneeded = function () { open.result.createObjectStore('proofs', { keyPath: 'key' }); };
+      open.onerror = function () { reject(open.error); };
+      open.onsuccess = function () {
+        var db = open.result, tx = db.transaction('proofs', mode), store = tx.objectStore('proofs'), out;
+        var req = fn(store);
+        if (req) req.onsuccess = function () { out = req.result; };
+        tx.oncomplete = function () { db.close(); resolve(out); };
+        tx.onerror = tx.onabort = function () { db.close(); reject(tx.error); };
+      };
+    });
+  }
+  SD.recent = {
+    put: function (entry) { return idb('readwrite', function (s) { return s.put(entry); }); },
+    get: function (key) { return idb('readonly', function (s) { return s.get(key); }); },
+    remove: function (key) { return idb('readwrite', function (s) { return s.delete(key); }); },
+    list: function () {
+      return idb('readonly', function (s) { return s.getAll(); }).then(function (all) {
+        return (all || []).map(function (e) { return { key: e.key, family: e.family, label: e.label, date: e.date, opened: e.opened }; })
+          .sort(function (a, b) { return (b.opened || '') < (a.opened || '') ? -1 : 1; });
+      });
+    }
+  };
+})(typeof window !== 'undefined' ? window : this);
+</script>
+<script>/* rednotes viewer: the page the client opens. */
+(function () {
+  'use strict';
+  var SD = window.SD;
+  var NS = 'http://www.w3.org/2000/svg';
+
+  // ------------------------------------------------------------------ data
+
+  function readData() {
+    if (window.REDNOTES_DATA) return window.REDNOTES_DATA;
+    var el = document.getElementById('rednotes-data');
+    try { return el ? JSON.parse(el.textContent) : null; } catch (e) { return null; }
+  }
+  // the red marker stroke of the rednotes mark
+  var BRAND_SVG = '<svg width="24" height="24" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 17c3-1.2 5.2-5.6 8-5.6 2.4 0 2 3.4 4.4 3.4 1.5 0 2.6-1.2 3.6-2.4" fill="none" stroke="#dc2626" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/></svg>';
+  var root = document.getElementById('app');
+  var embedded = readData();
+  if (embedded) boot(embedded); else landing();
+
+  // ------------------------------------------------------------------ hosted page: open a proof file
+
+  /**
+   * On the website the page has no proof built in: the client opens the proof file they
+   * were sent (button or drop). Opened proofs are kept in this browser, and the address
+   * remembers the open one, so a reload or a later visit goes straight back to it.
+   */
+  function landing() {
+    var key = decodeURIComponent((location.hash || '').slice(1));
+    if (key) {
+      SD.recent.get(key).then(function (e) { if (e && e.data) boot(e.data); else showLanding(); }, showLanding);
+    } else showLanding();
+  }
+  function el(tag, cls, text) { var e = document.createElement(tag); if (cls) e.className = cls; if (text != null) e.textContent = text; return e; }
+  function showLanding(message) {
+    document.title = 'rednotes';
+    var wrap = el('div', 'landing');
+    var brand = el('div', 'brand');
+    brand.innerHTML = BRAND_SVG;
+    brand.appendChild(document.createTextNode('rednotes'));
+    var input = el('input'); input.type = 'file'; input.accept = '.rednotes,application/json'; input.hidden = true;
+    var pick = el('button', 'btn primary', 'Open proof'); pick.type = 'button';
+    pick.onclick = function () { input.click(); };
+    input.onchange = function () { if (input.files && input.files[0]) openFile(input.files[0]); };
+    var drop = el('div', 'dropzone'); drop.appendChild(pick); drop.appendChild(input);
+    wrap.appendChild(brand); wrap.appendChild(drop);
+    if (message) wrap.appendChild(el('p', 'landing-msg', message));
+    var recent = el('div', 'recent');
+    wrap.appendChild(recent);
+    root.replaceChildren(wrap);
+    SD.recent.list().then(function (items) {
+      if (!items.length) return;
+      recent.appendChild(el('h2', 'cap', 'Recent'));
+      items.forEach(function (it) {
+        var row = el('div', 'recent-row');
+        var open = el('button', 'recent-open'); open.type = 'button';
+        open.appendChild(el('b', null, it.family));
+        open.appendChild(el('span', null, it.label + (it.date ? ' \u00b7 ' + fmtDateShort(it.date) : '')));
+        open.onclick = function () { location.hash = encodeURIComponent(it.key); location.reload(); };
+        var rm = el('button', 'iconbtn', '\u00d7'); rm.type = 'button'; rm.title = 'Remove from this browser'; rm.setAttribute('aria-label', 'Remove ' + it.family + ' ' + it.label);
+        rm.onclick = function () { SD.recent.remove(it.key).then(function () { row.remove(); }); };
+        row.appendChild(open); row.appendChild(rm);
+        recent.appendChild(row);
+      });
+    }, function () {});
+  }
+  function fmtDateShort(iso) {
+    var d = new Date(iso + 'T00:00:00');
+    return isNaN(d) ? iso : d.toLocaleDateString(undefined, { day: 'numeric', month: 'short', year: 'numeric' });
+  }
+  function openFile(file) {
+    var reader = new FileReader();
+    reader.onload = function () {
+      var data = null;
+      try { data = JSON.parse(reader.result); } catch (e) { /* not JSON */ }
+      if (!data || !data.snapshots || !data.snapshots.length || !data.current) { showLanding('This file isn\u2019t a rednotes proof.'); return; }
+      var cur = data.snapshots.filter(function (s) { return s.id === data.current; })[0] || data.snapshots[data.snapshots.length - 1];
+      var key = (data.proofId || 'proof') + ':' + cur.id;
+      var entry = { key: key, family: data.family || '', label: cur.label || '', date: cur.date || '', opened: new Date().toISOString(), data: data };
+      var go = function () { location.hash = encodeURIComponent(key); boot(data); };
+      SD.recent.put(entry).then(go, go);
+    };
+    reader.readAsText(file);
+  }
+  document.addEventListener('dragover', function (e) { if (!document.querySelector('.landing')) return; e.preventDefault(); document.body.classList.add('dragging'); });
+  document.addEventListener('dragleave', function (e) { if (e.target === document.documentElement || e.target === document.body) document.body.classList.remove('dragging'); });
+  document.addEventListener('drop', function (e) {
+    if (!document.querySelector('.landing')) return;
+    e.preventDefault();
+    document.body.classList.remove('dragging');
+    var f = e.dataTransfer && e.dataTransfer.files && e.dataTransfer.files[0];
+    if (f) openFile(f);
+  });
+
+  // ------------------------------------------------------------------ the proof
+
+  function boot(DATA) {
+    if (!DATA.snapshots || !DATA.snapshots.length) {
+      root.textContent = 'This proof has no font data.';
+      return;
+    }
+    var HOSTED = !embedded;
+    var M = new SD.Model(DATA);
+    var N = new SD.Notes(M);
+    // overlay: the compared version is a translucent teal fill under the current one;
+    // where both cover the paper it reads dark, teal alone is the compared version only,
+    // grey alone is the current version only
+    var PREV = '#0d9488';
+    var PREV_OPACITY = 0.5, CUR_OPACITY = 0.65;
+    function swatch(color, opacity) { return h('span', { class: 'dot', style: 'border-radius:3px;width:14px;height:14px;background:' + color + ';opacity:' + opacity }); }
+    var hasChanges = M.earlier(M.cur).length > 0;
+
+    var S = {
+      view: 'proof', // proof | notes | pairs | glyphs (the last two only while comparing)
+      mid: M.masters[0].id,
+      compare: false,
+      baseId: M.defaultBase ? M.defaultBase.id : (hasChanges ? M.earlier(M.cur).slice(-1)[0].id : null),
+      cmp: { view: 'overlay', measure: 'net', exag: false, deltas: true, showPrev: false, hold: false },
+      proof: { preset: 'kern', text: SD.PRESETS[0].text, size: 96, values: false, pins: true, applyAll: false,
+        sel: null, target: 'gap', type: null, sug: 0, preview: true, scope: 'group', draft: '', page: 0 },
+      notes: { filter: 'all', anchor: 'all', hideResolved: false },
+      pairs: { filter: 'all', keyOnly: true, hideComp: true, thr: 0, sel: null, ctx: 0, type: 'question', draft: '', limit: 300 },
+      glyphs: { filter: 'all', showComp: false, sel: null, side: 'right', type: 'too-loose', sug: -6, preview: false, draft: '' }
+    };
+    var prefs = SD.storage.get('rednotes:prefs:' + M.proofId) || {};
+    if (prefs.size) S.proof.size = prefs.size;
+    if (prefs.mid && M.masters.some(function (m) { return m.id === prefs.mid; })) S.mid = prefs.mid;
+    if (M.samples.length) { S.proof.preset = 'font:0'; S.proof.text = M.samples[0].text; }
+    function savePrefs() { SD.storage.set('rednotes:prefs:' + M.proofId, { size: S.proof.size, mid: S.mid }); }
+
+    /** the snapshot we compare against, or null when not comparing */
+    function B() { return S.compare && S.baseId ? M.byId[S.baseId] : null; }
+    function picked() { return S.baseId ? M.byId[S.baseId] : null; }
+
+    // ------------------------------------------------------------------ dom helpers
+
+    function h(tag, attrs) {
+      var el = document.createElement(tag), deferred = null;
+      if (attrs) {
+        Object.keys(attrs).forEach(function (k) {
+          var v = attrs[k];
+          if (v == null || v === false) return;
+          if (k === 'class') el.className = v;
+          else if (k === 'style') el.setAttribute('style', v);
+          else if (k.indexOf('on') === 0) el.addEventListener(k.slice(2).toLowerCase(), v);
+          else if (k === 'value') deferred = v;
+          else if (k === 'checked') el.checked = !!v;
+          else el.setAttribute(k, v === true ? '' : v);
+        });
+      }
+      for (var i = 2; i < arguments.length; i++) append(el, arguments[i]);
+      if (deferred != null) el.value = deferred;
+      return el;
+    }
+    function append(el, c) {
+      if (c == null || c === false) return;
+      if (Array.isArray(c)) { c.forEach(function (x) { append(el, x); }); return; }
+      el.appendChild(c.nodeType ? c : document.createTextNode(String(c)));
+    }
+    function sv(tag, attrs) {
+      var el = document.createElementNS(NS, tag);
+      Object.keys(attrs || {}).forEach(function (k) { if (attrs[k] != null) el.setAttribute(k, attrs[k]); });
+      for (var i = 2; i < arguments.length; i++) if (arguments[i]) el.appendChild(arguments[i]);
+      return el;
+    }
+    function icon(d, color) {
+      return sv('svg', { width: 16, height: 16, viewBox: '0 0 24 24', 'aria-hidden': 'true' },
+        sv('path', { d: d, fill: 'none', stroke: color || 'currentColor', 'stroke-width': 1.75, 'stroke-linecap': 'round', 'stroke-linejoin': 'round' }));
+    }
+    var ICON_SEND = 'M21 3 3 10.5l7.5 2.5L13 20.5 21 3ZM10.5 13 15 8.5';
+    function fmtDate(d) {
+      if (!d) return '';
+      var m = /^(\d{4})-(\d{2})-(\d{2})/.exec(d);
+      if (!m) return d;
+      return parseInt(m[3], 10) + ' ' + ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'][parseInt(m[2], 10) - 1];
+    }
+    function seg(items, current, onPick, cls) {
+      return h('div', { class: 'seg' + (cls ? ' ' + cls : ''), role: 'group' }, items.map(function (it) {
+        return h('button', { type: 'button', 'aria-pressed': String(it[0] === current), title: it[3] || null, onclick: function () { onPick(it[0]); } },
+          it[1], it[2] != null ? h('span', { class: 'n' }, it[2]) : null);
+      }));
+    }
+    function check(label, value, onChange, extraClass) {
+      return h('label', { class: extraClass || 'check' }, h('input', { type: 'checkbox', checked: value, onchange: function (e) { onChange(e.target.checked); } }), label);
+    }
+    var toastTimer = null;
+    function toast(text) {
+      var old = document.querySelector('.toast');
+      if (old) old.remove();
+      var t = h('div', { class: 'toast', role: 'status' }, text);
+      document.body.appendChild(t);
+      clearTimeout(toastTimer);
+      toastTimer = setTimeout(function () { t.remove(); }, 2200);
+    }
+    var IS_MAC = /Mac|iPhone|iPad/.test(navigator.platform || navigator.userAgent || '');
+    var HOLD_KEY = IS_MAC ? '\u2325' : 'Alt';
+    function holdButton(label) {
+      var C = S.cmp;
+      return h('button', { type: 'button', class: 'btn dashed', title: 'Hold this button or the ' + (IS_MAC ? 'Option' : 'Alt') + ' key',
+        onpointerdown: function () { C.hold = true; render(); },
+        onpointerup: function () { C.hold = false; render(); }, onpointerleave: function () { if (C.hold) { C.hold = false; render(); } } },
+        h('kbd', null, HOLD_KEY), label);
+    }
+
+    // ------------------------------------------------------------------ outlines
+
+    var defsSvg = sv('svg', { width: 0, height: 0, style: 'position:absolute;width:0;height:0', 'aria-hidden': 'true' });
+    var defs = sv('defs');
+    defsSvg.appendChild(defs);
+    document.body.appendChild(defsSvg);
+    var defined = {};
+    function ensure(hash) {
+      if (!hash || defined[hash]) return !!hash;
+      var d = M.outlines[hash];
+      if (!d) return false;
+      defs.appendChild(sv('path', { id: 'o-' + hash, d: d, 'vector-effect': 'non-scaling-stroke' }));
+      defined[hash] = true;
+      return true;
+    }
+
+    /**
+     * Render one line of glyphs.
+     * opts: tokens, size, mid, cur {metrics,kern,outline}, base {...}|null, ghost, showBase, ex, extra,
+     *       pick(gap), selKey, focus(gap), pin(gap), label(glyph, i, prevGlyph), ink, padTop, padBottom, edges
+     *   focus(gap): glyphs outside the gaps it accepts are drawn in CONTEXT_INK
+     *   label() may return fade: true for a Δ label (see fadeLabels)
+     */
+    var CONTEXT_INK = '#6b6b73';
+    /** what the proof being viewed is called wherever it is compared with another */
+    var CURRENT = 'Current';
+    function renderRun(opts) {
+      var s = opts.size / M.upm;
+      var mid = opts.mid || S.mid;
+      var lc = M.layout(opts.tokens, mid, { metrics: opts.cur.metrics, kern: opts.cur.kern, outline: opts.cur.outline, extra: opts.extra });
+      var lb = opts.base ? M.layout(opts.tokens, mid, { metrics: opts.base.metrics, kern: opts.base.kern, outline: opts.base.outline }) : null;
+      var ex = opts.ex || 1;
+      if (lb && ex !== 1) {
+        lc.glyphs.forEach(function (g, i) { var b = lb.glyphs[i]; if (b) g.x = b.x + ex * (g.x - b.x); });
+        var last = lc.glyphs[lc.glyphs.length - 1];
+        if (last) lc.width = last.x + last.w;
+      }
+      var shown = opts.showBase && lb ? lb : lc;
+      var asc = M.ascender * s, H = (M.ascender - M.descender) * s;
+      var padTop = opts.padTop == null ? 26 : opts.padTop, padBottom = opts.padBottom == null ? 28 : opts.padBottom;
+      var W = Math.max(lc.width, lb ? lb.width : 0) * s + 2;
+      var wrap = h('div', { class: 'run', style: 'width:' + Math.ceil(W) + 'px;height:' + Math.ceil(H + padTop + padBottom) + 'px' });
+      var svg = sv('svg', { width: Math.ceil(W), height: Math.ceil(H), style: 'top:' + padTop + 'px', 'aria-hidden': 'true' });
+      var ink = sv('g', { fill: opts.ink || '#18181b' });
+      var inFocus = null;
+      if (opts.focus) {
+        inFocus = {};
+        lc.glyphs.forEach(function (g, i) { if (g.gap && opts.focus(g.gap)) { inFocus[i] = true; inFocus[i - 1] = true; } });
+      }
+      shown.glyphs.forEach(function (g, i) {
+        if (g.space) return;
+        if (g.missing) {
+          ink.appendChild(sv('rect', { x: (g.x + g.w * 0.1) * s, y: asc - M.upm * 0.7 * s, width: g.w * 0.8 * s, height: M.upm * 0.7 * s, fill: 'none', stroke: '#b9b9b2', 'stroke-width': 1 }));
+          return;
+        }
+        if (g.o && ensure(g.o)) ink.appendChild(sv('use', { href: '#o-' + g.o, fill: inFocus && !inFocus[i] ? CONTEXT_INK : null, transform: 'translate(' + ((g.x + g.shift) * s).toFixed(2) + ' ' + asc.toFixed(2) + ') scale(' + s + ' ' + (-s) + ')' }));
+      });
+      if (opts.ghost && lb && !opts.showBase) {
+        // group opacity, so glyphs that touch within one version don't darken each other
+        var prev = sv('g', { fill: PREV, opacity: PREV_OPACITY });
+        lb.glyphs.forEach(function (g) {
+          if (g.o && !g.space && ensure(g.o)) prev.appendChild(sv('use', { href: '#o-' + g.o, transform: 'translate(' + ((g.x + g.shift) * s).toFixed(2) + ' ' + asc.toFixed(2) + ') scale(' + s + ' ' + (-s) + ')' }));
+        });
+        svg.appendChild(prev);
+        ink.setAttribute('opacity', CUR_OPACITY);
+      }
+      svg.appendChild(ink);
+      if (opts.edges) opts.edges(svg, s, asc, H);
+      wrap.appendChild(svg);
+      var bw = Math.max(14, Math.min(22, opts.size * 0.16));
+      lc.glyphs.forEach(function (g, i) {
+        var x = (opts.showBase && lb ? lb.glyphs[i].x : g.x) * s;
+        var prev = i > 0 ? lc.glyphs[i - 1] : null;
+        if (g.gap && opts.pick) {
+          var key = g.gap.L + ' ' + g.gap.R;
+          wrap.appendChild(h('button', {
+            type: 'button', class: 'gapbtn', 'aria-label': 'Gap ' + g.gap.L + ' / ' + g.gap.R, 'aria-pressed': String(key === opts.selKey),
+            style: 'left:' + (x - bw / 2) + 'px;top:' + padTop + 'px;width:' + bw + 'px;height:' + H + 'px',
+            onclick: (function (gap) { return function () { opts.pick(gap); }; })(g.gap)
+          }));
+        }
+        if (g.gap && opts.pin) {
+          var p = opts.pin(g.gap);
+          if (p) wrap.appendChild(h('span', { class: 'pin', style: 'left:' + x + 'px;top:' + padTop + 'px;background:' + p.color }, p.n));
+        }
+        if (opts.label && i > 0) {
+          var lab = opts.label(g, i, prev);
+          // a Δ label (fade) belongs to the current version: it stays put while the
+          // compared version is shown, and fades instead of moving with the glyphs
+          var lx = lab && lab.fade ? g.x * s : x;
+          if (lab) wrap.appendChild(h('span', { class: 'lab' + (lab.dashed ? ' dashed' : '') + (lab.strong ? ' strong' : '') + (lab.fade ? ' fadeable' : ''),
+            style: 'left:' + lx + 'px;top:' + (padTop + H + 2) + 'px;color:' + lab.fg + ';background:' + (lab.dashed ? '#fff' : lab.bg) + (lab.dashed ? ';border-color:' + lab.fg : '') }, lab.text));
+        }
+      });
+      return wrap;
+    }
+
+    function same(snap) { return { metrics: snap, kern: snap, outline: snap }; }
+    function pic(names, size, opts) {
+      opts = opts || {};
+      return renderRun({ tokens: names.map(function (n) { return { name: n, text: n }; }), size: size, cur: same(opts.snap || M.cur), padTop: 0, padBottom: 0, ink: opts.ink });
+    }
+
+    function netParts(snap, mid, L, R) {
+      var a = snap.layer(mid, L), b = snap.layer(mid, R), k = snap.kern(mid, L, R);
+      return { rsb: a ? a.r : null, lsb: b ? b.l : null, k: k.v, level: k.level, exists: k.exists };
+    }
+    function netDelta(base, cur, mid, L, R, measure) {
+      if (!base.has(L) || !base.has(R)) return 0;
+      var c = netParts(cur, mid, L, R), b = netParts(base, mid, L, R);
+      var dk = c.k - b.k;
+      var ds = (c.rsb != null && b.rsb != null ? c.rsb - b.rsb : 0) + (c.lsb != null && b.lsb != null ? c.lsb - b.lsb : 0);
+      return measure === 'kern' ? dk : measure === 'space' ? ds : dk + ds;
+    }
+    /** what to draw as "current" for the chosen measure */
+    function curSpecFor(base) {
+      var m = S.cmp.measure, cur = M.cur;
+      if (!base) return same(cur);
+      return m === 'kern' ? { metrics: base, kern: cur, outline: base } : m === 'space' ? { metrics: cur, kern: base, outline: cur } : same(cur);
+    }
+
+    // ------------------------------------------------------------------ notes helpers
+
+    function notesFor(L, R) {
+      return N.all().filter(function (a) { return SD.noteHits(a, M.cur, L, R) > 0; });
+    }
+    function pinFor(gap) {
+      var list = notesFor(gap.L, gap.R);
+      if (!list.length) return null;
+      list.sort(function (a, b) { return a.n - b.n; });
+      return { n: list[0].n + (list.length > 1 ? '+' : ''), color: SD.TYPES[list[0].type].pin };
+    }
+    function who(a) { return a.local ? 'You' : a.author === 'designer' ? 'Designer' : 'Client'; }
+    function threadItem(a) {
+      var t = SD.TYPES[a.type] || SD.TYPES.question;
+      return h('article', { class: 'thread' + (a.status === 'resolved' ? ' res' : '') },
+        h('div', { class: 'meta' },
+          h('span', { class: 'num', style: 'background:' + t.pin }, a.n),
+          h('span', { class: 'tchip', style: 'color:' + t.fg + ';background:' + t.bg }, t.label),
+          resolvedChip(a),
+          a.suggest ? h('span', { class: 'sug' }, 'suggests ' + SD.fmt(a.suggest)) : null,
+          h('span', { class: 'spacer' }),
+          h('span', { class: 'xs muted' }, who(a) + ' · ' + fmtDate(a.date))),
+        h('p', null, a.text),
+        (a.replies || []).map(function (r) { return h('div', { class: 'reply' }, h('b', null, r.author === 'designer' ? 'Designer: ' : 'Client: '), r.text); }),
+        h('div', { class: 'meta' },
+          h('span', { class: 'xs muted' }, SD.scopeText(M, a)),
+          h('span', { class: 'spacer' }),
+          a.local ? h('button', { type: 'button', class: 'linkbtn', onclick: function () { N.remove(a.id); render(); } }, 'Delete') : null,
+          a.type !== 'change-note' ? h('button', { type: 'button', class: 'linkbtn', onclick: function () { N.setStatus(a.id, a.status === 'resolved' ? 'open' : 'resolved'); render(); } }, a.status === 'resolved' ? 'Reopen' : 'Mark resolved') : null));
+    }
+    function resolvedChip(a) {
+      return a.status === 'resolved' ? h('span', { class: 'tchip resolved' }, '\u2713 Resolved') : null;
+    }
+    function typeChips(current, onPick, list) {
+      return h('div', { class: 'chips', role: 'group', 'aria-label': 'Annotation type' }, (list || ['too-tight', 'too-loose', 'collision', 'question', 'looks-good']).map(function (id) {
+        var t = SD.TYPES[id], on = id === current;
+        return h('button', { type: 'button', class: 'typechip', 'aria-pressed': String(on), onclick: function () { onPick(id); },
+          style: on ? 'border-color:' + t.fg + ';background:' + t.bg + ';color:' + t.fg : null },
+          h('span', { class: 'dot', style: 'background:' + t.pin }), t.label);
+      }));
+    }
+    /**
+     * − / + nudge by `step`; the value itself can be typed (Enter or leaving the
+     * field applies it, ↑/↓ change it by 1, with Shift by 10). The buttons keep
+     * focus in the field and start from what is typed there, so typing and then
+     * clicking + works.
+     */
+    function stepper(value, onChange, step, fk) {
+      function parse(text) {
+        var n = parseInt(String(text).replace(/[\u2212\u2013]/g, '-').replace(/[^0-9+-]/g, ''), 10);
+        return isNaN(n) ? null : Math.max(-999, Math.min(999, n));
+      }
+      function typed() { var n = parse(input.value); return n == null ? value : n; }
+      function commit() {
+        var n = parse(input.value);
+        if (n == null || n === value) { input.value = SD.fmt(value); return; }
+        onChange(n);
+      }
+      function nudge(d) { return h('button', { type: 'button', 'aria-label': d < 0 ? 'Tighter' : 'Looser', 'data-fk': fk ? fk + (d < 0 ? '-dec' : '-inc') : null,
+        onmousedown: function (e) { if (document.activeElement === input) e.preventDefault(); },
+        onclick: function () { onChange(typed() + d); } }, d < 0 ? '\u2212' : '+'); }
+      var input = h('input', { type: 'text', inputmode: 'numeric', 'aria-label': 'Suggested value in font units', 'data-fk': fk, value: SD.fmt(value), style: 'color:' + SD.tone(value).fg,
+        onfocus: function () { input.select(); },
+        // after Tab or a click elsewhere: apply once focus has moved, so the redraw keeps it there
+        onchange: function () { setTimeout(commit, 0); },
+        onkeydown: function (e) {
+          if (e.key === 'Enter') { e.preventDefault(); commit(); }
+          else if (e.key === 'ArrowUp' || e.key === 'ArrowDown') { e.preventDefault(); onChange(typed() + (e.key === 'ArrowUp' ? 1 : -1) * (e.shiftKey ? 10 : 1)); }
+        } });
+      return h('div', { class: 'stepper' }, nudge(-step), input, nudge(step));
+    }
+    /** Kern On is only mentioned for model pairs */
+    function konChip(snap, mid, L, R) {
+      if (snap.kernOnStatus(mid, L, R) !== 'model') return null;
+      return h('span', { class: 'chip' }, h('span', { class: 'dot', style: 'background:#c2410c' }), 'Kern On model');
+    }
+
+    // ------------------------------------------------------------------ chrome
+
+    function Header() {
+      var cur = M.cur;
+      var masterCtl = M.masters.length <= 4
+        ? seg(M.masters.map(function (m) { return [m.id, m.name]; }), S.mid, function (id) { S.mid = id; savePrefs(); render(); }, 'dark')
+        : h('select', { class: 'select', 'aria-label': 'Master', value: S.mid, onchange: function (e) { S.mid = e.target.value; savePrefs(); render(); } },
+          M.masters.map(function (m) { return h('option', { value: m.id }, m.name); }));
+      return h('header', { class: 'top' },
+        h('div', { class: 'left' },
+          brandMark(),
+          h('span', { class: 'vsep', 'aria-hidden': 'true' }),
+          h('div', { class: 'family' }, h('b', null, M.family), h('span', null, cur.label + ' · ' + fmtDate(cur.date) + ' · ' + M.upm + ' UPM')),
+          masterCtl),
+        sendButton());
+    }
+
+    function Nav() {
+      function tab(label, view, badge) {
+        var on = view === 'proof' ? S.view !== 'notes' : S.view === view;
+        return h('button', { type: 'button', class: 'tab' + (on ? ' on' : ''), 'aria-current': on ? 'page' : null, onclick: function () { go(view); } },
+          label, badge != null ? h('span', { class: 'badge' }, badge) : null);
+      }
+      return h('nav', { class: 'modes', 'aria-label': 'Modes' },
+        tab('Proof', 'proof'),
+        tab('Notes', 'notes', N.all().length));
+    }
+
+    function setCompare(on) {
+      S.compare = on;
+      S.cmp.hold = false;
+      if (!on && (S.view === 'pairs' || S.view === 'glyphs')) S.view = 'proof';
+      render();
+    }
+
+    /**
+     * The compare line sits under Proof (it has no effect on Notes). The
+     * checkbox and version picker are always usable; the options after them
+     * only work while Compare is ticked.
+     */
+    function CompareRow() {
+      if (!hasChanges || S.view === 'notes') return null;
+      var on = !!B(), base = picked(), C = S.cmp, cur = M.cur;
+      var earlier = M.earlier(cur);
+      var showItems = [['proof', 'Text'], ['pairs', 'Changed pairs', pairsDiff().length], ['glyphs', 'Respaced glyphs', glyphsDiff().length]];
+      var switchable = S.view === 'proof' || S.view === 'pairs';
+      var showing = on && (C.showPrev || C.hold);
+      return h('div', { class: 'subbar' + (on ? ' on' : ''), role: 'region', 'aria-label': 'Compare' },
+        h('div', { class: 'l' },
+          h('label', { class: 'comparebox' },
+            h('input', { type: 'checkbox', checked: on, onchange: function (e) { setCompare(e.target.checked); } }),
+            'Compare'),
+          h('select', { class: 'select', 'aria-label': 'Compare with', value: S.baseId,
+            onchange: function (e) { S.baseId = e.target.value; S.pairs.sel = null; S.glyphs.sel = null; setCompare(true); } },
+            earlier.slice().reverse().map(function (s) { return h('option', { value: s.id, title: s.commit && s.commit.summary ? s.commit.summary : null }, 'with ' + s.label + ' \u00b7 ' + fmtDate(s.date)); })),
+          h('span', { class: 'vsep', style: 'height:24px', 'aria-hidden': 'true' }),
+          h('fieldset', { class: 'opts', disabled: !on, 'aria-label': 'Compare options' },
+            labelled('Show', seg(showItems, S.view, function (v) { go(v); })),
+            switchable ? labelled('View', seg([['overlay', 'Overlay'], ['switch', 'Switch'], ['stacked', 'Stacked']], C.view, function (v) { C.view = v; C.showPrev = false; render(); })) : null,
+            S.view !== 'glyphs' ? labelled('Measure', seg([['net', 'Net'], ['kern', 'Kerning'], ['space', 'Spacing']], C.measure, function (v) { C.measure = v; render(); })) : null,
+            S.view === 'proof' ? check('\u0394 labels', C.deltas, function (v) { C.deltas = v; render(); }) : null,
+            S.view === 'proof' ? check('Exaggerate \u00d74', C.exag, function (v) { C.exag = v; render(); }) : null,
+            switchable && C.view === 'switch' ? h('div', { class: 'chips' },
+              h('button', { type: 'button', class: 'btn sm' + (!showing ? ' primary' : ''), 'aria-pressed': String(!showing), onclick: function () { C.showPrev = false; render(); } }, h('kbd', null, '1'), CURRENT),
+              h('button', { type: 'button', class: 'btn sm' + (showing ? ' primary' : ''), 'aria-pressed': String(showing), onclick: function () { C.showPrev = true; render(); } }, h('kbd', null, '2'), base.label)) : null,
+            switchable && C.view === 'overlay' ? holdButton('Hold for ' + base.label) : null)));
+    }
+    /** a segmented control named for screen readers, without a visible label */
+    function labelled(name, el) { el.setAttribute('aria-label', name); return el; }
+
+    function go(view) {
+      if ((view === 'pairs' || view === 'glyphs') && !B()) view = 'proof';
+      S.view = view;
+      render();
+      window.scrollTo(0, 0);
+    }
+
+    // ------------------------------------------------------------------ proof view
+
+    function presetOptions() {
+      var opts = SD.PRESETS.map(function (p) { return [p.id, p.label]; });
+      M.samples.forEach(function (s, i) { opts.push(['font:' + i, s.name || 'Sample ' + (i + 1)]); });
+      opts.push(['allpairs', 'Every kerned group pair']);
+      opts.push(['custom', 'Custom']);
+      return opts;
+    }
+    function setPreset(id) {
+      var P = S.proof;
+      P.preset = id;
+      P.page = 0;
+      if (id === 'custom') return;
+      if (id === 'allpairs') { P.text = M.allPairsText(S.mid, 0, 120).text; P.size = Math.min(P.size, 64); }
+      else if (id.indexOf('font:') === 0) P.text = M.samples[parseInt(id.slice(5), 10)].text;
+      else P.text = SD.PRESETS.filter(function (p) { return p.id === id; })[0].text;
+      P.sel = null;
+    }
+
+    function proofExtra(prev, name) {
+      var P = S.proof, add = 0, cur = M.cur;
+      if (P.applyAll) {
+        N.all().forEach(function (a) {
+          if (!a.suggest || (a.master && a.master !== S.mid)) return;
+          if (a.anchor.type === 'side') add += a.suggest * SD.noteHits(a, cur, prev, name);
+          else if (prev && name && SD.noteHits(a, cur, prev, name)) add += a.suggest;
+        });
+      }
+      return add + previewExtra(prev, name);
+    }
+    function previewExtra(prev, name) {
+      var P = S.proof;
+      if (!P.preview || !P.sug || !P.sel) return 0;
+      if (P.target === 'rsb') return prev === P.sel.L ? P.sug : 0;
+      if (P.target === 'lsb') return name === P.sel.R ? P.sug : 0;
+      if (!prev || !name) return 0;
+      if (P.scope === 'pair' || !M.cur.groupL(P.sel.L) || !M.cur.groupR(P.sel.R)) return prev === P.sel.L && name === P.sel.R ? P.sug : 0;
+      return M.cur.groupL(prev) === M.cur.groupL(P.sel.L) && M.cur.groupR(name) === M.cur.groupR(P.sel.R) ? P.sug : 0;
+    }
+
+    function pickGap(gap) {
+      var P = S.proof;
+      if (P.sel && P.sel.L === gap.L && P.sel.R === gap.R) P.sel = null;
+      else { P.sel = { L: gap.L, R: gap.R }; P.draft = ''; }
+      render();
+    }
+
+    function ProofView() {
+      var P = S.proof, base = B(), cur = M.cur, C = S.cmp;
+      var lines = M.parse(P.text);
+      if (P.sel && (!cur.has(P.sel.L) || !cur.has(P.sel.R))) P.sel = null;
+      var selKey = P.sel ? P.sel.L + ' ' + P.sel.R : null;
+      var allTotal = P.preset === 'allpairs' ? M.allPairs(S.mid).length : 0;
+      var showBase = base && (C.view === 'switch' ? (C.showPrev || C.hold) : C.view === 'overlay' && C.hold);
+
+      var toolbar = h('div', { class: 'toolbar', 'data-keep': 'proof-toolbar' },
+        h('label', { class: 'field' }, 'Sample',
+          h('select', { class: 'select', value: P.preset, onchange: function (e) { setPreset(e.target.value); render(); } },
+            presetOptions().map(function (o) { return h('option', { value: o[0] }, o[1]); }))),
+        P.preset === 'allpairs' ? h('span', { class: 'pager' },
+          h('button', { type: 'button', class: 'btn sm', disabled: P.page === 0 ? true : null, onclick: function () { P.page--; P.text = M.allPairsText(S.mid, P.page, 120).text; render(); } }, '‹'),
+          'Pairs ' + (P.page * 120 + 1) + '–' + Math.min(allTotal, (P.page + 1) * 120) + ' of ' + allTotal,
+          h('button', { type: 'button', class: 'btn sm', disabled: (P.page + 1) * 120 >= allTotal ? true : null, onclick: function () { P.page++; P.text = M.allPairsText(S.mid, P.page, 120).text; render(); } }, '›')) : null,
+        h('label', { class: 'field' }, 'Size',
+          h('input', { type: 'range', min: 24, max: 200, step: 4, value: P.size, style: 'width:140px;accent-color:#18181b', 'data-fk': 'size',
+            // while dragging, redraw everything but this toolbar: replacing the slider would end the drag
+            oninput: function (e) { P.size = parseInt(e.target.value, 10); e.target.nextSibling.textContent = P.size + ' px'; savePrefs(); render('proof-toolbar'); },
+            onchange: function () { render(); } }),
+          h('span', { class: 'mono', style: 'font-size:12px;color:#18181b;min-width:44px' }, P.size + ' px')),
+        check('Kerning values', P.values, function (v) { P.values = v; render(); }),
+        check('Annotations', P.pins, function (v) { P.pins = v; render(); }),
+        check('Apply all suggestions', P.applyAll, function (v) { P.applyAll = v; render(); }));
+
+      function label(g, i, prev) {
+        var prevName = prev && !prev.space ? prev.name : null;
+        var pv = previewExtra(prevName, g.space ? null : g.name);
+        var isSel = g.gap && g.gap.L + ' ' + g.gap.R === selKey;
+        if (isSel) {
+          var k = g.gap.k.v;
+          if (pv && P.target === 'gap') return { text: SD.fmtv(k) + ' → ' + SD.fmtv(k + pv), fg: '#1d4ed8', dashed: true };
+          if (base && base.has(g.gap.L) && base.has(g.gap.R)) {
+            var kb = base.kern(S.mid, g.gap.L, g.gap.R).v;
+            if (kb !== k) return { text: SD.fmtv(kb) + ' → ' + SD.fmtv(k), fg: '#18181b', bg: '#e8eefc', strong: true };
+          }
+          if (pv) return { text: SD.fmtv(k) + '  ' + SD.fmt(pv), fg: '#1d4ed8', dashed: true };
+          return { text: SD.fmtv(k), fg: '#18181b', bg: '#e8eefc', strong: true };
+        }
+        if (pv && !g.space) return { text: SD.fmt(pv), fg: '#1d4ed8', dashed: true };
+        if (!g.gap) return null;
+        if (base && C.deltas) { var d = netDelta(base, cur, S.mid, g.gap.L, g.gap.R, C.measure); if (d) { var t = SD.tone(d); return { text: 'Δ' + SD.fmt(d), fg: t.fg, bg: t.bg, fade: true }; } }
+        if (P.values && g.gap.k.v) return { text: SD.fmtv(g.gap.k.v), fg: '#55555c', bg: '#f3f3f0' };
+        return null;
+      }
+
+      var runs = [];
+      lines.forEach(function (tokens) {
+        var common = { tokens: tokens, size: P.size, extra: proofExtra, selKey: selKey, pick: pickGap, pin: P.pins ? pinFor : null, label: label };
+        if (base && C.view === 'stacked') {
+          runs.push(h('div', { class: 'stack' },
+            h('span', { class: 'stacklab' }, base.label),
+            renderRun({ tokens: tokens, size: P.size, cur: same(base), padTop: 4, padBottom: 4, ink: '#6b6b73' }),
+            h('span', { class: 'stacklab' }, CURRENT),
+            renderRun(Object.assign({}, common, { cur: curSpecFor(base), base: same(base), ex: C.exag ? 4 : 1, padTop: 22 }))));
+        } else {
+          runs.push(renderRun(Object.assign({}, common, {
+            cur: curSpecFor(base), base: base ? same(base) : null, ex: base && C.exag ? 4 : 1,
+            ghost: base && C.view === 'overlay', showBase: showBase
+          })));
+        }
+      });
+
+      var main = h('main', { class: 'main', onclick: function (e) {
+        if (!P.sel) return;
+        if (e.target.closest && e.target.closest('button, textarea, input, select, a, label')) return;
+        P.sel = null;
+        render();
+      } },
+        h('div', { class: 'textfield' },
+          h('label', { for: 'sd-text' }, 'Text ', h('span', { style: 'font-weight:400;color:#5f5f66' }, '· type or paste, one line per row · /glyphname for unencoded glyphs')),
+          h('textarea', { id: 'sd-text', rows: 2, 'data-fk': 'text', value: P.text, oninput: function (e) { P.text = e.target.value; P.preset = 'custom'; render(); } })),
+        fadeLabels(h('div', { class: 'lines', 'data-sk': 'lines' }, runs), !!showBase, P),
+        h('div', { class: 'legend' },
+          h('b', null, 'Annotations'),
+          ['too-tight', 'too-loose', 'collision', 'question', 'looks-good'].map(function (id) {
+            return h('span', { class: 'item' }, h('span', { class: 'dot', style: 'background:' + SD.TYPES[id].pin }), SD.TYPES[id].label);
+          }),
+          base && C.view === 'overlay' ? [
+            h('span', { class: 'item', style: 'margin-left:8px' }, swatch('#18181b', CUR_OPACITY), CURRENT),
+            h('span', { class: 'item' }, swatch(PREV, PREV_OPACITY), base.label)] : null));
+
+      return [toolbar, h('div', { class: 'body' }, main, Inspector())];
+    }
+
+    function Inspector() {
+      var P = S.proof, cur = M.cur, mid = S.mid;
+      if (!P.sel) {
+        return h('aside', { class: 'side', 'aria-label': 'Gap inspector' },
+          h('div', { class: 'emptystate' },
+            h('b', null, 'Nothing selected'),
+            h('span', null, 'Click the space between two letters to see its kerning and add a note. Click it again, or anywhere outside the text, to deselect.')));
+      }
+      var L = P.sel.L, R = P.sel.R;
+      var gl = cur.groupL(L), gr = cur.groupR(R);
+      var kon = konChip(cur, mid, L, R);
+      var hasGroups = gl && gr;
+      var targets = [['gap', 'Gap ' + L + ' / ' + R], ['rsb', L + ' · right side'], ['lsb', R + ' · left side']];
+      var thread = notesFor(L, R);
+      // the pair, centred, with its kerning groups either side; an empty strut puts the
+      // picture's text baseline on the glyph baseline so the group names line up with it
+      var PAIR_SIZE = 56;
+      var pairPic = pic([L, R], PAIR_SIZE);
+      pairPic.insertBefore(h('span', { class: 'strut', style: 'height:' + (M.ascender * PAIR_SIZE / M.upm).toFixed(1) + 'px' }), pairPic.firstChild);
+
+      return h('aside', { class: 'side', 'aria-label': 'Gap inspector' },
+        h('div', { class: 'pairpic' },
+          h('h2', { class: 'sr' }, L + ' / ' + R + (gl || gr ? ' (' + (gl || L) + ' \u00d7 ' + (gr || R) + ')' : '')),
+          h('span', { class: 'grp l', title: gl ? 'Left kerning group' : null, 'aria-hidden': 'true' }, gl || ''),
+          pairPic,
+          h('span', { class: 'grp r', title: gr ? 'Right kerning group' : null, 'aria-hidden': 'true' }, gr || ''),
+          h('button', { type: 'button', class: 'iconbtn', 'aria-label': 'Deselect', title: 'Deselect', onclick: function () { P.sel = null; render(); } },
+            icon('M6 6l12 12M18 6L6 18'))),
+        kon ? h('div', { class: 'chips' }, kon) : null,
+        h('section', { class: 'blk', style: 'gap:10px' },
+          h('h3', { class: 'cap' }, 'Annotate'),
+          seg(targets, P.target, function (t) { P.target = t; P.sug = !P.type ? 0 : t === 'gap' ? SD.TYPES[P.type].sug : Math.round(SD.TYPES[P.type].sug * 0.6); render(); }, 'full'),
+          typeChips(P.type, function (t) { P.type = t; P.sug = P.target === 'gap' ? SD.TYPES[t].sug : Math.round(SD.TYPES[t].sug * 0.6); render(); }),
+          h('div', { class: 'box' },
+            h('span', { class: 'small', style: 'font-weight:600' }, 'Suggest'),
+            stepper(P.sug, function (v) { P.sug = v; render(); }, P.target === 'gap' ? 5 : 2, 'proof-sug'),
+            P.target === 'gap' && hasGroups ? labelled('Scope', seg([['pair', 'Pair only', null, 'Just ' + L + ' / ' + R], ['group', 'All members', null, 'Every ' + gl + ' \u00d7 ' + gr + ' pair']], P.scope, function (v) { P.scope = v; render(); })) : null,
+            h('label', { class: 'check', style: 'font-size:12px;min-height:0;flex-basis:100%' }, h('input', { type: 'checkbox', checked: P.preview, style: 'accent-color:#1d4ed8', onchange: function (e) { P.preview = e.target.checked; render(); } }), 'Preview in text')),
+          h('label', { for: 'sd-note', class: 'small', style: 'font-weight:600' }, 'Comment'),
+          h('textarea', { id: 'sd-note', class: 'note', rows: 3, 'data-fk': 'proof-note', value: P.draft, oninput: function (e) { P.draft = e.target.value; } }),
+          h('button', { type: 'button', class: 'btn primary', style: 'align-self:flex-end', onclick: addProofNote }, 'Add')),
+        h('section', { class: 'blk' },
+          h('h3', { class: 'cap' }, 'This pair'),
+          thread.length ? thread.map(function (a) { return threadItem(a); }) : h('p', { class: 'empty', style: 'font-size:12px' }, 'No annotations for this pair yet.')));
+    }
+
+    function addProofNote() {
+      var P = S.proof, cur = M.cur, L = P.sel.L, R = P.sel.R;
+      var text = (P.draft || '').trim();
+      if (!P.type) { toast('Pick what kind of note this is first: too tight, too loose, …'); return; }
+      if (!text && !P.sug) { toast('Write a comment or suggest a value first.'); return; }
+      var anchor = P.target === 'gap'
+        ? { type: 'pair', l: L, r: R, kl: cur.groupL(L), kr: cur.groupR(R), scope: cur.groupL(L) && cur.groupR(R) ? P.scope : 'pair' }
+        : { type: 'side', glyph: P.target === 'rsb' ? L : R, side: P.target === 'rsb' ? 'right' : 'left' };
+      N.add({ anchor: anchor, master: S.mid, type: P.type, suggest: P.sug || null, text: text || '(no comment)' });
+      P.draft = '';
+      P.type = null;
+      P.sug = 0;
+      render();
+      toast('Annotation added. It is kept in this browser until you export it.');
+    }
+
+    // ------------------------------------------------------------------ notes view
+
+
+    function noteLines(a) {
+      var an = a.anchor || {}, mid = a.master || S.mid, out = [];
+      if (!M.masters.some(function (m) { return m.id === mid; })) mid = S.mid;
+      var tokens, extra;
+      if (an.type === 'pair' && M.cur.has(an.l) && M.cur.has(an.r)) {
+        tokens = M.parse(M.contexts(an.l, an.r)[0])[0];
+        extra = function (p, n) { return p === an.l && n === an.r ? a.suggest : 0; };
+      } else if (an.type === 'side' && M.cur.has(an.glyph)) {
+        tokens = M.parse(M.spacingStrings(an.glyph)[0] || M.tok(an.glyph))[0];
+        extra = function (p, n) { return a.suggest * SD.noteHits(a, M.cur, p, n); };
+      } else return out;
+      out.push(h('div', { class: 'nline' }, h('span', { style: 'color:#5f5f66' }, a.suggest ? 'Now' : ''),
+        renderRun({ tokens: tokens, size: 40, mid: mid, cur: same(M.cur), padTop: 2, padBottom: 2 })));
+      if (a.suggest) out.push(h('div', { class: 'nline' }, h('span', { style: 'color:#1d4ed8' }, 'Suggested'),
+        renderRun({ tokens: tokens, size: 40, mid: mid, cur: same(M.cur), extra: extra, padTop: 2, padBottom: 2, ink: '#1d4ed8' })));
+      return out;
+    }
+
+    function showInContext(a) {
+      var an = a.anchor || {};
+      if (a.master && M.masters.some(function (m) { return m.id === a.master; })) S.mid = a.master;
+      if (an.type === 'pair' && M.cur.has(an.l) && M.cur.has(an.r)) {
+        S.proof.text = M.contexts(an.l, an.r).join('\n');
+        S.proof.sel = { L: an.l, R: an.r };
+        S.proof.target = 'gap';
+      } else if (an.type === 'side' && M.cur.has(an.glyph)) {
+        var strs = M.spacingStrings(an.glyph);
+        S.proof.text = strs.join('\n');
+        var t = M.parse(strs[0])[0], idx = t.findIndex(function (x) { return x.name === an.glyph; });
+        if (idx > 0 && t[idx - 1].name) S.proof.sel = { L: t[idx - 1].name, R: an.glyph };
+        if (an.side === 'right' && t[idx + 1] && t[idx + 1].name) S.proof.sel = { L: an.glyph, R: t[idx + 1].name };
+        S.proof.target = an.side === 'right' ? 'rsb' : 'lsb';
+      }
+      S.proof.preset = 'custom';
+      go('proof');
+    }
+
+    function NotesView() {
+      var Q = S.notes, all = N.all();
+      var byAnchor = function (a) { return Q.anchor === 'all' || (a.anchor && a.anchor.type === Q.anchor); };
+      var counts = function (f) { return all.filter(function (a) { return byAnchor(a) && (f === 'all' || a.type === f); }).length; };
+      var shown = all.filter(function (a) { return byAnchor(a) && (Q.filter === 'all' || a.type === Q.filter) && !(Q.hideResolved && a.status === 'resolved'); });
+      shown.sort(function (a, b) { return SD.TYPE_ORDER.indexOf(a.type) - SD.TYPE_ORDER.indexOf(b.type) || a.n - b.n; });
+
+      var toolbar = h('div', { class: 'toolbar' },
+        seg([['all', 'All', counts('all')]].concat(SD.TYPE_ORDER.map(function (t) { return [t, t === 'change-note' ? 'Change notes' : SD.TYPES[t].label, counts(t)]; })), Q.filter, function (v) { Q.filter = v; render(); }),
+        seg([['all', 'All anchors'], ['pair', 'Pairs'], ['side', 'Glyph sides']], Q.anchor, function (v) { Q.anchor = v; render(); }),
+        check('Hide resolved', Q.hideResolved, function (v) { Q.hideResolved = v; render(); }));
+
+      var cards = shown.map(function (a) {
+        var t = SD.TYPES[a.type] || SD.TYPES.question, an = a.anchor || {};
+        var isModel = an.type === 'pair' && M.cur.has(an.l) && M.cur.has(an.r) && M.cur.kernOnStatus(a.master || S.mid, an.l, an.r) === 'model';
+        return h('article', { class: 'ncard' + (a.status === 'resolved' ? ' res' : '') },
+          h('div', { class: 'lft' }, noteLines(a)),
+          h('div', { class: 'rgt' },
+            h('div', { class: 'nmeta' },
+              h('span', { class: 'num', style: 'background:' + t.pin + ';min-width:22px;height:22px' }, a.n),
+              h('span', { class: 'tchip', style: 'color:' + t.fg + ';background:' + t.bg }, t.label),
+              resolvedChip(a),
+              h('b', { style: 'font-size:13px' }, SD.anchorText(M, a)),
+              h('span', { class: 'small muted' }, SD.scopeText(M, a)),
+              h('span', { class: 'spacer' }),
+              h('span', { class: 'small muted' }, who(a) + ' · ' + fmtDate(a.date))),
+            h('p', null, a.text),
+            (a.replies || []).map(function (r) { return h('div', { class: 'reply' }, h('b', null, r.author === 'designer' ? 'Designer: ' : 'Client: '), r.text); }),
+            h('div', { class: 'chips', style: 'align-items:center' },
+              a.suggest ? h('span', { class: 'sug' }, 'suggests ' + SD.fmt(a.suggest)) : null,
+              isModel && a.suggest ? h('span', { class: 'tag kon', style: 'font-size:12px;padding:2px 8px;border-radius:999px' }, 'Kern On model: edit the model in Kern On') : null,
+              h('span', { class: 'spacer' }),
+              h('button', { type: 'button', class: 'btn', onclick: function () { showInContext(a); } }, 'Show in context'),
+              a.type !== 'change-note' ? h('button', { type: 'button', class: 'btn', 'aria-pressed': String(a.status === 'resolved'), onclick: function () { N.setStatus(a.id, a.status === 'resolved' ? 'open' : 'resolved'); render(); } }, a.status === 'resolved' ? 'Reopen' : 'Mark resolved') : null,
+              a.local ? h('button', { type: 'button', class: 'linkbtn', onclick: function () { N.remove(a.id); render(); } }, 'Delete') : null)));
+      });
+
+      return [toolbar, h('div', { class: 'body' },
+        h('main', { class: 'main', style: 'background:transparent;padding:20px 24px 28px;gap:12px' },
+          h('h1', { style: 'font-size:18px;font-weight:600;margin-bottom:4px' }, 'Annotations'),
+          cards.length ? cards : h('p', { class: 'empty' }, all.length ? 'No annotations match these filters.' : 'No annotations yet. Click a gap in Proof to add one.')))];
+    }
+
+    // ------------------------------------------------------------------ sending notes
+
+    function brandMark() {
+      var mark = h('span', { class: 'mark', 'aria-hidden': 'true' });
+      mark.innerHTML = BRAND_SVG;
+      // on the website the name leads back to the list of opened proofs
+      return HOSTED
+        ? h('button', { type: 'button', class: 'brand', title: 'All proofs', onclick: function () { location.href = location.pathname; } }, mark, 'rednotes')
+        : h('div', { class: 'brand' }, mark, 'rednotes');
+    }
+
+    var SYNC = DATA.sync || null;
+    var sentKey = 'rednotes:sent:' + M.proofId + ':' + M.cur.id;
+    var sending = false;
+
+    var dataStatus = {};
+    (DATA.notes || []).forEach(function (n) { dataStatus[n.id] = n.status || 'open'; });
+
+    /**
+     * What the client has to say: the notes written here, and earlier notes from the file
+     * whose status they changed. Untouched notes from the file stay out, so an older proof
+     * can't undo what was decided since. The designer's change notes never go.
+     */
+    function annotationList() {
+      return N.all()
+        .filter(function (a) { return a.type !== 'change-note' && (a.local || a.status !== (dataStatus[a.id] || 'open')); })
+        .sort(function (a, b) { return SD.TYPE_ORDER.indexOf(a.type) - SD.TYPE_ORDER.indexOf(b.type) || (a.id < b.id ? -1 : 1); });
+    }
+    function annotationRecords(list) {
+      return list.map(function (a) {
+        return { id: a.id, anchor: a.anchor, master: a.master || null, masterName: M.masterName(a.master), type: a.type,
+          suggest: a.suggest || null, status: a.status, author: a.author || 'client', date: a.date, snapshot: a.snapshot || M.cur.id, text: a.text };
+      });
+    }
+    /** what is sent: the notes, and which versions the client was looking at */
+    function notesPayload() {
+      var base = M.defaultBase;
+      return {
+        rednotes: 1, proofId: M.proofId, font: M.family, proof: M.cur.label,
+        snapshot: M.cur.id, commit: M.cur.commit ? M.cur.commit.sha || null : null,
+        baseline: base ? base.id : null, baselineCommit: base && base.commit ? base.commit.sha || null : null,
+        annotations: annotationRecords(annotationList())
+      };
+    }
+    /** anything new or changed since the last send from this browser */
+    function unsent() {
+      var list = annotationRecords(annotationList());
+      var before = SD.storage.get(sentKey);
+      return before ? SD.fingerprint(JSON.stringify(list)) !== before : list.length > 0;
+    }
+    function senderId() {
+      var id = SD.storage.get('rednotes:sender');
+      if (!id) {
+        var b = new Uint8Array(12);
+        crypto.getRandomValues(b);
+        id = Array.prototype.map.call(b, function (x) { return ('0' + x.toString(16)).slice(-2); }).join('');
+        SD.storage.set('rednotes:sender', id);
+      }
+      return id;
+    }
+    /** filled while there are notes that have not been sent yet */
+    function sendButton() {
+      var pending = unsent();
+      return h('button', { type: 'button', class: 'btn' + (pending ? ' primary' : ''), disabled: sending ? true : null, onclick: sendNotes },
+        icon(ICON_SEND, pending ? '#fff' : null), sending ? 'Sending…' : 'Send notes');
+    }
+    /** encrypt in the browser, then post to the Worker; a proof exported without sync settings saves a file instead */
+    function sendNotes() {
+      if (sending) return;
+      var payload = notesPayload();
+      if (!payload.annotations.length && !SD.storage.get(sentKey)) { toast('Add a note first.'); return; }
+      var text = JSON.stringify(payload);
+      var done = function () { SD.storage.set(sentKey, SD.fingerprint(JSON.stringify(payload.annotations))); };
+      if (!SYNC || !SYNC.url || !SYNC.token || !SYNC.key || !SYNC.proof) {
+        saveFile(text);
+        done();
+        render();
+        return;
+      }
+      sending = true;
+      render();
+      var sender = senderId();
+      SD.seal(SYNC.key, text, SYNC.proof + '|' + sender).then(function (box) {
+        return fetch(SYNC.url.replace(/\/$/, '') + '/v1/notes', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + SYNC.token },
+          body: JSON.stringify({ proof: SYNC.proof, sender: sender, label: SYNC.label || '', count: payload.annotations.length, iv: box.iv, ct: box.ct, tag: box.tag })
+        });
+      }).then(function (res) {
+        if (!res.ok) throw new Error('HTTP ' + res.status);
+        done();
+        sending = false;
+        render();
+        toast('Notes sent.');
+      }).catch(function () {
+        sending = false;
+        render();
+        toast('Couldn’t send the notes. Check your connection and try again.');
+      });
+    }
+    function saveFile(text) {
+      var blob = new Blob([text], { type: 'application/json' });
+      var a = h('a', { href: URL.createObjectURL(blob), download: 'notes-' + M.family.replace(/\s+/g, '') + '-' + M.cur.label.replace(/\s+/g, '') + '.json' });
+      document.body.appendChild(a);
+      a.click();
+      setTimeout(function () { URL.revokeObjectURL(a.href); a.remove(); }, 1000);
+      toast('Notes saved as a file.');
+    }
+
+    // ------------------------------------------------------------------ compare: changed pairs
+
+    var cache = {};
+    function pairsDiff() {
+      var k = 'p|' + S.baseId + '|' + S.mid;
+      return cache[k] || (cache[k] = SD.diffPairs(picked(), M.cur, S.mid));
+    }
+    function glyphsDiff() {
+      var k = 'g|' + S.baseId + '|' + S.mid;
+      return cache[k] || (cache[k] = SD.diffGlyphs(picked(), M.cur, S.mid));
+    }
+
+    /**
+     * While the compared version is held up (Option or the Hold button) the Δ labels
+     * fade out, and back in on release. Each render rebuilds the labels, so they start
+     * in the previous state and switch on the next frame to let the transition run.
+     */
+    function fadeLabels(el, hidden, Q) {
+      var labs = el.querySelectorAll('.lab.fadeable');
+      Array.prototype.forEach.call(labs, function (l) { l.classList.toggle('out', !!Q.labelsHidden); });
+      if (!!Q.labelsHidden !== hidden) {
+        afterRender.push(function () {
+          requestAnimationFrame(function () { Array.prototype.forEach.call(labs, function (l) { l.classList.toggle('out', hidden); }); });
+        });
+      }
+      Q.labelsHidden = hidden;
+      return el;
+    }
+    /** stage content width before it has been measured: list 290, side panel 300, paddings 56 */
+    function estimateStageWidth() {
+      var w = window.innerWidth;
+      return w >= 1180 ? w - 290 - 300 - 58 : w >= 850 ? w - 290 - 58 : w - 58;
+    }
+    function measured(e) { var m = S.cmp.measure; return m === 'kern' ? e.dk : m === 'space' ? e.ds : e.net; }
+
+    function PairsChanges() {
+      var Q = S.pairs, C = S.cmp, base = B(), cur = M.cur, mid = S.mid;
+      var entries = pairsDiff();
+      var notesAll = N.all();
+      function annsFor(e) { return notesAll.filter(function (a) { return SD.noteHits(a, cur, e.L, e.R) > 0; }); }
+      var tests = {
+        all: function () { return true; },
+        kon: function (e) { return !!SD.konChange(e) || e.konC === 'model' || e.konP === 'model'; },
+        exc: function (e) { return e.exception; },
+        annotated: function (e) { return annsFor(e).length > 0; }
+      };
+      var basic = entries.filter(function (e) {
+        if (Q.hideComp && e.net === 0 && (e.dk !== 0 || e.ds !== 0) && !e.stale && !SD.konChange(e)) return false;
+        return Math.abs(measured(e)) >= Q.thr || e.stale || (SD.konChange(e) && measured(e) === 0);
+      });
+      var hiddenComp = entries.filter(function (e) { return e.net === 0 && (e.dk !== 0 || e.ds !== 0) && !e.stale && !SD.konChange(e); }).length;
+      var list = basic.filter(tests[Q.filter]);
+      list.sort(function (a, b) { return Math.abs(measured(b)) - Math.abs(measured(a)); });
+      if (!Q.keyOnly) {
+        var expanded = [];
+        list.forEach(function (e) {
+          expanded.push(e);
+          SD.memberOutliers(base, cur, mid, e, 20).forEach(function (o) { if (Math.abs(measured(o)) >= Q.thr) expanded.push(o); });
+        });
+        list = expanded;
+      }
+      var sel = null;
+      if (Q.sel) sel = list.filter(function (e) { return e.id === Q.sel; })[0] || entries.filter(function (e) { return e.id === Q.sel; })[0];
+      if (!sel) sel = list[0] || null;
+
+      var toolbar = h('div', { class: 'toolbar' },
+        h('div', { class: 'field' }, 'Show', seg([['all', 'All changes'], ['kon', 'Kern On models'], ['exc', 'Exceptions'], ['annotated', 'Annotated']].map(function (f) { return [f[0], f[1], basic.filter(tests[f[0]]).length]; }), Q.filter, function (v) { Q.filter = v; render(); })),
+        check('Key glyphs only', Q.keyOnly, function (v) { Q.keyOnly = v; render(); }),
+        check('Hide compensated', Q.hideComp, function (v) { Q.hideComp = v; render(); }),
+        h('label', { class: 'field', style: 'font-weight:400;color:#18181b;font-size:13px' }, 'Min |Δ|',
+          h('select', { class: 'select', value: String(Q.thr), onchange: function (e) { Q.thr = parseInt(e.target.value, 10); render(); } },
+            [['0', 'any'], ['5', '5 units'], ['10', '10 units'], ['20', '20 units']].map(function (o) { return h('option', { value: o[0] }, o[1]); }))));
+
+      var rows = list.slice(0, Q.limit).map(function (e) {
+        var v = measured(e), t = SD.tone(v), anns = annsFor(e);
+        var gl = e.lk.charAt(0) === '@' ? e.lk : e.L, gr = e.rk.charAt(0) === '@' ? e.rk : e.R;
+        return h('button', { type: 'button', class: 'prow', 'aria-pressed': String(sel && sel.id === e.id), onclick: function () { Q.sel = e.id; Q.ctx = 0; render(); } },
+          h('span', { class: 'g' }, pic([e.L, e.R], 30)),
+          h('span', { class: 't' },
+            h('b', null, e.L + ' / ' + e.R),
+            h('span', null, gl + ' × ' + gr),
+            h('span', { class: 'tags' },
+              SD.entryTags(e).map(function (tg) { return h('span', { class: 'tag' + (tg.kind === 'kon' ? ' kon' : tg.kind === 'warn' ? ' warn' : '') }, tg.label); }),
+              anns.length ? h('span', { class: 'num', style: 'background:' + SD.TYPES[anns[0].type].pin + ';min-width:18px;height:18px;font-size:10px' }, anns[0].n + (anns.length > 1 ? '+' : '')) : null)),
+          h('span', { class: 'pill', style: 'color:' + t.fg + ';background:' + t.bg }, SD.fmt(v)));
+      });
+      var foot = [];
+      if (Q.keyOnly) foot.push('Member pairs follow their key pair. Untick “Key glyphs only” to see members that moved differently.');
+      if (Q.hideComp && hiddenComp) foot.push(hiddenComp + ' compensated pair' + (hiddenComp === 1 ? '' : 's') + ' hidden (net ±0)');
+
+      var listEl = h('aside', { class: 'list', 'aria-label': 'Changed pairs' },
+        h('div', { class: 'head' }, h('h2', { class: 'h' }, 'Changed pairs'), h('span', { class: 'small muted' }, list.length + ' shown · largest first')),
+        h('div', { class: 'rows' }, rows, list.length > Q.limit ? h('button', { type: 'button', class: 'btn more', onclick: function () { Q.limit += 300; render(); } }, 'Show ' + Math.min(300, list.length - Q.limit) + ' more') : null,
+          !list.length ? h('p', { class: 'empty', style: 'padding:16px' }, 'No changed pairs match.') : null),
+        h('div', { class: 'foot' }, foot.map(function (t) { return h('span', null, t); }),
+          h('span', { class: 'chips', style: 'gap:6px 14px' },
+            h('span', null, h('b', { class: 'mono', style: 'color:#1d4ed8' }, '−'), ' tighter'),
+            h('span', null, h('b', { class: 'mono', style: 'color:#b4430b' }, '+'), ' looser'),
+            h('span', null, 'font units'))));
+
+      if (!sel) return [toolbar, h('div', { class: 'body' }, listEl, h('main', { class: 'main', style: 'padding:24px' }, h('p', { class: 'empty' }, 'Nothing changed since ' + base.label + ' in this master.')))];
+
+      var ctxs = M.contexts(sel.L, sel.R);
+      var ctxIndex = Math.min(Q.ctx, ctxs.length - 1);
+      var tokens = M.parse(ctxs[ctxIndex])[0];
+      // fit the string (current or previous, whichever is wider) to the stage width,
+      // measured after each render; the first render estimates it from the window
+      var units = Math.max(M.layout(tokens, mid, { metrics: cur, kern: cur }).width, M.layout(tokens, mid, { metrics: base, kern: base }).width) || M.upm;
+      var stageW = Q.stageW || estimateStageWidth();
+      var size = Math.max(24, Math.min(150, Math.floor((stageW - 12) * M.upm / units)));
+      afterRender.push(function () {
+        var st = root.querySelector('.stage');
+        if (!st) return;
+        var cs = getComputedStyle(st);
+        var w = Math.round(st.clientWidth - parseFloat(cs.paddingLeft) - parseFloat(cs.paddingRight));
+        if (w > 0 && Math.abs(w - (Q.stageW || 0)) > 4) { Q.stageW = w; render(); }
+      });
+      var showing = C.view === 'switch' ? (C.showPrev || C.hold) : C.view === 'overlay' && C.hold;
+      var selKey = sel.L + ' ' + sel.R;
+      function lab(g) {
+        if (!g.gap) return null;
+        var d = netDelta(base, cur, mid, g.gap.L, g.gap.R, C.measure);
+        if (!d) return null;
+        var t = SD.tone(d);
+        return { text: SD.fmt(d), fg: t.fg, bg: t.bg, fade: true };
+      }
+      var focus = function (g) { return g.L + ' ' + g.R === selKey; };
+      var common = { tokens: tokens, size: size, cur: curSpecFor(base), base: same(base), focus: focus, pin: pinFor };
+      var stage;
+      if (C.view === 'switch') {
+        stage = h('div', { style: 'display:flex;flex-direction:column;gap:4px' },
+          h('span', { class: 'stacklab' }, showing ? base.label : CURRENT),
+          renderRun(Object.assign({}, common, { showBase: showing, ghost: false, pin: null, padTop: 4 })));
+      } else if (C.view === 'stacked') {
+        stage = h('div', { style: 'display:flex;flex-direction:column;gap:4px' },
+          h('span', { class: 'stacklab' }, base.label),
+          renderRun({ tokens: tokens, size: Math.round(size * 0.8), cur: same(base), padTop: 4, padBottom: 4, ink: '#3f3f46', focus: focus }),
+          h('span', { class: 'stacklab', style: 'margin-top:10px' }, CURRENT),
+          renderRun(Object.assign({}, common, { size: Math.round(size * 0.8), ghost: false, label: lab, padTop: 4 })));
+      } else {
+        stage = [
+          fadeLabels(renderRun(Object.assign({}, common, { ghost: true, showBase: showing, label: lab })), showing, Q),
+          h('div', { class: 'chips', style: 'gap:8px 20px;font-size:12px;color:#3f3f46' },
+            h('span', { style: 'display:inline-flex;align-items:center;gap:6px' }, swatch('#18181b', CUR_OPACITY), CURRENT),
+            h('span', { style: 'display:inline-flex;align-items:center;gap:6px' }, swatch(PREV, PREV_OPACITY), base.label))
+        ];
+      }
+
+      var gl = sel.lk.charAt(0) === '@' ? sel.lk : sel.L, gr = sel.rk.charAt(0) === '@' ? sel.rk : sel.R;
+      function fcell(op, label, sub, a, b, strong) {
+        var d = (b == null ? 0 : b) - (a == null ? 0 : a), t = SD.tone(d);
+        return h('div', { style: 'display:flex;align-items:center' },
+          op ? h('span', { class: 'fop', 'aria-hidden': 'true' }, op) : null,
+          h('div', { class: 'fcell' + (strong ? ' strong' : '') },
+            h('span', { class: 'small', style: 'font-weight:600' }, label),
+            h('span', { class: 'xs muted' }, sub),
+            h('span', { style: 'display:flex;align-items:baseline;gap:8px;margin-top:4px' },
+              h('span', { class: 'mono', style: 'font-size:15px;font-weight:' + (strong ? 700 : 500) }, SD.fmtv(a) + ' → ' + SD.fmtv(b)),
+              h('span', { class: 'pill', style: 'font-size:12px;padding:1px 7px;color:' + t.fg + ';background:' + t.bg }, SD.fmt(d)))));
+      }
+      var netP = sel.rsbP != null && sel.lsbP != null ? sel.rsbP + sel.kp + sel.lsbP : null;
+      var netC = sel.rsbC != null && sel.lsbC != null ? sel.rsbC + sel.kc + sel.lsbC : null;
+      var level = sel.member ? 'Member pair' : sel.exception ? 'Exception' : 'Group pair';
+
+      var main = h('main', { class: 'main' },
+        h('div', { class: 'stagehead' },
+          h('div', { style: 'display:flex;flex-direction:column;gap:4px' },
+            h('span', { class: 'k' }, level + ' · ' + M.masterName(mid)),
+            h('h1', null, sel.L + ' / ' + sel.R + ' ', h('span', null, gl + ' × ' + gr))),
+          h('div', { class: 'chips', role: 'group', 'aria-label': 'Context string' },
+            ctxs.map(function (c, i) {
+              return h('button', { type: 'button', class: 'ctxbtn', 'aria-pressed': String(i === ctxIndex), onclick: function () { Q.ctx = i; render(); } },
+                renderRun({ tokens: M.parse(c)[0], size: 18, cur: same(cur), padTop: 0, padBottom: 0 }));
+            }),
+            h('button', { type: 'button', class: 'btn', style: 'border-radius:999px', onclick: function () { S.proof.text = ctxs.join('\n'); S.proof.preset = 'custom'; S.proof.sel = { L: sel.L, R: sel.R }; S.proof.target = 'gap'; go('proof'); } }, 'Open in Proof'))),
+        h('div', { class: 'stage' }, stage),
+        h('div', { class: 'formula' },
+          fcell('', sel.L + ' right sidebearing', 'spacing', sel.rsbP, sel.rsbC),
+          fcell('+', 'Kerning', gl + ' × ' + gr, sel.kp, sel.kc),
+          fcell('+', sel.R + ' left sidebearing', 'spacing', sel.lsbP, sel.lsbC),
+          fcell('=', 'Net distance', 'what the reader sees', netP, netC, true)));
+
+      return [toolbar, h('div', { class: 'body' }, listEl, main, PairSide(sel, annsFor(sel)))];
+    }
+
+    function PairSide(e, anns) {
+      var Q = S.pairs, cur = M.cur, mid = S.mid;
+      var kc = SD.konChange(e);
+      var konNow = cur.kernOnStatus(mid, e.L, e.R) === 'model';
+      var kon = kc ? { label: kc.label, dot: kc.short === 'model added' ? '#15803d' : kc.short === 'model removed' ? '#b91c1c' : '#c2410c' } : konNow ? { label: 'Kern On model', dot: '#c2410c' } : null;
+      var Ls = e.lk.charAt(0) === '@' ? cur.members('L', e.lk) : [e.L];
+      var Rs = e.rk.charAt(0) === '@' ? cur.members('R', e.rk) : [e.R];
+      var K = cur.kerning[mid] || {};
+      var excL = Ls.filter(function (g) { return K[g] && (K[g][e.rk] != null || Rs.some(function (r) { return K[g][r] != null; })); });
+      var excR = Rs.filter(function (g) { return (K[e.lk] && K[e.lk][g] != null) || Ls.some(function (l) { return K[l] && K[l][g] != null; }); });
+      function chip(g, isKey, isExc) {
+        return h('span', { class: 'gchip' + (isExc ? ' exc' : isKey ? ' key' : ''), title: g + (isExc ? ' has an exception' : isKey ? ' is the key glyph' : '') }, pic([g], 19));
+      }
+      var affected = (Ls.length - excL.length) * Rs.length;
+      var warn = [];
+      if (e.stale) warn.push(e.L + ' / ' + e.R + ' is an exception that kept ' + SD.fmtv(e.kc) + ' while its group pair changed. Intended?');
+      if (excL.length && e.level === 'group-group') warn.push(excL.join(', ') + ' ' + (excL.length === 1 ? 'has' : 'have') + ' an exception and did not follow this change.');
+      return h('aside', { class: 'side', 'aria-label': 'Pair details' },
+        kon ? h('section', { class: 'blk' }, h('h3', { class: 'cap' }, 'Kern On'),
+          h('span', { class: 'chip', style: 'align-self:flex-start;font-size:13px;padding:6px 10px;border-radius:8px' }, h('span', { class: 'dot', style: 'background:' + kon.dot }), kon.label)) : null,
+        h('section', { class: 'blk' }, h('h3', { class: 'cap' }, 'Kerning groups'),
+          h('span', { class: 'small muted' }, e.level === 'group-group' ? affected + ' glyph pairs changed with this value' + (excL.length ? '; ' + (excL.length * Rs.length) + ' are held by an exception.' : '.') : 'Single glyph pair (' + e.level.replace('-', ' × ') + ').'),
+          h('span', { class: 'small', style: 'font-weight:500;color:#3f3f46' }, 'Left · ' + (e.lk.charAt(0) === '@' ? e.lk + ' · ' + Ls.length + ' glyphs' : e.L + ' (single glyph)')),
+          h('div', { class: 'gchips' }, Ls.slice(0, 40).map(function (g) { return chip(g, g === e.L, excL.indexOf(g) >= 0); }), Ls.length > 40 ? h('span', { class: 'xs muted' }, '+' + (Ls.length - 40)) : null),
+          h('span', { class: 'small', style: 'font-weight:500;color:#3f3f46' }, 'Right · ' + (e.rk.charAt(0) === '@' ? e.rk + ' · ' + Rs.length + ' glyphs' : e.R + ' (single glyph)')),
+          h('div', { class: 'gchips' }, Rs.slice(0, 40).map(function (g) { return chip(g, g === e.R, excR.indexOf(g) >= 0 && e.level === 'group-group'); }), Rs.length > 40 ? h('span', { class: 'xs muted' }, '+' + (Rs.length - 40)) : null),
+          warn.map(function (w) { return h('div', { class: 'warnbox' }, icon('M12 3 2.5 20h19L12 3ZM12 10v4.5M12 17.2v.3', '#9a3412'), h('span', null, w)); }),
+          h('span', { class: 'xs muted' }, 'Dark outline: key glyph, the one listed. Orange: has an exception.')),
+        h('section', { class: 'blk' }, h('h3', { class: 'cap' }, 'Annotations'),
+          anns.length ? anns.map(function (a) { return threadItem(a); }) : h('p', { class: 'empty', style: 'font-size:12px' }, 'No annotations for this pair yet.'),
+          h('div', { class: 'thread', style: 'gap:8px' },
+            typeChips(Q.type, function (t) { Q.type = t; render(); }),
+            h('label', { for: 'sd-chg-note', class: 'small', style: 'font-weight:600' }, 'Comment on this change'),
+            h('textarea', { id: 'sd-chg-note', class: 'note', rows: 2, 'data-fk': 'chg-note', value: Q.draft, oninput: function (ev) { Q.draft = ev.target.value; } }),
+            h('button', { type: 'button', class: 'btn primary', style: 'align-self:flex-end', onclick: function () {
+              var text = (Q.draft || '').trim();
+              if (!text) { toast('Write a comment first.'); return; }
+              N.add({ anchor: { type: 'pair', l: e.L, r: e.R, kl: cur.groupL(e.L), kr: cur.groupR(e.R), scope: cur.groupL(e.L) && cur.groupR(e.R) ? 'group' : 'pair' }, master: mid, type: Q.type, suggest: null, text: text });
+              Q.draft = '';
+              render();
+              toast('Annotation added.');
+            } }, 'Add'))));
+    }
+
+    // ------------------------------------------------------------------ compare: respaced glyphs
+
+    function GlyphsChanges() {
+      var Q = S.glyphs, base = B(), cur = M.cur, mid = S.mid;
+      var rows = glyphsDiff();
+      var notesAll = N.all();
+      var sideNotes = function (name, side) { return notesAll.filter(function (a) { return a.anchor && a.anchor.type === 'side' && a.anchor.glyph === name && (!side || a.anchor.side === side || a.anchor.side === 'both'); }); };
+      var tests = { all: function () { return true; }, outline: function (r) { return r.outline; }, annotated: function (r) { return sideNotes(r.name).length > 0; } };
+      var list = rows.filter(tests[Q.filter]).sort(function (a, b) { return (Math.abs(b.dl) + Math.abs(b.dr)) - (Math.abs(a.dl) + Math.abs(a.dr)); });
+      var sel = rows.filter(function (r) { return r.name === Q.sel; })[0] || list[0] || null;
+      var nComp = rows.reduce(function (n, r) { return n + r.composites.length; }, 0);
+      var nOutline = rows.filter(function (r) { return r.outline; }).length;
+
+      var toolbar = h('div', { class: 'toolbar' },
+        seg([['all', 'All respaced'], ['outline', 'Outline also changed'], ['annotated', 'Annotated']].map(function (f) { return [f[0], f[1], rows.filter(tests[f[0]]).length]; }), Q.filter, function (v) { Q.filter = v; render(); }),
+        check('Show composites', Q.showComp, function (v) { Q.showComp = v; render(); }),
+        h('span', { class: 'spacer' }),
+        h('span', { class: 'small muted' }, rows.length + ' glyphs respaced · ' + nOutline + ' outlines changed · ' + nComp + ' composites follow'));
+
+      var size = 108, s = size / M.upm;
+      var cards = list.slice(0, 400).map(function (r) {
+        var lay = cur.layer(mid, r.name);
+        var nl = sideNotes(r.name, 'left'), nr = sideNotes(r.name, 'right');
+        var picEl = renderRun({ tokens: [{ name: r.name, text: r.name }], size: size, cur: same(cur), padTop: 8, padBottom: 8,
+          edges: function (svg, sc, asc, H) {
+            var w = lay.w * sc;
+            var col = function (d) { return d === 0 ? '#c9c9c3' : SD.tone(d).fg; };
+            svg.appendChild(sv('line', { x1: 0, x2: 0, y1: -6, y2: H + 6, stroke: col(r.dl), 'stroke-width': 2 }));
+            svg.appendChild(sv('line', { x1: w, x2: w, y1: -6, y2: H + 6, stroke: col(r.dr), 'stroke-width': 2 }));
+            svg.appendChild(sv('line', { x1: r.dl * sc, x2: r.dl * sc, y1: -6, y2: H + 6, stroke: PREV, 'stroke-width': 1.5, 'stroke-dasharray': '4 3' }));
+            svg.appendChild(sv('line', { x1: w - r.dr * sc, x2: w - r.dr * sc, y1: -6, y2: H + 6, stroke: PREV, 'stroke-width': 1.5, 'stroke-dasharray': '4 3' }));
+          } });
+        if (nl.length) picEl.appendChild(h('span', { class: 'pin', style: 'left:0;top:8px;background:' + SD.TYPES[nl[0].type].pin }, nl[0].n));
+        if (nr.length) picEl.appendChild(h('span', { class: 'pin', style: 'left:' + (lay.w * s) + 'px;top:8px;background:' + SD.TYPES[nr[0].type].pin }, nr[0].n));
+        function row(k, now, d) { var t = SD.tone(d); return h('span', null, h('span', { class: 'k' }, k), h('span', { style: 'flex:1' }, SD.fmtv(now - d) + ' → ' + SD.fmtv(now)), h('span', { class: 'pill', style: 'font-size:12px;padding:0 6px;color:' + t.fg + ';background:' + t.bg }, SD.fmt(d))); }
+        var u = (cur.glyphs[r.name].u || [])[0];
+        return h('button', { type: 'button', class: 'gcard', 'aria-pressed': String(sel && sel.name === r.name), onclick: function () { Q.sel = r.name; Q.draft = ''; render(); } },
+          h('div', { class: 'pic' }, picEl),
+          h('div', { class: 'nm' }, h('b', { style: 'font-size:14px' }, r.name), h('span', { class: 'mono xs muted' }, u != null ? 'U+' + u.toString(16).toUpperCase().padStart(4, '0') : '')),
+          h('div', { class: 'rows2' }, row('LSB', r.l, r.dl), row('RSB', r.r, r.dr), row('Width', r.w, r.dl + r.dr)),
+          h('div', { class: 'tags', style: 'padding:0 14px' },
+            r.outline ? h('span', { class: 'tag kon' }, 'outline changed') : null,
+            r.composites.length ? h('span', { class: 'tag' }, '+' + r.composites.length + ' composites follow') : null),
+          Q.showComp && r.composites.length ? h('div', { style: 'padding:0 14px' }, pic(r.composites.slice(0, 16), 20, { ink: '#3f3f46' })) : null);
+      });
+
+      var main = h('main', { class: 'main', style: 'background:transparent;padding:20px 24px 28px;gap:14px' },
+        h('div', { style: 'display:flex;flex-wrap:wrap;align-items:baseline;justify-content:space-between;gap:8px' },
+          h('h1', { style: 'font-size:18px;font-weight:600' }, 'Respaced glyphs'),
+          h('span', { class: 'small muted' }, 'Solid edges: ' + CURRENT + '. Dashed: ' + base.label + '.')),
+        cards.length ? h('div', { class: 'grid' }, cards) : h('p', { class: 'empty' }, 'No glyph was respaced in this master.'));
+
+      return [toolbar, h('div', { class: 'body' }, main, sel ? GlyphSide(sel, sideNotes) : null)];
+    }
+
+    function GlyphSide(r, sideNotes) {
+      var Q = S.glyphs, cur = M.cur, base = B(), mid = S.mid;
+      var prevOn = Q.preview && Q.sug;
+      var addL = prevOn && (Q.side === 'left' || Q.side === 'both') ? Q.sug : 0;
+      var addR = prevOn && (Q.side === 'right' || Q.side === 'both') ? Q.sug : 0;
+      var lines = M.spacingStrings(r.name).map(function (str) {
+        return h('div', { class: 'strbox' }, renderRun({
+          tokens: M.parse(str)[0], size: 56, cur: same(cur), base: same(base), ghost: true, padTop: 4, padBottom: 20,
+          extra: function (p, n) { return (n === r.name ? addL : 0) + (p === r.name ? addR : 0); },
+          label: function (g, i, prev) {
+            var e = (g.name === r.name ? addL : 0) + (prev && prev.name === r.name ? addR : 0);
+            if (e && !g.space) return { text: SD.fmt(e), fg: '#1d4ed8', dashed: true };
+            if (!g.gap) return null;
+            var d = netDelta(base, cur, mid, g.gap.L, g.gap.R);
+            return d ? { text: SD.fmt(d), fg: SD.tone(d).fg, bg: SD.tone(d).bg } : null;
+          }
+        }));
+      });
+      var related = pairsDiff().filter(function (e) { return e.L === r.name || e.R === r.name; }).slice(0, 16);
+      var thread = sideNotes(r.name);
+      return h('aside', { class: 'side wide', 'aria-label': 'Glyph details' },
+        h('div', { class: 'pairhead', style: 'gap:16px' }, pic([r.name], 60),
+          h('div', { style: 'display:flex;flex-direction:column;gap:2px' },
+            h('h2', { style: 'font-size:18px' }, r.name),
+            h('span', { class: 'small muted' }, 'LSB ' + SD.fmt(r.dl) + ' · RSB ' + SD.fmt(r.dr) + ' · width ' + SD.fmt(r.dl + r.dr) + (r.outline ? ' · outline changed too' : ' · outline unchanged')))),
+        h('section', { class: 'blk' }, h('h3', { class: 'cap' }, 'Spacing strings'), lines),
+        h('section', { class: 'blk' }, h('h3', { class: 'cap' }, 'Changed pairs with ' + r.name),
+          related.length ? h('div', { class: 'chips' }, related.map(function (e) {
+            var t = SD.tone(e.net);
+            return h('button', { type: 'button', class: 'btn', style: 'padding:0 10px', onclick: function () { S.pairs.sel = e.id; S.pairs.filter = 'all'; go('pairs'); } },
+              pic([e.L, e.R], 20), h('span', { class: 'pill', style: 'font-size:12px;padding:0 6px;color:' + t.fg + ';background:' + t.bg }, SD.fmt(e.net)));
+          })) : h('span', { class: 'small muted' }, 'No kerned pair with this glyph changed. Only its spacing moved.')),
+        h('section', { class: 'blk', style: 'gap:10px' }, h('h3', { class: 'cap' }, 'Annotate a side'),
+          seg([['left', 'Left (LSB)'], ['right', 'Right (RSB)'], ['both', 'Both']], Q.side, function (v) { Q.side = v; render(); }),
+          typeChips(Q.type, function (t) { Q.type = t; Q.sug = Math.round(SD.TYPES[t].sug * 0.6); render(); }, ['too-tight', 'too-loose', 'question', 'looks-good']),
+          h('div', { class: 'chips', style: 'align-items:center;gap:8px 12px' },
+            h('span', { class: 'small', style: 'font-weight:600' }, 'Suggest'),
+            stepper(Q.sug, function (v) { Q.sug = v; render(); }, 2, 'side-sug'),
+            h('label', { class: 'check', style: 'font-size:12px;min-height:0' }, h('input', { type: 'checkbox', checked: Q.preview, style: 'accent-color:#1d4ed8', onchange: function (ev) { Q.preview = ev.target.checked; render(); } }), 'Preview in strings')),
+          h('label', { for: 'sd-side-note', class: 'small', style: 'font-weight:600' }, 'Comment'),
+          h('textarea', { id: 'sd-side-note', class: 'note', rows: 2, 'data-fk': 'side-note', value: Q.draft, oninput: function (ev) { Q.draft = ev.target.value; } }),
+          h('button', { type: 'button', class: 'btn primary', style: 'align-self:flex-end', onclick: function () {
+            var text = (Q.draft || '').trim();
+            if (!text && !Q.sug) { toast('Write a comment or suggest a value first.'); return; }
+            N.add({ anchor: { type: 'side', glyph: r.name, side: Q.side }, master: mid, type: Q.type, suggest: Q.sug || null, text: text || '(no comment)' });
+            Q.draft = '';
+            render();
+            toast('Annotation added.');
+          } }, 'Add'),
+          thread.map(function (a) { return threadItem(a); })));
+    }
+
+    // ------------------------------------------------------------------ app
+
+    function App() {
+      if ((S.view === 'pairs' || S.view === 'glyphs') && !B()) S.view = 'proof';
+      var view = S.view === 'notes' ? NotesView() : S.view === 'pairs' ? PairsChanges() : S.view === 'glyphs' ? GlyphsChanges() : ProofView();
+      return h('div', { class: 'app' }, Header(), Nav(), CompareRow(), view);
+    }
+
+    /**
+     * Rebuild the page. With keep, the current element marked data-keep="<keep>" stays
+     * in the document untouched (used while a slider in it is being dragged) and
+     * everything around it is replaced.
+     */
+    function render(keep) {
+      var ae = document.activeElement;
+      var fk = ae && ae.getAttribute ? ae.getAttribute('data-fk') : null;
+      var selStart = null, selEnd = null;
+      if (fk && typeof ae.selectionStart === 'number') { selStart = ae.selectionStart; selEnd = ae.selectionEnd; }
+      var scrolls = {};
+      Array.prototype.forEach.call(root.querySelectorAll('[data-sk]'), function (el) { scrolls[el.getAttribute('data-sk')] = el.scrollLeft; });
+      var y = window.scrollY;
+      var next = App();
+      var oldApp = root.firstChild;
+      var keepOld = keep && oldApp ? oldApp.querySelector(':scope > [data-keep="' + keep + '"]') : null;
+      var keepNew = keep ? next.querySelector(':scope > [data-keep="' + keep + '"]') : null;
+      if (keepOld && keepNew) {
+        var kids = Array.prototype.slice.call(next.children), k = kids.indexOf(keepNew);
+        Array.prototype.slice.call(oldApp.children).forEach(function (c) { if (c !== keepOld) c.remove(); });
+        kids.slice(0, k).forEach(function (c) { oldApp.insertBefore(c, keepOld); });
+        kids.slice(k + 1).forEach(function (c) { oldApp.appendChild(c); });
+      } else {
+        root.replaceChildren(next);
+      }
+      Array.prototype.forEach.call(root.querySelectorAll('[data-sk]'), function (el) { var k = el.getAttribute('data-sk'); if (scrolls[k]) el.scrollLeft = scrolls[k]; });
+      if (fk) {
+        var el = root.querySelector('[data-fk="' + fk + '"]');
+        if (el) {
+          el.focus({ preventScroll: true });
+          if (selStart != null && typeof el.setSelectionRange === 'function') { try { el.setSelectionRange(selStart, selEnd); } catch (e) { /* range inputs */ } }
+        }
+      }
+      window.scrollTo(0, y);
+      afterRender.splice(0).forEach(function (fn) { fn(); });
+    }
+    var afterRender = [];
+
+    // the Changed pairs string is sized to its stage; refit when the window changes size
+    var resizeTimer = null;
+    window.addEventListener('resize', function () {
+      clearTimeout(resizeTimer);
+      resizeTimer = setTimeout(function () { if (S.view === 'pairs') render(); }, 120);
+    });
+
+    // Option (Alt) on its own works like holding the Hold button, also while typing in the
+    // text field; pressing another key with it (Option+u for ü) lets go again
+    var keyHold = false;
+    function holdable() { return !!B() && (S.view === 'proof' || S.view === 'pairs') && S.cmp.view !== 'stacked'; }
+    function releaseKeyHold(later) {
+      if (!keyHold) return;
+      keyHold = false;
+      S.cmp.hold = false;
+      if (later) setTimeout(render, 0); else render();
+    }
+    document.addEventListener('keyup', function (e) { if (e.key === 'Alt') releaseKeyHold(false); });
+    window.addEventListener('blur', function () { releaseKeyHold(false); });
+
+    document.addEventListener('keydown', function (e) {
+      if (e.key === 'Alt') {
+        if (!e.repeat && !keyHold && !e.ctrlKey && !e.metaKey && !e.shiftKey && holdable()) {
+          keyHold = true;
+          S.cmp.hold = true;
+          render();
+        }
+        return;
+      }
+      // a combination: give the key to the page first, then redraw
+      releaseKeyHold(true);
+      var t = e.target;
+      if (t && (t.tagName === 'INPUT' || t.tagName === 'TEXTAREA' || t.tagName === 'SELECT')) return;
+      if (e.key === 'Escape' && S.view === 'proof' && S.proof.sel) { S.proof.sel = null; render(); return; }
+      if (!B() || S.cmp.view !== 'switch' || (S.view !== 'proof' && S.view !== 'pairs')) return;
+      if (e.key === '1') { S.cmp.showPrev = false; render(); }
+      if (e.key === '2') { S.cmp.showPrev = true; render(); }
+    });
+
+    document.title = M.family + ' \u00b7 ' + M.cur.label + ' \u00b7 rednotes';
+    render();
+  }
+})();</script>
+</body>
+</html>
