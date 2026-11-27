@@ -14,13 +14,12 @@ The single-letter keys are the defaults: each of them – and the [[C]] that act
 | [[E]]               | Toggle **E**xtras (add to selected diagonal / remove from owning diagonal)                                     |
 | [[A]]               | Toggle **A**nchor edge on two selected corners                                                         |
 | [[H]]               | Toggle **H**inge corners (one selected corner implies its opposite)                                    |
-| [[L]]               | Toggle **L**imit Curve on selected on-curve nodes                                                      |
+| [[F]]               | **F**ix Point / Release Fixed Point on selected on-curve nodes                                         |
 | [[N]]               | Toggle **N**o Curve Correction on selected curve segments                                              |
 | [[I]]               | Add / remove **I**nktrap on a selected straight segment between two unsmooth nodes                     |
-| [[Y]]               | Toggle **Y**-Snap on selected on-curve nodes (retain their y ↔ let them follow the correction)         |
 | [[C]]               | Toggle Terminal (think **C**ap) on a selected straight segment between two unsmooth on-curve nodes     |
-| [[⌫]]               | Remove tag / diagonal / custom curve extension; with a corner clicked, delete that corner; with an anchor selected, clear its links |
-| [[↑]] / [[↓]]       | With a curve extension or terminal control clicked: raise / lower its value by 1 % ([[⇧]]: 10 %)       |
+| [[⌫]]               | Remove tag / diagonal / Fix Point / Curve Flow setting; with a corner clicked, delete that corner; with an anchor selected, clear its links |
+| [[↑]] / [[↓]]       | With a Fix Point or terminal knob clicked: raise / lower its value by 1 % ([[⇧]]: 10 %); with Curve Flow clicked (its handle or the extreme’s line): turn it by 0.5° ([[⇧]]: 5°) |
 | [[⌘A]]              | Cycle select-all: nodes → diagonals → tags → anchors and their combinations (present kinds only)           |
 | [[Tab]] / [[⇧Tab]]  | With one mark type selected (diagonal, tag or anchor), select the next / previous item of that type        |
 | [[⌘C]]              | Copy Selection – copies the selected diagonals / tags / anchor links (any mix)

@@ -1,51 +1,42 @@
 # Tags {#node-flags}
 
-@lede Five per-node marks outside the diagonal model. Each changes how the filter treats certain aspects.
+@lede Six per-node marks outside the diagonal model. Each changes how the filter treats certain aspects.
 
 Every Tag has a canvas marker and an entry in the right-click *Tags* section (or use the keyboard shortcuts). As always, hold [[⌥]] while toggling any of them to mirror the change across every compatible master.
 
-## Curve Extension {#curve-extension}
+## Fix Point {#fix-point}
 
-If a curve doesn’t have its nodes on extremes, Italify will try to infer a larger curve for calculations based on the existing curves. While mathematically correct, the resulting correction can look wrong, or simply not match the design intent. In that case, you can set a custom amount by which the existing curve is extended for the calculations.
+Where a curve runs into a straight line, the correction moves the node where they meet. **Fix Point** holds such a node back: select it and press [[F]], or right-click and choose *Fix Point*. The node then stays where its straight neighbour puts it, and the rest of the curve is corrected around it. A fixed node is marked with a **teal square**; press [[F]] again (*Release Fixed Point*) to free it.
 
-Select the curve end that is *not* on an extreme and you get a teal **control point** which you can drag in order to adjust the amount of curve extension.
+Fix Point works on a curve’s corner node – into a straight line or into another curve – and on a smooth node where a curve meets a straight line. It doesn’t apply to a smooth node between two curves.
 
-- The **round tick** fully extends the curve – the default.
-- The **square tick** is the same as [Limit Curve](#limit-curve), where the curve is taken as-is.
+To fix a node only partly, select it: a small teal knob, on a track beside the curve and parallel to its tangent, shows how much it is held back. Drag it, or click it and use [[↑]] and [[↓]] to change it by 1 % – by 10 % with [[⇧]]. In between, the correction blends the free and the fixed result. [[⌫]] removes the Fix Point.
 
-Hold [[⌥]] when releasing to mirror the value onto every compatible master. Each master keeps its own value, and when Italify runs [at export](filter#export) an instance between masters gets a value in between – halfway between a master at 20 % and one at 80 %, the curve is extended by 50 %. A master without a setting counts as the default, 100 %.
+Hold [[⌥]] when toggling or releasing to mirror the change onto every compatible master. Each master keeps its own amount, and when Italify runs [at export](filter#export) an instance between masters gets an amount in between. A master without a Fix Point counts as 0 %.
 
-For exact values, click the control point to select it: it shows its percentage, and [[↑]] and [[↓]] change it by 1 % – by 10 % with [[⇧]]. Click anywhere else to deselect it.
-
-Occasionally a curve can’t be meaningfully extended by default – no usable extreme exists anywhere near it, so Italify takes the curve as-is. The control still appears at such corners, resting at the square tick: drag it to add as much extension as the geometry supports (the track simply ends where the result would stop being useful).
-
-When the non-extreme node is the connection between two curves, the value is shared between the curves. A **doubled node** at the corner behaves like a single one: click either of the two and the control appears. A node with a partial setting is marked with a **teal circle** – select it to bring the control back. To return to the default, drag the point back to the round tick or select Remove Custom Extension [[⌫]].
-
-A segment tagged [No Curve Correction](#no-curve-correction) offers no control: it isn’t corrected, so there is nothing to extend. A stored setting on such a node draws greyed and is ignored until the segment is corrected again.
-
-To reuse a setting elsewhere, select the node, copy it with [[⌘C]], select the target node and paste – see [Copy & Paste](copy-paste.md).
+A **doubled node** behaves like a single one: click either of the two. To reuse a setting elsewhere, select the node, copy it with [[⌘C]], select the target node and paste – see [Copy & Paste](copy-paste.md).
 
 ```screenshot
-img: ../images/curveExtension.png
-tag: Screenshot – curve-centre control
-caption: The curve extension control: drag the teal point to adjust how much additional curve information Italify infers.
+img: ../images/fixPoint.png
+caption: Fix Point holds a node back from the correction, by the set percentage.
 ```
 
-### Limit Curve {#limit-curve}
+## Curve Flow {#curve-flow}
 
-If you drag the custom extension slider to 0, Italify infers no extra information. The shortcut for this is **Limit Curve**, marked with a teal marker.
+To correct a curve properly, Italify needs to know where it is vertical or horizontal – its extremes. For a curve that doesn’t reach an extreme, Italify infers the missing rest of the curve. This can result in transformations not quite matching expectations.
+
+In such a case, select the corner. Drag the round handle to adjust the corner’s tangent, which Italify relies on. Or drag the extreme’s line itself. Handle and line belong together. Click either and use the arrow keys for half a degree at a time – 5° with [[⇧]]. A corner with a setting is marked with a teal diamond. *Reset Curve Flow* [[⌫]] removes it.
 
 ```screenshot
-img: ../images/limitCurve.png
-alt: An unsmooth curve corner with the teal Limit-Curve square around the tagged node.
-caption: Limit Curve pins a curve’s transformation to the node’s own tangent.
+img: ../images/curveFlow.png
+caption: Curve Flow turns the tangent Italify derives the curve’s next extreme from – by its handle, or by the extreme’s line.
 ```
 
 ## No Curve Correction {#no-curve-correction}
 
 **No Curve Correction** takes a whole curve segment out of curve correction. The segment is then only slanted – its drawn shape is preserved exactly.
 
-The tag sits on **both** on-curve endpoints of the segment (any curve, cubic or quadratic, with at least one off-curve between them). Select those two nodes and press [[N]], or right-click and choose *Toggle No Curve Correction*; press [[N]] again to remove it. The segment draws with a yellow overlay along its length. It takes precedence over a [Curve Extension](#curve-extension) on its nodes, and an adjoining [Inktrap](#inktrap) still meets it – on the untouched curve’s own extension where it has to.
+The tag sits on **both** on-curve endpoints of the segment (any curve, cubic or quadratic, with at least one off-curve between them). Select those two nodes and press [[N]], or right-click and choose *Toggle No Curve Correction*; press [[N]] again to remove it. The segment draws with a yellow overlay along its length. It takes precedence over a [Fix Point](#fix-point) or a [Curve Flow](#curve-flow) setting on its nodes, and an adjoining [Inktrap](#inktrap) still meets it – on the untouched curve’s own extension where it has to.
 
 ```screenshot
 img: ../images/noCurveCorrection.png
@@ -65,18 +56,6 @@ On the canvas the tagged segment glows purple, a short stretch of each adjoining
 img: ../images/inktrap.png
 alt: A short straight segment tagged as an inktrap, glowing purple.
 caption: An Inktrap segment preserves its size even after correction of the adjoining segments.
-```
-
-## Y-Snap {#snap-y}
-
-**Y-Snap** keeps a node at its original height: the correction may still move it sideways, but its y stays exactly where you drew it. It works on **any** on-curve node – a corner or a smooth node, on a metric or not.
-
-Select the node (or several) and press [[Y]], or right-click and choose *Toggle Y-Snap*. The key flips each node: an untagged node is pinned, a pinned one is released. A pinned node carries a violet pin. To remove the tag you can also clear the node’s tags (right-click *Clear all Tags*, or [[⌫]]).
-
-```screenshot
-img: ../images/snapY.png
-alt: A node tagged Y-Snap carrying the violet pin marker, holding its height through the correction.
-caption: Y-Snap keeps a node at its original height, on a metric or not.
 ```
 
 ## Terminal {#terminal}
@@ -100,7 +79,7 @@ Drag a control, or click it to select it and step its value with [[↑]] and [[�
 
 The controls sit on the corrected terminal, so they need a slant to work with. In an **upright master** with the filter’s angle locked to the layer there is none – but that master may well be the source another one is [generated from](filter#generate-from), and then its terminals are the ones to set. There, the same two controls appear as short horizontal sliders next to the selected terminal, and work the same way.
 
-A terminal with its own settings shows a small **reset button**: a circled [[↺]]. Click it to remove the custom settings. With the terminal selected, [[⌫]] does the same, as does *Remove Custom Terminal Settings* in the right-click menu. Hold [[⌥]] to do it in all compatible masters. The values copy, paste and propagate with the other tags. Like the curve extension, they are interpolated when an instance between masters is [exported](filter#export); a master where the terminal has no settings of its own contributes the filter’s values for that master.
+A terminal with its own settings shows a small **reset button**: a circled [[↺]]. Click it to remove the custom settings. With the terminal selected, [[⌫]] does the same, as does *Remove Custom Terminal Settings* in the right-click menu. Hold [[⌥]] to do it in all compatible masters. The values copy, paste and propagate with the other tags. Like a Fix Point, they are interpolated when an instance between masters is [exported](filter#export); a master where the terminal has no settings of its own contributes the filter’s values for that master.
 
 One related behaviour: an [anchor](anchor-links) linked to a node that sits on a terminal follows that node **fully, in both x and y** – a terminal is a moving cut, so an anchor on it rides along completely rather than tracking only its horizontal shift.
 

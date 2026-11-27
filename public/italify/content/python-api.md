@@ -186,9 +186,9 @@ The anchors a node belongs to.
 
 - `list[str]` – the anchor names linked to it
 
-**`curve_extension(node)`**
+**`fix_point(node)`**
 
-The node’s effective [Curve Extension](handbook/tags#curve-extension) ratio: an explicit stored value, or `1.0` when untagged (the default full extension). [Limit Curve](handbook/tags#limit-curve) has no verb of its own – it is a curve extension of `0`, so `curve_extension(node) == 0` is the test for it (a legacy Limit Curve tag in an older file reads as `0.0` too).
+The node’s [Fix Point](handbook/tags#fix-point) amount: `0.0` when it carries none, `1.0` when it is fully fixed (what Limit Curve was).
 
 *Parameters:*
 
@@ -196,7 +196,19 @@ The node’s effective [Curve Extension](handbook/tags#curve-extension) ratio: a
 
 *Returns:*
 
-- `float` – the effective ratio in `0 … 1`
+- `float` – the amount in `0 … 1`
+
+**`curve_flow(node)`**
+
+The corner’s [Curve Flow](handbook/tags#curve-flow) setting: how far, in degrees, the tangent Italify derives the curve’s next extreme from is turned away from the drawn one (positive is steeper).
+
+*Parameters:*
+
+- `node` (`GSNode`) – the node to query (this verb takes no `layer`)
+
+*Returns:*
+
+- `float` or `None` – the angle in degrees, or `None` when the node carries none
 
 **`has_no_curve_correction(node)`**
 
@@ -221,18 +233,6 @@ Whether a node carries the [Inktrap](handbook/tags#inktrap) tag. The tag sits on
 *Returns:*
 
 - `bool` – `True` when the tag is set
-
-**`snap_y(node)`**
-
-Whether the node carries the [Y-Snap](handbook/tags#snap-y) tag.
-
-*Parameters:*
-
-- `node` (`GSNode`) – the node to query (this verb takes no `layer`)
-
-*Returns:*
-
-- `bool` – `True` when the node retains its y through the correction
 
 **`terminal(node)`**
 
@@ -484,15 +484,30 @@ An `ItalifyDiagonal` is a thin wrapper, so it refuses exactly as the free functi
 
 ## Tags {#tags}
 
-**`set_curve_extension(layer, node, ratio, all_masters=False)`**
+**`set_fix_point(layer, node, amount, all_masters=False)`**
 
-Store a [Curve Extension](handbook/tags#curve-extension) ratio on an on-curve node – the same value the tagger’s curve-centre control writes. `0` is [Limit Curve](handbook/tags#limit-curve) (no extension) – this is how a script limits a curve; `1` removes the override, restoring the default full extension. Any legacy Limit Curve flag on the node is migrated away by the write.
+Store a [Fix Point](handbook/tags#fix-point) on an on-curve node – the same value the tagger’s *Fix Point* and its amount knob write. `1` fixes the node fully, `0` removes the Fix Point, anything between blends the free and the fixed correction. Refuses with [`notFixPointNode`](#refusals) unless the node borders a curve and isn’t a smooth node between two curves – the tool’s own precondition; removing (`0`) always works.
 
 *Parameters:*
 
 - `layer` (`GSLayer`)
 - `node` (`GSNode`) – the on-curve node to tag
-- `ratio` (`float`) – the extension amount, `0 … 1`
+- `amount` (`float`) – how much the node is held back, `0 … 1`
+- `all_masters` (`bool`) – also apply it on every compatible master
+
+*Returns:*
+
+- `ItalifyResult`
+
+**`set_curve_flow(layer, node, degrees, all_masters=False)`**
+
+Store a [Curve Flow](handbook/tags#curve-flow) setting on a curve corner – the same value the tagger’s Curve Flow control writes. Positive turns the tangent steeper (the derived extreme comes closer), negative flatter; `None` removes the setting.
+
+*Parameters:*
+
+- `layer` (`GSLayer`)
+- `node` (`GSNode`) – the corner node to tag
+- `degrees` (`float` or `None`) – the angle in degrees, or `None` to remove it
 - `all_masters` (`bool`) – also apply it on every compatible master
 
 *Returns:*
@@ -530,21 +545,6 @@ Toggle [Inktrap](handbook/tags#inktrap) on the straight segment between two node
 *Returns:*
 
 - `ItalifyResult` – refuses with [`notInktrapSegment`](#refusals) unless `node_a` and `node_b` are directly-connected, unsmooth on-curve endpoints of a straight segment, the same precondition the tool’s own Toggle Inktrap verb enforces
-
-**`set_snap_y(layer, node, retain, all_masters=False)`**
-
-Set or remove the [Y-Snap](handbook/tags#snap-y) tag on a node.
-
-*Parameters:*
-
-- `layer` (`GSLayer`)
-- `node` (`GSNode`) – the on-curve node to tag or untag
-- `retain` (`bool`) – `True` keeps the node’s y through the correction, `False` removes the tag
-- `all_masters` (`bool`) – also apply on every compatible master
-
-*Returns:*
-
-- `ItalifyResult`
 
 **`set_terminal(layer, node_a, node_b, on, all_masters=False)`**
 
@@ -892,3 +892,4 @@ When a write is refused, `result.reason` is one of these machine codes (`result.
 | `notCurveSegment` | The two nodes must be on-curve endpoints of the same curve segment, with at least one off-curve between them. |
 | `notInktrapSegment` | The two nodes must be directly-connected, unsmooth on-curve endpoints of a straight segment. |
 | `notTerminalSegment` | The two nodes must be the on-curve endpoints of a directly-connected straight segment. |
+| `notFixPointNode` | Fix Point needs an on-curve node beside a curve – a corner, or a smooth node where a curve meets a straight line, but not a smooth node between two curves. |

@@ -103,7 +103,7 @@ Italify;angle:10;exclude:A,B,*-ar
 
 `include` means “run *only* on these glyphs”; `exclude` means “run on everything *except* these”. The two can’t be combined – if both are given, `include` is used.
 
-Saved parameters apply at export too. For an instance between masters, anything saved per master – a *Master* scope, a *Group (master)* value set, a *Layer* – is interpolated. Halfway between a Regular saved at 40 % curve correction and a Bold at 100 %, the instance gets 70 %. An instance beyond the outermost master takes that master’s value (no extrapolation). The same goes for the amounts stored on nodes – a [curve extension](tags#curve-extension) and a [terminal’s own angle and position](tags#terminal-settings). Diagonals and the other tags are **not interpolated:** the instance takes them from the first master it is made from.
+Saved parameters apply at export too. For an instance between masters, anything saved per master – a *Master* scope, a *Group (master)* value set, a *Layer* – is interpolated. Halfway between a Regular saved at 40 % curve correction and a Bold at 100 %, the instance gets 70 %. An instance beyond the outermost master takes that master’s value (no extrapolation). The same goes for the amounts stored on nodes – a [Fix Point](tags#fix-point), a [Curve Flow](tags#curve-flow) setting (when every master has one) and a [terminal’s own angle and position](tags#terminal-settings). Diagonals and the other tags are **not interpolated:** the instance takes them from the first master it is made from.
 
 If you work with **master credits**, the filter runs on an instance only if every master that instance is interpolated from is [activated](settings#licences). With a time pass, every instance is covered.
 

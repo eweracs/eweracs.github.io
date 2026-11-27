@@ -16,7 +16,7 @@ The Edit View tool that describes your glyphs to the filter, plus [navigation an
 ## [Diagonals](diagonals)
 Diagonal strokes corrected as one rigid unit: [creating them](diagonals#creating-diagonals), [anchored edges](diagonals#anchor-edges), [hinge corners](diagonals#hinge-corners), [extras](diagonals#extras), and [repair](diagonals#corruption).
 ## [Tags](tags)
-Per-node marks: [Curve Extension](tags#curve-extension) (with [Limit Curve](tags#limit-curve)), [No Curve Correction](tags#no-curve-correction), [Inktrap](tags#inktrap), [Y-Snap](tags#snap-y), and [Terminal](tags#terminal).
+Per-node marks: [Fix Point](tags#fix-point), [Curve Flow](tags#curve-flow), [No Curve Correction](tags#no-curve-correction), [Inktrap](tags#inktrap), and [Terminal](tags#terminal).
 ## [Anchor links](anchor-links)
 Tie Glyphs anchors to outline nodes so they ride along through the correction.
 ## [Copy, paste & propagate](copy-paste)

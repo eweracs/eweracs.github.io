@@ -44,10 +44,9 @@ caption: A fully described glyph: every diagonal tagged, constraints in place.
 With the diagonals in place, handle the local exceptions for curves with [Tags](tags) if necessary:
 
 - [Terminal](tags#terminal) ([[C]]) for tagging terminals that the filter doesn’t recognise automatically, or for explicitly un-tagging automatically detected terminals.
-- [Curve Extension](tags#curve-extension) where a small curve bends in unwanted ways – drag the control to 
-  adjust how much Italify infers, or press [[L]] to jump straight to [Limit Curve](tags#limit-curve) (0%).
+- [Fix Point](tags#fix-point) ([[F]]) where a curve should leave a node where its straight neighbour puts it,
+  and [Curve Flow](tags#curve-flow) where a small curve bends in unwanted ways.
 - [Inktrap](tags#inktrap) ([[I]]) to hold an ink trap (a single line segment between two adjoining segments) at its original size.
-- [Y-Snap](tags#snap-y) ([[Y]]) to pin a node’s height by hand.
 
 ## 5. Tune parameters with the live preview {#tune}
 
